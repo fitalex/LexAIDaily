@@ -3,7 +3,7 @@
 - 任务类型：<Engineering / Documentation / Design / Research / Governance>
 - 级别：<A / B>（理由：<一句话>）
 - 授权来源：<A 级：Claude，见 STATUS 台账｜B 级：Human Maintainer，注明日期与位置>
-- 任务 Owner：<Codex / Antigravity / GPT 网页版 / Claude>
+- 任务 Owner：<Codex / DeepSeek Harness / Antigravity / GPT 网页版 / Claude>
 - 复核者：Claude（若 Owner 为 Claude，则为 <其他复核者>）
 - 独立审计：<否｜是：GPT 网页版，依据 AGENTS.md 6.1(<a-e>)>
 - Final Approver：Human Maintainer

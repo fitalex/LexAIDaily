@@ -1,4 +1,4 @@
-# LD-GOV-01 整改回应（Owner：Claude，含第二轮）
+# LD-GOV-01 整改回应（Owner：Claude，含第二、三轮）
 
 - 回应对象：[GPT 网页版独立审计](LD-GOV-01-gpt-audit.md)（2026-11-05，基准 `a87e7fe`，结论：需修改）
 - 处理方式：全部采纳，在原 PR #3 修订，保留原审计原文与结论，不改写为通过。
@@ -55,3 +55,21 @@ Human 在整改期间提供了 ROADMAP.md（尚未入库）。为对齐它，本
 - AGENTS.md 5：Gate 1 排版模板须经 Human 在 iOS、Android 微信客户端真机预览。
 - STATUS、任务书索引：新增 LD-G0-02 至 04、LD-G1-04；LD-G1 系列待 Gate 0 验收后开工；Human 待办补充 README 与 ROADMAP 不一致项（Gate 0 勾选状态、Gate 名称）。
 - 手册：新增第 10 节 Gate 分工预案。
+
+## 第三轮回应（针对 commit `8a76086` 的增量审计）
+
+第三轮审计目前只有 PR 评论和 GPT 的摘要，尚未归档为文件；下表回应摘要列出的项目，评论若有更多条目，以评论为准。
+
+**我需要更正一处**：第二轮审计全文（已归档为 [LD-GOV-01-gpt-audit-r2.md](LD-GOV-01-gpt-audit-r2.md)）的 S2-02 同时指出了 AGENTS.md 第 5 节工程行只提 6.1(c)，我第二轮回应表只列了摘要里的项目，漏了这一条；这是回应表不完整，不是审计意见变化。
+
+| 项目 | 处理 | 位置 |
+|---|---|---|
+| S2-02 遗留：AGENTS.md 第 5 节只引用 6.1(c) | 采纳，改为按 6.1(a)-(e) 判断 | AGENTS.md 5 |
+| 任务书模板 Owner 枚举缺 DeepSeek Harness | 采纳 | docs/templates/TASK_BOOK.md |
+| LD-G0-04 可能通过 A 级验收清单改变验收标准 | 采纳。验收清单只能转写冻结基线的既有验收标准，不得新增、降低或改写，差异只报告给 Human | AGENTS.md 10.2；STATUS；任务书索引；手册第 10 节 |
+| 审计索引仍写“待归档” | 采纳，第二轮已链接；第三轮标明待归档 | docs/audits/README.md |
+| STATUS 人工确认记录未同步 | 采纳，引用 Human 在 PR #3 的留言及时间；注明措辞含糊，待明确 | STATUS 决策记录与待办 |
+| ROADMAP 未入库，无法核验 | **待 Human**：提供并固定版本，经 LD-G0-02 入库；本轮请 Human 把原文件上传给 GPT 仅作核验 | STATUS 待办 |
+| 首轮审计报告格式 | 已由 GPT 按原始回复恢复，本地副本已同步仓库版本 | docs/audits/LD-GOV-01-gpt-audit.md |
+
+**我自行新增的一条规则（请复审）**：AGENTS.md 6.2 增加“审计意见须以文件形式归档，PR 评论只作通知”，原因是我无法读取 PR 评论，只能读仓库文件。

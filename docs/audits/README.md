@@ -9,6 +9,7 @@
 
 | 任务 | 文件 | 类型 | 结论 |
 |---|---|---|---|
-| LD-GOV-01 | [LD-GOV-01-gpt-audit.md](LD-GOV-01-gpt-audit.md) | 独立审计（GPT 网页版，2026-11-05，基准 `a87e7fe`） | 需修改 |
-| LD-GOV-01 | PR #3 评论（issuecomment-6652272778） | 第二轮增量审计（GPT 网页版，基准 `a8bf671`） | 需修改（正文待操作员原文归档为 `LD-GOV-01-gpt-audit-r2.md`） |
+| LD-GOV-01 | [LD-GOV-01-gpt-audit.md](LD-GOV-01-gpt-audit.md) | 独立审计（GPT 网页版，2026-11-05，基准 `a87e7fe`；已按 GPT 原始回复恢复格式） | 需修改 |
+| LD-GOV-01 | [LD-GOV-01-gpt-audit-r2.md](LD-GOV-01-gpt-audit-r2.md) | 第二轮增量审计（GPT 网页版，基准 `a8bf671`） | 需修改 |
+| LD-GOV-01 | 待归档为 `LD-GOV-01-gpt-audit-r3.md`（PR #3 评论 issuecomment-6652706005） | 第三轮增量审计（GPT 网页版，基准 `8a76086`） | 需修改 |
 | LD-GOV-01 | [LD-GOV-01-claude-response.md](LD-GOV-01-claude-response.md) | Owner 整改回应（Claude，含第二轮） | 待增量复审 |
