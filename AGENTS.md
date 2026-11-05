@@ -1,6 +1,6 @@
 # AI Agent 开发与协作规范（V1.0 草案）
 
-> **状态：DRAFT，未生效。** 本规范由 Claude（协调者）起草。依 6.1，须经 GPT 网页版独立审计、Human Maintainer 批准后生效（任务 LD-GOV-01）。首轮审计（PR #3，2026-11-05）结论为“需修改”，本版为整改稿，回应见[审计归档](docs/audits/README.md)；生效条件见第 14 节。
+> **状态：DRAFT，未生效。** 本规范由 Claude（协调者）起草。依 6.1，须经 GPT 网页版独立审计、Human Maintainer 批准后生效（任务 LD-GOV-01）。首轮与第二轮（commit `a8bf671`）审计结论均为“需修改”，本版为第二轮整改稿，回应见[审计归档](docs/audits/README.md)；生效条件见第 14 节。
 > 设计参照：[LexRouter AGENTS.md V2.2](https://github.com/fitalex/LexRouter/blob/main/AGENTS.md)（Single Owner + Cross Review + Human Gate）。主要调整：协调者由 ChatGPT 改为 Claude；GPT 网页版改任仓库操作员、独立审计与调研；新增 DeepSeek Harness、A/B 任务分级和每日内容线。
 
 本规范适用于 LexAIDaily 仓库的全部 AI Agent 与贡献者，采用 **协调者调度 → 单任务负责人（Single Owner）→ 交叉复核（Cross Review）→ 人工验收（Human Gate）**。角色分工不授权自动合并，也不替代 Human Maintainer 的内容终审与发布决定。协调者的日常操作细则见 [协调者操作手册](docs/COORDINATOR_PLAYBOOK.md)，冲突时以本文件为准。
@@ -86,7 +86,7 @@ flowchart LR
 
 ## 4. 任务书规范
 
-任务书存于 `docs/daily-specs/<任务号>.md`，按 [任务书模板](docs/templates/TASK_BOOK.md) 编写，必须写明：级别、Owner、复核者、是否触发独立审计、基准 commit 与分支、依赖、输入与输出、可改与不可改的文件范围、非范围、冻结边界、逐项可验证的 DoD、验证命令与证据要求、升级条件。
+任务书存于 `docs/daily-specs/<任务号>.md`，按 [任务书模板](docs/templates/TASK_BOOK.md) 编写，必须写明：级别、Owner、复核者、是否触发独立审计、基准 commit 与分支、依赖、输入与输出、可改与不可改的文件范围、非范围、冻结边界、逐项可验证的 DoD（并标明对应所属 Gate 验收标准的哪一条）、验证命令与证据要求、升级条件。
 
 任务号规则：阶段工程任务 `LD-G<Gate>-<两位序号>`（如 LD-G1-02）；治理任务 `LD-GOV-<序号>`；内容线任务 `LD-OPS-<序号>`；修订追加字母后缀（如 LD-G1-02A）。分支命名：`codex/<任务号小写>-<slug>`、`ag/<任务号小写>-<slug>`、`ds/<任务号小写>-<slug>`、`claude/<任务号小写>-<slug>`（Claude 的产出由操作员代提交，使用 `claude/` 前缀）。
 
@@ -101,7 +101,7 @@ flowchart LR
 | 核心架构、数据契约、站点实现、微信导出脚本、CI | Codex | DeepSeek Harness 交叉测试；Claude 复核 DoD 与证据；数据契约须经 DeepSeek Harness 从适配器侧确认 | 涉及 6.1(c) 时 GPT 网页版审计；Human 合并 |
 | 信源采集适配器、解析与去重模块、单元测试与回归、缺陷复现 | DeepSeek Harness | Codex 工程复核；Claude 复核 DoD 与证据 | 信源可信度与入库由 Human 决定，不由其自动判定 |
 | 仓库落盘（提交 Claude 产出、建 PR/Issue、回传 diff 与 CI） | GPT 网页版（操作员） | Claude 核对提交内容与原文一致 | 见 6.6 |
-| 设计系统、Web 原型、公众号排版模板 | Codex（Figma MCP + 图像生成） | Claude 复核；DeepSeek Harness 测试排版导出（HTML、内联样式）的结构与兼容，不做视觉判断；Antigravity 将定稿规范同步进文档 | 使用 Figma 与图像生成属 B 级授权项；Codex 提供截图、导出文件与测试证据，Human 视觉验收 |
+| 设计系统、Web 原型、公众号排版模板 | Codex（Figma MCP + 图像生成） | Claude 复核；DeepSeek Harness 测试排版导出（HTML、内联样式）的结构与兼容，不做视觉判断；Antigravity 将定稿规范同步进文档 | 使用 Figma 与图像生成属 B 级授权项；Codex 提供截图、导出文件与测试证据；Human 视觉验收，并在 iOS、Android 微信客户端真机预览（Gate 1 验收要求） |
 | 文档、索引、归档、版本一致性 | Antigravity | Claude 复核；技术事实由模块 Owner 确认 | — |
 | 每日内容线（Gate 2 起） | 见 8.2 | 见 8.2 | Human 终审 |
 
@@ -142,7 +142,7 @@ Claude 负责：拆分任务书、判定级别与审计触发、选择执行者�
 
 ### 8.1 工程线（Gate 1 至 Gate 4）
 
-按第 3 至 7 节执行；各 Gate 的目标以 [README](README.md) 的路线图为准。
+按第 3 至 7 节执行；各 Gate 的目标与验收标准以 Human 的 ROADMAP.md（入库后）和 [README](README.md) 为准，两者不一致时交 Human 裁决。
 
 ### 8.2 每日内容线（Gate 2 起启用，当前为草案）
 
@@ -174,8 +174,8 @@ Claude 负责：拆分任务书、判定级别与审计触发、选择执行者�
 ## 10. 工程规则
 
 1. `main` 为稳定分支；实质变更一律经 PR。不得直接推送 main、强制推送、自动合并或覆盖他人工作。
-2. [README](README.md) 中的产品定位、双端形态、编辑原则与 Gate 路线图是 Human 冻结基线，Agent 不得自行修改；冲突交 Human 裁决。
-3. 以当前 Gate 与任务书授权为界，不预建后续 Gate 的空模块。正式采集数据契约属 Gate 2，Gate 1 只定义供 UI 使用的展示字段；提前实施须 Human 批准调整 Gate 范围。
+2. [README](README.md) 与 ROADMAP.md（入库后）中的产品定位、双端形态、编辑原则、Gate 路线图及验收标准是 Human 冻结基线，Agent 不得自行修改；冲突交 Human 裁决。
+3. 以当前 Gate 与任务书授权为界，不预建后续 Gate 的空模块。Gate 严格串行：前一 Gate 经 Human 正式验收前，不得开始下一 Gate 的实质研发，只允许起草任务书等准备工作。正式采集数据契约属 Gate 2，Gate 1 只定义供 UI 使用的展示字段；提前实施须 Human 批准调整 Gate 范围。
 4. 新增依赖、外部 API、凭据、定时调度或产生费用的服务均属 B 级，须说明必要性并经 Human 授权。
 5. 验证如实：PR 前运行任务书规定的检查，如实记录命令、结果与未执行项。CI 以实际运行为准；因路径过滤等原因未触发时，写“CI 未触发”，不得写成通过。
 6. 密钥、账号凭据、读者私域数据不得进入仓库、PR、Issue 或日志。

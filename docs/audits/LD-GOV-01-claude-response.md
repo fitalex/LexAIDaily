@@ -1,4 +1,4 @@
-# LD-GOV-01 整改回应（Owner：Claude）
+# LD-GOV-01 整改回应（Owner：Claude，含第二轮）
 
 - 回应对象：[GPT 网页版独立审计](LD-GOV-01-gpt-audit.md)（2026-11-05，基准 `a87e7fe`，结论：需修改）
 - 处理方式：全部采纳，在原 PR #3 修订，保留原审计原文与结论，不改写为通过。
@@ -34,3 +34,24 @@
   - **工作链接**：[README 路线图](https://github.com/fitalex/LexAIDaily/blob/main/README.md)
   - **执行步骤**：选一项并在 PR 留言：(甲) Gate 1 只做 UI 展示字段，正式采集数据契约放 Gate 2（我的建议）；(乙) 批准提前，并相应调整 Gate 范围。
 - AI 不得代你确认、批准或合并。
+
+## 第二轮回应（针对 commit `a8bf671` 的增量审计）
+
+我只拿到 GPT 网页版的摘要，评论全文在 GitHub，未能读取；下表只回应摘要中列出的项目，评论中若有更多细节，以评论为准。
+
+| 项目 | 处理 | 位置 |
+|---|---|---|
+| 任务书模板遗漏审计条件 6.1(e) | 采纳，已改为 6.1(a-e)；同时新增“所属 Gate / 对应验收标准”字段 | docs/templates/TASK_BOOK.md |
+| 任务索引仍写“PR 待建” | 采纳，已改为 PR #3 链接 | docs/daily-specs/README.md |
+| 首轮审计报告未完全保留原文格式 | **不由我修复。** 我归档的是 Human 提供的文本文件，已用 `cmp` 核对逐字节一致；GPT 网页版聊天界面的渲染格式我拿不到。建议操作员用其原始输出覆盖该文件，我不再改动它 | docs/audits/LD-GOV-01-gpt-audit.md |
+| D-001 至 D-004 最终授权确认 | 需 Human 在 PR #3 针对最新版本明确确认或修订；已列入 STATUS 待办 | STATUS 决策记录与待办 |
+
+## 并入的 ROADMAP 对齐修改（新增审计面，请重点复审）
+
+Human 在整改期间提供了 ROADMAP.md（尚未入库）。为对齐它，本轮额外修改：
+
+- AGENTS.md 10.2、10.3、8.1：冻结基线加入 ROADMAP.md；Gate 严格串行，前一 Gate 未经 Human 正式验收前只准备任务书；Gate 目标与验收标准以 ROADMAP 和 README 为准，不一致交 Human。
+- AGENTS.md 4、TASK_BOOK：DoD 须对应所属 Gate 验收标准条目。
+- AGENTS.md 5：Gate 1 排版模板须经 Human 在 iOS、Android 微信客户端真机预览。
+- STATUS、任务书索引：新增 LD-G0-02 至 04、LD-G1-04；LD-G1 系列待 Gate 0 验收后开工；Human 待办补充 README 与 ROADMAP 不一致项（Gate 0 勾选状态、Gate 名称）。
+- 手册：新增第 10 节 Gate 分工预案。

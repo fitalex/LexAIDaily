@@ -5,9 +5,10 @@
 - 授权来源：<A 级：Claude，见 STATUS 台账｜B 级：Human Maintainer，注明日期与位置>
 - 任务 Owner：<Codex / Antigravity / GPT 网页版 / Claude>
 - 复核者：Claude（若 Owner 为 Claude，则为 <其他复核者>）
-- 独立审计：<否｜是：GPT 网页版，依据 AGENTS.md 6.1(<a-d>)>
+- 独立审计：<否｜是：GPT 网页版，依据 AGENTS.md 6.1(<a-e>)>
 - Final Approver：Human Maintainer
 - 基准：`main`（Commit SHA：`<sha>`）｜分支：`<agent>/<任务号小写>-<slug>`｜PR：<链接>
+- 所属 Gate：<Gate N>｜对应验收标准：<ROADMAP 中的条目>
 - 依赖：<任务号 / 无>｜被依赖：<任务号 / 无>
 
 ## 一、背景与目标
@@ -28,10 +29,10 @@
 
 ## 四、DoD
 
-| 序号 | 验收标准 | 证明方式 |
-|---|---|---|
-| D01 | <可验证的标准> | <命令 / 文件 / 截图 / 链接> |
-| D02 | | |
+| 序号 | 验收标准 | 对应 Gate 验收条目 | 证明方式 |
+|---|---|---|---|
+| D01 | <可验证的标准> | <条目> | <命令 / 文件 / 截图 / 链接> |
+| D02 | | | |
 
 ## 五、验证与证据要求
 
