@@ -73,3 +73,18 @@ Human 在整改期间提供了 ROADMAP.md（尚未入库）。为对齐它，本
 | 首轮审计报告格式 | 已由 GPT 按原始回复恢复，本地副本已同步仓库版本 | docs/audits/LD-GOV-01-gpt-audit.md |
 
 **我自行新增的一条规则（请复审）**：AGENTS.md 6.2 增加“审计意见须以文件形式归档，PR 评论只作通知”，原因是我无法读取 PR 评论，只能读仓库文件。
+
+## 第四轮回应（针对 commit `08b29e9` 的增量审计，评论 issuecomment-6653214636）
+
+本轮已读到审计全文（附件），下表覆盖全部新发现；第三轮遗留项的复核结论（已解决 / 部分解决 / 待 Human）以审计为准，我不自行宣称关闭。
+
+| 项目 | 处理 | 位置 |
+|---|---|---|
+| S2：§6.2 缺少审计文件固定 SHA 与独立来源核验规则 | 采纳。新增审计证据约束：PR 通知须含结论、被审 commit SHA、归档文件固定链接与 blob SHA；已归档文件不得修改，新一轮另存；Claude 用 `git hash-object` 核对并记录；Human 最终批准前核对归档与评论原文；无法核对的意见不得作通过依据。已回填 r1–r3 的 blob SHA | AGENTS.md 6.2；docs/audits/README.md |
+| S3：审计索引仍显示 R3 待归档 | 采纳。已链接 r3 文件；新增 r4 行，待操作员原样提交 | docs/audits/README.md |
+| S3：STATUS 引用和整改状态滞后 | 采纳。更新整改状态；补记 Human 07:39:30 UTC 更明确的确认留言；区分“决策确认”与“规范正式批准”；不改动 Human 决策原文 | STATUS |
+| 部分解决：ROADMAP 未入库 | 待 Human：LD-G0-02 另开 PR；并新增生效条件 (5)：ROADMAP 入库且 README 对齐 | AGENTS.md 14；STATUS |
+
+另：按 Human 本轮三项回复登记 D-005（Gate 甲，**待明确确认**）、D-006（AGENTS.md 列入 Gate 0 交付）、D-007（以 ROADMAP 为准并修改 README），并把 LD-G0-02 范围改为“ROADMAP 入库与 README 对齐”。这些均为我的记录，需 Human 在 PR 中确认才生效。
+
+我的自我核对：新增规则只增加证据约束，不改变权限；未运行自动化测试（无 CI）。

@@ -1,6 +1,6 @@
 # AI Agent 开发与协作规范（V1.0 草案）
 
-> **状态：DRAFT，未生效。** 本规范由 Claude（协调者）起草。依 6.1，须经 GPT 网页版独立审计、Human Maintainer 批准后生效（任务 LD-GOV-01）。前三轮审计（至 commit `8a76086`）结论均为“需修改”，本版为第三轮整改稿，回应见[审计归档](docs/audits/README.md)；生效条件见第 14 节。
+> **状态：DRAFT，未生效。** 本规范由 Claude（协调者）起草。依 6.1，须经 GPT 网页版独立审计、Human Maintainer 批准后生效（任务 LD-GOV-01）。前四轮审计（至 commit `08b29e9`）结论均为“需修改”，本版为第五轮整改稿，回应见[审计归档](docs/audits/README.md)；生效条件见第 14 节。
 > 设计参照：[LexRouter AGENTS.md V2.2](https://github.com/fitalex/LexRouter/blob/main/AGENTS.md)（Single Owner + Cross Review + Human Gate）。主要调整：协调者由 ChatGPT 改为 Claude；GPT 网页版改任仓库操作员、独立审计与调研；新增 DeepSeek Harness、A/B 任务分级和每日内容线。
 
 本规范适用于 LexAIDaily 仓库的全部 AI Agent 与贡献者，采用 **协调者调度 → 单任务负责人（Single Owner）→ 交叉复核（Cross Review）→ 人工验收（Human Gate）**。角色分工不授权自动合并，也不替代 Human Maintainer 的内容终审与发布决定。协调者的日常操作细则见 [协调者操作手册](docs/COORDINATOR_PLAYBOOK.md)，冲突时以本文件为准。
@@ -118,7 +118,7 @@ DeepSeek Harness 是第二个工程 Agent，负责对 Codex 的成果做交叉�
 
 Human 可对任何任务追加审计；仅 Human 可豁免，且须在任务书或 PR 中书面记录理由。协调者不得省略或自行豁免。
 
-6.2 **审计意见格式。** 使用 [复核与审计报告模板](docs/templates/REVIEW_REPORT.md)：审计对象及基准 commit、检查范围、按严重程度排序的发现、未检查项、建议结论（通过 / 需修改 / 需人工决策）。审计意见只构成证据，不自动产生权限。审计意见须以文件形式归档到 `docs/audits/`（由操作员原样提交），PR 评论只作通知；文件与评论不一致时交 Human 裁决。
+6.2 **审计意见格式。** 使用 [复核与审计报告模板](docs/templates/REVIEW_REPORT.md)：审计对象及基准 commit、检查范围、按严重程度排序的发现、未检查项、建议结论（通过 / 需修改 / 需人工决策）。审计意见只构成证据，不自动产生权限。审计意见须以文件形式归档到 `docs/audits/`（由操作员原样提交），PR 评论只作通知；文件与评论不一致时交 Human 裁决。**审计证据约束：** (a) PR 通知评论须包含审计结论、被审 commit SHA、归档文件的固定链接（permalink，含 commit）及该文件的 Git blob SHA；(b) 已归档的审计文件不得修改，新一轮审计另存新文件，勘误以新文件说明；(c) Claude 读取归档文件后以 `git hash-object` 核对 blob SHA，并记入 `docs/audits/README.md`；(d) Human 在最终批准前核对归档版本与 PR 评论原文一致。无法核对的审计意见不得作为通过依据。
 
 6.3 **分歧处理。** Claude 与 GPT 网页版的意见不一致时，任何一方不得单方裁定。原 Owner 在原 PR 回应，Claude 列出分歧点交 Human 决定。
 
@@ -215,4 +215,4 @@ Claude 负责：拆分任务书、判定级别与审计触发、选择执行者�
 
 本规范的修改经 PR 提交，依 6.1(a) 须独立审计，由 Human 批准后合并；生效与版本变更记入 STATUS 的决策记录。
 
-**生效条件**（全部满足才可合并生效）：(1) 独立审计通过，S1 与 S2 问题已关闭；(2) 决策记录 D-001 至 D-004 已由 Human 在 PR 中确认；(3) 第 13 节文件地图所列文件均已合入，链接检查通过；(4) Human 审核 diff 后批准。
+**生效条件**（全部满足才可合并生效）：(1) 独立审计通过，S1 与 S2 问题已关闭；(2) 决策记录 D-001 至 D-004 已由 Human 在 PR 中确认；(3) 第 13 节文件地图所列文件均已合入，链接检查通过；(4) Human 审核 diff 后批准；(5) ROADMAP.md 已入库（LD-G0-02）且 README 已与之对齐，审计归档文件的 SHA 已按 6.2 核对。

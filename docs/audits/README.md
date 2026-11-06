@@ -11,5 +11,17 @@
 |---|---|---|---|
 | LD-GOV-01 | [LD-GOV-01-gpt-audit.md](LD-GOV-01-gpt-audit.md) | 独立审计（GPT 网页版，2026-11-05，基准 `a87e7fe`；已按 GPT 原始回复恢复格式） | 需修改 |
 | LD-GOV-01 | [LD-GOV-01-gpt-audit-r2.md](LD-GOV-01-gpt-audit-r2.md) | 第二轮增量审计（GPT 网页版，基准 `a8bf671`） | 需修改 |
-| LD-GOV-01 | 待归档为 `LD-GOV-01-gpt-audit-r3.md`（PR #3 评论 issuecomment-6652706005） | 第三轮增量审计（GPT 网页版，基准 `8a76086`） | 需修改 |
-| LD-GOV-01 | [LD-GOV-01-claude-response.md](LD-GOV-01-claude-response.md) | Owner 整改回应（Claude，含第二轮） | 待增量复审 |
+| LD-GOV-01 | [LD-GOV-01-gpt-audit-r3.md](LD-GOV-01-gpt-audit-r3.md) | 第三轮增量审计（GPT 网页版，基准 `8a76086`；PR 评论 issuecomment-6652706005） | 需修改 |
+| LD-GOV-01 | 待归档为 `LD-GOV-01-gpt-audit-r4.md`（PR #3 评论 issuecomment-6653214636） | 第四轮增量审计（GPT 网页版，基准 `08b29e9`） | 需修改 |
+| LD-GOV-01 | [LD-GOV-01-claude-response.md](LD-GOV-01-claude-response.md) | Owner 整改回应（Claude，含第二至四轮） | 待增量复审 |
+
+## 归档文件 blob SHA 核对记录（AGENTS.md 6.2）
+
+Claude 读取仓库中的归档文件后以 `git hash-object` 计算；已归档文件不得修改，新一轮另存新文件。Human 在最终批准前核对归档版本与 PR 评论原文一致。
+
+| 文件 | Git blob SHA | 核对人 / 日期 | 与 PR 评论原文一致（Human 核对） |
+|---|---|---|---|
+| LD-GOV-01-gpt-audit.md | `2c40f03148f3928aa3e1910fa2210208bdbe8bd3` | Claude / 2026-11-06 | 待核对 |
+| LD-GOV-01-gpt-audit-r2.md | `3606d85e95034227f57b34281edaed5d9953c460` | Claude / 2026-11-06 | 待核对 |
+| LD-GOV-01-gpt-audit-r3.md | `8d43ca4d210cca1798b5fa763a2cdf2b0b9dfa09` | Claude / 2026-11-06 | 待核对 |
+| LD-GOV-01-gpt-audit-r4.md | 归档后补记 | — | 待核对 |
