@@ -1,6 +1,6 @@
 # Gate 0 验收清单（LD-G0-04）
 
-> **状态：独立审计已完成（需修改，已整改，整改未再审），Human 已口头表态通过，待 Human 本人签署留痕。** 本清单只转写 [ROADMAP.md](../../ROADMAP.md) Gate 0 既有交付成果与验收标准，原文逐字照录，不新增、不降低、不改写。证据与状态列是核对记录，不构成验收结论。
+> **状态：独立审计已完成（需修改，已整改，整改未再审）；Human 本人于 2026-11-07 在 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 写明“Gate 0 验收通过”。** 本清单只转写 [ROADMAP.md](../../ROADMAP.md) Gate 0 既有交付成果与验收标准，原文逐字照录，不新增、不降低、不改写。证据与状态列是核对记录，不构成验收结论。
 >
 > 基准：`main` @ `3ea52c0`（含 PR #3、PR #4 合并结果）｜编制：Claude｜日期：2026-11-07
 
@@ -44,7 +44,7 @@
 
 ## 六、Human 签署
 
-**Claude 代记：** Human 于 2026-11-07 18:05（Asia/Taipei）在会话中表态：“Gate 0 签署通过”，并确认 D-006、D-007。这是对话记录，**不等于本栏签署**。AI 不得代签；请 Human 在本栏填写，或在 PR 评论写明“Gate 0 验收通过”后由 Claude 记入链接。
+**Human 本人留痕：** 2026-11-07 10:10 UTC，Human（fitalex）在 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 写明：“确认 D-006、D-007；Gate 0 验收通过”。该评论为签署依据；下方复选框与签名由 Human 本人填写，Claude 不代填。
 
 以下由 Human Maintainer 本人填写，AI 不得代签：
 
