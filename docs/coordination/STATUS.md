@@ -12,7 +12,8 @@
 | LD-G0-01 | README 增加协作规范文档入口 | A | Antigravity | Claude | PROPOSED | 依赖 LD-GOV-01 生效；不得改动 README 定位与路线图段落 |
 | LD-G0-02 | ROADMAP.md 入库与 README 对齐（以 ROADMAP 为准，D-007） | B（冻结基线） | GPT 网页版（操作员） | Claude 核对与原文一致；Human 审 diff | DONE | 已通过 PR #4 合并入 main（merge commit `0570956`）；Human 2026-11-07 授权合并；同次 Human 指示 ROADMAP Gate 3 增加“供 AI Agent 调用的 LexAIDaily Skill” |
 | LD-G0-03 | README 与 ROADMAP 一致性核对 | A | Claude（Human 2026-11-07 指示开始，由 Claude 直接执行） | 待 Human 阅读 | DONE | 未发现语义冲突，仅措辞差异；报告摘要见 docs/coordination/GATE0_ACCEPTANCE.md 第三节 |
-| LD-G0-04 | Gate 0 验收清单 | A | Claude | GPT 网页版审计（6.1(d)，待启动）；Human 签署 | IN_REVIEW（草案已开 PR） | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
+| LD-G0-04 | Gate 0 验收清单 | A | Claude | 独立审计：LD-G0-05（Astra，待派发）；Human 签署 | IN_REVIEW（草案已开 PR） | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
+| LD-G0-05 | Gate 0 验收清单独立审计（1 轮） | A | Codex（Astra，Human 2026-11-07 指定） | Claude | AUTHORIZED_TO_EXECUTE | 对象为 PR #6；只审 1 轮；任务书 docs/daily-specs/LD-G0-05.md；待 Human 派发 |
 | LD-GOV-02 | 修订 AGENTS.md 过时表述（文首“DRAFT，未生效”；Claude 已有 GitHub 读写权限，D-003 前提已变） | B（治理） | Claude | GPT 网页版审计；Human 批准 | PROPOSED | 待 Human 授权；见 GATE0_ACCEPTANCE.md 观察 O1 |
 | LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | B（跨 Gate） | Codex | Claude | PROPOSED | 须待 Human 正式验收 Gate 0 后才能开工（ROADMAP 串行准入）；提前做正式契约须 Human 批准调整 Gate 范围 |
 | LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Codex | Claude；Human 视觉验收 | PROPOSED | 依赖 LD-G1-01；使用 Figma MCP 与图像生成，须先经 Human 授权；Codex 提供截图、Figma 版本与素材来源记录 |
@@ -40,6 +41,7 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 | 日期 | 任务 | 授权依据（一句话） | Human 已知悉 |
 |---|---|---|---|
 | 2026-11-07 | LD-G0-03 | Human 回复“开始 G0-03”，A 级只出报告，不改基线 | 是 |
+| 2026-11-07 | LD-G0-05 | Human 指定 Astra 做 PR #6 的 1 轮独立审计并要求 Claude 写任务书；A 级，只出审计意见 | 是 |
 | 2026-11-07 | LD-G0-04 | Human 回复“开这个 PR 并继续 G0-04”，A 级、Claude 为 Owner，触发 6.1(d) 审计 | 是 |
 
 ## 决策记录
