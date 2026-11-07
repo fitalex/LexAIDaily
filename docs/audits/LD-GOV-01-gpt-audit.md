@@ -1,0 +1,122 @@
+来源：GPT 网页版｜LD-GOV-01｜基准：`a87e7fe6d8549064c87aa0e42ce5f1a17189c028`｜日期：2026-11-05
+
+## 一、步骤 A：仓库提交完成
+
+**3 个文件已原样提交，Draft PR 已创建，未合并。**
+
+| 项目 | 结果 |
+|---|---|
+| 仓库 | [fitalex/LexAIDaily](https://github.com/fitalex/LexAIDaily) |
+| PR | [#3｜LD-GOV-01 多 Agent 协作规范 V1 草案](https://github.com/fitalex/LexAIDaily/pull/3) |
+| 分支 | `claude/ld-gov-01-collab-spec` |
+| 基准 main | `0f7ecd5` |
+| 最终 commit | [`a87e7fe`](https://github.com/fitalex/LexAIDaily/commit/a87e7fe6d8549064c87aa0e42ce5f1a17189c028) |
+| PR 状态 | Draft / Open / 未合并 |
+| 变更 | 新增 3 个文件，无删除 |
+
+已提交文件：
+
+- `AGENTS.md`
+- `docs/COORDINATOR_PLAYBOOK.md`
+- `docs/coordination/STATUS.md`
+
+**原文一致性：PASS。** 三个文件均已从 GitHub 重新读取，并与交接包逐字比较，结果完全一致。
+
+其余模板、索引和配置文件未修改。本次提交仅为草案，不代表治理规范已获批准或生效。
+
+## 二、步骤 B：独立审计报告
+
+**审计结论：需修改（CHANGES_REQUESTED）。**
+
+整体架构保留了 LexRouter 的 Single Owner、Cross Review 和 Human Gate，方向合理。
+
+但发现 **2 项 S1 阻断问题、6 项 S2 重要问题、2 项 S3 改进建议**。
+
+主要风险不是 Claude 能直接合并代码，而是 Claude 同时控制任务分级、执行授权、审核条件和状态记录。现有制衡措施尚不足以防止权限绕过。
+
+### 1. S1｜阻断问题
+
+| 编号 | 位置 | 问题与风险 | 修改建议 |
+|---|---|---|---|
+| S1-01 | `AGENTS.md` §3.1；`STATUS.md` D-001 | 草案称 Human 已批准 Claude 自主授权 A 级任务，且规范生效前适用。但审计材料未提供可独立核验的授权记录。Claude 起草的状态记录不能单独证明授权有效。 | 补充 Human 的原始授权依据或由 Human 在 PR 明确确认。确认前，不应依据 D-001 启动 A 级任务。 |
+| S1-02 | `AGENTS.md` §3.1、§6.1、§6.5；手册 §2、§4 | Claude 同时判定 A/B 级、审计触发条件、验收要求和状态。现有禁止拆分 B 级任务的规定缺乏独立检查机制。多个 A 级任务可能共同构成 B 级变更。 | 强制按整体目标和累计变更判级。涉及权限、治理标准、审计规则的修改一律 B 级。任务降级或豁免独立审计须经 Human 确认。 |
+
+### 2. S2｜重要问题
+
+| 编号 | 位置 | 问题与风险 | 修改建议 |
+|---|---|---|---|
+| S2-01 | `AGENTS.md` §6.6 | GPT 同时提交文件和审计文件，形成操作集中风险。原文比对能证明内容一致，不能证明治理规则正确。 | 保留 GPT 双角色，但分别记录原文一致性检查和治理审计。Human 对治理 PR 审核 diff 后决定合并。 |
+| S2-02 | `AGENTS.md` §6.1(c) | 审计触发范围偏窄，主要针对高风险工程变更。可能遗漏改变内容可信度的数据契约、分类逻辑、信源权重和 AI 提示词。 | 增加独立审计触发项：影响内容真实性、来源判断、法律风险提示和人工审核流程的实质变更。 |
+| S2-03 | `STATUS.md` LD-G1-01；`README.md` §5 | README 将 Gate 1 定义为 UI 与排版原型，Gate 2 才进入采集工作流。LD-G1-01 的正式数据契约任务可能超出 Gate 1 范围。 | 区分用于 UI 展示的字段定义和正式采集数据契约。若需提前实施正式契约，由 Human 批准调整 Gate 范围。 |
+| S2-04 | `AGENTS.md` §8.2；手册 §8 | 每日内容线基本符合四项编辑原则，但“一手链接可访问”不足以证明法律信息准确、现行有效。 | 对法律高风险条目增加发布机构、发布日期、文件版本或效力状态的核查。无法核实的内容不得写成确定事实。 |
+| S2-05 | `AGENTS.md` §5、§10.10；手册 §3 | Codex 同时负责工程、UI 和图像生成，存在单点风险。Figma 与生成素材的第三方权利、使用权限及可追溯性也未完全定义。 | 依次执行工程与 UI 任务。保留 Human 视觉验收；记录 Figma 版本、素材来源、授权情况，禁止提交凭据。 |
+| S2-06 | `AGENTS.md` §2、§3.2、§12；手册 §1 | `main`、STATUS 和 PR 的状态关系不够清楚。审计失败后缺少返回修改状态的明确路径。 | `main` 保存已生效规则，PR 保存待审变更。审计不通过转 `CHANGES_REQUESTED`，修复后按需重新审计。Human 拒绝时不得标记 DONE。 |
+
+### 3. S3｜建议改进
+
+| 编号 | 位置 | 问题与建议 |
+|---|---|---|
+| S3-01 | `AGENTS.md` §2、§6.4；手册 §1 | “GPT 没有跨会话记忆”表述过于绝对。建议改成“不依赖聊天记忆，任务事实以仓库中已核验记录为准”。 |
+| S3-02 | `AGENTS.md` §13；`STATUS.md` | 多个模板和索引文件尚不存在。虽然交接包已说明由 Human 另行提供，但规范生效前应检查必要链接，明确未完成项，不应宣称文档系统完整。 |
+
+### 4. 与 LexRouter V2.2 的比较
+
+已核查 [LexRouter AGENTS.md V2.2](https://github.com/fitalex/LexRouter/blob/main/AGENTS.md)。
+
+**合理保留：** 唯一 Owner、工程交叉测试、独立审计、Human 最终合并，以及法律专业判断与 AI 预审分离。
+
+**新增风险：** LexRouter 中 Claude 是独立审计者；LexAIDaily 中 Claude 兼任协调者和治理规则起草者。虽然增加了 GPT 独立审计，但 GPT 又承担仓库操作员职责，职责分离程度有所下降。
+
+DeepSeek Harness 与 Codex 的双向工程交叉测试安排基本清楚。不过，DeepSeek Harness 对 Figma 设计和公众号排版的独立视觉验证能力尚未确认。应明确由 Codex 提供截图、导出文件和测试证据，Human 负责视觉验收。
+
+每日内容线总体符合 README 四项编辑原则。尤其应保留“一手信源、AI 初稿标注、Human 终审”的规则，不得因为采集自动化而降低核验要求。
+
+### 5. 验证结果与未检查项
+
+| 检查项目 | 结果 |
+|---|---|
+| 三个文件与交接包原文一致 | PASS |
+| PR 文件范围 | PASS，仅新增 3 个文件 |
+| Draft 状态与未合并要求 | PASS |
+| GitHub CI | 未发现状态检查或工作流运行记录 |
+| README 阶段边界 | 发现 S2-03 |
+| LexRouter V2.2 对照 | 已完成 |
+| D-001 至 D-004 原始人工授权记录 | 未核实 |
+| Figma 权限、生成素材授权 | 未核实 |
+| 尚未提供的模板与索引 | 未检查 |
+| 实际工程执行与内容发布 | 不在本次审计范围 |
+
+**说明：** 没有发现 CI 运行记录，不等于 CI 测试通过。本次仅验证文件原文、PR 状态及已取得的仓库证据。
+
+## 三、整改与人工决策
+
+建议由 Claude 作为原 Owner，在 [Draft PR #3](https://github.com/fitalex/LexAIDaily/pull/3) 中修复问题，保留原 PR 和审计历史。
+
+整改范围应优先限于 S1、S2，不需要重建整套协作系统。
+
+### Claude 工作清单
+
+- [ ] 修复 S1-01、S1-02 两项阻断问题。
+- [ ] 修复 S2-01 至 S2-06 六项重要问题。
+- [ ] 在原 PR 提交修订，并逐项说明如何解决。
+- [ ] 回传最新 commit SHA、diff 和实际检查结果，供 GPT 增量复审。
+
+### Human 工作清单
+
+- [ ] **确认授权。** 查看 [STATUS.md 决策记录](https://github.com/fitalex/LexAIDaily/blob/claude/ld-gov-01-collab-spec/docs/coordination/STATUS.md)，核实 D-001 至 D-004。对无法证明的授权，在 PR 留言确认、修订或撤回。
+- [ ] **确认 Gate 范围。** 对照 [README 路线图](https://github.com/fitalex/LexAIDaily/blob/main/README.md)，决定正式数据契约是否允许进入 Gate 1。
+- [ ] **决定最终合并。** 等待阻断问题修复及重新审计后，再检查 [PR #3](https://github.com/fitalex/LexAIDaily/pull/3)，自主批准或拒绝。
+
+## 四、最终建议
+
+**LD-GOV-01：CHANGES_REQUESTED（需修改）。**
+
+目前不建议批准或合并 PR #3。
+
+整改目标是：保留 Claude 的日常协调效率，同时使 A 级授权有据可查、B 级权限不能通过任务拆分绕过、独立审计不能由协调者自行免除。
+
+无需增加新的常驻 Agent，也无需建立复杂审批系统。修复现有权限与审计规则即可。
+
+本报告只提供独立审计意见，不构成治理规范批准、法律专业意见或合并授权。Claude 可将报告原文归档至 `docs/audits/LD-GOV-01-gpt-audit.md`，但应保留本次“需修改”结论，不得改写为通过。
+
+🔴需人工决策/阻塞
