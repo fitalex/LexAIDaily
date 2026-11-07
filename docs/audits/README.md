@@ -13,7 +13,7 @@
 | LD-GOV-01 | [LD-GOV-01-gpt-audit-r2.md](LD-GOV-01-gpt-audit-r2.md) | 第二轮增量审计（GPT 网页版，基准 `a8bf671`） | 需修改 |
 | LD-GOV-01 | [LD-GOV-01-gpt-audit-r3.md](LD-GOV-01-gpt-audit-r3.md) | 第三轮增量审计（GPT 网页版，基准 `8a76086`；PR 评论 issuecomment-6652706005） | 需修改 |
 | LD-GOV-01 | 待归档为 `LD-GOV-01-gpt-audit-r4.md`（PR #3 评论 issuecomment-6653214636） | 第四轮增量审计（GPT 网页版，基准 `08b29e9`） | 需修改 |
-| LD-G0-04 | [LD-G0-04-codex-audit-r1.md](https://github.com/fitalex/LexAIDaily/blob/c37167adcd8580a4d44e8b365c4404404ea9bc05/docs/audits/LD-G0-04-codex-audit-r1.md)（在 [PR #8](https://github.com/fitalex/LexAIDaily/pull/8)，尚未合并到 main） | 独立审计（Codex Astra，1 轮，被审 `d32abf4`；通知评论 issuecomment-6702332965） | 需修改 |
+| LD-G0-04 | [LD-G0-04-codex-audit-r1.md](https://github.com/fitalex/LexAIDaily/blob/c37167adcd8580a4d44e8b365c4404404ea9bc05/docs/audits/LD-G0-04-codex-audit-r1.md)（经 [PR #8](https://github.com/fitalex/LexAIDaily/pull/8) 合并，`31a2d0a`） | 独立审计（Codex Astra，1 轮，被审 `d32abf4`；通知评论 issuecomment-6702332965） | 需修改 |
 | LD-GOV-01 | [LD-GOV-01-claude-response.md](LD-GOV-01-claude-response.md) | Owner 整改回应（Claude，含第二至四轮） | 待增量复审 |
 
 ## 归档文件 blob SHA 核对记录（AGENTS.md 6.2）
