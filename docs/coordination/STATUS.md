@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-07（Claude）｜当前阶段：Gate 0（文档规划）｜基准：`main`（以实际最新 commit 为准）
+最后更新：2026-11-07（Claude）｜当前阶段：Gate 0（项目文档与产品规划，待正式验收）｜基准：`main`（以实际最新 commit 为准）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -8,11 +8,12 @@
 
 | 任务 | 标题 | 级别 | Owner | 复核 / 审计 | 状态 | 备注 |
 |---|---|---|---|---|---|---|
-| LD-GOV-01 | 多 Agent 协作规范 V1 | B（治理） | Claude | GPT 网页版审计（必须）；Human 批准 | MERGING（Human 2026-11-07 豁免第六轮并指示合并） | PR #3（Draft）；前四轮审计（至 commit `08b29e9`）均为“需修改”，第四轮余 1 项 S2、2 项 S3，已在本轮整改；回应见 docs/audits/LD-GOV-01-claude-response.md；第五轮 S2、S3 未整改，Human 已在 PR #3 评论 6701898915 书面豁免第六轮复审并承担，后续可另开任务清理 |
+| LD-GOV-01 | 多 Agent 协作规范 V1 | B（治理） | Claude | GPT 网页版审计（必须）；Human 批准 | DONE（已合并 `3ea52c0`；Human 2026-11-07 豁免第六轮） | PR #3（Draft）；前四轮审计（至 commit `08b29e9`）均为“需修改”，第四轮余 1 项 S2、2 项 S3，已在本轮整改；回应见 docs/audits/LD-GOV-01-claude-response.md；第五轮 S2、S3 未整改，Human 已在 PR #3 评论 6701898915 书面豁免第六轮复审并承担，后续可另开任务清理 |
 | LD-G0-01 | README 增加协作规范文档入口 | A | Antigravity | Claude | PROPOSED | 依赖 LD-GOV-01 生效；不得改动 README 定位与路线图段落 |
 | LD-G0-02 | ROADMAP.md 入库与 README 对齐（以 ROADMAP 为准，D-007） | B（冻结基线） | GPT 网页版（操作员） | Claude 核对与原文一致；Human 审 diff | DONE | 已通过 PR #4 合并入 main（merge commit `0570956`）；Human 2026-11-07 授权合并；同次 Human 指示 ROADMAP Gate 3 增加“供 AI Agent 调用的 LexAIDaily Skill” |
-| LD-G0-03 | README 与 ROADMAP 一致性核对 | A | GPT 网页版 | Claude | PROPOSED | 依赖 LD-G0-02；只出报告 |
-| LD-G0-04 | Gate 0 验收清单 | A | Claude | GPT 网页版审计（6.1(d)）；Human 签署 | PROPOSED | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
+| LD-G0-03 | README 与 ROADMAP 一致性核对 | A | Claude（Human 2026-11-07 指示开始，由 Claude 直接执行） | 待 Human 阅读 | DONE | 未发现语义冲突，仅措辞差异；报告摘要见 docs/coordination/GATE0_ACCEPTANCE.md 第三节 |
+| LD-G0-04 | Gate 0 验收清单 | A | Claude | GPT 网页版审计（6.1(d)，待启动）；Human 签署 | IN_REVIEW（草案已开 PR） | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
+| LD-GOV-02 | 修订 AGENTS.md 过时表述（文首“DRAFT，未生效”；Claude 已有 GitHub 读写权限，D-003 前提已变） | B（治理） | Claude | GPT 网页版审计；Human 批准 | PROPOSED | 待 Human 授权；见 GATE0_ACCEPTANCE.md 观察 O1 |
 | LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | B（跨 Gate） | Codex | Claude | PROPOSED | 须待 Human 正式验收 Gate 0 后才能开工（ROADMAP 串行准入）；提前做正式契约须 Human 批准调整 Gate 范围 |
 | LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Codex | Claude；Human 视觉验收 | PROPOSED | 依赖 LD-G1-01；使用 Figma MCP 与图像生成，须先经 Human 授权；Codex 提供截图、Figma 版本与素材来源记录 |
 | LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | Codex | DeepSeek Harness 测试导出结构与兼容（不做视觉判断）；Claude；Human 视觉验收 | PROPOSED | 依赖 LD-G1-01；排在 LD-G1-02 之后，避免并行压给 Codex；微信 iOS/Android 真机预览由 Human 执行 |
@@ -24,7 +25,7 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 
 - [x] 首轮独立审计已完成（PR #3，2026-11-05，结论：需修改），报告原文见 docs/audits/LD-GOV-01-gpt-audit.md
 - [ ] 在 PR #3 留言确认或修订决策记录 D-001 至 D-004（审计 S1-01）；确认前不启动任何 A 级任务
-- [ ] 明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
+- [x] （已于 PR #3 评论 `6679648988` 确认选甲）明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
 - [ ] 确认 Figma 文件与权限、Codex 图像生成的使用方式；Figma 凭据只放你本机或 Codex 环境，不入库
 - [x] 批准并合并 LD-GOV-01：Human 2026-11-07 豁免第六轮（PR #3 评论 6701898915）并指示合并
 - [ ] 正式验收 Gate 0（验收后 LD-G1-01 至 04 才能开工；ROADMAP 要求 README 与 ROADMAP 一致）
@@ -38,7 +39,8 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 
 | 日期 | 任务 | 授权依据（一句话） | Human 已知悉 |
 |---|---|---|---|
-| — | — | — | — |
+| 2026-11-07 | LD-G0-03 | Human 回复“开始 G0-03”，A 级只出报告，不改基线 | 是 |
+| 2026-11-07 | LD-G0-04 | Human 回复“开这个 PR 并继续 G0-04”，A 级、Claude 为 Owner，触发 6.1(d) 审计 | 是 |
 
 ## 决策记录
 
@@ -48,7 +50,7 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 | D-002 | 2026-11-05 | DeepSeek Harness 加入，承担适配器、单测与交叉测试 | Human | 原话：“本地还有deepseek harness，你也可以加进来安排合适的任务”。同 D-001 的 PR #3 两次留言 |
 | D-003 | 2026-11-05 | Claude 无 GitHub 权限；GPT 网页版（具备 GitHub 权限）担任仓库操作员 | Human | 原话：“ChatGPT网页这边有GitHub权限”。同 D-001 的 PR #3 两次留言 |
 | D-004 | 2026-11-05 | Gate 1 UI 由 Codex 使用 Figma MCP 与自带图像生成完成；Antigravity 只负责文档 | Human | 原话：“UI我准备让codex结合自带的imagegen和figma mcp来做”。同 D-001 的 PR #3 两次留言 |
-| D-005 | 2026-11-06 | Gate 范围按甲：Gate 1 只定义 UI 展示字段，正式采集数据契约归 Gate 2 | Human（**待明确确认**） | 原话：“不一致的以路线图为准”（由 Claude 推断为甲），Human 尚未明确选甲或乙 |
+| D-005 | 2026-11-06 | Gate 范围按甲：Gate 1 只定义 UI 展示字段，正式采集数据契约归 Gate 2 | Human | 原话：“不一致的以路线图为准”；Human 已在 PR #3 评论 `6679648988` 明确“确认 D-005 选甲” |
 | D-006 | 2026-11-06 | 协作规范（AGENTS.md）列入 Gate 0 交付成果 | Human | 原话：“确认列入gate0交付”；ROADMAP 相应修改随 LD-G0-02，待 Human 在 PR 确认 |
 | D-007 | 2026-11-06 | README 与 ROADMAP 不一致处以 ROADMAP 为准，并修改 README | Human | 原话：“不一致的以路线图为准，顺便修改一下”；经 LD-G0-02 另开 PR 执行，待 Human 在 PR 确认 |
 
