@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-06（Claude）｜当前阶段：Gate 0（文档规划）｜基准：`main`（以实际最新 commit 为准）
+最后更新：2026-11-07（Claude）｜当前阶段：Gate 0（文档规划）｜基准：`main`（以实际最新 commit 为准）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -8,9 +8,9 @@
 
 | 任务 | 标题 | 级别 | Owner | 复核 / 审计 | 状态 | 备注 |
 |---|---|---|---|---|---|---|
-| LD-GOV-01 | 多 Agent 协作规范 V1 | B（治理） | Claude | GPT 网页版审计（必须）；Human 批准 | IN_AUDIT（第五轮整改稿，待定向复审） | PR #3（Draft）；前四轮审计（至 commit `08b29e9`）均为“需修改”，第四轮余 1 项 S2、2 项 S3，已在本轮整改；回应见 docs/audits/LD-GOV-01-claude-response.md |
+| LD-GOV-01 | 多 Agent 协作规范 V1 | B（治理） | Claude | GPT 网页版审计（必须）；Human 批准 | MERGING（Human 2026-11-07 豁免第六轮并指示合并） | PR #3（Draft）；前四轮审计（至 commit `08b29e9`）均为“需修改”，第四轮余 1 项 S2、2 项 S3，已在本轮整改；回应见 docs/audits/LD-GOV-01-claude-response.md；第五轮 S2、S3 未整改，Human 已在 PR #3 评论 6701898915 书面豁免第六轮复审并承担，后续可另开任务清理 |
 | LD-G0-01 | README 增加协作规范文档入口 | A | Antigravity | Claude | PROPOSED | 依赖 LD-GOV-01 生效；不得改动 README 定位与路线图段落 |
-| LD-G0-02 | ROADMAP.md 入库与 README 对齐（以 ROADMAP 为准，D-007） | B（冻结基线） | GPT 网页版（操作员） | Claude 核对与原文一致；Human 审 diff | PROPOSED | Claude 已备好对齐稿，待 Human 授权并交操作员另开 Draft PR；README 只改“当前阶段”行与路线图段落，不动定位 |
+| LD-G0-02 | ROADMAP.md 入库与 README 对齐（以 ROADMAP 为准，D-007） | B（冻结基线） | GPT 网页版（操作员） | Claude 核对与原文一致；Human 审 diff | DONE | 已通过 PR #4 合并入 main（merge commit `0570956`）；Human 2026-11-07 授权合并；同次 Human 指示 ROADMAP Gate 3 增加“供 AI Agent 调用的 LexAIDaily Skill” |
 | LD-G0-03 | README 与 ROADMAP 一致性核对 | A | GPT 网页版 | Claude | PROPOSED | 依赖 LD-G0-02；只出报告 |
 | LD-G0-04 | Gate 0 验收清单 | A | Claude | GPT 网页版审计（6.1(d)）；Human 签署 | PROPOSED | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
 | LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | B（跨 Gate） | Codex | Claude | PROPOSED | 须待 Human 正式验收 Gate 0 后才能开工（ROADMAP 串行准入）；提前做正式契约须 Human 批准调整 Gate 范围 |
@@ -26,9 +26,9 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 - [ ] 在 PR #3 留言确认或修订决策记录 D-001 至 D-004（审计 S1-01）；确认前不启动任何 A 级任务
 - [ ] 明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
 - [ ] 确认 Figma 文件与权限、Codex 图像生成的使用方式；Figma 凭据只放你本机或 Codex 环境，不入库
-- [ ] 审计通过后批准并合并 LD-GOV-01
+- [x] 批准并合并 LD-GOV-01：Human 2026-11-07 豁免第六轮（PR #3 评论 6701898915）并指示合并
 - [ ] 正式验收 Gate 0（验收后 LD-G1-01 至 04 才能开工；ROADMAP 要求 README 与 ROADMAP 一致）
-- [ ] 授权 LD-G0-02：把 ROADMAP.md 与对齐后的 README 交操作员另开 Draft PR，审 diff 后合并（解决 Gate 0 勾选与 Gate 名称不一致；ROADMAP 版本由此固定）
+- [x] 授权 LD-G0-02：已由 PR #4 合并（2026-11-07，`0570956`），ROADMAP 版本由此固定
 - [x] 已决定把协作规范（AGENTS.md）列入 Gate 0 交付成果（D-006，ROADMAP Gate 0 相应条目随 LD-G0-02 修改）
 - [ ] 最终核对审计归档文件与 PR 评论原文一致（AGENTS.md 6.2；blob SHA 见 docs/audits/README.md）
 - [ ] 对 D-001 至 D-004 作最终治理批准：你已在 PR #3 留言“确认修订D-001到D-004”（07:14:58 UTC）及更明确的确认留言（07:39:30 UTC，针对当时最新版本；a8bf671 之后 D-001 至 D-004 文字未变）。决策确认与规范正式批准是两件事，后者须待审计通过后由你另行批准
