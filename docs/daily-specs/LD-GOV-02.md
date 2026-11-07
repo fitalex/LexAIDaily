@@ -4,7 +4,7 @@
 - 级别：B（理由：修改治理文档）
 - 授权来源：Human Maintainer，2026-11-07 会话：“你直接修正 AGENTS.md 的过时表述吧”
 - 任务 Owner：Claude｜复核者：待定（Owner 为 Claude，不得自审）
-- 独立审计：是：依据 AGENTS.md 6.1(a)(d)；**尚未安排**，须由 Human 指定审计者或书面豁免
+- 独立审计：依据 AGENTS.md 6.1(a)(d) 本应触发；**Human 于 2026-11-07 在会话中明确豁免**（原话：“PR#7直接合并，不审计”），理由与记录见 PR #7 评论；本豁免只针对本任务，不改变 6.1 的一般规则
 - Final Approver：Human Maintainer
 - 基准：`main`（`3ea52c0`）｜分支：`claude/ld-gov-02-agents-status`｜PR：见 STATUS
 - 所属 Gate：Gate 0（治理）｜依赖：LD-GOV-01（已完成）
