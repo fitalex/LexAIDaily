@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-07（Claude）｜当前阶段：Gate 0 已由 Human 验收通过（2026-11-07），Gate 1 可启动准备｜基准：`main`（以实际最新 commit 为准）
+最后更新：2026-11-09（Claude）｜当前阶段：Gate 0 已由 Human 验收通过（2026-11-07），Gate 1 任务书已起草（待 Human 确认 D-008 至 D-010 并授权 B 级任务）｜基准：`main`（以实际最新 commit 为准）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -15,12 +15,14 @@
 | LD-G0-04 | Gate 0 验收清单 | A | Claude | 独立审计 LD-G0-05 已完成（Astra，结论：需修改，已整改，整改未再审）；Human 签署 | DONE（Human 本人于 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 签署） | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
 | LD-G0-05 | Gate 0 验收清单独立审计（1 轮） | A | Codex（Astra，Human 2026-11-07 指定） | Claude | DONE | 审计已交付并归档：[PR #8](https://github.com/fitalex/LexAIDaily/pull/8) 已合并 `31a2d0a`；只审 1 轮，不再复审 |
 | LD-GOV-02 | 修订 AGENTS.md 过时表述（文首“DRAFT，未生效”；Claude 已有 GitHub 读写权限，D-003 前提已变） | B（治理） | Claude | 独立审计已由 Human 豁免 | DONE | Human 2026-11-07 授权修订并豁免审计（原话“PR#7直接合并，不审计”，记录见 PR #7 评论 6705408705）；已合并 `9551b6e` |
-| LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | B（跨 Gate） | Codex | Claude | PROPOSED | 须待 Human 正式验收 Gate 0 后才能开工（ROADMAP 串行准入）；提前做正式契约须 Human 批准调整 Gate 范围 |
-| LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Codex | Claude；Human 视觉验收 | PROPOSED | 依赖 LD-G1-01；使用 Figma MCP 与图像生成，须先经 Human 授权；Codex 提供截图、Figma 版本与素材来源记录 |
-| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | Codex | DeepSeek Harness 测试导出结构与兼容（不做视觉判断）；Claude；Human 视觉验收 | PROPOSED | 依赖 LD-G1-01；排在 LD-G1-02 之后，避免并行压给 Codex；微信 iOS/Android 真机预览由 Human 执行 |
-| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | GPT 网页版 | Claude 核验一手链接与事实 | PROPOSED | 须待 Gate 0 验收 |
+| LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | A（Human 2026-11-07 由 B 降为 A，D-010） | Codex | Claude；独立审计已豁免（D-010） | PROPOSED | [任务书](../daily-specs/LD-G1-01.md)；Gate 0 已验收，可派发；分支 `codex/ld-g1-01-card-fields`；先于 LD-G1-02、LD-G1-03 |
+| LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Codex | Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | PROPOSED | [任务书](../daily-specs/LD-G1-02.md)；依赖 LD-G1-01；使用 Figma MCP 与图像生成，**须先经 Human 授权**；第三方拷贝按 D-008 登记；Codex 提供截图、Figma 版本与素材来源记录 |
+| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | Codex | LD-G1-06 交叉测试；Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | PROPOSED | [任务书](../daily-specs/LD-G1-03.md)；依赖 LD-G1-01、LD-G1-02（Codex 任务不并行）；juice 依赖已授权（D-009），其余须 Human 授权；微信 iOS/Android 真机预览由 Human 执行 |
+| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | GPT 网页版 | Claude 核验一手链接与事实 | PROPOSED | [任务书](../daily-specs/LD-G1-04.md)；与 LD-G1-01 可并行；需 Claude 另出交接包；AGENTS 4 未定义 GPT 网页版分支前缀，待补 |
+| LD-G1-05 | Gate 1 验收清单（只转写 ROADMAP 既有验收标准） | A | Claude | GPT 网页版（核对转写）；独立审计：D-010 豁免范围待 Human 确认；Human 签署 | PROPOSED | [任务书](../daily-specs/LD-G1-05.md)；依赖 LD-G1-01 至 04、06 完成 |
+| LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | DeepSeek Harness | Codex 工程复核；Claude | PROPOSED | [任务书](../daily-specs/LD-G1-06.md)；依赖 LD-G1-03 READY_FOR_REVIEW |
 
-Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 后才能开工，当前只准备任务书。
+Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺序开工；Codex 的 LD-G1-01、02、03 依次执行，不并行。B 级任务（LD-G1-02、03）须 Human 授权后才能开工。
 
 ## Human 待办
 
@@ -28,6 +30,8 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 - [x] （已于 PR #3 评论 `6652115636`、`6652516660` 确认）在 PR #3 留言确认或修订决策记录 D-001 至 D-004（审计 S1-01）；确认前不启动任何 A 级任务
 - [x] （已于 PR #3 评论 `6679648988` 确认选甲）明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
 - [ ] 确认 Figma 文件与权限、Codex 图像生成的使用方式；Figma 凭据只放你本机或 Codex 环境，不入库
+- [ ] 在 Gate 1 任务书 PR 中确认决策 D-008 至 D-010（复用策略、juice 依赖、LD-G1-01 降级与审计豁免的范围）
+- [ ] 授权 LD-G1-02（含 Figma MCP 与图像生成）与 LD-G1-03（B 级）；授权前 Codex 只可开工 LD-G1-01
 - [x] 批准并合并 LD-GOV-01：Human 2026-11-07 豁免第六轮（PR #3 评论 6701898915）并指示合并
 - [x] 正式验收 Gate 0：Human 本人于 2026-11-07 在 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 写明“确认 D-006、D-007；Gate 0 验收通过”（验收后 LD-G1-01 至 04 才能开工；ROADMAP 要求 README 与 ROADMAP 一致）
 - [x] 授权 LD-G0-02：已由 PR #4 合并（2026-11-07，`0570956`），ROADMAP 版本由此固定
@@ -44,6 +48,7 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 | 2026-11-07 | LD-GOV-02 | B 级；Human 授权修订 AGENTS.md 过时表述，并于 18:05 豁免审计 | 是 |
 | 2026-11-07 | LD-G0-05 | Human 指定 Astra 做 PR #6 的 1 轮独立审计并要求 Claude 写任务书；A 级，只出审计意见 | 是 |
 | 2026-11-07 | LD-G0-04 | Human 回复“开这个 PR 并继续 G0-04”，A 级、Claude 为 Owner，触发 6.1(d) 审计 | 是 |
+| 2026-11-09 | LD-G1-01 | 整体目标：Gate 1 原型。Human 2026-11-07 确认降为 A 并豁免审计（D-010）；Claude 依 D-001 授权派发；仅定义 UI 展示字段，无依赖、无对外发布 | 是 |
 
 ## 决策记录
 
@@ -56,5 +61,8 @@ Gate 严格串行（ROADMAP）：LD-G1 系列须待 Human 正式验收 Gate 0 �
 | D-005 | 2026-11-06 | Gate 范围按甲：Gate 1 只定义 UI 展示字段，正式采集数据契约归 Gate 2 | Human | 原话：“不一致的以路线图为准”；Human 已在 PR #3 评论 `6679648988` 明确“确认 D-005 选甲” |
 | D-006 | 2026-11-06 | 协作规范（AGENTS.md）列入 Gate 0 交付成果 | Human | 原话：“确认列入gate0交付”；ROADMAP 相应修改已随 PR #4 合并。Human 2026-11-07 18:05 会话原话：“D-006、D-007 确认”；Human 本人已在 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 确认 |
 | D-007 | 2026-11-06 | README 与 ROADMAP 不一致处以 ROADMAP 为准，并修改 README | Human | 原话：“不一致的以路线图为准，顺便修改一下”；已经 PR #4 执行并合并。Human 2026-11-07 18:05 会话原话：“D-006、D-007 确认”；Human 本人已在 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 确认 |
+| D-008 | 2026-11-07 | 第三方代码与素材的复用策略：合规拷贝优先，其余参考。“合规拷贝”的做法：许可证须为 MIT、Apache-2.0、BSD、ISC、WTFPL、CC0 一类宽松许可，并且取最小必要部分、保留版权与许可证声明、登记到根目录 `THIRD_PARTY_NOTICES.md`（来源仓库、commit SHA、路径、许可证、改动说明）；GPL、AGPL、非商用、无许可证的内容只参考，不拷贝；许可证只覆盖代码，不覆盖品牌标识、图片与内容数据。登记表只记录第三方许可，不构成本仓库许可证声明（AGENTS 10.7）。每个涉及拷贝的任务按 6.1(c) 触发独立审计，Human 可书面豁免 | Human（做法由 Claude 起草） | Human 原话：“复用策略为：合规拷贝优先，其余参考”；上述具体做法由 Claude 补充，待 Human 在 PR 中确认 |
+| D-009 | 2026-11-07 | 授权新增依赖 juice（Automattic/juice，MIT），仅用于 LD-G1-03 的公众号内联样式原型脚本；版本固定、锁文件入库、`--ignore-scripts` 安装 | Human | Human 原话：“授权 juice 这个依赖”；待 Human 在 PR 中确认 |
+| D-010 | 2026-11-07 | LD-G1-01 由 B 降为 A；独立审计豁免。豁免范围：Claude 记为适用于 LD-G1-01，并适用于 LD-G1-05（对应 Claude 当时的提问“是否给 LD-G1-05 做独立审计”），范围若与 Human 本意不同，请在 PR 中更正；LD-G1-02、03 的 6.1(c) 审计不在此豁免内 | Human | Human 原话：“确认 LD-G1-01 降为 A，审计豁免”；待 Human 在 PR 中确认 |
 
 决策记录须附 Human 原话或链接，并经 Human 在 PR 中确认后生效；Claude 起草的记录不单独构成授权。
