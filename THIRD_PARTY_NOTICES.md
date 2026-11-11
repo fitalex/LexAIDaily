@@ -15,6 +15,7 @@
 | 04 | 界面西文字体：Inter | [rsms/inter](https://github.com/rsms/inter) | `v4.0` | `InterVariable.ttf` | SIL OFL-1.1 | 原型与设计规范指定界面默认无衬线西文字体（支持 400, 600, 700 字符重），商业友好开源授权。 |
 | 05 | 等宽代码与数据字体：JetBrains Mono | [JetBrains/JetBrainsMono](https://github.com/JetBrains/JetBrainsMono) | `v2.304` | `fonts/ttf/JetBrainsMono-Regular.ttf` | SIL OFL-1.1 | 原型中信源 URL 域名、时间戳及编号的专用等宽显示字体。 |
 | 06 | 设计协作工具平台：Penpot | [penpot/penpot](https://github.com/penpot/penpot) | `v2.19.0` (SaaS / Open Source) | Penpot Design App & MCP Plugin | MPL-2.0 | 仅使用 Penpot 云端平台及 MCP 插件作为原型产出载体（D-013），未拷贝其服务端或前端源代码。 |
+| 07 | WebGL/WebGPU 特效交互组件库：Canvas UI | [DavidHDev/canvas-ui](https://github.com/DavidHDev/canvas-ui) | `a0be3b7` | 全库 | MIT + Commons Clause | Gate 1 仅参考交互概念并预留静态效果槽位，未安装、未拷贝任何代码；Gate 3 使用代码待 Human 确认 D-018。 |
 
 ---
 
@@ -60,4 +61,15 @@ Permission is hereby granted, free of charge, to any person obtaining
 a copy of the Font Software, to use, study, copy, merge, embed, modify,
 redistribute, and sell modified and unmodified copies of the Font Software,
 subject to the conditions stated in the OFL license.
+```
+
+### 3. MIT License with Commons Clause (DavidHDev/canvas-ui)
+
+```text
+The Commons Clause License Condition v1.0
+Without limiting other conditions in the License, the grant of rights under the
+License will not include, and the License does not grant, the right to Sell the
+Software (including supplying the Software, in whole or in part, to others for a fee).
+
+（注：Gate 1 仅参考交互概念并预留静态效果槽位，未安装、未拷贝任何代码；Gate 3 使用代码待 Human 确认 D-018）
 ```
