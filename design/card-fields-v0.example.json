@@ -1,0 +1,55 @@
+{
+  "note": "本文件全部为虚构占位内容（v0 联调用），不是真实资讯，不得作为事实引用。每条标题均含“【示例占位，非真实资讯】”，链接只使用保留域名 example.com。字段定义见 card-fields-v0.md；本文件不是 Gate 2 的正式采集数据契约（D-005）。`category` 使用字符串仅为原型展示，不预设“单标签”结论，多标签问题见 card-fields-v0.md 第六节第 1 条。",
+  "cards": [
+    {
+      "title": "【示例占位，非真实资讯】示例标题：虚构团队发布示例模型技术说明",
+      "summary": "占位摘要：虚构团队发布一份示例性技术说明，用于演示摘要段落长度与换行，不包含任何真实新闻事实。",
+      "impact_anchor": "占位锚点：用于演示 AI 初稿标识的排版位置，内容为虚构示例，不构成法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-001",
+      "category": "模型与技术",
+      "ai_draft_fields": ["summary", "impact_anchor"],
+      "unverified": false,
+      "fact_level": "官方数据"
+    },
+    {
+      "title": "【示例占位，非真实资讯】示例标题：虚构机构上线示例合同审阅工具",
+      "summary": "占位摘要：第二条仅用于演示“实务与工具”分类的卡片排版，机构与产品均为虚构，不指向任何真实主体。",
+      "impact_anchor": "占位锚点：示例用于演示工具类资讯的影响提示排版位置，内容虚构，不构成法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-002",
+      "category": "实务与工具",
+      "ai_draft_fields": ["summary", "impact_anchor"],
+      "unverified": false,
+      "fact_level": "已证实事实"
+    },
+    {
+      "title": "【示例占位，非真实资讯】示例标题：虚构监管机构就示例性 AI 指引征求意见",
+      "summary": "占位摘要：第三条仅用于演示“监管与合规”分类与“未核实”标识同排的排版，全部信息为虚构。",
+      "impact_anchor": "占位锚点：监管类信息的实务影响提示占位文本；示例设定为无法核实发布机构与日期，故不带事实层级。",
+      "source_url": "https://example.com/lexaidaily/placeholder-003",
+      "category": "监管与合规",
+      "ai_draft_fields": ["summary", "impact_anchor"],
+      "unverified": true,
+      "fact_level": null
+    },
+    {
+      "title": "【示例占位，非真实资讯】示例标题：虚构法院发布示例性裁判要点汇编",
+      "summary": "占位摘要：第四条仅用于演示“判例与学术”分类的卡片排版，法院与文书均为虚构。",
+      "impact_anchor": "占位锚点：示例用于演示判例类资讯的影响提示排版，内容虚构，不构成法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-004",
+      "category": "判例与学术",
+      "ai_draft_fields": ["summary", "impact_anchor"],
+      "unverified": false,
+      "fact_level": "已证实事实"
+    },
+    {
+      "title": "【示例占位，非真实资讯】示例标题：虚构机构完成示例轮融资",
+      "summary": "占位摘要：第五条仅用于演示“行业与资本”分类的卡片排版，金额与主体均为虚构占位。",
+      "impact_anchor": "占位锚点：示例用于演示资本类资讯的影响提示排版，内容虚构，不构成投资或法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-005",
+      "category": "行业与资本",
+      "ai_draft_fields": ["summary", "impact_anchor"],
+      "unverified": false,
+      "fact_level": "市场观点"
+    }
+  ]
+}
