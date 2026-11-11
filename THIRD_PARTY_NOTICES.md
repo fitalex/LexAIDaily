@@ -16,6 +16,9 @@
 | 05 | 等宽代码与数据字体：JetBrains Mono | [JetBrains/JetBrainsMono](https://github.com/JetBrains/JetBrainsMono) | `v2.304` | `fonts/ttf/JetBrainsMono-Regular.ttf` | SIL OFL-1.1 | 原型中信源 URL 域名、时间戳及编号的专用等宽显示字体。 |
 | 06 | 设计协作工具平台：Penpot | [penpot/penpot](https://github.com/penpot/penpot) | `v2.19.0` (SaaS / Open Source) | Penpot Design App & MCP Plugin | MPL-2.0 | 仅使用 Penpot 云端平台及 MCP 插件作为原型产出载体（D-013），未拷贝其服务端或前端源代码。 |
 | 07 | WebGL/WebGPU 特效交互组件库：Canvas UI | [DavidHDev/canvas-ui](https://github.com/DavidHDev/canvas-ui) | `a0be3b7` | 全库 | MIT + Commons Clause | Gate 1 仅参考交互概念并预留静态效果槽位，未安装、未拷贝任何代码；Gate 3 使用代码待 Human 确认 D-018。 |
+| 08 | 标题楷体：霞鹜文楷 (LXGW WenKai) | [lxgw/LxgwWenKai](https://github.com/lxgw/LxgwWenKai) | `v1.330` | Penpot 内置 (Google Fonts `LXGW WenKai TC`) | SIL OFL-1.1 | 卡片标题与详情页标题专用中文字体；通过 Penpot 内置 Google 字体库直接选用，未在仓库入库字体文件。 |
+| 09 | 站名衬线：思源宋体 (Noto Serif SC) | [googlefonts/noto-cjk](https://github.com/googlefonts/noto-cjk) | `v2.002` | Penpot 内置 (Google Fonts `Noto Serif SC`) | SIL OFL-1.1 | 站名字体专用宋体/衬线字；通过 Penpot 内置 Google 字体库直接选用，未在仓库入库字体文件。 |
+| 10 | 摘要与标识无衬线：思源黑体 (Noto Sans SC) | [googlefonts/noto-cjk](https://github.com/googlefonts/noto-cjk) | `v2.004` | Penpot 内置 (Google Fonts `Noto Sans SC`) | SIL OFL-1.1 | 摘要、来源行、日期、导航与状态标识专用无衬线字体；通过 Penpot 内置 Google 字体库直接选用，未在仓库入库字体文件。 |
 
 ---
 
