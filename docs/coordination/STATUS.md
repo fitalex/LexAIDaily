@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-09（Claude）｜当前阶段：Gate 0 已由 Human 验收通过（2026-11-07），Gate 1 任务书已起草，Human 已在 PR #11 确认 D-008 至 D-013 并授权 LD-G1-02、03（PR #11 已合并，可派发 LD-G1-01）｜基准：`main`（以实际最新 commit 为准）
+最后更新：2026-11-11（Claude）｜当前阶段：Gate 1 进行中；LD-G1-01 已完成并合并（PR #12），Human 已答复三个待决问题（D-016），下一步 LD-G1-01A 定稿字段表，再开工 LD-G1-02、03；LD-G1-04 交接包已备好｜基准：`main`（以实际最新 commit 为准）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -17,15 +17,16 @@
 | LD-G0-04 | Gate 0 验收清单 | A | Claude | 独立审计 LD-G0-05 已完成（Astra，结论：需修改，已整改，整改未再审）；Human 签署 | ✅ DONE（Human 本人于 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 签署） | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
 | LD-G0-05 | Gate 0 验收清单独立审计（1 轮） | A | Codex（Astra，Human 2026-11-07 指定） | Claude | ✅ DONE | 审计已交付并归档：[PR #8](https://github.com/fitalex/LexAIDaily/pull/8) 已合并 `31a2d0a`；只审 1 轮，不再复审 |
 | LD-GOV-02 | 修订 AGENTS.md 过时表述（文首“DRAFT，未生效”；Claude 已有 GitHub 读写权限，D-003 前提已变） | B（治理） | Claude | 独立审计已由 Human 豁免 | ✅ DONE | Human 2026-11-07 授权修订并豁免审计（原话“PR#7直接合并，不审计”，记录见 PR #7 评论 6705408705）；已合并 `9551b6e` |
-| LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | A（Human 2026-11-07 由 B 降为 A，D-010） | DeepSeek Harness（D-011，原 Codex） | Claude；独立审计已豁免（D-010） | 🟢 AUTHORIZED_TO_EXECUTE（A 级，已登记台账；任务书已随 PR #11 入 main，待 Human 触发） | [任务书](../daily-specs/LD-G1-01.md)；Gate 0 已验收，可派发；分支 `ds/ld-g1-01-card-fields`；先于 LD-G1-02、LD-G1-03 |
-| LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Antigravity（D-012，原 Codex） | Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权；待 LD-G1-01 完成后开工） | [任务书](../daily-specs/LD-G1-02.md)；依赖 LD-G1-01；使用 Penpot（开源免费，D-013）及其 MCP 服务，**须先经 Human 授权**；图像生成可使用 Nano Banana（D-014）；第三方拷贝按 D-008 登记；执行者提供截图、Penpot 版本与素材来源记录 |
-| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（D-011，原 Codex） | LD-G1-06 交叉测试（执行者待指定）；Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权；待 LD-G1-01 完成后开工） | [任务书](../daily-specs/LD-G1-03.md)；依赖 LD-G1-01、LD-G1-02（DeepSeek Harness 任务不并行）；juice 依赖已授权（D-009），其余须 Human 授权；微信 iOS/Android 真机预览由 Human 执行 |
-| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | GPT 网页版 | Claude 核验一手链接与事实 | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-04.md)；与 LD-G1-01 可并行；需 Claude 另出交接包；AGENTS 4 未定义 GPT 网页版分支前缀，待补 |
+| LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | A（Human 2026-11-07 由 B 降为 A，D-010） | DeepSeek Harness（D-011，原 Codex） | Claude；独立审计已豁免（D-010） | ✅ DONE（[PR #12](https://github.com/fitalex/LexAIDaily/pull/12) 已合并 `419cda7`；Claude 复核两轮，第二轮通过；Human 2026-11-11 答复三个待决问题并要求合并） | [任务书](../daily-specs/LD-G1-01.md)；首轮复核 F01–F04 已由 Owner 在原 PR 修复；三个答复见 D-016，由 LD-G1-01A 写入字段表 |
+| LD-G1-01A | 字段表定稿：写入 Human 对三个待决问题的答复（D-016） | A | DeepSeek Harness（D-011） | Claude；不触发独立审计（Claude 判断，Human 可追加） | 🟢 AUTHORIZED_TO_EXECUTE（A 级，已登记台账；待 Human 触发） | [任务书](../daily-specs/LD-G1-01A.md)；LD-G1-02、03 开工前须先合并；事实层级是否必填待 Human 决定 |
+| LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Antigravity（D-012，原 Codex） | Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权；待 LD-G1-01、LD-G1-01A 合并及 Penpot 就绪后开工） | [任务书](../daily-specs/LD-G1-02.md)；依赖 LD-G1-01、LD-G1-01A；使用 Penpot（开源免费，D-013）及其 MCP 服务，**须先经 Human 授权**；图像生成可使用 Nano Banana（D-014）；第三方拷贝按 D-008 登记；执行者提供截图、Penpot 版本与素材来源记录 |
+| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（D-011，原 Codex） | LD-G1-06 交叉测试（执行者待指定）；Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权；待 LD-G1-01、LD-G1-01A、LD-G1-02 合并后开工） | [任务书](../daily-specs/LD-G1-03.md)；依赖 LD-G1-01、LD-G1-01A、LD-G1-02（DeepSeek Harness 任务不并行）；juice 依赖已授权（D-009），其余须 Human 授权；微信 iOS/Android 真机预览由 Human 执行 |
+| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | GPT 网页版 | Claude 核验一手链接与事实 | 🟢 AUTHORIZED_TO_EXECUTE（A 级，已登记台账；交接包已备好，待 Human 粘贴给 GPT 网页版） | [任务书](../daily-specs/LD-G1-04.md)；[交接包](../daily-specs/LD-G1-04-handoff.md)；可与 LD-G1-02 并行；AGENTS 4 未定义 GPT 网页版分支前缀，待补 |
 | LD-G1-05 | Gate 1 验收清单（只转写 ROADMAP 既有验收标准） | A | Claude | GPT 网页版（核对转写）；独立审计已豁免（D-010，Human 已确认且未更正范围）；Human 签署 | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-05.md)；依赖 LD-G1-01 至 04、06 完成 |
 | LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | Antigravity（D-015） | Claude | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-06.md)；依赖 LD-G1-03 READY_FOR_REVIEW；Antigravity 不是 LD-G1-03 的实现者，符合交叉测试要求 |
 | LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Claude | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-07.md)；依赖 LD-G1-01、02、03 中已合并者，可分批 |
 
-Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺序开工；LD-G1-01（DeepSeek Harness）、LD-G1-02（Antigravity，D-012）、LD-G1-03（DeepSeek Harness）依次执行，不并行。B 级任务（LD-G1-02、03）须 Human 授权后才能开工。
+Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺序开工；LD-G1-01（已完成）、LD-G1-01A、LD-G1-02（Antigravity，D-012）、LD-G1-03（DeepSeek Harness）依次执行，不并行；LD-G1-04（GPT 网页版）可与它们并行。B 级任务（LD-G1-02、03）须 Human 授权后才能开工。
 
 ## Human 待办
 
@@ -34,7 +35,11 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 - [x] （已于 PR #3 评论 `6679648988` 确认选甲）明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
 - [ ] 注册 Penpot 免费账号并新建文件，在 Antigravity 连接 Penpot MCP（见 LD-G1-02 第八节）；访问令牌只放你本机或 Antigravity 所在环境，不入库
 - [x] 合并 PR #11：Human 2026-11-09 17:07 会话原话“直接帮我合并合并 PR #11”，授权 Claude 执行合并（Claude 不自行决定合并）
-- [ ] 对 DeepSeek Harness 说“执行 LD-G1-01”（话术见 PR #11 描述）。前置：DeepSeek Harness 的项目是空项目，须先克隆本仓库并切到最新 main；Human 已确认它可以提交 PR
+- [x] 对 DeepSeek Harness 说“执行 LD-G1-01”：已完成，PR #12 已合并（2026-11-11）
+- [x] 回答 LD-G1-01 的三个待决问题并合并 PR #12：Human 2026-11-11 于 [PR #12 评论](https://github.com/fitalex/LexAIDaily/pull/12#issuecomment-6785145973) 答复（见 D-016），并指示 Claude 合并
+- [ ] 对 DeepSeek Harness 说“执行 LD-G1-01A”，附任务书路径 `docs/daily-specs/LD-G1-01A.md`；合并后再开工 LD-G1-02、03
+- [ ] 决定“事实层级”是否必填（目前为条件显示；LD-G1-01A 的 PR 会再提）
+- [ ] 把 [LD-G1-04 交接包](../daily-specs/LD-G1-04-handoff.md) 全文粘贴给 GPT 网页版，并把它的回复原文贴回对应 PR
 - [x] （已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050) 确认 D-008 至 D-013）在 Gate 1 任务书 PR 中确认决策 D-008 至 D-010 等
 - [x] （已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权）LD-G1-02、LD-G1-03（B 级）；图像生成见 D-014
 - [x] （已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050) 确认）D-011、D-012、D-013；并指定 LD-G1-06 的交叉测试执行者为 Antigravity（D-015）
@@ -55,6 +60,8 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 | 2026-11-07 | LD-G0-05 | Human 指定 Astra 做 PR #6 的 1 轮独立审计并要求 Claude 写任务书；A 级，只出审计意见 | 是 |
 | 2026-11-07 | LD-G0-04 | Human 回复“开这个 PR 并继续 G0-04”，A 级、Claude 为 Owner，触发 6.1(d) 审计 | 是 |
 | 2026-11-09 | LD-G1-01 | 整体目标：Gate 1 原型。Human 2026-11-07 确认降为 A 并豁免审计（D-010）；Claude 依 D-001 授权派发，Owner 依 D-011 为 DeepSeek Harness；仅定义 UI 展示字段，无依赖、无对外发布 | 是 |
+| 2026-11-11 | LD-G1-01A | 整体目标：Gate 1 原型。只把 Human 的三个答复（D-016）写入字段表，无新增字段、依赖与对外发布；Claude 依 D-001 授权派发，Owner 依 D-011 为 DeepSeek Harness | 是（内容即 Human 的答复；派发待其触发） |
+| 2026-11-11 | LD-G1-04 | 整体目标：Gate 1 原型。真实资讯样本集，内部评审用，不对外发布，无依赖与费用；Claude 依 D-001 授权派发，Owner 为 GPT 网页版；交接包已备好 | 是（待 Human 触发） |
 
 ## 决策记录
 
@@ -75,5 +82,6 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 | D-013 | 2026-11-09 | Gate 1 设计工具由 Figma 改为开源免费方案 Penpot（MPL-2.0；免费云端版，也可自托管），由 Antigravity 经其 MCP 服务操作。理由：Human 使用 Figma 免费账号，而 Figma 官方文档显示其 MCP 对免费 Starter 套餐的 Full 与 Dev 席位不提供访问。影响：(1) 取代 D-004 中“Figma MCP”的部分；(2) AGENTS 10.10 中的“Figma”按 Penpot 理解，`design/` 保存 Penpot 链接、版本、导出的设计令牌与截图，另可保存 Penpot 文件导出备份；AGENTS.md 未修改，同 D-011 只作任务书载明范围内的例外；(3) Penpot 免费版只保留 7 天版本历史，故要求导出备份；(4) Penpot MCP 与 Antigravity 的兼容性未验证，开工前连通小测，失败则交 Claude；(5) 只使用工具，不拷贝 Penpot 代码，使用其内置 UI 库或模板按 D-008 登记 | Human（工具选择由 Claude 检索后提出） | Human 原话：“我是Figma免费账号，直接改成开源免费方案吧，你检索一些”；选 Penpot 是 Claude 的建议，Human 已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050) 确认（2026-11-09） |
 | D-014 | 2026-11-09 | 授权 Antigravity 在 LD-G1-02 内使用其可调用的图像生成（Nano Banana）。条件沿用任务书：登记生成方式、提示词、来源与授权，标注“AI 生成”，不生成真实人物肖像与仿冒真实机构的标识。Human 未设费用上限，故如需付费或超出免费额度，停止并交 Claude | Human | 原话：“Antigravity可以生图，可直接调用nanobananan”（[PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050)） |
 | D-015 | 2026-11-09 | LD-G1-06 交叉测试由 Antigravity 负责。Claude 的理解：这同时是 Human 对该任务放宽 AGENTS 1“不写代码”限制，范围仅限 `tests/wechat-prototype/` 下的测试脚本，不得改被测代码。Antigravity 不是 LD-G1-03 的实现者，符合“实现者与交叉测试者不得是同一 Agent”。放宽范围若与 Human 本意不同，请在 PR 中更正 | Human（放宽范围为 Claude 的理解） | 原话：“LD-G1-06交叉测试让Antigravity负责”（[PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050)） |
+| D-016 | 2026-11-11 | 对 LD-G1-01 三个待决问题的答复：(1) 资讯卡片按单标签（每条一个分类）；(2) 采纳“事实层级”三档（已证实事实 / 官方数据 / 市场观点）；(3) README 简称与 ROADMAP 全称的差异先不改。Claude 的记录说明：Human 原话未限定“单标签”的适用范围，Claude 提议的表述是“Gate 1 按单标签”，Gate 2 数据契约是否沿用，届时另行决定；“采纳”未说明事实层级是否必填，字段表保持“条件显示”，待 Human 另行决定 | Human | 原话：“1.按单标签；2.采纳；3.先不改；”（[PR #12 评论](https://github.com/fitalex/LexAIDaily/pull/12#issuecomment-6785145973)）；由 LD-G1-01A 写入字段表 |
 
 决策记录须附 Human 原话或链接，并经 Human 在 PR 中确认后生效；Claude 起草的记录不单独构成授权。
