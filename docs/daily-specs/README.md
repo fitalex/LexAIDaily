@@ -25,6 +25,7 @@
 | LD-G1-01 | 2026-11-09 | 资讯卡片展示字段定义 v0（仅 UI；正式契约归 Gate 2） | A | DeepSeek Harness（D-011） | [LD-G1-01](LD-G1-01.md)；[PR #12](https://github.com/fitalex/LexAIDaily/pull/12)（已合并 `419cda7`） |
 | LD-G1-01A | 2026-11-11 | 字段表定稿：写入 Human 对三个待决问题的答复（D-016） | A | DeepSeek Harness（D-011） | [LD-G1-01A](LD-G1-01A.md) |
 | LD-G1-02 | 2026-11-09 | 设计系统与 Web 桌面/移动原型 | B | Antigravity（D-012） | [LD-G1-02](LD-G1-02.md)（Human 已授权） |
+| LD-G1-02A | 2026-11-11 | 设计系统与 Web 原型返工（推倒重做） | B | Antigravity（D-012） | [LD-G1-02A](LD-G1-02A.md)（Human 2026-11-11 指示，待其在 PR 中确认） |
 | LD-G1-03 | 2026-11-09 | 公众号内联排版模板原型（juice 依赖，D-009） | B | DeepSeek Harness（D-011） | [LD-G1-03](LD-G1-03.md)（Human 已授权） |
 | LD-G1-04 | 2026-11-09 | 真实资讯样本集（用于原型填充与 3 分钟扫读评审，不对外发布） | A | GPT 网页版 | [LD-G1-04](LD-G1-04.md)；[交接包](LD-G1-04-handoff.md)；Claude 核验一手链接 |
 | LD-G1-05 | 2026-11-09 | Gate 1 验收清单（只转写 ROADMAP 既有标准） | A | Claude | [LD-G1-05](LD-G1-05.md) |
