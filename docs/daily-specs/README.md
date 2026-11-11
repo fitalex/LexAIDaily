@@ -22,10 +22,11 @@
 | LD-G0-03 | 待定 | README 与 ROADMAP 一致性核对（勾选状态、Gate 名称、阶段划分），只出报告不改基线 | A | Claude | 报告已写完，完成确认待 Human；摘要见 [验收清单第三节](../coordination/GATE0_ACCEPTANCE.md) |
 | LD-G0-04 | 待定 | Gate 0 验收清单（只转写 ROADMAP 既有验收标准；供 Human 签署；触发 6.1(d) 审计） | A | Claude | [LD-G0-04](LD-G0-04.md)；清单：[GATE0_ACCEPTANCE.md](../coordination/GATE0_ACCEPTANCE.md) |
 | LD-G0-05 | 2026-11-07 | Gate 0 验收清单独立审计（Human 指定 Codex 的 Astra，1 轮） | A | Codex（Astra） | [LD-G0-05](LD-G0-05.md)；审计 [PR #8](https://github.com/fitalex/LexAIDaily/pull/8)（Draft） |
-| LD-G1-01 | 2026-11-09 | 资讯卡片展示字段定义 v0（仅 UI；正式契约归 Gate 2） | A | DeepSeek Harness（D-011） | [LD-G1-01](LD-G1-01.md) |
+| LD-G1-01 | 2026-11-09 | 资讯卡片展示字段定义 v0（仅 UI；正式契约归 Gate 2） | A | DeepSeek Harness（D-011） | [LD-G1-01](LD-G1-01.md)；[PR #12](https://github.com/fitalex/LexAIDaily/pull/12)（已合并 `419cda7`） |
+| LD-G1-01A | 2026-11-11 | 字段表定稿：写入 Human 对三个待决问题的答复（D-016） | A | DeepSeek Harness（D-011） | [LD-G1-01A](LD-G1-01A.md) |
 | LD-G1-02 | 2026-11-09 | 设计系统与 Web 桌面/移动原型 | B | Antigravity（D-012） | [LD-G1-02](LD-G1-02.md)（Human 已授权） |
 | LD-G1-03 | 2026-11-09 | 公众号内联排版模板原型（juice 依赖，D-009） | B | DeepSeek Harness（D-011） | [LD-G1-03](LD-G1-03.md)（Human 已授权） |
-| LD-G1-04 | 2026-11-09 | 真实资讯样本集（用于原型填充与 3 分钟扫读评审，不对外发布） | A | GPT 网页版 | [LD-G1-04](LD-G1-04.md)；Claude 核验一手链接 |
+| LD-G1-04 | 2026-11-09 | 真实资讯样本集（用于原型填充与 3 分钟扫读评审，不对外发布） | A | GPT 网页版 | [LD-G1-04](LD-G1-04.md)；[交接包](LD-G1-04-handoff.md)；Claude 核验一手链接 |
 | LD-G1-05 | 2026-11-09 | Gate 1 验收清单（只转写 ROADMAP 既有标准） | A | Claude | [LD-G1-05](LD-G1-05.md) |
 | LD-G1-06 | 2026-11-09 | 公众号排版导出结构与兼容性交叉测试 | A | Antigravity（D-015） | [LD-G1-06](LD-G1-06.md) |
 | LD-G1-07 | 2026-11-09 | Gate 1 文档同步与交叉引用核对 | A | Antigravity | [LD-G1-07](LD-G1-07.md) |
