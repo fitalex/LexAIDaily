@@ -52,13 +52,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-### 2. SIL Open Font License 1.1 (Inter, JetBrains Mono)
+### 2. SIL Open Font License 1.1 (Inter, JetBrains Mono, LXGW WenKai, Noto Serif SC, Noto Sans SC)
 
 ```text
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
 
 Copyright (c) 2016-2024 The Inter Project Authors
 Copyright (c) 2020-2024 JetBrains s.r.o.
+Copyright (c) 2021-2024 LXGW (lxgw@outlook.com)
+Copyright (c) 2014-2024 Adobe Systems Incorporated and Google Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of the Font Software, to use, study, copy, merge, embed, modify,
