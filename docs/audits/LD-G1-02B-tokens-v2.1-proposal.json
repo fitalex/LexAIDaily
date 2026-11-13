@@ -1,0 +1,492 @@
+{
+  "$description": "LexAIDaily Design Tokens v2.1 (proposal by Claude review of PR #16, DTCG format). Replaces v2.0 'value/type' keys with '$value/$type'.",
+  "color": {
+    "canvas": {
+      "slate": {
+        "$value": "#A0BCCE",
+        "$type": "color"
+      },
+      "linen": {
+        "$value": "#EAE1D3",
+        "$type": "color"
+      },
+      "luminous": {
+        "$value": "#F8F4ED",
+        "$type": "color"
+      },
+      "wash": {
+        "$value": "#7B98AC",
+        "$type": "color",
+        "$description": "use at 65% opacity"
+      }
+    },
+    "surface": {
+      "card": {
+        "$value": "#FFFDF8",
+        "$type": "color"
+      },
+      "panel": {
+        "$value": "#FFFDF8",
+        "$type": "color"
+      },
+      "codeWell": {
+        "$value": "#F6F1E6",
+        "$type": "color",
+        "$description": "quiet inset area, e.g. practical-impact box"
+      }
+    },
+    "border": {
+      "card": {
+        "$value": "#E6DFC8",
+        "$type": "color"
+      },
+      "divider": {
+        "$value": "#ECE5D5",
+        "$type": "color"
+      },
+      "glass": {
+        "$value": "#DCD4C0",
+        "$type": "color"
+      }
+    },
+    "text": {
+      "primary": {
+        "$value": "#1F1B16",
+        "$type": "color",
+        "$description": "16.84:1 on card"
+      },
+      "secondary": {
+        "$value": "#5C5549",
+        "$type": "color",
+        "$description": "7.25:1 on card"
+      },
+      "muted": {
+        "$value": "#6B6354",
+        "$type": "color",
+        "$description": "v2.0 #8C8373 was 3.68:1 on card (fail). 5.84:1 on card, 5.27:1 on surface.codeWell"
+      },
+      "onCanvas": {
+        "$value": "#14284B",
+        "$type": "color",
+        "$description": "only text color allowed directly on slate canvas (7.37:1). Never use text.muted/secondary on canvas"
+      },
+      "onAccent": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      }
+    },
+    "accent": {
+      "navy": {
+        "$value": "#14284B",
+        "$type": "color"
+      },
+      "navyHover": {
+        "$value": "#0F2347",
+        "$type": "color"
+      }
+    },
+    "glass": {
+      "surface": {
+        "$value": "rgba(255,255,255,0.64)",
+        "$type": "color",
+        "$description": "CSS with backdrop-filter blur(24px)"
+      },
+      "surfacePrototype": {
+        "$value": "rgba(255,255,255,0.82)",
+        "$type": "color",
+        "$description": "Penpot has no backdrop blur; 0.82 keeps bleed-through text at 1.4:1"
+      },
+      "borderTop": {
+        "$value": "rgba(255,255,255,0.70)",
+        "$type": "color"
+      },
+      "borderBottom": {
+        "$value": "rgba(220,212,192,0.50)",
+        "$type": "color"
+      },
+      "sliderActive": {
+        "$value": "#14284B",
+        "$type": "color"
+      },
+      "sliderActiveText": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      }
+    },
+    "reducedTransparency": {
+      "surface": {
+        "$value": "#F6F1E6",
+        "$type": "color"
+      },
+      "border": {
+        "$value": "#DCD4C0",
+        "$type": "color"
+      },
+      "sliderActive": {
+        "$value": "#14284B",
+        "$type": "color",
+        "$description": "keep navy so white label stays legible; v2.0 used #FFFFFF with white text (1.0:1, invisible)"
+      },
+      "sliderActiveText": {
+        "$value": "#FFFFFF",
+        "$type": "color"
+      }
+    },
+    "dark": {
+      "canvas": {
+        "$value": "#090D16",
+        "$type": "color",
+        "$description": "reserved"
+      },
+      "card": {
+        "$value": "#111827",
+        "$type": "color",
+        "$description": "reserved"
+      },
+      "textPrimary": {
+        "$value": "#F8FAFC",
+        "$type": "color",
+        "$description": "reserved"
+      },
+      "border": {
+        "$value": "#1E293B",
+        "$type": "color",
+        "$description": "reserved"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "title": {
+        "$value": "'LXGW WenKai TC','LXGW WenKai',STKaiti,KaiTi,serif",
+        "$type": "fontFamily"
+      },
+      "wordmark": {
+        "$value": "'Noto Serif SC','Songti SC',SimSun,serif",
+        "$type": "fontFamily"
+      },
+      "sans": {
+        "$value": "'Noto Sans SC',-apple-system,BlinkMacSystemFont,'PingFang SC',sans-serif",
+        "$type": "fontFamily"
+      }
+    },
+    "scale": {
+      "meta": {
+        "size": {
+          "$value": "13px",
+          "$type": "dimension",
+          "$description": "v2.0 12.5px; 13px keeps 4.5:1 text.muted readable"
+        },
+        "line": {
+          "$value": "20px",
+          "$type": "dimension"
+        }
+      },
+      "body": {
+        "size": {
+          "$value": "15px",
+          "$type": "dimension"
+        },
+        "line": {
+          "$value": "26px",
+          "$type": "dimension"
+        }
+      },
+      "bodyDetail": {
+        "size": {
+          "$value": "16px",
+          "$type": "dimension",
+          "$description": "detail page only"
+        },
+        "line": {
+          "$value": "28px",
+          "$type": "dimension"
+        }
+      },
+      "nav": {
+        "size": {
+          "$value": "18px",
+          "$type": "dimension",
+          "$description": "v2.0 17px; merged into 18px so the dashboard uses 5 sizes: 13/15/18/21/30 (badge 12px is the only exception)"
+        },
+        "line": {
+          "$value": "24px",
+          "$type": "dimension"
+        }
+      },
+      "titleS": {
+        "size": {
+          "$value": "18px",
+          "$type": "dimension"
+        },
+        "line": {
+          "$value": "26px",
+          "$type": "dimension"
+        }
+      },
+      "titleM": {
+        "size": {
+          "$value": "21px",
+          "$type": "dimension"
+        },
+        "line": {
+          "$value": "30px",
+          "$type": "dimension"
+        }
+      },
+      "titleL": {
+        "size": {
+          "$value": "30px",
+          "$type": "dimension"
+        },
+        "line": {
+          "$value": "38px",
+          "$type": "dimension"
+        }
+      },
+      "titleDetail": {
+        "size": {
+          "$value": "30px",
+          "$type": "dimension"
+        },
+        "line": {
+          "$value": "42px",
+          "$type": "dimension"
+        }
+      },
+      "wordmark": {
+        "size": {
+          "$value": "30px",
+          "$type": "dimension"
+        },
+        "line": {
+          "$value": "36px",
+          "$type": "dimension"
+        }
+      },
+      "badge": {
+        "size": {
+          "$value": "12px",
+          "$type": "dimension",
+          "$description": "badges only, text is bold or on solid fill"
+        },
+        "line": {
+          "$value": "16px",
+          "$type": "dimension"
+        }
+      }
+    }
+  },
+  "space": {
+    "1": {
+      "$value": "4px",
+      "$type": "dimension"
+    },
+    "2": {
+      "$value": "8px",
+      "$type": "dimension"
+    },
+    "3": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "4": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "5": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "6": {
+      "$value": "24px",
+      "$type": "dimension"
+    },
+    "8": {
+      "$value": "32px",
+      "$type": "dimension"
+    },
+    "10": {
+      "$value": "40px",
+      "$type": "dimension"
+    }
+  },
+  "radius": {
+    "badge": {
+      "$value": "6px",
+      "$type": "dimension"
+    },
+    "chip": {
+      "$value": "12px",
+      "$type": "dimension"
+    },
+    "card": {
+      "$value": "16px",
+      "$type": "dimension"
+    },
+    "panel": {
+      "$value": "20px",
+      "$type": "dimension"
+    },
+    "pill": {
+      "$value": "9999px",
+      "$type": "dimension"
+    }
+  },
+  "shadow": {
+    "card": {
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "4px",
+        "blur": "16px",
+        "spread": "0px",
+        "color": "rgba(31,27,22,0.06)"
+      },
+      "$type": "shadow"
+    },
+    "glass": {
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "8px",
+        "blur": "32px",
+        "spread": "0px",
+        "color": "rgba(31,27,22,0.08)"
+      },
+      "$type": "shadow"
+    }
+  },
+  "layout": {
+    "desktop": {
+      "canvas": {
+        "$value": "1440x1080",
+        "$type": "string"
+      },
+      "sidebar": {
+        "$value": "240px",
+        "$type": "dimension"
+      },
+      "summary": {
+        "$value": "300px",
+        "$type": "dimension"
+      },
+      "columns": {
+        "$value": "6",
+        "$type": "number"
+      },
+      "gutter": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "one value for every grid gap; v2.0 used 16 and 20"
+      },
+      "catBarHeight": {
+        "$value": "72px",
+        "$type": "dimension",
+        "$description": "v2.0 74px; 72 sits on the 8px grid"
+      },
+      "catBarMinWidth": {
+        "$value": "840px",
+        "$type": "dimension"
+      },
+      "detailMeasure": {
+        "$value": "680px",
+        "$type": "dimension",
+        "$description": "max text column width on detail page (~40 CJK chars at 16px)"
+      }
+    },
+    "mobile": {
+      "canvas": {
+        "$value": "390x960",
+        "$type": "string"
+      },
+      "gutter": {
+        "$value": "12px",
+        "$type": "dimension"
+      },
+      "columns": {
+        "$value": "2",
+        "$type": "number"
+      },
+      "dateBarHeight": {
+        "$value": "52px",
+        "$type": "dimension"
+      },
+      "catBarHeight": {
+        "$value": "56px",
+        "$type": "dimension"
+      }
+    }
+  },
+  "component": {
+    "card": {
+      "padding": {
+        "L": {
+          "$value": "28px",
+          "$type": "dimension"
+        },
+        "M": {
+          "$value": "24px",
+          "$type": "dimension"
+        },
+        "S": {
+          "$value": "20px",
+          "$type": "dimension"
+        }
+      },
+      "linkGap": {
+        "$value": "16px",
+        "$type": "dimension",
+        "$description": "gap between summary and source link; card height = content, never stretched"
+      },
+      "L": {
+        "columns": {
+          "$value": "4",
+          "$type": "number"
+        },
+        "summaryMaxLines": {
+          "$value": "6",
+          "$type": "number"
+        }
+      },
+      "M": {
+        "columns": {
+          "$value": "2",
+          "$type": "number"
+        },
+        "summaryMaxLines": {
+          "$value": "4",
+          "$type": "number"
+        }
+      },
+      "S": {
+        "columns": {
+          "$value": "2",
+          "$type": "number"
+        },
+        "summaryMaxLines": {
+          "$value": "2",
+          "$type": "number"
+        }
+      }
+    },
+    "badge": {
+      "headline": {
+        "$value": "fill navy, text white",
+        "$type": "string"
+      },
+      "category": {
+        "$value": "text only, text.muted, no fill",
+        "$type": "string",
+        "$description": "v2.0 detail page reused the headline badge style"
+      },
+      "unverified": {
+        "$value": "1px navy outline, navy text",
+        "$type": "string"
+      },
+      "aiDraft": {
+        "$value": "1px border.card outline, text.muted, transparent fill",
+        "$type": "string",
+        "$description": "v2.0 doc said this; screenshots 03/07 drew it navy-filled"
+      }
+    }
+  }
+}
