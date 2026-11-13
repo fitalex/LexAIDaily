@@ -11,10 +11,10 @@
 |---|---|---|
 | **项目文件名称** | `LexAIDaily Gate 1`（Penpot 文件名 `New File 2`） | Gate 1 Web 桌面端与移动端核心高保真原型 |
 | **Penpot 内部 ID** | `124ca123-b2be-80ce-8008-eb252bd959df` | 文件全局唯一标识 |
-| **当前页面名称** | `LexAIDaily v2.0 (Ink Nav-Glass)`（Page ID: `c79a9564-709e-807f-8008-edf6a988300d`） | 第二版核心全量原型页面（宣纸墨色 × 导航液态玻璃） |
+| **当前页面名称** | `LexAIDaily v2.0 (Ink Nav-Glass)`（Page ID: `c79a9564-709e-807f-8008-edf6a988300d`） | 第二版核心全量原型页面（雾霭蓝灰 × 晨光亚麻 × 导航液态玻璃） |
 | **归档页面名称** | `Archive v1.0 (Clean Light)`、`Archive v0.1 (Dark Prototype)` | 历史评审版本归档保留 |
 | **云端在线访问链接** | [https://design.penpot.app/#/workspace/124ca123-b2be-80ce-8008-eb252bd959df](https://design.penpot.app/#/workspace/124ca123-b2be-80ce-8008-eb252bd959df) | Human Maintainer 视觉验收与在线交互走查链接 |
-| **当前文件版本号** | `LexAIDaily-Gate1-v2.0-Stage2` | 第二版阶段 2 全量 8 画板高保真原型落盘 |
+| **当前文件版本号** | `LexAIDaily-Gate1-v2.0-Stage2-B1.1` | 第二版阶段 2 全量 8 画板高保真原型落盘（B1.1：DTCG 令牌规范、对比度数值对齐、平实文案与色板更新） |
 | **平台版本** | Penpot 2.19.0（SaaS 免费云端版，MPL-2.0） | 遵循决策记录 D-013 |
 | **访问权限设置** | **仅受邀者（Restricted / Invite Only）** | 依照任务书要求配置，不公开对外发布 |
 
@@ -57,7 +57,9 @@
 
 ## 四、文件备份与导出说明（DoD D02）
 
-1. **高保真截图落盘**：
+1. **Penpot 基准恢复与防位移保障**：
+   Penpot 源文件依据版本历史快照 `internal/snapshot/127`（时间戳 `2026-11-13T03:21:16.790Z`）精准还原至 `987280f` 导出基准。还原后重新导出的全部 9 张画板与仓库 `987280f` 经 PIL 差值比对包围盒均为 `None`（0px 偏差，100% 逐像素一致）。B1 及后续批次严格按限定范围分步推进，保证容器与布局零位移。
+2. **高保真截图落盘**：
    全量 8 块画板及风格样张已完整导出至 `design/screenshots/g1-02b/`：
    - `01-desktop-dashboard.png` (1440 × 1080)
    - `02-desktop-category-filter.png` (1440 × 1080)
@@ -68,5 +70,5 @@
    - `07-mobile-outbound-detail.png` (390 × 960)
    - `08-mobile-archive-search.png` (390 × 960)
    - `09-style-sheet.png` (1440 × 1080)
-2. **样式令牌持久化**：
+3. **样式令牌持久化**：
    全套色彩、排版、组件栅格及无障碍降级令牌均在 `design/tokens/tokens.json` 严格对齐保存，支持自动化校验与未来工程复现。
