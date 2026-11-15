@@ -27,3 +27,4 @@ Claude 读取仓库中的归档文件后以 `git hash-object` 计算；已归档
 | LD-GOV-01-gpt-audit-r3.md | `8d43ca4d210cca1798b5fa763a2cdf2b0b9dfa09` | Claude / 2026-11-06 | 待核对 |
 | LD-GOV-01-gpt-audit-r4.md | 归档后补记 | — | 待核对 |
 | LD-G0-04-codex-audit-r1.md | `c7fd1a968459e73d44343929c8be58fc64456ed3` | Claude / 2026-11-07（读回 commit `c37167a` 的文件，与评论所载 SHA 一致） | 待核对 |
+| LD-G1-02B-gpt-font-license-audit.md | `86d4d5a7f92b6a99b220b1a5025737704e206256` | Claude / 2026-11-15（取自 Human 贴回的原文附件，`git hash-object` 计算；GPT 网页版审计基准 `1719eae`，其后 `623ca3b` 未改被审文件） | 待核对 |
