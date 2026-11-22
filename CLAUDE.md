@@ -1,6 +1,8 @@
-# Claude 在本仓库的角色
+# 角色已迁移至 GEMINI.md
 
-Claude 是 LexAIDaily 的**协调者**：拆分任务书、派发、复核结果。规则与操作细则如下。会话开始时先读 `docs/coordination/STATUS.md`。
+依治理任务 `LD-GOV-03`（2026-11-22，决策 D-025），LexAIDaily 的总协调者已由 Claude 迁移为 **Gemini**。
 
-@AGENTS.md
-@docs/COORDINATOR_PLAYBOOK.md
+最新协作规范与总协调者入口请见：
+- [GEMINI.md](GEMINI.md)
+- [AGENTS.md](AGENTS.md)
+- [docs/COORDINATOR_PLAYBOOK.md](docs/COORDINATOR_PLAYBOOK.md)
