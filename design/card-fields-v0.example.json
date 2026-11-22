@@ -1,55 +1,125 @@
 {
-  "note": "本文件全部为虚构占位内容（v0 联调用），不是真实资讯，不得作为事实引用。每条标题均含“【示例占位，非真实资讯】”，链接只使用保留域名 example.com。字段定义见 card-fields-v0.md；本文件不是 Gate 2 的正式采集数据契约（D-005）。`category` 单标签，五类取一（D-016）。",
+  "note": "本文件全部为虚构占位内容（v0.2 联调用），不是真实资讯，不得作为事实引用。每条 placeholder 均为 true，标题不含“【示例占位】”字样，链接只使用保留域名 example.com。字段定义见 card-fields-v0.md；本文件不是 Gate 2 的正式采集数据契约（D-005）。`category` 单标签，五类取一（D-016）；`importance` 取值“头条”/“常规”（D-019），本文件仅作原型排版演示，不代表任何编辑判断。",
   "cards": [
     {
-      "title": "【示例占位，非真实资讯】示例标题：虚构团队发布示例模型技术说明",
-      "summary": "占位摘要：虚构团队发布一份示例性技术说明，用于演示摘要段落长度与换行，不包含任何真实新闻事实。",
-      "impact_anchor": "占位锚点：用于演示 AI 初稿标识的排版位置，内容为虚构示例，不构成法律意见。",
+      "title": "虚构团队发布示例性模型技术说明，供占位排版演示",
+      "summary": "占位摘要（短档）：虚构团队发布一份示例性模型技术说明，全部信息为占位虚构，用于演示短摘要卡片的排版高度。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示影响提示的排版位置，内容虚构，不构成法律意见。",
       "source_url": "https://example.com/lexaidaily/placeholder-001",
       "category": "模型与技术",
-      "ai_draft_fields": ["summary", "impact_anchor"],
+      "importance": "常规",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
       "unverified": false,
       "fact_level": "官方数据"
     },
     {
-      "title": "【示例占位，非真实资讯】示例标题：虚构机构上线示例合同审阅工具",
-      "summary": "占位摘要：第二条仅用于演示“实务与工具”分类的卡片排版，机构与产品均为虚构，不指向任何真实主体。",
-      "impact_anchor": "占位锚点：示例用于演示工具类资讯的影响提示排版位置，内容虚构，不构成法律意见。",
+      "title": "虚构机构上线示例性合同审阅工具，供占位排版演示",
+      "summary": "占位摘要（常规档）：虚构机构上线一项示例性合同审阅工具，全部信息为占位虚构。用于演示“实务与工具”分类下常规篇幅卡片的排版，包括标题行数、摘要行高与来源域名的同排显示位置，不指向任何真实主体或产品。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示工具类资讯的影响提示排版，内容虚构，不构成法律意见。",
       "source_url": "https://example.com/lexaidaily/placeholder-002",
       "category": "实务与工具",
-      "ai_draft_fields": ["summary", "impact_anchor"],
+      "importance": "头条",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
       "unverified": false,
       "fact_level": "已证实事实"
     },
     {
-      "title": "【示例占位，非真实资讯】示例标题：虚构监管机构就示例性 AI 指引征求意见",
-      "summary": "占位摘要：第三条仅用于演示“监管与合规”分类与“未核实”标识同排的排版，全部信息为虚构。",
-      "impact_anchor": "占位锚点：监管类信息的实务影响提示占位文本；示例设定为无法核实发布机构与日期，故不带事实层级。",
+      "title": "虚构监管机构就示例性指引公开征求意见，供占位排版演示",
+      "summary": "占位摘要（长档）：虚构监管机构就一项示例性指引公开征求意见，发布机构、日期与效力状态均为占位虚构，用于演示长摘要卡片与“未核实”标识同排的排版效果。本条同时演示事实层级缺失时不显示徽标、不默认归入任何一档的降级规则；全部文字均为泛化占位表述，不指向任何真实文件、机构或时间。",
+      "impact_anchor": "占位锚点（详情页专供）：监管类资讯的影响提示占位文本；示例设定为无法核实发布机构与日期，故事实层级为空。",
       "source_url": "https://example.com/lexaidaily/placeholder-003",
       "category": "监管与合规",
-      "ai_draft_fields": ["summary", "impact_anchor"],
+      "importance": "常规",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
       "unverified": true,
       "fact_level": null
     },
     {
-      "title": "【示例占位，非真实资讯】示例标题：虚构法院发布示例性裁判要点汇编",
-      "summary": "占位摘要：第四条仅用于演示“判例与学术”分类的卡片排版，法院与文书均为虚构。",
-      "impact_anchor": "占位锚点：示例用于演示判例类资讯的影响提示排版，内容虚构，不构成法律意见。",
+      "title": "虚构法院发布示例性裁判要点汇编，供占位排版演示",
+      "summary": "占位摘要（短档）：虚构法院发布一份示例性裁判要点汇编，法院、文书与要点均为占位虚构，用于演示短摘要卡片。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示判例类资讯的影响提示排版，内容虚构，不构成法律意见。",
       "source_url": "https://example.com/lexaidaily/placeholder-004",
       "category": "判例与学术",
-      "ai_draft_fields": ["summary", "impact_anchor"],
+      "importance": "常规",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
       "unverified": false,
       "fact_level": "已证实事实"
     },
     {
-      "title": "【示例占位，非真实资讯】示例标题：虚构机构完成示例轮融资",
-      "summary": "占位摘要：第五条仅用于演示“行业与资本”分类的卡片排版，金额与主体均为虚构占位。",
-      "impact_anchor": "占位锚点：示例用于演示资本类资讯的影响提示排版，内容虚构，不构成投资或法律意见。",
+      "title": "虚构机构完成示例性轮融资，供占位排版演示",
+      "summary": "占位摘要（常规档）：虚构机构完成一轮示例性融资，主体、金额与时间均为占位虚构，不指向任何真实交易。用于演示“行业与资本”分类下常规篇幅卡片的排版，以及头条档位与常规档位的尺寸差异；全部信息为泛化占位表述，不得作为投资、交易或法律判断依据。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示资本类资讯的影响提示排版，内容虚构，不构成投资或法律意见。",
       "source_url": "https://example.com/lexaidaily/placeholder-005",
       "category": "行业与资本",
-      "ai_draft_fields": ["summary", "impact_anchor"],
+      "importance": "头条",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
       "unverified": false,
       "fact_level": "市场观点"
+    },
+    {
+      "title": "虚构研究团队发布示例性评估方法说明，供占位排版演示",
+      "summary": "占位摘要（长档）：虚构研究团队发布一套示例性评估方法说明，用于演示长摘要卡片的排版，包括摘要行数上限、段落换行与卡片整体高度增长的关系。团队、方法、指标与结论均为占位虚构，不包含任何真实机构、事件或数字，也不构成任何技术结论；本条用于检验错落布局中较高卡片的视觉节奏。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示研究方法类资讯的影响提示排版，内容虚构，不构成法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-006",
+      "category": "模型与技术",
+      "importance": "常规",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
+      "unverified": false,
+      "fact_level": "官方数据"
+    },
+    {
+      "title": "虚构平台更新示例性合规模板，供占位排版演示",
+      "summary": "占位摘要（常规档）：虚构平台更新一套示例性合规模板，平台、模板与更新内容均为占位虚构，用于演示“实务与工具”分类的常规卡片排版与状态位组合。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示合规工具类资讯的影响提示排版，内容虚构，不构成法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-007",
+      "category": "实务与工具",
+      "importance": "常规",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
+      "unverified": false,
+      "fact_level": "已证实事实"
+    },
+    {
+      "title": "虚构部门发布示例性合规问答，供占位排版演示",
+      "summary": "占位摘要（长档）：虚构部门发布一组示例性合规问答，用于演示长摘要卡片在“监管与合规”分类下的排版，包括分类标签、事实层级徽标与来源域名的相对位置。问答内容、发布主体、时间与效力状态均为占位虚构，不指向任何真实文件或机构；本条只用于检验列表卡片的信息密度与扫读节奏，不构成任何合规或法律意见，也不代表任何真实监管口径。",
+      "impact_anchor": "占位锚点（详情页专供）：用于演示监管问答类资讯的影响提示排版，内容虚构，不构成法律意见。",
+      "source_url": "https://example.com/lexaidaily/placeholder-008",
+      "category": "监管与合规",
+      "importance": "头条",
+      "placeholder": true,
+      "ai_draft_fields": [
+        "summary",
+        "impact_anchor"
+      ],
+      "unverified": false,
+      "fact_level": "已证实事实"
     }
   ]
 }
