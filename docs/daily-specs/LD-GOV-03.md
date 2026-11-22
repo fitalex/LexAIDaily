@@ -24,10 +24,10 @@
   - `docs/COORDINATOR_PLAYBOOK.md`（同步为 Gemini 协调者手册）
   - `docs/daily-specs/LD-GOV-03.md`（本任务书）
   - `docs/daily-specs/README.md`（补登任务书索引并同步 Owner）
-  - `docs/coordination/STATUS.md`（登记 LD-GOV-03 及决策 D-025、D-026）
+  - `docs/coordination/STATUS.md`（登记 LD-GOV-03、并入原 PR #21 的 D-020～D-022 与 D-024，以及新增决策 D-025、D-026）
 - **可改文件**：上述 7 个文件
 - **不可改文件**：`README.md`、`ROADMAP.md`、任何 `design/` 与代码文件、历史已归档审计文件（`docs/audits/`）
-- **非范围**：不修改产品定位、编辑原则、Gate 路线图或冻结基线；不触碰 PR #16/#19/#21 的业务内容
+- **非范围**：不修改产品定位、编辑原则、Gate 路线图或冻结基线；不触碰 PR #16/#19 的业务内容（原 Draft PR #21 中的 `STATUS.md` 决策记录 D-020～D-022、D-024 按 Human 2026-11-22 指示并入本 PR，PR #21 关闭）
 
 ## 三、冻结边界
 
@@ -39,7 +39,7 @@
 |---|---|---|---|
 | D01 | `AGENTS.md` 升级至 V2.0：Claude 替换为 Gemini，ChatGPT 网页版与 Codex 移出主表，DeepSeek 与 Antigravity 实际分工转正，独立审计改为架构内交叉审计，6.6 标记废止，分支前缀新增 `gemini/` | 治理一致性 | `AGENTS.md` diff |
 | D02 | 新增 `GEMINI.md`，`CLAUDE.md` 改为迁移说明；`docs/COORDINATOR_PLAYBOOK.md` 同步去除过时角色与操作员流程 | 治理一致性 | 对应文件 diff |
-| D03 | `docs/coordination/STATUS.md` 与 `docs/daily-specs/README.md` 补登 `LD-GOV-03` 及决策 D-025、D-026（避开 PR #21 预留的 D-020～D-024） | 状态源一致 | 对应文件 diff |
+| D03 | `docs/coordination/STATUS.md` 与 `docs/daily-specs/README.md` 补登 `LD-GOV-03`、并入原 PR #21 的 D-020～D-022 与已确认的 D-024，以及新增决策 D-025、D-026 | 状态源一致 | 对应文件 diff |
 | D04 | 全文无指向不存在文件的断链，未改动任何冻结基线文件 | 冻结基线保护 | `git diff --stat` 核对 |
 
 ## 五、验证与证据要求
