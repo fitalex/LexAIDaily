@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-22（Gemini）｜当前阶段：先完成治理架构重组 LD-GOV-03（Gemini 接替 Claude 任总协调者、ChatGPT 网页版退出、Codex 移出主表，D-025/D-026），随后继续 Gate 1 队列（PR #16、PR #19、PR #21 与 LD-G1-04）｜基准：`main`（`f8c9ce6`）
+最后更新：2026-11-22（Gemini）｜当前阶段：先完成治理架构重组 LD-GOV-03（Gemini 接替 Claude 任总协调者、ChatGPT 网页版退出、Codex 移出主表，并入原 PR #21 的 D-020～D-022、D-024 及新增 D-025/D-026），随后继续 Gate 1 队列（PR #16、PR #19 与 LD-G1-04）｜基准：`main`（`f8c9ce6`）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -30,7 +30,7 @@
 | LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | Antigravity（D-015） | Claude | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-06.md)；依赖 LD-G1-03 READY_FOR_REVIEW；Antigravity 不是 LD-G1-03 的实现者，符合交叉测试要求 |
 | LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Claude | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-07.md)；依赖 LD-G1-01、02、03 中已合并者，可分批 |
 
-Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺序开工；LD-G1-01（已完成）、LD-G1-01A、LD-G1-02（Antigravity，D-012）、LD-G1-03（DeepSeek Harness）依次执行，不并行；LD-G1-04（GPT 网页版）可与它们并行。B 级任务（LD-G1-02、03）须 Human 授权后才能开工。
+Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺序开工；LD-G1-01（已完成）、LD-G1-01A、LD-G1-02（Antigravity，D-012）、LD-G1-03（DeepSeek Harness）依次执行，不并行；LD-G1-04（Gemini，D-025）可与它们并行。B 级任务（LD-G1-02、03）须 Human 授权后才能开工。
 
 ## Human 待办
 
@@ -47,7 +47,7 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 - [x] 回答 LD-G1-01 的三个待决问题并合并 PR #12：Human 2026-11-11 于 [PR #12 评论](https://github.com/fitalex/LexAIDaily/pull/12#issuecomment-6785145973) 答复（见 D-016），并指示 Claude 合并
 - [x] 对 DeepSeek Harness 说“执行 LD-G1-01A”并合并 PR #14：已完成（2026-11-11，`6e2b986`）
 - [ ] 决定“事实层级”是否必填（目前为条件显示；Claude 建议 Gate 1 保持条件显示，Gate 2 定数据契约时再决定）
-- [ ] 把 [LD-G1-04 交接包](../daily-specs/LD-G1-04-handoff.md) 全文粘贴给 GPT 网页版，并把它的回复原文贴回对应 PR
+- [x] （已由 D-025 取代：`LD-G1-04` 转由 Gemini 执行）把 [LD-G1-04 交接包](../daily-specs/LD-G1-04-handoff.md) 全文粘贴给 GPT 网页版，并把它的回复原文贴回对应 PR
 - [x] （已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050) 确认 D-008 至 D-013）在 Gate 1 任务书 PR 中确认决策 D-008 至 D-010 等
 - [x] （已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权）LD-G1-02、LD-G1-03（B 级）；图像生成见 D-014
 - [x] （已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050) 确认）D-011、D-012、D-013；并指定 LD-G1-06 的交叉测试执行者为 Antigravity（D-015）
@@ -70,7 +70,7 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 | 2026-11-09 | LD-G1-01 | 整体目标：Gate 1 原型。Human 2026-11-07 确认降为 A 并豁免审计（D-010）；Claude 依 D-001 授权派发，Owner 依 D-011 为 DeepSeek Harness；仅定义 UI 展示字段，无依赖、无对外发布 | 是 |
 | 2026-11-11 | LD-G1-01A | 整体目标：Gate 1 原型。只把 Human 的三个答复（D-016）写入字段表，无新增字段、依赖与对外发布；Claude 依 D-001 授权派发，Owner 依 D-011 为 DeepSeek Harness | 是（内容即 Human 的答复；已执行并合并） |
 | 2026-11-11 | LD-G1-01B | 整体目标：Gate 1 原型。只改字段表展示层级、重要度与占位标记（D-019），无新增依赖、外部服务与对外发布；Claude 依 D-001 授权派发，Owner 依 D-011 为 DeepSeek Harness；独立审计待 Human 决定 | 是（内容即 Human 2026-11-11 的反馈；派发待其触发） |
-| 2026-11-11 | LD-G1-04 | 整体目标：Gate 1 原型。真实资讯样本集，内部评审用，不对外发布，无依赖与费用；Claude 依 D-001 授权派发，Owner 为 GPT 网页版；交接包已备好 | 是（待 Human 触发） |
+| 2026-11-11 | LD-G1-04 | 整体目标：Gate 1 原型。真实资讯样本集，内部评审用，不对外发布，无依赖与费用；依 D-001 授权派发，Owner 原为 GPT 网页版，随 D-025 转由 Gemini 执行 | 是 |
 
 ## 决策记录
 
@@ -92,12 +92,14 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 | D-014 | 2026-11-09 | 授权 Antigravity 在 LD-G1-02 内使用其可调用的图像生成（Nano Banana）。条件沿用任务书：登记生成方式、提示词、来源与授权，标注“AI 生成”，不生成真实人物肖像与仿冒真实机构的标识。Human 未设费用上限，故如需付费或超出免费额度，停止并交 Claude | Human | 原话：“Antigravity可以生图，可直接调用nanobananan”（[PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050)） |
 | D-015 | 2026-11-09 | LD-G1-06 交叉测试由 Antigravity 负责。Claude 的理解：这同时是 Human 对该任务放宽 AGENTS 1“不写代码”限制，范围仅限 `tests/wechat-prototype/` 下的测试脚本，不得改被测代码。Antigravity 不是 LD-G1-03 的实现者，符合“实现者与交叉测试者不得是同一 Agent”。放宽范围若与 Human 本意不同，请在 PR 中更正 | Human（放宽范围为 Claude 的理解） | 原话：“LD-G1-06交叉测试让Antigravity负责”（[PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735751050)） |
 | D-016 | 2026-11-11 | 对 LD-G1-01 三个待决问题的答复：(1) 资讯卡片按单标签（每条一个分类）；(2) 采纳“事实层级”三档（已证实事实 / 官方数据 / 市场观点）；(3) README 简称与 ROADMAP 全称的差异先不改。Claude 的记录说明：Human 原话未限定“单标签”的适用范围，Claude 提议的表述是“Gate 1 按单标签”，Gate 2 数据契约是否沿用，届时另行决定；“采纳”未说明事实层级是否必填，字段表保持“条件显示”，待 Human 另行决定 | Human | 原话：“1.按单标签；2.采纳；3.先不改；”（[PR #12 评论](https://github.com/fitalex/LexAIDaily/pull/12#issuecomment-6785145973)）；由 LD-G1-01A 写入字段表 |
-
 | D-017 | 2026-11-11 | LD-G1-02 的设计成果（PR #16）作废，按 LD-G1-02A 在原 PR 返工；UI 参考 iandaily.xyz 与 Canvas UI（README 设计理念），只参考不拷贝；阶段 1 先出大盘桌面与移动各 1 张，Human 确认后再做全套。Claude 的理解：返工沿用 LD-G1-02 的授权范围，不新增工具或费用 | Human（返工方式由 Claude 起草） | Human 原话：“设计效果非常不好看，需要推倒重做。之前路线图中提及过，UI设计需要参考 https://iandaily.xyz/ 这个网站和 Canvas UI 启发，需要重新让Antigravity执行”（2026-11-11 会话）；待 Human 在 PR 中确认 |
 | D-018 | 2026-11-11 | **Human 已同意**（[PR #17 评论](https://github.com/fitalex/LexAIDaily/pull/17#issuecomment-6790808909)）：Canvas UI（DavidHDev/canvas-ui，MIT + Commons Clause，不在 D-008 宽松许可名单内）作为 Gate 3 Web 前端的特效组件库直接使用；Gate 1（LD-G1-02A）只在 Penpot 预留效果槽位，不引入代码。Claude 的核对：许可允许用于网站与产品（含商用），禁止单独出售、再授权、再分发组件本身；提交组件源码到公开仓库是否算再分发存在灰区。该库是 WebGL/WebGPU 特效库，不是布局组件库 | Human（核对由 Claude 做） | Human 原话：“https://github.com/DavidHDev/canvas-ui 这是开源免费的UI组件，我的意思是直接拿来用”（2026-11-11 会话）；Human 已于 PR #17 评论写“D-018 同意”；Gate 1 仍不拷贝或安装其代码，Gate 3 使用时在独立审计中再核“公开仓库是否算再分发” |
 | D-019 | 2026-11-11 | 对 LD-G1-02A 阶段 1 的五点反馈及 Claude 的重定风格：(1) 列表卡片不展示实务影响（移到详情页）；(2) 字体改楷体，Claude 选霞鹜文楷（SIL OFL）；(3) 卡片按重要度与摘要长度分 L/M/S 三档错落，新增显示字段“重要度”（头条/常规，Human 勾选）；(4) 分类切换条放大并采用 Liquid Glass 风格；(5) 卡片也用玻璃风格。整体风格由 Claude 起草为“宣纸 × 墨色楷体 × 液态玻璃，朱砂红单强调色”。**修订（2026-11-11 21:06）**：强调色改深海军蓝；标题用霞鹜文楷，摘要与站名配其他字体（Claude 选思源黑体摘要、思源宋体站名，均 SIL OFL）；只有分类栏与日期导航切换栏位用玻璃，卡片不用玻璃（取代上文第 5 点）。Claude 的理解：卡片不含实务影响只针对 Web 列表卡片，公众号栏目待 Human 另定，README/ROADMAP 文字不改；“重要度”由 Human 终审勾选，AI 不得自标 | Human（整体风格由 Claude 起草） | Human 原话：“1.信息卡片展示的字段不要涵盖实务影响部分，卡片上的文字排版非常不合理；2.整体的字体不好看，没有特色，我比较喜欢楷体；3.卡片的大小不要完全一致，按照信息重要程度和内容摘要长度，错落布局；4.我截图中的板块切换部分，比例太小，我希望参考苹果公司liquid glass设计风格；5.卡片我也希望是liquid glass设计风格……你整体再设计下设计风格，再让Antigravity做第二版”（2026-11-11 会话）；修订原话：“1.强调色改用深海军蓝；2.标题用霞鹜文楷，摘要和站名配合其他字体；3.只有分类栏和日期导航切换栏位使用玻璃质感和liquid glass风格，卡片就不用了”（2026-11-11 会话，针对 PR #18）；待 Human 在 PR 中确认 |
-
-| D-025 | 2026-11-22 | 多 Agent 协作架构重组（LD-GOV-03，AGENTS.md V2.0）：(1) Gemini 接替 Claude 担任总协调者，承接 D-001 的 A 级任务授权，新增 `GEMINI.md` 入口与 `gemini/` 分支前缀，`CLAUDE.md` 改为迁移指引；(2) ChatGPT 网页版退出协作架构，取消“仓库操作员”中转角色（6.6 废止），联网调研与 `LD-G1-04` 样本集转由 Gemini 承担，独立审计改为架构内非起草/非实现方交叉审计，Gate 2 高风险资讯二次核验改由 DeepSeek Harness 交叉核验或并入 Human 终审；(3) Codex 移出主协作表，将 DeepSeek Harness 与 Antigravity（Gemini 3.8 Flash）在 D-011～D-015 落地的实际分工正式转正写入 `AGENTS.md`（注：D-020～D-024 预留给在途 Draft PR #21） | Human | Human 2026-11-22 会话原话：“第一，ChatGPT网页版退出协作架构。第二，DeepSeek的任务范围、负责的任务目标不变。第三，反重力Gemini 3.8 Flash同样负责原来的工作。”及“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；待 Human 在 LD-GOV-03 PR 中确认 |
+| D-020 | 2026-11-13 | 移动端卡片摘要字号不小于 14px、不超过 3 行；桌面端摘要 15px（不小于 14.5px） | Human | 原话：“同意 14px”（PR #16 评论 `6847634086`）。画板 05 最终为 10px 原型示意，未达成，转 Gate 3 网页实现（见 D-024）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
+| D-021 | 2026-11-14 | 示例数据口径：桌面端 11 月 11 日 11 条，移动端 6 条；差异为示例取舍，不是产品规则；全部卡片标“示例” | Human | 原话：“桌面 11、移动 6”（PR #16 评论 `6869545932`）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
+| D-022 | 2026-11-14 | 分类筛选结果少的页面（画板 02、06）下半屏留白可接受，DoD D04 对其不适用；仍适用于大盘与归档页 | Human | 原话：“筛选页留白可接受；”（PR #16 评论 `6874207216`）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
+| D-024 | 2026-11-15 | **Human 已确认**：画板 05 摘要 10px 仅为原型示意，低于 D-020；Gate 3 网页实现按不小于 14px，行数与布局届时再定（注：D-023 对应已关闭的 PR #20，不再启用） | Human | 原话：“确认 D-024”（PR #16 评论 `6888462817`、PR #21 评论 `6888801594`）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
+| D-025 | 2026-11-22 | 多 Agent 协作架构重组（LD-GOV-03，AGENTS.md V2.0）：(1) Gemini 接替 Claude 担任总协调者，承接 D-001 的 A 级任务授权，新增 `GEMINI.md` 入口与 `gemini/` 分支前缀，`CLAUDE.md` 改为迁移指引；(2) ChatGPT 网页版退出协作架构，取消“仓库操作员”中转角色（6.6 废止），联网调研与 `LD-G1-04` 样本集转由 Gemini 承担，独立审计改为架构内非起草/非实现方交叉审计，Gate 2 高风险资讯二次核验改由 DeepSeek Harness 交叉核验或并入 Human 终审；(3) Codex 移出主协作表，将 DeepSeek Harness 与 Antigravity（Gemini 3.8 Flash）在 D-011～D-015 落地的实际分工正式转正写入 `AGENTS.md` | Human | Human 2026-11-22 会话原话：“第一，ChatGPT网页版退出协作架构。第二，DeepSeek的任务范围、负责的任务目标不变。第三，反重力Gemini 3.8 Flash同样负责原来的工作。”及“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；待 Human 在 LD-GOV-03 PR 中确认 |
 | D-026 | 2026-11-22 | Human 书面豁免 `LD-GOV-03`（治理文档重组）与 PR #16（`LD-G1-02B` 字体许可 6 项整改增量复审）的独立审计；两项豁免仅限本次任务，不改变 `AGENTS.md` 6.1 的一般规则 | Human | Human 2026-11-22 会话原话：“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；待 Human 在 LD-GOV-03 PR 中确认 |
 
 决策记录须附 Human 原话或链接，并经 Human 在 PR 中确认后生效；协调者起草的记录不单独构成授权。
