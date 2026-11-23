@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-22（Gemini）｜当前阶段：先完成治理架构重组 LD-GOV-03（Gemini 接替 Claude 任总协调者、ChatGPT 网页版退出、Codex 移出主表，并入原 PR #21 的 D-020～D-022、D-024 及新增 D-025/D-026），随后继续 Gate 1 队列（PR #16、PR #19 与 LD-G1-04）｜基准：`main`（`f8c9ce6`）
+最后更新：2026-11-23（Gemini）｜当前阶段：Gate 1 攻坚收口（PR #22/`LD-GOV-03`、PR #19/`LD-G1-01B`、PR #16/`LD-G1-02B` 已合并；启动 `D-027` 复古报刊 Design-in-Code 原型 `LD-G1-02C` 双轨交付并并行推进 `LD-G1-04` 真实资讯样本集，随后进入 `LD-G1-03` 公众号排版与 Gate 1 验收）｜基准：`main`（`cec7d31`）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -17,18 +17,19 @@
 | LD-G0-04 | Gate 0 验收清单 | A | Claude | 独立审计 LD-G0-05 已完成（Astra，结论：需修改，已整改，整改未再审）；Human 签署 | ✅ DONE（Human 本人于 [PR #6 评论](https://github.com/fitalex/LexAIDaily/pull/6#issuecomment-6705455666) 签署） | 依赖 LD-GOV-01、LD-G0-02、LD-G0-03；只能转写 ROADMAP 既有验收标准，不得新增、降低或改写 |
 | LD-G0-05 | Gate 0 验收清单独立审计（1 轮） | A | Codex（Astra，Human 2026-11-07 指定） | Claude | ✅ DONE | 审计已交付并归档：[PR #8](https://github.com/fitalex/LexAIDaily/pull/8) 已合并 `31a2d0a`；只审 1 轮，不再复审 |
 | LD-GOV-02 | 修订 AGENTS.md 过时表述（文首“DRAFT，未生效”；Claude 已有 GitHub 读写权限，D-003 前提已变） | B（治理） | Claude | 独立审计已由 Human 豁免 | ✅ DONE | Human 2026-11-07 授权修订并豁免审计（原话“PR#7直接合并，不审计”，记录见 PR #7 评论 6705408705）；已合并 `9551b6e` |
-| LD-GOV-03 | 重组多 Agent 协作架构与治理文档（V2.0：Gemini 接任总协调者、ChatGPT 网页版退出、Codex 移出主表、交叉独立审计） | B（治理） | Gemini | 独立审计已由 Human 豁免（D-026）；Human 审 diff 合并 | ⚖️ HUMAN_DECISION | [任务书](../daily-specs/LD-GOV-03.md)；分支 `gemini/ld-gov-03-collab-reorg`；Human 2026-11-22 授权并豁免审计 |
+| LD-GOV-03 | 重组多 Agent 协作架构与治理文档（V2.0：Gemini 接任总协调者、ChatGPT 网页版退出、Codex 移出主表、交叉独立审计） | B（治理） | Gemini | 独立审计已由 Human 豁免（D-026）；Human 审 diff 合并 | ✅ DONE（PR #22 已合并 `f035894`） | [任务书](../daily-specs/LD-GOV-03.md)；`AGENTS.md` V2.0 与 `GEMINI.md` 已正式生效 |
 | LD-G1-01 | 资讯卡片展示字段定义 v0（仅供 UI 与排版原型；正式采集数据契约归 Gate 2） | A（Human 2026-11-07 由 B 降为 A，D-010） | DeepSeek Harness（D-011，原 Codex） | Claude；独立审计已豁免（D-010） | ✅ DONE（[PR #12](https://github.com/fitalex/LexAIDaily/pull/12) 已合并 `419cda7`；Claude 复核两轮，第二轮通过；Human 2026-11-11 答复三个待决问题并要求合并） | [任务书](../daily-specs/LD-G1-01.md)；首轮复核 F01–F04 已由 Owner 在原 PR 修复；三个答复见 D-016，由 LD-G1-01A 写入字段表 |
 | LD-G1-01A | 字段表定稿：写入 Human 对三个待决问题的答复（D-016） | A | DeepSeek Harness（D-011） | Claude；不触发独立审计（Claude 判断，Human 可追加） | ✅ DONE（[PR #14](https://github.com/fitalex/LexAIDaily/pull/14) 已合并，merge commit `6e2b986`；Claude 复核通过，Human 2026-11-11 合并） | [任务书](../daily-specs/LD-G1-01A.md)；复核无 S1、S2，余 3 项 S3（PR 行数统计不自洽、3.3 节两条重复、第六节一句流程说明）不阻断；事实层级是否必填仍待 Human 决定 |
 | LD-G1-02 | 设计系统与 Web 桌面/移动原型 | B（跨 Gate） | Antigravity（D-012，原 Codex） | Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | ✏️ CHANGES_REQUESTED（Human 2026-11-11 否决 [PR #16](https://github.com/fitalex/LexAIDaily/pull/16) 的设计，要求推倒重做，见 LD-G1-02A；原授权记录：Human 已于 [PR #11 评论](https://github.com/fitalex/LexAIDaily/pull/11#issuecomment-6735352277) 授权；LD-G1-01、LD-G1-01A 已合并；待 Penpot 就绪（见 Human 待办）后由 Human 触发；基准以最新 main 为准，任务书所写 `048cb09` 已过期） | [任务书](../daily-specs/LD-G1-02.md)；依赖 LD-G1-01、LD-G1-01A；使用 Penpot（开源免费，D-013）及其 MCP 服务，**须先经 Human 授权**；图像生成可使用 Nano Banana（D-014）；第三方拷贝按 D-008 登记；执行者提供截图、Penpot 版本与素材来源记录 |
 | LD-G1-02A | 设计系统与 Web 原型返工（推倒重做；参考 iandaily.xyz 与 Canvas UI） | B（同 LD-G1-02） | Antigravity（D-012） | Claude；GPT 网页版独立审计（6.1(c)，Human 可豁免）；Human 视觉验收 | ✏️ CHANGES_REQUESTED（阶段 1 浅色版被 Human 否决，[PR #16](https://github.com/fitalex/LexAIDaily/pull/16) 评论 6791029309；视觉约束由 LD-G1-02B 取代，参考笔记与 Canvas UI 处理继续有效） | [任务书](../daily-specs/LD-G1-02A.md)；在 PR #16 返工；参考 iandaily.xyz 截图规范；分两阶段，阶段 1 出大盘桌面与移动各 1 张后停下等 Human 确认；Canvas UI 仅预留槽位（D-018）；Claude 复核发现 PR #16 含编造内容（S1），须清除 |
-| LD-G1-01B | 字段表 v0.2：列表卡片不含实务影响、新增重要度（头条/常规）、占位标记改为字段 | A | DeepSeek Harness（D-011） | Gemini（接替 Claude）；Human 已在 PR #18 豁免审计 | 👀 READY_FOR_REVIEW（PR #19 待 Gemini 复核） | [任务书](../daily-specs/LD-G1-01B.md)；LD-G1-02B 的前置；公众号栏目是否含实务影响待 Human 另定 |
-| LD-G1-02B | 设计系统与 Web 原型第二版（宣纸 × 楷体标题 × 导航玻璃，深海军蓝，D-019） | B（同 LD-G1-02） | Antigravity（D-012） | Gemini（接替 Claude）；字体许可增量复审已由 Human 豁免（D-026）；Human 视觉验收 | 👀 READY_FOR_REVIEW（PR #16 `296807d` 待 Gemini 核验 6 项文档整改后交 Human 合并） | [任务书](../daily-specs/LD-G1-02B.md)；R13 设计复核已通过；字体许可增量复审已豁免（D-026） |
-| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（D-011，原 Codex） | LD-G1-06 交叉测试（Antigravity，D-015）；Gemini；按 6.1(c) 独立审计（Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 PR #11 授权；待 LD-G1-01B、LD-G1-02B 合并后开工） | [任务书](../daily-specs/LD-G1-03.md)；juice 依赖已授权（D-009）；微信 iOS/Android 真机预览由 Human 执行 |
-| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | DeepSeek Harness 抽查核验（或 Human 书面豁免，6.1(d)） | 🟢 AUTHORIZED_TO_EXECUTE（A 级，已登记台账；随 LD-GOV-03 转由 Gemini 执行） | [任务书](../daily-specs/LD-G1-04.md)；可与 PR #16/#19 复核并行 |
+| LD-G1-01B | 字段表 v0.2：列表卡片不含实务影响、新增重要度（头条/常规）、占位标记改为字段 | A | DeepSeek Harness（D-011） | Gemini（接替 Claude）；Human 已在 PR #18 豁免审计 | ✅ DONE（PR #19 已合并 `2307eed`） | [任务书](../daily-specs/LD-G1-01B.md)；公众号栏目是否含实务影响待 Human 另定 |
+| LD-G1-02B | 设计系统与 Web 原型第二版（宣纸 × 楷体标题 × 导航玻璃，深海军蓝，D-019） | B（同 LD-G1-02） | Antigravity（D-012） | Gemini（接替 Claude）；字体许可增量复审已由 Human 豁免（D-026）；Human 视觉验收 | ✅ DONE（[PR #16](https://github.com/fitalex/LexAIDaily/pull/16) 已合并 `cec7d31`；视觉与交付路线随后由 D-027 与 LD-G1-02C 替代升级） | [任务书](../daily-specs/LD-G1-02B.md)；Penpot 阶段归档完成 |
+| LD-G1-02C | 复古报刊风 Design-in-Code HTML 原型与 v2.0 AI 配图规范落地（放弃 Penpot，替代 D-013；D-027） | B（跨 Gate） | DeepSeek Harness（代码线）｜Antigravity（视觉资产线） | Gemini（Coordinator）；独立审计：否（仅静态原型与资产规范）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 2026-11-23 确认 D-027 路线与 v2.0 配图规范；待任务书入库后双轨开工） | [任务书](../daily-specs/LD-G1-02C.md)；配图规范：[illustration-spec.md](../../design/illustration-spec.md)；参考原型：[gemini-code-1795400982825.html](../../design/gemini-code-1795400982825.html) |
+| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（D-011，原 Codex） | LD-G1-06 交叉测试（Antigravity，D-015）；Gemini；按 6.1(c) 独立审计（Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 PR #11 授权；待 LD-G1-02C 定稿及 Human 确认公众号字段后开工） | [任务书](../daily-specs/LD-G1-03.md)；juice 依赖已授权（D-009）；微信 iOS/Android 真机预览由 Human 执行 |
+| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | DeepSeek Harness 抽查核验（或 Human 书面豁免，6.1(d)） | 🟢 AUTHORIZED_TO_EXECUTE（A 级，已登记台账；随 LD-GOV-03 转由 Gemini 执行） | [任务书](../daily-specs/LD-G1-04.md)；可与 LD-G1-02C 双轨并行 |
 | LD-G1-05 | Gate 1 验收清单（只转写 ROADMAP 既有验收标准） | A | Gemini（接替 Claude） | 独立审计已豁免（D-010）；Human 签署 | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-05.md)；依赖 LD-G1-01 至 04、06 完成 |
-| LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | Antigravity（D-015） | Claude | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-06.md)；依赖 LD-G1-03 READY_FOR_REVIEW；Antigravity 不是 LD-G1-03 的实现者，符合交叉测试要求 |
-| LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Claude | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-07.md)；依赖 LD-G1-01、02、03 中已合并者，可分批 |
+| LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | Antigravity（D-015） | Gemini（接替 Claude） | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-06.md)；依赖 LD-G1-03 READY_FOR_REVIEW；Antigravity 不是 LD-G1-03 的实现者，符合交叉测试要求 |
+| LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Gemini（接替 Claude） | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-07.md)；依赖 LD-G1-01、02C、03 中已合并者，可分批 |
 
 Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺序开工；LD-G1-01（已完成）、LD-G1-01A、LD-G1-02（Antigravity，D-012）、LD-G1-03（DeepSeek Harness）依次执行，不并行；LD-G1-04（Gemini，D-025）可与它们并行。B 级任务（LD-G1-02、03）须 Human 授权后才能开工。
 
@@ -37,7 +38,8 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 - [x] 首轮独立审计已完成（PR #3，2026-11-05，结论：需修改），报告原文见 docs/audits/LD-GOV-01-gpt-audit.md
 - [x] （已于 PR #3 评论 `6652115636`、`6652516660` 确认）在 PR #3 留言确认或修订决策记录 D-001 至 D-004（审计 S1-01）；确认前不启动任何 A 级任务
 - [x] （已于 PR #3 评论 `6679648988` 确认选甲）明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
-- [ ] 审阅并合并 `LD-GOV-03` PR（分支 `gemini/ld-gov-03-collab-reorg`），在 PR 评论确认 D-025、D-026
+- [x] （已完成，PR #22 已合并 `f035894`）审阅并合并 `LD-GOV-03` PR（分支 `gemini/ld-gov-03-collab-reorg`），确认 D-025、D-026
+- [ ] 审阅并合并 `gemini/ld-g1-02c-spec-sync` PR（入库 `LD-G1-02C` 任务书、`illustration-spec.md` 与 V3.2 参考原型，刷新 `STATUS.md`），在 PR 评论确认 D-027
 - [x] （已完成）合并 LD-G1-02A 任务书 PR #17，确认 D-017，D-018 同意；阶段 1 已交付并被否决（D-019）
 - [x] （已完成，PR #18 已合并，Human 已确认 D-019 并豁免 01B 审计）确认 LD-G1-01B、LD-G1-02B 任务书 PR
 - [ ] 另定：公众号栏目的资讯单元是否沿用“含实务影响”（LD-G1-03 开工前确认）；README/ROADMAP 里“标准单元四要素”文字是否需要由你修改
@@ -99,7 +101,8 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 | D-021 | 2026-11-14 | 示例数据口径：桌面端 11 月 11 日 11 条，移动端 6 条；差异为示例取舍，不是产品规则；全部卡片标“示例” | Human | 原话：“桌面 11、移动 6”（PR #16 评论 `6869545932`）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
 | D-022 | 2026-11-14 | 分类筛选结果少的页面（画板 02、06）下半屏留白可接受，DoD D04 对其不适用；仍适用于大盘与归档页 | Human | 原话：“筛选页留白可接受；”（PR #16 评论 `6874207216`）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
 | D-024 | 2026-11-15 | **Human 已确认**：画板 05 摘要 10px 仅为原型示意，低于 D-020；Gate 3 网页实现按不小于 14px，行数与布局届时再定（注：D-023 对应已关闭的 PR #20，不再启用） | Human | 原话：“确认 D-024”（PR #16 评论 `6888462817`、PR #21 评论 `6888801594`）；原 Draft PR #21 内容按 Human 2026-11-22 指示并入 LD-GOV-03 |
-| D-025 | 2026-11-22 | 多 Agent 协作架构重组（LD-GOV-03，AGENTS.md V2.0）：(1) Gemini 接替 Claude 担任总协调者，承接 D-001 的 A 级任务授权，新增 `GEMINI.md` 入口与 `gemini/` 分支前缀，`CLAUDE.md` 改为迁移指引；(2) ChatGPT 网页版退出协作架构，取消“仓库操作员”中转角色（6.6 废止），联网调研与 `LD-G1-04` 样本集转由 Gemini 承担，独立审计改为架构内非起草/非实现方交叉审计，Gate 2 高风险资讯二次核验改由 DeepSeek Harness 交叉核验或并入 Human 终审；(3) Codex 移出主协作表，将 DeepSeek Harness 与 Antigravity（Gemini 3.8 Flash）在 D-011～D-015 落地的实际分工正式转正写入 `AGENTS.md` | Human | Human 2026-11-22 会话原话：“第一，ChatGPT网页版退出协作架构。第二，DeepSeek的任务范围、负责的任务目标不变。第三，反重力Gemini 3.8 Flash同样负责原来的工作。”及“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；待 Human 在 LD-GOV-03 PR 中确认 |
-| D-026 | 2026-11-22 | Human 书面豁免 `LD-GOV-03`（治理文档重组）与 PR #16（`LD-G1-02B` 字体许可 6 项整改增量复审）的独立审计；两项豁免仅限本次任务，不改变 `AGENTS.md` 6.1 的一般规则 | Human | Human 2026-11-22 会话原话：“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；待 Human 在 LD-GOV-03 PR 中确认 |
+| D-025 | 2026-11-22 | 多 Agent 协作架构重组（LD-GOV-03，AGENTS.md V2.0）：(1) Gemini 接替 Claude 担任总协调者，承接 D-001 的 A 级任务授权，新增 `GEMINI.md` 入口与 `gemini/` 分支前缀，`CLAUDE.md` 改为迁移指引；(2) ChatGPT 网页版退出协作架构，取消“仓库操作员”中转角色（6.6 废止），联网调研与 `LD-G1-04` 样本集转由 Gemini 承担，独立审计改为架构内非起草/非实现方交叉审计，Gate 2 高风险资讯二次核验改由 DeepSeek Harness 交叉核验或并入 Human 终审；(3) Codex 移出主协作表，将 DeepSeek Harness 与 Antigravity（Gemini 3.8 Flash）在 D-011～D-015 落地的实际分工正式转正写入 `AGENTS.md` | Human | Human 2026-11-22 会话原话：“第一，ChatGPT网页版退出协作架构。第二，DeepSeek的任务范围、负责的任务目标不变。第三，反重力Gemini 3.8 Flash同样负责原来的工作。”及“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；PR #22 已合并 |
+| D-026 | 2026-11-22 | Human 书面豁免 `LD-GOV-03`（治理文档重组）与 PR #16（`LD-G1-02B` 字体许可 6 项整改增量复审）的独立审计；两项豁免仅限本次任务，不改变 `AGENTS.md` 6.1 的一般规则 | Human | Human 2026-11-22 会话原话：“授权 LD-GOV-03，全部按推荐方案，本次（以及 PR #16）豁免审计”；PR #22 已合并 |
+| D-027 | 2026-11-23 | Gate 1 放弃 Penpot（替代 D-013），改用 Design-in-Code 静态 HTML/CSS 分层迭代（`LD-G1-02C`）；视觉对标 Niccolò Miranda 复古报刊纸美学（`#C8C0B6` 纸底、`#1D1D1B` 墨黑、`#C03F13` 朱红微标、1px 锐利黑线、零毛玻璃与零阴影）；列表卡片隐藏来源外链与「实务影响」，二者下沉至点击详情弹窗；全站 AI 配图统一采用 `design/illustration-spec.md` v2.0「清透日光厚涂油画」规范 | Human | Human 2026-11-23 会话确认放弃 Penpot 路线，定稿 V3.2 复古报刊交互原型与 v2.0 清透日光厚涂油画自动配图规范；待 Human 在 `gemini/ld-g1-02c-spec-sync` PR 中确认 |
 
 决策记录须附 Human 原话或链接，并经 Human 在 PR 中确认后生效；协调者起草的记录不单独构成授权。
