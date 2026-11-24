@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V2</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V3</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --paper-bg: #C8C0B6;
@@ -22,6 +22,7 @@
       --accent-text: #F4EDE4;
 
       --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
+      --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
       --font-serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif;
       --font-sans-cn: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
@@ -39,7 +40,7 @@
       overflow-x: hidden;
     }
 
-    /* 报纸棉纸纤维肌理（双层微噪点 + 正片叠底，零弥散投影、零毛玻璃） */
+    /* 报纸棉纸纤维肌理（正片叠底，零弥散投影、零毛玻璃） */
     body::before {
       content: "";
       position: fixed;
@@ -57,7 +58,7 @@
 
     .paper-page {
       width: 100%;
-      max-width: 1440px;
+      max-width: 100%;
       margin: 0 auto;
       background: var(--paper-bg);
       transition: max-width 0.35s var(--ease);
@@ -68,10 +69,10 @@
       border: 1px solid #4C4842;
     }
 
-    /* ========== 1. 顶部报眉（经典报刊双线收口） ========== */
+    /* ========== 1. 顶部报眉（加宽首屏第一行，对齐参考站全幅节奏） ========== */
     .top-bar {
-      height: 70px;
-      padding: 0 32px;
+      height: 84px;
+      padding: 0 40px;
       border-bottom: 1px solid var(--rule-strong);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -79,18 +80,19 @@
     }
     .top-left {
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 12.5px;
       letter-spacing: 0.04em;
       text-transform: uppercase;
       color: var(--ink-body);
       white-space: nowrap;
     }
     .top-center {
-      font-family: var(--font-display);
-      font-weight: 800;
-      font-size: 21px;
-      letter-spacing: 0.01em;
+      font-family: var(--font-masthead-cn);
+      font-weight: 400;
+      font-size: 26px;
+      letter-spacing: 0.08em;
       text-align: center;
+      line-height: 1.1;
     }
     .top-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 
@@ -111,7 +113,7 @@
     .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
 
     .drawer {
-      display: none; padding: 16px 32px; border-bottom: 1px solid var(--ink); background: var(--paper-inset);
+      display: none; padding: 16px 40px; border-bottom: 1px solid var(--ink); background: var(--paper-inset);
       align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
     }
     .drawer.open { display: flex; }
@@ -127,7 +129,7 @@
     }
 
     /* ========== 2. 首屏缓缓流动横轨（卡片 + 今日综述） ========== */
-    .hero-section { padding: 28px 0 24px; }
+    .hero-section { padding: 30px 0 26px; }
     .hero-rail-viewport {
       width: 100%;
       overflow: hidden;
@@ -142,7 +144,7 @@
     .rail-item {
       flex: 0 0 33.3333%;
       min-width: 33.3333%;
-      padding: 0 28px;
+      padding: 0 36px;
       border-right: 1px solid var(--rule);
       display: flex;
       flex-direction: column;
@@ -153,13 +155,13 @@
       align-items: center;
       text-align: center;
       gap: 14px;
-      padding: 8px 34px;
+      padding: 8px 40px;
     }
     .digest-kicker-row { display: inline-flex; align-items: center; gap: 10px; }
     .digest-kicker {
       font-family: var(--font-serif-cn);
       font-weight: 900;
-      font-size: clamp(30px, 2.8vw, 44px);
+      font-size: clamp(32px, 3vw, 46px);
       line-height: 1.08;
       letter-spacing: -0.02em;
       color: var(--ink);
@@ -211,7 +213,6 @@
       background: #B8B0A5;
       flex-shrink: 0;
     }
-    /* 纸墨融合微釉层：让高明度油画自然沉入复古新闻纸，悬停恢复满彩日光 */
     .m-card-art-frame::after {
       content: "";
       position: absolute;
@@ -249,7 +250,6 @@
     }
     .m-card:hover .m-card-art-fallback svg { transform: scale(1.035); }
 
-    /* 独立报刊眉标行（固定 22px 高度，彻底杜绝各列标题/摘要基线错位） */
     .m-card-kicker {
       margin-top: 14px;
       height: 22px;
@@ -262,22 +262,9 @@
       letter-spacing: 0.04em;
       color: var(--ink-muted);
     }
-    .m-kicker-left {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      min-width: 0;
-    }
-    .m-kicker-num {
-      color: var(--ink);
-      font-weight: 500;
-    }
-    .m-kicker-cat {
-      font-family: var(--font-sans-cn);
-      font-size: 11.5px;
-      color: var(--ink-muted);
-      letter-spacing: 0.02em;
-    }
+    .m-kicker-left { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+    .m-kicker-num { color: var(--ink); font-weight: 500; }
+    .m-kicker-cat { font-family: var(--font-sans-cn); font-size: 11.5px; color: var(--ink-muted); letter-spacing: 0.02em; }
     .m-badge {
       display: inline-block;
       background: var(--accent);
@@ -291,11 +278,7 @@
       letter-spacing: 0.04em;
       flex-shrink: 0;
     }
-    .m-badge.outline {
-      background: transparent;
-      color: var(--accent);
-      border: 1px solid var(--accent);
-    }
+    .m-badge.outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
     .m-placeholder-tag {
       font-family: var(--font-sans-cn);
       font-size: 10.5px;
@@ -305,7 +288,6 @@
       flex-shrink: 0;
     }
 
-    /* 报刊雕版衬线标题（锁定 2 行基线槽位，全行左右对齐） */
     .m-card-title {
       margin-top: 8px;
       font-family: var(--font-serif-cn);
@@ -321,11 +303,8 @@
       overflow: hidden;
       transition: color 0.2s;
     }
-    .m-card:hover .m-card-title {
-      color: var(--accent);
-    }
+    .m-card:hover .m-card-title { color: var(--accent); }
 
-    /* 报刊两端对齐正文摘要（严格 3 行，左右切齐竖栏线） */
     .m-card-summary {
       margin-top: 10px;
       font-family: var(--font-sans-cn);
@@ -341,13 +320,13 @@
       overflow: hidden;
     }
 
-    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带 ========== */
-    .masthead-wrap { padding: 0 32px; }
-    .masthead-black-band { width: 100%; background: var(--ink); padding: 12px 16px 6px; display: block; }
+    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带（1:1 对齐参考站 MIRANDA 修长雕版比例） ========== */
+    .masthead-wrap { padding: 0 40px; }
+    .masthead-black-band { width: 100%; background: var(--ink); padding: 10px 14px 8px; display: block; }
     .masthead-svg { width: 100%; height: auto; display: block; }
 
     /* ========== 5. 下半区报刊双线分类索引 + 严格等宽三栏网格 ========== */
-    .feed-section { padding: 20px 32px 48px; }
+    .feed-section { padding: 20px 40px 48px; }
     .index-bar {
       display: flex; align-items: center; justify-content: space-between; gap: 14px;
       padding: 11px 0;
@@ -369,23 +348,22 @@
     .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
     .index-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em; color: var(--ink-muted); }
 
-    /* 关键修复：所有三栏采用完全对称的 padding（左右均为 28px），保证三列配图宽高 100% 像素级一致 */
     .broadsheet-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       border-bottom: 2px solid var(--ink);
-      margin-left: -28px;
-      margin-right: -28px;
+      margin-left: -32px;
+      margin-right: -32px;
     }
     .grid-cell {
-      padding: 30px 28px 32px;
+      padding: 32px 32px 34px;
       border-right: 1px solid var(--rule);
       border-bottom: 1px solid var(--rule);
       display: flex;
       flex-direction: column;
     }
     .grid-cell:nth-child(3n) { border-right: none; }
-    .empty-msg { grid-column: 1 / -1; padding: 54px 28px; text-align: center; font-size: 15px; color: var(--ink-muted); }
+    .empty-msg { grid-column: 1 / -1; padding: 54px 32px; text-align: center; font-size: 15px; color: var(--ink-muted); }
 
     .colophon {
       padding: 20px 0 8px; display: flex; align-items: center; justify-content: space-between;
@@ -464,9 +442,9 @@
     .modal-note { font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted); border-top: 1px solid var(--rule-light); padding-top: 10px; line-height: 1.6; }
 
     /* ========== 7. 移动端单列适配（375px 零横向溢出） ========== */
-    body.mobile-preview .top-bar { padding: 0 14px; height: 58px; }
-    body.mobile-preview .top-left { font-size: 10.5px; }
-    body.mobile-preview .top-center { font-size: 15px; }
+    body.mobile-preview .top-bar { padding: 0 14px; height: 62px; }
+    body.mobile-preview .top-left { font-size: 10px; }
+    body.mobile-preview .top-center { font-size: 17px; letter-spacing: 0.04em; }
     body.mobile-preview .drawer { padding: 14px 16px; }
     body.mobile-preview .drawer-search { width: 100%; }
     body.mobile-preview .hero-section { padding: 16px 0 14px; }
@@ -485,9 +463,9 @@
     body.mobile-preview .btn-ink { min-width: 100%; }
 
     @media (max-width: 960px) {
-      .top-bar { padding: 0 16px; height: 60px; }
-      .top-left { font-size: 11px; }
-      .top-center { font-size: 16px; }
+      .top-bar { padding: 0 16px; height: 64px; }
+      .top-left { font-size: 10.5px; }
+      .top-center { font-size: 18px; letter-spacing: 0.04em; }
       .drawer { padding: 14px 16px; }
       .drawer-search { width: 100%; }
       .rail-item { flex: 0 0 84%; min-width: 84%; padding: 0 16px; }
@@ -509,7 +487,7 @@
     <div class="paper-page">
       <header class="top-bar">
         <div class="top-left" id="topDateText">BEIJING · 2026-11-22</div>
-        <div class="top-center">The Legal AI Daily</div>
+        <div class="top-center">法律人的AI情报雷达</div>
         <div class="top-right">
           <div class="viewport-mini" aria-label="视口切换">
             <button class="vp-btn active" id="vpDesktop" onclick="setViewport('desktop')">桌面</button>
@@ -538,11 +516,11 @@
 
         <div class="masthead-wrap">
           <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
-            <svg class="masthead-svg" viewBox="0 0 1200 225" preserveAspectRatio="xMidYMid meet">
-              <text x="600" y="196" text-anchor="middle" fill="#C8C0B6"
+            <svg class="masthead-svg" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid meet">
+              <text x="600" y="312" text-anchor="middle" fill="#C8C0B6"
                 font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
-                font-weight="900" font-size="214" letter-spacing="-7"
-                textLength="1168" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
+                font-weight="900" font-size="340" letter-spacing="-10"
+                textLength="1166" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
             </svg>
           </div>
         </div>
