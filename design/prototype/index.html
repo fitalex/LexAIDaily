@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V13</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V14</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
@@ -100,7 +100,6 @@
       transition: max-width 0.35s var(--ease);
       overflow-x: hidden;
     }
-    /* 表层极轻书页吃墨层：克制细腻，最大化中文小字长时间阅读舒适度（零投影、零毛玻璃） */
     .paper-page::after {
       content: "";
       position: absolute;
@@ -128,7 +127,6 @@
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
     }
-    /* 左上角媒体矩阵图标栏（微信 / 小红书 / 抖音 / GitHub） */
     .social-bar {
       display: inline-flex;
       align-items: center;
@@ -199,7 +197,6 @@
     }
     .vp-btn.active { background: var(--ink); color: var(--paper-bg); }
 
-    /* 右上角双横杠菜单入口（已移除旧抽屉，保留为后续扩展板块入口） */
     .menu-btn {
       width: 34px; height: 28px; background: transparent; border: none; cursor: pointer;
       display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 2px;
@@ -230,7 +227,6 @@
       flex-direction: column;
     }
 
-    /* 今日综述上边缘与相邻卡片图片上边缘齐平，底部 TIP 贴底对齐 */
     .digest-rail-card {
       justify-content: flex-start;
       align-items: center;
@@ -397,11 +393,11 @@
       overflow: hidden;
     }
 
-    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带（与上方横轨同处 hero-section，宽度 100% 一致） ========== */
+    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带 ========== */
     .masthead-black-band { width: 100%; background: var(--ink); padding: 10px 14px 8px; display: block; }
     .masthead-svg { width: 100%; height: auto; display: block; }
 
-    /* ========== 5. 第二屏：左侧分类索引 + 右上角近三天期号与更多日期切换 ========== */
+    /* ========== 5. 第二屏：左侧分类索引 + 右上角近三日日报与按周历史归档 ========== */
     .feed-section { padding: 20px 40px 48px; }
     .index-bar {
       position: relative;
@@ -424,7 +420,7 @@
     .cat-btn.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
     .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
 
-    /* 第二屏右上角期号切换条（近三天 + 更多日期） */
+    /* 第二屏右上角期号切换条（近三天完整日报 + 按周精选历史归档） */
     .edition-nav {
       position: relative;
       display: flex;
@@ -460,16 +456,17 @@
       transition: background 0.18s, color 0.18s;
     }
     .date-more-btn:hover,
-    .date-more-btn.open { background: var(--ink); color: var(--paper-bg); border-style: solid; }
+    .date-more-btn.open,
+    .date-more-btn.active { background: var(--ink); color: var(--paper-bg); border-style: solid; border-color: var(--ink); }
 
-    /* 更多日期历史归档弹出面板（同款细腻棉质书页纸 + 直角 1.5px 黑框，零投影） */
+    /* 按周精选历史归档弹出面板（D-029 归档规范：每周仅留存优质精选，其余清理） */
     .archive-popover {
       display: none;
       position: absolute;
       top: calc(100% + 8px);
       right: 0;
       z-index: 60;
-      width: 280px;
+      width: 310px;
       background-color: var(--paper-modal);
       background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
       background-size: 340px 340px, 485px 485px;
@@ -491,13 +488,19 @@
     }
     .archive-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
     .archive-item {
-      display: flex; justify-content: space-between; align-items: center;
-      background: transparent; border: 1px solid var(--rule-light); padding: 6px 10px;
-      font-family: var(--font-mono); font-size: 12px; color: var(--ink); cursor: pointer; text-align: left;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      background: transparent; border: 1px solid var(--rule-light); padding: 7px 10px;
+      font-family: var(--font-mono); font-size: 11.5px; color: var(--ink); cursor: pointer; text-align: left;
     }
     .archive-item:hover { border-color: var(--ink); background: rgba(29, 29, 27, 0.05); }
     .archive-item.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
-    .archive-note { font-family: var(--font-sans-cn); font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
+    .archive-count-tag {
+      font-family: var(--font-sans-cn);
+      font-size: 10.5px;
+      opacity: 0.85;
+      white-space: nowrap;
+    }
+    .archive-note { font-family: var(--font-sans-cn); font-size: 11px; color: var(--ink-muted); line-height: 1.55; }
 
     .broadsheet-grid {
       display: grid;
@@ -843,16 +846,16 @@
       <section class="feed-section">
         <nav class="index-bar" aria-label="分类与期号筛选">
           <div class="cat-list" id="catList"></div>
-          <div class="edition-nav" aria-label="近三天期号与历史归档">
+          <div class="edition-nav" aria-label="近三日日报与按周历史归档">
             <div class="recent-dates-wrap" id="recentDates"></div>
-            <button class="date-more-btn" id="moreDatesBtn" onclick="toggleArchivePopover(event)">更多日期 ▾</button>
+            <button class="date-more-btn" id="moreDatesBtn" onclick="toggleArchivePopover(event)">历史归档 ▾</button>
             <div class="archive-popover" id="archivePopover">
               <div class="archive-pop-title">
-                <span>历史期号归档</span>
-                <span id="archiveVolText">VOL.04</span>
+                <span>按周精选归档</span>
+                <span>WEEKLY CURATED</span>
               </div>
               <div class="archive-list" id="archiveList"></div>
-              <p class="archive-note">原型示例含近 3 期与 1 期往期归档；Gate 3 正式站点将接入全量日历检索。</p>
+              <p class="archive-note">归档规范：近 3 日保留完整日报；超期按周分类归档，每周仅留存高价值优质情报，其余信息直接清理。</p>
             </div>
           </div>
         </nav>
@@ -937,10 +940,11 @@
     }
 
     const RECENT_KEYS = ["2026-11-22", "2026-11-21", "2026-11-20"];
+    const WEEKLY_ARCHIVE_KEYS = ["2026-W46", "2026-W45", "2026-W44"];
 
     const EDITIONS = {
       "2026-11-22": {
-        vol: "VOL.04 NO.326", label: "11-22 今日",
+        vol: "VOL.04 NO.326", label: "11-22 今日", isWeekly: false,
         digest: "今日聚焦生成内容双轨标识新规与多模态法律推理评测——合规重点正从原则宣示落向水印留痕，律所工具全面转向“无依据即拒答”的幻觉审计。",
         items: [
           {
@@ -1004,7 +1008,7 @@
         ]
       },
       "2026-11-21": {
-        vol: "VOL.04 NO.325", label: "11-21 昨日",
+        vol: "VOL.04 NO.325", label: "11-21 昨日", isWeekly: false,
         digest: "昨日焦点围绕 AI 专利审查细则与深度伪造音视频举证标准展开，同时 14B 开源法律模型降低了中小律所本地化部署门槛。",
         items: [
           {
@@ -1031,7 +1035,7 @@
         ]
       },
       "2026-11-20": {
-        vol: "VOL.04 NO.324", label: "11-20 前日",
+        vol: "VOL.04 NO.324", label: "11-20 前日", isWeekly: false,
         digest: "前日关注律协发布生成式 AI 执业伦理指引与法务合同生命周期自动对标工具，合规披露正成为律师代理协议新标配。",
         items: [
           {
@@ -1057,16 +1061,71 @@
           }
         ]
       },
-      "2026-11-19": {
-        vol: "VOL.04 NO.323", label: "11-19 往期",
-        digest: "往期归档示例：聚焦司法公开文书结构化标注进展与开源法律评测基准更新。",
+      /* ===== 按周分类历史精选归档（依 D-029 归档规范：每周仅留存优质情报，其余清理） ===== */
+      "2026-W46": {
+        vol: "WEEKLY 2026-W46", label: "W46 精选", rangeText: "2026-W46 · 11/09–11/15", isWeekly: true,
+        digest: "W46 周度精选归档：本周仅留存 3 条具有长期参考价值的里程碑情报，聚焦跨境数据豁免、开源裁判语料库与大模型著作权规则。",
         items: [
           {
-            id: "1119-01", badge: "头条", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
-            placeholder: true, sourceDomain: "example.com/academic/legal-corpus-2026", date: "2026-11-19",
+            id: "w46-01", badge: "周度精选", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w46/legal-corpus", date: "2026-11-14",
             title: "法学院联合发布结构化裁判要旨开源语料库，覆盖商事与知产纠纷",
             summary: "语料库按争议焦点、裁判理由与法条引用三层结构进行人工校对，供学术研究与低幻觉检索评测免费使用。",
             impact: ["【法律研究者与 LegalTech 团队】可直接复用该开源标注体例构建内部高质量检索评测集。"]
+          },
+          {
+            id: "w46-02", badge: "周度精选", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/archive/w46/eu-ai-compliance", date: "2026-11-12",
+            title: "欧盟通用人工智能模型合规行为准则最终版公布，明确版权摘要披露模板",
+            summary: "准则要求通用大模型提供方公开训练数据来源类别摘要，并建立面向权利人的标准化申诉与撤回响应通道。",
+            impact: ["【涉外合规律师】出海 AI 产品须提前对照行为准则准备训练语料披露清单与版权合规档案。"]
+          },
+          {
+            id: "w46-03", badge: "周度精选", badgeOutline: false, category: "实务与工具", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w46/ediscovery-eval", date: "2026-11-10",
+            title: "跨国诉讼电子取证 AI 审阅白皮书发布，建立抽样复核置信度门槛",
+            summary: "白皮书结合多起大型商事仲裁经验，提出 AI 辅助电子证据初筛后的分层随机抽样比例与可审计日志规范。",
+            impact: ["【争议解决律师】在向仲裁庭说明 AI 辅助取证流程时，可直接援引该抽样验证框架增强程序正当性。"]
+          }
+        ]
+      },
+      "2026-W45": {
+        vol: "WEEKLY 2026-W45", label: "W45 精选", rangeText: "2026-W45 · 11/02–11/08", isWeekly: true,
+        digest: "W45 周度精选归档：本周精选留存 2 条高价值情报，涵盖生成式 AI 侵权举证分配与企业法务隐私计算部署实践。",
+        items: [
+          {
+            id: "w45-01", badge: "周度精选", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w45/ai-tort-burden", date: "2026-11-06",
+            title: "互联网法院就 AI 生成内容人格权侵权案确立平台过错分层认定标准",
+            summary: "判决区分基础模型提供方与应用分发平台的注意义务边界，明确接到有效通知后的合理处置时限与显著标识抗辩条件。",
+            impact: ["【平台法务与诉讼律师】建议对照判决要点完善侵权投诉工单响应 SLA 与生成内容显著提示位置。"]
+          },
+          {
+            id: "w45-02", badge: "周度精选", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w45/private-rag-bench", date: "2026-11-04",
+            title: "面向律所内网的零数据留存合同审查评测框架开源",
+            summary: "框架提供 400 份脱敏商事合同对照集，重点评估本地化模型在违约金、管辖条款与知识产权归属条款上的漏检率。",
+            impact: ["【律所技术负责人】可用于内部 POC 选型对比，量化不同开源模型在关键风险条款上的召回表现。"]
+          }
+        ]
+      },
+      "2026-W44": {
+        vol: "WEEKLY 2026-W44", label: "W44 精选", rangeText: "2026-W44 · 10/26–11/01", isWeekly: true,
+        digest: "W44 周度精选归档：本周精选留存 2 条长期有效情报，聚焦法律科技采购合规清单与 AI 代理签约效力探讨。",
+        items: [
+          {
+            id: "w44-01", badge: "周度精选", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/archive/w44/agent-contract", date: "2026-10-30",
+            title: "商事法学界发布 AI Agent 自动化缔约意思表示效力研究报告",
+            summary: "报告系统梳理了授权边界明确与越权下单两类情形下，智能体代为签署标准采购订单的表见代理认定路径。",
+            impact: ["【公司法务】在接入自动化采购 Agent 前，应在平台协议中明确单笔金额上限与人工二次确认触发阈值。"]
+          },
+          {
+            id: "w44-02", badge: "周度精选", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            placeholder: true, sourceDomain: "example.com/archive/w44/legaltech-pricing", date: "2026-10-28",
+            title: "年度法律科技订阅定价趋势：按席位收费正加速转向按案件工作流计费",
+            summary: "调研覆盖 180 家大中型律所，指出传统 SaaS 席位制难以体现 AI 审查效率差异，基于文档量与审阅深度的弹性计费接受度上升。",
+            impact: ["【律所管委会】续签法律科技年度合同时可要求供应商提供基于实际用量的阶梯报价方案。"]
           }
         ]
       }
@@ -1133,10 +1192,11 @@
     }
 
     function renderDigestSlotHTML(ed) {
+      const heading = ed.isWeekly ? "本周精选" : "今日综述";
       return `
         <div class="rail-item digest-rail-card">
           <div class="digest-kicker-row">
-            <div class="digest-kicker">今日综述</div>
+            <div class="digest-kicker">${heading}</div>
             <span class="digest-draft-tag">AI 初稿</span>
           </div>
           <p class="digest-text">${ed.digest}</p>
@@ -1167,21 +1227,21 @@
         `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
       ).join("");
 
-      const isArchiveSelected = !RECENT_KEYS.includes(currentDate);
+      const isWeeklySelected = WEEKLY_ARCHIVE_KEYS.includes(currentDate);
       const moreBtn = document.getElementById("moreDatesBtn");
-      moreBtn.textContent = isArchiveSelected ? `${EDITIONS[currentDate].label} ▾` : "更多日期 ▾";
+      moreBtn.classList.toggle("active", isWeeklySelected);
+      moreBtn.textContent = isWeeklySelected ? `${EDITIONS[currentDate].label} ▾` : "历史归档 ▾";
 
-      document.getElementById("archiveVolText").textContent = ed.vol;
-      document.getElementById("archiveList").innerHTML = Object.keys(EDITIONS).map(d => {
-        const itemEd = EDITIONS[d];
-        return `<button class="archive-item ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')"><span>${d} · ${itemEd.label}</span><span>${itemEd.items.length} 条</span></button>`;
+      document.getElementById("archiveList").innerHTML = WEEKLY_ARCHIVE_KEYS.map(w => {
+        const weekEd = EDITIONS[w];
+        return `<button class="archive-item ${w === currentDate ? "active" : ""}" onclick="selectDate('${w}')"><span>${weekEd.rangeText}</span><span class="archive-count-tag">精选 ${weekEd.items.length} 条</span></button>`;
       }).join("");
 
       const filtered = ed.items.filter(item => currentCategory === "全部" || item.category === currentCategory);
 
       const grid = document.getElementById("broadsheetGrid");
       grid.innerHTML = filtered.length === 0
-        ? `<div class="empty-msg">当前筛选条件下暂无情报，可切换分类或日期查看往期。</div>`
+        ? `<div class="empty-msg">当前筛选条件下暂无情报，可切换分类或查看其他期次。</div>`
         : filtered.map((item, idx) => `<div class="grid-cell">${renderCardHTML(item, idx, false)}</div>`).join("");
     }
 
