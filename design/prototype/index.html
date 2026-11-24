@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V3</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V4</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
@@ -69,7 +69,7 @@
       border: 1px solid #4C4842;
     }
 
-    /* ========== 1. 顶部报眉（加宽首屏第一行，对齐参考站全幅节奏） ========== */
+    /* ========== 1. 顶部报眉 ========== */
     .top-bar {
       height: 84px;
       padding: 0 40px;
@@ -94,6 +94,14 @@
       text-align: center;
       line-height: 1.1;
     }
+    .top-center-latin {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: 0.02em;
+      margin: 0 3px;
+      vertical-align: 1px;
+    }
     .top-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 
     .viewport-mini { display: inline-flex; border: 1px solid var(--rule-strong); }
@@ -112,24 +120,20 @@
     .menu-btn.open span:first-child { transform: translateY(3.25px) rotate(12deg); }
     .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
 
+    /* 顶部抽屉仅保留关键词检索与卷期说明（期号切换已移至第二屏右上角） */
     .drawer {
-      display: none; padding: 16px 40px; border-bottom: 1px solid var(--ink); background: var(--paper-inset);
+      display: none; padding: 14px 40px; border-bottom: 1px solid var(--ink); background: var(--paper-inset);
       align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
     }
     .drawer.open { display: flex; }
-    .drawer-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-family: var(--font-sans-cn); font-size: 13px; }
-    .date-pill {
-      background: transparent; border: 1px solid var(--rule); padding: 4px 11px;
-      font-family: var(--font-mono); font-size: 12px; color: var(--ink); cursor: pointer;
-    }
-    .date-pill.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .drawer-meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-muted); }
     .drawer-search {
       background: transparent; border: none; border-bottom: 1px solid var(--ink);
-      padding: 4px 6px; font-family: var(--font-sans-cn); font-size: 13px; color: var(--ink); width: 220px; outline: none;
+      padding: 4px 6px; font-family: var(--font-sans-cn); font-size: 13px; color: var(--ink); width: 260px; outline: none;
     }
 
-    /* ========== 2. 首屏缓缓流动横轨（卡片 + 今日综述） ========== */
-    .hero-section { padding: 30px 0 26px; }
+    /* ========== 2. 首屏流动三卡横轨（左右边缘与底部 LEXAI DAILY 严格同宽对齐） ========== */
+    .hero-section { padding: 30px 40px 26px; }
     .hero-rail-viewport {
       width: 100%;
       overflow: hidden;
@@ -144,7 +148,7 @@
     .rail-item {
       flex: 0 0 33.3333%;
       min-width: 33.3333%;
-      padding: 0 36px;
+      padding: 0 28px;
       border-right: 1px solid var(--rule);
       display: flex;
       flex-direction: column;
@@ -155,7 +159,7 @@
       align-items: center;
       text-align: center;
       gap: 14px;
-      padding: 8px 40px;
+      padding: 8px 34px;
     }
     .digest-kicker-row { display: inline-flex; align-items: center; gap: 10px; }
     .digest-kicker {
@@ -196,13 +200,8 @@
     }
     .digest-tip strong { font-family: var(--font-mono); color: var(--ink); margin-right: 5px; }
 
-    /* ========== 3. 报刊印制级卡片（等宽配图 + 基线锁齐 + 纸墨融合） ========== */
-    .m-card {
-      cursor: pointer;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-    }
+    /* ========== 3. 报刊印制级卡片 ========== */
+    .m-card { cursor: pointer; display: flex; flex-direction: column; height: 100%; }
     .m-card-art-frame {
       position: relative;
       width: 100%;
@@ -237,13 +236,7 @@
     .m-card-art-fallback { width: 100%; height: 100%; display: none; }
     .m-card-art-frame.is-fallback .m-card-art-img { display: none; }
     .m-card-art-frame.is-fallback .m-card-art-fallback { display: block; }
-    .m-card-art-fallback svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      pointer-events: none;
-      transition: transform 0.55s var(--ease);
-    }
+    .m-card-art-fallback svg { width: 100%; height: 100%; display: block; pointer-events: none; transition: transform 0.55s var(--ease); }
     .m-card:hover .m-card-art-img {
       transform: scale(1.035);
       filter: sepia(0.02) contrast(1.02) saturate(1.02) brightness(1);
@@ -320,20 +313,19 @@
       overflow: hidden;
     }
 
-    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带（1:1 对齐参考站 MIRANDA 修长雕版比例） ========== */
-    .masthead-wrap { padding: 0 40px; }
+    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带（与上方横轨同处 hero-section，宽度 100% 一致） ========== */
     .masthead-black-band { width: 100%; background: var(--ink); padding: 10px 14px 8px; display: block; }
     .masthead-svg { width: 100%; height: auto; display: block; }
 
-    /* ========== 5. 下半区报刊双线分类索引 + 严格等宽三栏网格 ========== */
+    /* ========== 5. 第二屏：左侧分类索引 + 右上角近三天期号与更多日期切换 ========== */
     .feed-section { padding: 20px 40px 48px; }
     .index-bar {
-      display: flex; align-items: center; justify-content: space-between; gap: 14px;
-      padding: 11px 0;
+      position: relative;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 15px 0 11px;
       border-top: 2px solid var(--ink);
       border-bottom: 1px solid var(--ink);
       box-shadow: inset 0 3px 0 0 var(--paper-bg), inset 0 4px 0 0 var(--rule-strong);
-      padding-top: 15px;
       flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -346,7 +338,75 @@
     .cat-btn:hover { border-color: var(--rule); }
     .cat-btn.active { background: var(--ink); color: var(--paper-bg); }
     .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
-    .index-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em; color: var(--ink-muted); }
+
+    /* 第二屏右上角期号切换条（近三天 + 更多日期） */
+    .edition-nav {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .date-pill {
+      background: transparent;
+      border: 1px solid var(--rule);
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      white-space: nowrap;
+    }
+    .date-pill:hover { border-color: var(--ink); }
+    .date-pill.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .date-more-btn {
+      background: transparent;
+      border: 1px dashed var(--rule-strong);
+      padding: 4px 10px;
+      font-family: var(--font-sans-cn);
+      font-size: 12px;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.18s, color 0.18s;
+    }
+    .date-more-btn:hover,
+    .date-more-btn.open { background: var(--ink); color: var(--paper-bg); border-style: solid; }
+
+    /* 更多日期历史归档弹出面板（直角 1px 黑框纸面，零投影） */
+    .archive-popover {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 60;
+      width: 280px;
+      background: var(--paper-modal);
+      border: 1.5px solid var(--ink);
+      padding: 14px 16px;
+    }
+    .archive-popover.open { display: block; }
+    .archive-pop-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+    }
+    .archive-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .archive-item {
+      display: flex; justify-content: space-between; align-items: center;
+      background: transparent; border: 1px solid var(--rule-light); padding: 6px 10px;
+      font-family: var(--font-mono); font-size: 12px; color: var(--ink); cursor: pointer; text-align: left;
+    }
+    .archive-item:hover { border-color: var(--ink); background: var(--paper-bg); }
+    .archive-item.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .archive-note { font-family: var(--font-sans-cn); font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
 
     .broadsheet-grid {
       display: grid;
@@ -445,16 +505,18 @@
     body.mobile-preview .top-bar { padding: 0 14px; height: 62px; }
     body.mobile-preview .top-left { font-size: 10px; }
     body.mobile-preview .top-center { font-size: 17px; letter-spacing: 0.04em; }
+    body.mobile-preview .top-center-latin { font-size: 14px; }
     body.mobile-preview .drawer { padding: 14px 16px; }
     body.mobile-preview .drawer-search { width: 100%; }
-    body.mobile-preview .hero-section { padding: 16px 0 14px; }
-    body.mobile-preview .rail-item { flex: 0 0 86%; min-width: 86%; padding: 0 14px; }
+    body.mobile-preview .hero-section { padding: 16px 14px 14px; }
+    body.mobile-preview .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
     body.mobile-preview .digest-kicker { font-size: 26px; }
     body.mobile-preview .digest-text { font-size: 14px; }
-    body.mobile-preview .masthead-wrap { padding: 0 14px; }
     body.mobile-preview .feed-section { padding: 12px 14px 32px; }
     body.mobile-preview .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
     body.mobile-preview .cat-btn { white-space: nowrap; font-size: 13.5px; }
+    body.mobile-preview .edition-nav { width: 100%; justify-content: flex-start; }
+    body.mobile-preview .archive-popover { right: auto; left: 0; width: 100%; }
     body.mobile-preview .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
     body.mobile-preview .grid-cell { padding: 22px 0; border-right: none; }
     body.mobile-preview .m-card-title { min-height: auto; font-size: 18px; }
@@ -466,12 +528,16 @@
       .top-bar { padding: 0 16px; height: 64px; }
       .top-left { font-size: 10.5px; }
       .top-center { font-size: 18px; letter-spacing: 0.04em; }
+      .top-center-latin { font-size: 15px; }
       .drawer { padding: 14px 16px; }
       .drawer-search { width: 100%; }
-      .rail-item { flex: 0 0 84%; min-width: 84%; padding: 0 16px; }
-      .masthead-wrap, .feed-section { padding-left: 16px; padding-right: 16px; }
+      .hero-section { padding: 18px 16px 16px; }
+      .rail-item { flex: 0 0 86%; min-width: 86%; padding: 0 16px; }
+      .feed-section { padding-left: 16px; padding-right: 16px; }
       .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
       .cat-btn { white-space: nowrap; font-size: 13.5px; }
+      .edition-nav { width: 100%; justify-content: flex-start; }
+      .archive-popover { right: auto; left: 0; width: 100%; }
       .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
       .grid-cell { padding: 24px 0 !important; border-right: none !important; }
       .m-card-title { min-height: auto; }
@@ -487,26 +553,21 @@
     <div class="paper-page">
       <header class="top-bar">
         <div class="top-left" id="topDateText">BEIJING · 2026-11-22</div>
-        <div class="top-center">法律人的AI情报雷达</div>
+        <div class="top-center">法律人的<span class="top-center-latin">AI</span>情报雷达</div>
         <div class="top-right">
           <div class="viewport-mini" aria-label="视口切换">
             <button class="vp-btn active" id="vpDesktop" onclick="setViewport('desktop')">桌面</button>
             <button class="vp-btn" id="vpMobile" onclick="setViewport('mobile')">移动</button>
           </div>
-          <button class="menu-btn" id="menuBtn" onclick="toggleDrawer()" aria-label="展开日期与检索菜单">
+          <button class="menu-btn" id="menuBtn" onclick="toggleDrawer()" aria-label="展开检索栏">
             <span></span><span></span>
           </button>
         </div>
       </header>
 
       <div class="drawer" id="drawer">
-        <div class="drawer-group">
-          <span>期号日期：</span>
-          <div id="drawerDates"></div>
-        </div>
-        <div class="drawer-group">
-          <input class="drawer-search" id="searchInput" type="text" placeholder="检索关键词 / 法条 / 模型..." />
-        </div>
+        <div class="drawer-meta" id="drawerMeta">VOL.04 NO.326 · 7 DISPATCHES</div>
+        <input class="drawer-search" id="searchInput" type="text" placeholder="检索关键词 / 法条 / 模型..." />
       </div>
 
       <section class="hero-section">
@@ -514,22 +575,31 @@
           <div class="hero-rail-track" id="heroTrack"></div>
         </div>
 
-        <div class="masthead-wrap">
-          <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
-            <svg class="masthead-svg" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid meet">
-              <text x="600" y="312" text-anchor="middle" fill="#C8C0B6"
-                font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
-                font-weight="900" font-size="340" letter-spacing="-10"
-                textLength="1166" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
-            </svg>
-          </div>
+        <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
+          <svg class="masthead-svg" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid meet">
+            <text x="600" y="312" text-anchor="middle" fill="#C8C0B6"
+              font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
+              font-weight="900" font-size="340" letter-spacing="-10"
+              textLength="1166" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
+          </svg>
         </div>
       </section>
 
       <section class="feed-section">
-        <nav class="index-bar" aria-label="分类筛选">
+        <nav class="index-bar" aria-label="分类与期号筛选">
           <div class="cat-list" id="catList"></div>
-          <div class="index-meta" id="indexMeta">VOL.04 NO.326 · 7 DISPATCHES</div>
+          <div class="edition-nav" aria-label="近三天期号与历史归档">
+            <div id="recentDates" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"></div>
+            <button class="date-more-btn" id="moreDatesBtn" onclick="toggleArchivePopover(event)">更多日期 ▾</button>
+            <div class="archive-popover" id="archivePopover">
+              <div class="archive-pop-title">
+                <span>历史期号归档</span>
+                <span id="archiveVolText">VOL.04</span>
+              </div>
+              <div class="archive-list" id="archiveList"></div>
+              <p class="archive-note">原型示例含近 3 期与 1 期往期归档；Gate 3 正式站点将接入全量日历检索。</p>
+            </div>
+          </div>
         </nav>
 
         <div class="broadsheet-grid" id="broadsheetGrid"></div>
@@ -611,6 +681,8 @@
         <div class="m-card-art-fallback" aria-hidden="true">${fallback}</div>
       `;
     }
+
+    const RECENT_KEYS = ["2026-11-22", "2026-11-21", "2026-11-20"];
 
     const EDITIONS = {
       "2026-11-22": {
@@ -703,6 +775,46 @@
             impact: ["【律所 IT 与合规】可在断网内网服务器验证合同初筛流程，彻底消除客户文档上传公有云的合规顾虑。"]
           }
         ]
+      },
+      "2026-11-20": {
+        vol: "VOL.04 NO.324", label: "11-20 前日",
+        digest: "前日关注律协发布生成式 AI 执业伦理指引与法务合同生命周期自动对标工具，合规披露正成为律师代理协议新标配。",
+        items: [
+          {
+            id: "1120-01", badge: "头条", badgeOutline: false, category: "实务与工具", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/bar/ai-ethics-2026", date: "2026-11-20",
+            title: "某地律师协会发布生成式 AI 辅助执业指引，明确客户知情同意边界",
+            summary: "指引要求律所在使用外部大模型处理案卷前完成脱敏评估，并明确律师对 AI 生成法律检索意见承担最终核验责任。",
+            impact: ["【律所合伙人】建议在委托代理合同中增设 AI 工具使用披露与保密条款，统一所内脱敏操作底线。"]
+          },
+          {
+            id: "1120-02", badge: "", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            placeholder: true, sourceDomain: "example.com/capital/clm-consolidation", date: "2026-11-20",
+            title: "企业法务 CLM 平台加速并购整合，合同履约追踪成核心溢价点",
+            summary: "行业观察指出，单纯提供条款比对的独立插件估值承压，能与财务与采购审批流直连的履约风控平台获得更高续费率。",
+            impact: ["【企业总法律顾问】采购法务数字化系统时可优先考察与现有 ERP/OA 系统的双向集成能力。"]
+          },
+          {
+            id: "1120-03", badge: "", badgeOutline: false, category: "监管与合规", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/rules/ai-audit-standard", date: "2026-11-20",
+            title: "金融与医疗高风险 AI 算法年度合规审计标准草案公开",
+            summary: "草案细化了自动化决策可解释性文档与偏见复测频次要求，明确第三方合规审计机构的独立性门槛。",
+            impact: ["【合规业务律师】高风险行业算法年度审计有望形成周期性专项法律服务需求。"]
+          }
+        ]
+      },
+      "2026-11-19": {
+        vol: "VOL.04 NO.323", label: "11-19 往期",
+        digest: "往期归档示例：聚焦司法公开文书结构化标注进展与开源法律评测基准更新。",
+        items: [
+          {
+            id: "1119-01", badge: "头条", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/academic/legal-corpus-2026", date: "2026-11-19",
+            title: "法学院联合发布结构化裁判要旨开源语料库，覆盖商事与知产纠纷",
+            summary: "语料库按争议焦点、裁判理由与法条引用三层结构进行人工校对，供学术研究与低幻觉检索评测免费使用。",
+            impact: ["【法律研究者与 LegalTech 团队】可直接复用该开源标注体例构建内部高质量检索评测集。"]
+          }
+        ]
       }
     };
 
@@ -720,6 +832,20 @@
     function toggleDrawer() {
       document.getElementById("drawer").classList.toggle("open");
       document.getElementById("menuBtn").classList.toggle("open");
+    }
+
+    function toggleArchivePopover(e) {
+      e.stopPropagation();
+      const pop = document.getElementById("archivePopover");
+      const btn = document.getElementById("moreDatesBtn");
+      const next = !pop.classList.contains("open");
+      pop.classList.toggle("open", next);
+      btn.classList.toggle("open", next);
+    }
+
+    function closeArchivePopover() {
+      document.getElementById("archivePopover").classList.remove("open");
+      document.getElementById("moreDatesBtn").classList.remove("open");
     }
 
     function renderCardHTML(item, indexNum, isRail = false) {
@@ -763,9 +889,6 @@
     function render() {
       const ed = EDITIONS[currentDate];
       document.getElementById("topDateText").textContent = `BEIJING · ${currentDate}`;
-      document.getElementById("drawerDates").innerHTML = Object.keys(EDITIONS).map(d =>
-        `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
-      ).join(" ");
 
       const singleSetParts = [];
       if (ed.items[0]) singleSetParts.push(`<div class="rail-item">${renderCardHTML(ed.items[0], 0, true)}</div>`);
@@ -782,13 +905,28 @@
         return `<button class="cat-btn ${cat === currentCategory ? "active" : ""}" onclick="selectCategory('${cat}')">${cat}<span class="cat-num">${count}</span></button>`;
       }).join("");
 
+      /* 第二屏右上角：渲染近三天日期按钮 + 更多日期归档列表 */
+      document.getElementById("recentDates").innerHTML = RECENT_KEYS.map(d =>
+        `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
+      ).join("");
+
+      const isArchiveSelected = !RECENT_KEYS.includes(currentDate);
+      const moreBtn = document.getElementById("moreDatesBtn");
+      moreBtn.textContent = isArchiveSelected ? `${EDITIONS[currentDate].label} ▾` : "更多日期 ▾";
+
+      document.getElementById("archiveVolText").textContent = ed.vol;
+      document.getElementById("archiveList").innerHTML = Object.keys(EDITIONS).map(d => {
+        const itemEd = EDITIONS[d];
+        return `<button class="archive-item ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')"><span>${d} · ${itemEd.label}</span><span>${itemEd.items.length} 条</span></button>`;
+      }).join("");
+
       const q = currentSearch.trim().toLowerCase();
       const filtered = ed.items.filter(item => {
         const matchCat = currentCategory === "全部" || item.category === currentCategory;
         const matchQ = !q || item.title.toLowerCase().includes(q) || item.summary.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
         return matchCat && matchQ;
       });
-      document.getElementById("indexMeta").textContent = `${ed.vol} · ${filtered.length} DISPATCHES`;
+      document.getElementById("drawerMeta").textContent = `${ed.vol} · ${filtered.length} DISPATCHES`;
 
       const grid = document.getElementById("broadsheetGrid");
       grid.innerHTML = filtered.length === 0
@@ -830,7 +968,7 @@
     });
 
     function selectCategory(cat) { currentCategory = cat; render(); }
-    function selectDate(d) { currentDate = d; currentCategory = "全部"; render(); }
+    function selectDate(d) { currentDate = d; currentCategory = "全部"; closeArchivePopover(); render(); }
 
     function openModal(id) {
       const item = EDITIONS[currentDate].items.find(i => i.id === id);
@@ -870,7 +1008,12 @@
 
     document.getElementById("searchInput").addEventListener("input", e => { currentSearch = e.target.value; render(); });
     document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
-    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+    document.addEventListener("click", e => {
+      if (!e.target.closest(".edition-nav")) closeArchivePopover();
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") { closeModal(); closeArchivePopover(); }
+    });
 
     render();
     requestAnimationFrame(tickRail);
