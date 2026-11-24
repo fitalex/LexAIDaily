@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V4</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper-bg: #C8C0B6;
-      --paper-inset: #BEB5AA;
-      --paper-modal: #D8D1C7;
+      --paper-bg: #CCC4BA;
+      --paper-inset: #C2B9AE;
+      --paper-modal: #DCD5CB;
       --ink: #1D1D1B;
       --ink-body: #2A2825;
       --ink-muted: #524D46;
@@ -20,6 +20,10 @@
       --rule-light: rgba(29, 29, 27, 0.16);
       --accent: #C03F13;
       --accent-text: #F4EDE4;
+
+      /* 双层物理棉纸/新闻纸凹凸浮雕与细纤维肌理（零外链、无缝平铺、随页面滚动） */
+      --paper-relief: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360' viewBox='0 0 360 360'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.058 0.048' numOctaves='5' seed='14' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23FFFDF7' surfaceScale='2.2' diffuseConstant='1.16'%3E%3CfeDistantLight azimuth='42' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='360' height='360' filter='url(%23p)'/%3E%3Cg fill='%234A433A'%3E%3Ccircle cx='48' cy='72' r='0.9' opacity='0.08'/%3E%3Ccircle cx='182' cy='41' r='0.7' opacity='0.07'/%3E%3Ccircle cx='294' cy='118' r='1.0' opacity='0.06'/%3E%3Ccircle cx='116' cy='210' r='0.8' opacity='0.07'/%3E%3Ccircle cx='248' cy='265' r='0.9' opacity='0.06'/%3E%3Ccircle cx='74' cy='318' r='0.7' opacity='0.08'/%3E%3Ccircle cx='322' cy='292' r='0.8' opacity='0.07'/%3E%3Ccircle cx='158' cy='144' r='0.6' opacity='0.06'/%3E%3C/g%3E%3C/svg%3E");
+      --paper-fiber: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.18 0.13' numOctaves='3' seed='7' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23FFFDF8' surfaceScale='1.2' diffuseConstant='1.18'%3E%3CfeDistantLight azimuth='135' elevation='68'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23f)'/%3E%3C/svg%3E");
 
       --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
       --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
@@ -40,29 +44,36 @@
       overflow-x: hidden;
     }
 
-    /* 报纸棉纸纤维肌理（正片叠底，零弥散投影、零毛玻璃） */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 9999;
-      opacity: 0.085;
-      mix-blend-mode: multiply;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    }
-
     .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
     body.mobile-preview { background: #262522; }
     body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
 
+    /* 整张报刊纸面：凹凸纸浆底纹 + 细纤维叠印，随页面自然滚动 */
     .paper-page {
+      position: relative;
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
-      background: var(--paper-bg);
+      background-color: var(--paper-bg);
+      background-image: var(--paper-relief), var(--paper-fiber);
+      background-size: 360px 360px, 240px 240px;
+      background-repeat: repeat;
+      background-blend-mode: multiply, multiply;
       transition: max-width 0.35s var(--ease);
       overflow-x: hidden;
+    }
+    /* 表层极轻纸纹吃墨层：让文字、1px 细线与报头带与纸面自然咬合（零投影、零毛玻璃） */
+    .paper-page::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 45;
+      background-image: var(--paper-relief);
+      background-size: 360px 360px;
+      background-repeat: repeat;
+      mix-blend-mode: multiply;
+      opacity: 0.24;
     }
     body.mobile-preview .paper-page {
       max-width: 375px;
@@ -120,9 +131,13 @@
     .menu-btn.open span:first-child { transform: translateY(3.25px) rotate(12deg); }
     .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
 
-    /* 顶部抽屉仅保留关键词检索与卷期说明（期号切换已移至第二屏右上角） */
+    /* 顶部抽屉仅保留关键词检索与卷期说明（同款棉纸肌理） */
     .drawer {
-      display: none; padding: 14px 40px; border-bottom: 1px solid var(--ink); background: var(--paper-inset);
+      display: none; padding: 14px 40px; border-bottom: 1px solid var(--ink);
+      background-color: var(--paper-inset);
+      background-image: var(--paper-relief);
+      background-size: 360px 360px;
+      background-blend-mode: multiply;
       align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
     }
     .drawer.open { display: flex; }
@@ -154,19 +169,25 @@
       flex-direction: column;
     }
 
+    /* 今日综述上边缘与相邻卡片图片上边缘齐平，底部 TIP 贴底对齐 */
     .digest-rail-card {
-      justify-content: center;
+      justify-content: flex-start;
       align-items: center;
       text-align: center;
-      gap: 14px;
-      padding: 8px 34px;
+      gap: 0;
+      padding: 0 34px;
     }
-    .digest-kicker-row { display: inline-flex; align-items: center; gap: 10px; }
+    .digest-kicker-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: -3px;
+    }
     .digest-kicker {
       font-family: var(--font-serif-cn);
       font-weight: 900;
-      font-size: clamp(32px, 3vw, 46px);
-      line-height: 1.08;
+      font-size: clamp(34px, 3.2vw, 48px);
+      line-height: 0.98;
       letter-spacing: -0.02em;
       color: var(--ink);
     }
@@ -179,24 +200,26 @@
       line-height: 1.2;
     }
     .digest-text {
+      margin-top: 22px;
       font-family: var(--font-serif-cn);
       font-weight: 500;
-      font-size: 15.5px;
-      line-height: 1.74;
+      font-size: 16.5px;
+      line-height: 1.82;
       color: var(--ink-body);
-      max-width: 34ch;
+      max-width: 32ch;
       text-align: justify;
       text-justify: inter-ideograph;
       text-align-last: center;
     }
     .digest-tip {
-      margin-top: 6px;
-      padding-top: 10px;
+      margin-top: auto;
+      padding-top: 12px;
       border-top: 1px solid var(--rule-light);
       font-family: var(--font-sans-cn);
       font-size: 11.5px;
       color: var(--ink-muted);
       letter-spacing: 0.03em;
+      width: 100%;
     }
     .digest-tip strong { font-family: var(--font-mono); color: var(--ink); margin-right: 5px; }
 
@@ -325,7 +348,7 @@
       padding: 15px 0 11px;
       border-top: 2px solid var(--ink);
       border-bottom: 1px solid var(--ink);
-      box-shadow: inset 0 3px 0 0 var(--paper-bg), inset 0 4px 0 0 var(--rule-strong);
+      box-shadow: inset 0 3px 0 0 rgba(204, 196, 186, 0.72), inset 0 4px 0 0 var(--rule-strong);
       flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -374,7 +397,7 @@
     .date-more-btn:hover,
     .date-more-btn.open { background: var(--ink); color: var(--paper-bg); border-style: solid; }
 
-    /* 更多日期历史归档弹出面板（直角 1px 黑框纸面，零投影） */
+    /* 更多日期历史归档弹出面板（同款棉纸肌理 + 直角 1.5px 黑框，零投影） */
     .archive-popover {
       display: none;
       position: absolute;
@@ -382,7 +405,10 @@
       right: 0;
       z-index: 60;
       width: 280px;
-      background: var(--paper-modal);
+      background-color: var(--paper-modal);
+      background-image: var(--paper-relief), var(--paper-fiber);
+      background-size: 360px 360px, 240px 240px;
+      background-blend-mode: multiply, multiply;
       border: 1.5px solid var(--ink);
       padding: 14px 16px;
     }
@@ -404,7 +430,7 @@
       background: transparent; border: 1px solid var(--rule-light); padding: 6px 10px;
       font-family: var(--font-mono); font-size: 12px; color: var(--ink); cursor: pointer; text-align: left;
     }
-    .archive-item:hover { border-color: var(--ink); background: var(--paper-bg); }
+    .archive-item:hover { border-color: var(--ink); background: rgba(29, 29, 27, 0.05); }
     .archive-item.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
     .archive-note { font-family: var(--font-sans-cn); font-size: 11px; color: var(--ink-muted); line-height: 1.5; }
 
@@ -431,14 +457,18 @@
     }
     .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 
-    /* ========== 6. 详情剪报弹窗 ========== */
+    /* ========== 6. 详情剪报弹窗（同款物理棉纸肌理） ========== */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
       display: none; align-items: center; justify-content: center; padding: 20px;
     }
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
-      background: var(--paper-modal); color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
+      background-color: var(--paper-modal);
+      background-image: var(--paper-relief), var(--paper-fiber);
+      background-size: 360px 360px, 240px 240px;
+      background-blend-mode: multiply, multiply;
+      color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
       overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 26px 32px 30px;
     }
     .modal-top {
@@ -477,7 +507,11 @@
     }
 
     .impact-box {
-      border: 1px dashed var(--ink); border-left: 4px solid var(--ink); background: var(--paper-bg);
+      border: 1px dashed var(--ink); border-left: 4px solid var(--ink);
+      background-color: var(--paper-bg);
+      background-image: var(--paper-relief);
+      background-size: 360px 360px;
+      background-blend-mode: multiply;
       padding: 16px 18px; margin-bottom: 22px;
     }
     .impact-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
@@ -498,7 +532,7 @@
       background: transparent; color: var(--ink); border: 1px solid var(--ink);
       padding: 12px 16px; font-family: var(--font-sans-cn); font-size: 13.5px; cursor: pointer;
     }
-    .btn-outline:hover { background: var(--paper-bg); }
+    .btn-outline:hover { background: rgba(29, 29, 27, 0.06); }
     .modal-note { font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted); border-top: 1px solid var(--rule-light); padding-top: 10px; line-height: 1.6; }
 
     /* ========== 7. 移动端单列适配（375px 零横向溢出） ========== */
@@ -510,8 +544,9 @@
     body.mobile-preview .drawer-search { width: 100%; }
     body.mobile-preview .hero-section { padding: 16px 14px 14px; }
     body.mobile-preview .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
+    body.mobile-preview .digest-rail-card { padding: 0 16px; }
     body.mobile-preview .digest-kicker { font-size: 26px; }
-    body.mobile-preview .digest-text { font-size: 14px; }
+    body.mobile-preview .digest-text { margin-top: 14px; font-size: 14px; }
     body.mobile-preview .feed-section { padding: 12px 14px 32px; }
     body.mobile-preview .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
     body.mobile-preview .cat-btn { white-space: nowrap; font-size: 13.5px; }
@@ -533,6 +568,8 @@
       .drawer-search { width: 100%; }
       .hero-section { padding: 18px 16px 16px; }
       .rail-item { flex: 0 0 86%; min-width: 86%; padding: 0 16px; }
+      .digest-rail-card { padding: 0 18px; }
+      .digest-text { margin-top: 14px; font-size: 14.5px; }
       .feed-section { padding-left: 16px; padding-right: 16px; }
       .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
       .cat-btn { white-space: nowrap; font-size: 13.5px; }
@@ -577,7 +614,7 @@
 
         <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
           <svg class="masthead-svg" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid meet">
-            <text x="600" y="312" text-anchor="middle" fill="#C8C0B6"
+            <text x="600" y="312" text-anchor="middle" fill="#CCC4BA"
               font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
               font-weight="900" font-size="340" letter-spacing="-10"
               textLength="1166" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
@@ -905,7 +942,6 @@
         return `<button class="cat-btn ${cat === currentCategory ? "active" : ""}" onclick="selectCategory('${cat}')">${cat}<span class="cat-num">${count}</span></button>`;
       }).join("");
 
-      /* 第二屏右上角：渲染近三天日期按钮 + 更多日期归档列表 */
       document.getElementById("recentDates").innerHTML = RECENT_KEYS.map(d =>
         `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
       ).join("");
