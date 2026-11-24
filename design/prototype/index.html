@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V5</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V6</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper-bg: #CCC4BA;
-      --paper-inset: #C2B9AE;
-      --paper-modal: #DCD5CB;
+      --paper-bg: #CEC6BC;
+      --paper-inset: #C4BBB0;
+      --paper-modal: #DDD6CC;
       --ink: #1D1D1B;
       --ink-body: #2A2825;
       --ink-muted: #524D46;
@@ -21,9 +21,9 @@
       --accent: #C03F13;
       --accent-text: #F4EDE4;
 
-      /* 双层物理棉纸/新闻纸凹凸浮雕与细纤维肌理（零外链、无缝平铺、随页面滚动） */
-      --paper-relief: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360' viewBox='0 0 360 360'%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.058 0.048' numOctaves='5' seed='14' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23FFFDF7' surfaceScale='2.2' diffuseConstant='1.16'%3E%3CfeDistantLight azimuth='42' elevation='60'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='360' height='360' filter='url(%23p)'/%3E%3Cg fill='%234A433A'%3E%3Ccircle cx='48' cy='72' r='0.9' opacity='0.08'/%3E%3Ccircle cx='182' cy='41' r='0.7' opacity='0.07'/%3E%3Ccircle cx='294' cy='118' r='1.0' opacity='0.06'/%3E%3Ccircle cx='116' cy='210' r='0.8' opacity='0.07'/%3E%3Ccircle cx='248' cy='265' r='0.9' opacity='0.06'/%3E%3Ccircle cx='74' cy='318' r='0.7' opacity='0.08'/%3E%3Ccircle cx='322' cy='292' r='0.8' opacity='0.07'/%3E%3Ccircle cx='158' cy='144' r='0.6' opacity='0.06'/%3E%3C/g%3E%3C/svg%3E");
-      --paper-fiber: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='f' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.18 0.13' numOctaves='3' seed='7' stitchTiles='stitch' result='n'/%3E%3CfeDiffuseLighting in='n' lighting-color='%23FFFDF8' surfaceScale='1.2' diffuseConstant='1.18'%3E%3CfeDistantLight azimuth='135' elevation='68'/%3E%3C/feDiffuseLighting%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23f)'/%3E%3C/svg%3E");
+      /* 方案 B｜复古新闻报刊纸：真实扫描无拼接纸纹（Textured Paper + Natural Paper，CC BY-SA 3.0 via Transparent Textures / Subtle Patterns） */
+      --paper-newsprint: url("https://www.transparenttextures.com/patterns/textured-paper.png");
+      --paper-flecks: url("https://www.transparenttextures.com/patterns/natural-paper.png");
 
       --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
       --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
@@ -48,32 +48,32 @@
     body.mobile-preview { background: #262522; }
     body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
 
-    /* 整张报刊纸面：凹凸纸浆底纹 + 细纤维叠印，随页面自然滚动 */
+    /* 整张复古新闻报刊纸面：双层错周期无缝真实纸纹（500px × 523px 互质尺寸避免视觉重复） */
     .paper-page {
       position: relative;
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
       background-color: var(--paper-bg);
-      background-image: var(--paper-relief), var(--paper-fiber);
-      background-size: 360px 360px, 240px 240px;
-      background-repeat: repeat;
+      background-image: var(--paper-flecks), var(--paper-newsprint);
+      background-size: 523px 384px, 500px 500px;
+      background-repeat: repeat, repeat;
       background-blend-mode: multiply, multiply;
       transition: max-width 0.35s var(--ease);
       overflow-x: hidden;
     }
-    /* 表层极轻纸纹吃墨层：让文字、1px 细线与报头带与纸面自然咬合（零投影、零毛玻璃） */
+    /* 表层极轻纸纹吃墨层：让文字、1px 细线与报头带与新闻纸自然咬合（零投影、零毛玻璃） */
     .paper-page::after {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 45;
-      background-image: var(--paper-relief);
-      background-size: 360px 360px;
+      background-image: var(--paper-newsprint);
+      background-size: 500px 500px;
       background-repeat: repeat;
       mix-blend-mode: multiply;
-      opacity: 0.24;
+      opacity: 0.32;
     }
     body.mobile-preview .paper-page {
       max-width: 375px;
@@ -131,13 +131,13 @@
     .menu-btn.open span:first-child { transform: translateY(3.25px) rotate(12deg); }
     .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
 
-    /* 顶部抽屉仅保留关键词检索与卷期说明（同款棉纸肌理） */
+    /* 顶部抽屉仅保留关键词检索与卷期说明（同款新闻纸肌理） */
     .drawer {
       display: none; padding: 14px 40px; border-bottom: 1px solid var(--ink);
       background-color: var(--paper-inset);
-      background-image: var(--paper-relief);
-      background-size: 360px 360px;
-      background-blend-mode: multiply;
+      background-image: var(--paper-flecks), var(--paper-newsprint);
+      background-size: 523px 384px, 500px 500px;
+      background-blend-mode: multiply, multiply;
       align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
     }
     .drawer.open { display: flex; }
@@ -348,7 +348,7 @@
       padding: 15px 0 11px;
       border-top: 2px solid var(--ink);
       border-bottom: 1px solid var(--ink);
-      box-shadow: inset 0 3px 0 0 rgba(204, 196, 186, 0.72), inset 0 4px 0 0 var(--rule-strong);
+      box-shadow: inset 0 3px 0 0 rgba(206, 198, 188, 0.72), inset 0 4px 0 0 var(--rule-strong);
       flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -397,7 +397,7 @@
     .date-more-btn:hover,
     .date-more-btn.open { background: var(--ink); color: var(--paper-bg); border-style: solid; }
 
-    /* 更多日期历史归档弹出面板（同款棉纸肌理 + 直角 1.5px 黑框，零投影） */
+    /* 更多日期历史归档弹出面板（同款新闻纸肌理 + 直角 1.5px 黑框，零投影） */
     .archive-popover {
       display: none;
       position: absolute;
@@ -406,8 +406,8 @@
       z-index: 60;
       width: 280px;
       background-color: var(--paper-modal);
-      background-image: var(--paper-relief), var(--paper-fiber);
-      background-size: 360px 360px, 240px 240px;
+      background-image: var(--paper-flecks), var(--paper-newsprint);
+      background-size: 523px 384px, 500px 500px;
       background-blend-mode: multiply, multiply;
       border: 1.5px solid var(--ink);
       padding: 14px 16px;
@@ -457,7 +457,7 @@
     }
     .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 
-    /* ========== 6. 详情剪报弹窗（同款物理棉纸肌理） ========== */
+    /* ========== 6. 详情剪报弹窗（同款复古新闻纸肌理） ========== */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
       display: none; align-items: center; justify-content: center; padding: 20px;
@@ -465,8 +465,8 @@
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
       background-color: var(--paper-modal);
-      background-image: var(--paper-relief), var(--paper-fiber);
-      background-size: 360px 360px, 240px 240px;
+      background-image: var(--paper-flecks), var(--paper-newsprint);
+      background-size: 523px 384px, 500px 500px;
       background-blend-mode: multiply, multiply;
       color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
       overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 26px 32px 30px;
@@ -509,8 +509,8 @@
     .impact-box {
       border: 1px dashed var(--ink); border-left: 4px solid var(--ink);
       background-color: var(--paper-bg);
-      background-image: var(--paper-relief);
-      background-size: 360px 360px;
+      background-image: var(--paper-newsprint);
+      background-size: 500px 500px;
       background-blend-mode: multiply;
       padding: 16px 18px; margin-bottom: 22px;
     }
@@ -614,7 +614,7 @@
 
         <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
           <svg class="masthead-svg" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid meet">
-            <text x="600" y="312" text-anchor="middle" fill="#CCC4BA"
+            <text x="600" y="312" text-anchor="middle" fill="#C8C0B6"
               font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
               font-weight="900" font-size="340" letter-spacing="-10"
               textLength="1166" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
@@ -643,7 +643,7 @@
 
         <footer class="colophon">
           <div><strong>LEXAI DAILY© 2026</strong> · 法律人的 AI 情报雷达 · 严格区分事实与观点</div>
-          <div>配图插画由 AI 生成（v2.0 清透日光厚涂油画规范）· 点击任意卡片查看「实务影响」与「一手信源」</div>
+          <div>配图插画由 AI 生成（v2.0 清透日光厚涂油画规范）· 纸纹素材源自 Subtle Patterns / Transparent Textures（CC BY-SA 3.0）</div>
         </footer>
       </section>
     </div>
