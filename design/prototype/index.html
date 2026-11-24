@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V1</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V2</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
       --paper-bg: #C8C0B6;
       --paper-inset: #BEB5AA;
       --paper-modal: #D8D1C7;
       --ink: #1D1D1B;
-      --ink-body: #2B2926;
-      --ink-muted: #4C4842;
-      --rule: rgba(29, 29, 27, 0.42);
-      --rule-light: rgba(29, 29, 27, 0.2);
+      --ink-body: #2A2825;
+      --ink-muted: #524D46;
+      --rule-strong: rgba(29, 29, 27, 0.85);
+      --rule: rgba(29, 29, 27, 0.36);
+      --rule-light: rgba(29, 29, 27, 0.16);
       --accent: #C03F13;
       --accent-text: #F4EDE4;
 
@@ -38,14 +39,16 @@
       overflow-x: hidden;
     }
 
+    /* 报纸棉纸纤维肌理（双层微噪点 + 正片叠底，零弥散投影、零毛玻璃） */
     body::before {
       content: "";
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 9999;
-      opacity: 0.055;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.085;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
     }
 
     .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
@@ -65,22 +68,37 @@
       border: 1px solid #4C4842;
     }
 
+    /* ========== 1. 顶部报眉（经典报刊双线收口） ========== */
     .top-bar {
-      height: 72px;
+      height: 70px;
       padding: 0 32px;
-      border-bottom: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule-strong);
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
     }
-    .top-left { font-family: var(--font-serif-cn); font-size: 13.5px; color: var(--ink-body); white-space: nowrap; }
-    .top-center { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; text-align: center; }
+    .top-left {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-body);
+      white-space: nowrap;
+    }
+    .top-center {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: 0.01em;
+      text-align: center;
+    }
     .top-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 
-    .viewport-mini { display: inline-flex; border: 1px solid var(--rule); }
+    .viewport-mini { display: inline-flex; border: 1px solid var(--rule-strong); }
     .vp-btn {
-      background: transparent; border: none; padding: 3px 9px;
+      background: transparent; border: none; padding: 3px 10px;
       font-family: var(--font-sans-cn); font-size: 11.5px; color: var(--ink-muted); cursor: pointer;
+      transition: background 0.2s, color 0.2s;
     }
     .vp-btn.active { background: var(--ink); color: var(--paper-bg); }
 
@@ -105,9 +123,10 @@
     .date-pill.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
     .drawer-search {
       background: transparent; border: none; border-bottom: 1px solid var(--ink);
-      padding: 4px 6px; font-family: var(--font-sans-cn); font-size: 13px; color: var(--ink); width: 210px; outline: none;
+      padding: 4px 6px; font-family: var(--font-sans-cn); font-size: 13px; color: var(--ink); width: 220px; outline: none;
     }
 
+    /* ========== 2. 首屏缓缓流动横轨（卡片 + 今日综述） ========== */
     .hero-section { padding: 28px 0 24px; }
     .hero-rail-viewport {
       width: 100%;
@@ -123,7 +142,7 @@
     .rail-item {
       flex: 0 0 33.3333%;
       min-width: 33.3333%;
-      padding: 0 32px;
+      padding: 0 28px;
       border-right: 1px solid var(--rule);
       display: flex;
       flex-direction: column;
@@ -134,8 +153,7 @@
       align-items: center;
       text-align: center;
       gap: 14px;
-      padding-top: 6px;
-      padding-bottom: 6px;
+      padding: 8px 34px;
     }
     .digest-kicker-row { display: inline-flex; align-items: center; gap: 10px; }
     .digest-kicker {
@@ -147,9 +165,9 @@
       color: var(--ink);
     }
     .digest-draft-tag {
-      border: 1px dashed var(--ink);
+      border: 1px dashed var(--rule-strong);
       font-family: var(--font-sans-cn);
-      font-size: 11px;
+      font-size: 10.5px;
       color: var(--ink-muted);
       padding: 2px 6px;
       line-height: 1.2;
@@ -157,30 +175,54 @@
     .digest-text {
       font-family: var(--font-serif-cn);
       font-weight: 500;
-      font-size: 16px;
-      line-height: 1.65;
+      font-size: 15.5px;
+      line-height: 1.74;
       color: var(--ink-body);
       max-width: 34ch;
+      text-align: justify;
+      text-justify: inter-ideograph;
+      text-align-last: center;
     }
     .digest-tip {
-      margin-top: 4px;
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule-light);
       font-family: var(--font-sans-cn);
-      font-size: 12px;
+      font-size: 11.5px;
       color: var(--ink-muted);
-      letter-spacing: 0.02em;
+      letter-spacing: 0.03em;
     }
-    .digest-tip strong { font-family: var(--font-mono); color: var(--ink); margin-right: 4px; }
+    .digest-tip strong { font-family: var(--font-mono); color: var(--ink); margin-right: 5px; }
 
-    .m-card { cursor: pointer; display: flex; flex-direction: column; }
+    /* ========== 3. 报刊印制级卡片（等宽配图 + 基线锁齐 + 纸墨融合） ========== */
+    .m-card {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
     .m-card-art-frame {
       position: relative;
       width: 100%;
       aspect-ratio: 16 / 7;
-      border: 1px solid var(--ink);
+      border: 1px solid var(--rule-strong);
       border-radius: 0;
       overflow: hidden;
-      background: #1C1B19;
+      background: #B8B0A5;
+      flex-shrink: 0;
     }
+    /* 纸墨融合微釉层：让高明度油画自然沉入复古新闻纸，悬停恢复满彩日光 */
+    .m-card-art-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(200, 192, 182, 0.14);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transition: opacity 0.45s var(--ease);
+    }
+    .m-card:hover .m-card-art-frame::after { opacity: 0; }
+
     .m-card-art-img {
       width: 100%;
       height: 100%;
@@ -188,7 +230,8 @@
       object-fit: cover;
       object-position: center;
       pointer-events: none;
-      transition: transform 0.55s var(--ease);
+      filter: sepia(0.11) contrast(1.03) saturate(0.88) brightness(0.96);
+      transition: transform 0.55s var(--ease), filter 0.45s var(--ease);
     }
     .m-card-art-fallback { width: 100%; height: 100%; display: none; }
     .m-card-art-frame.is-fallback .m-card-art-img { display: none; }
@@ -200,90 +243,165 @@
       pointer-events: none;
       transition: transform 0.55s var(--ease);
     }
-    .m-card:hover .m-card-art-img,
-    .m-card:hover .m-card-art-fallback svg { transform: scale(1.04); }
-
-    .m-card-head { margin-top: 13px; display: flex; align-items: baseline; flex-wrap: wrap; gap: 7px; }
-    .m-card-title {
-      font-family: var(--font-serif-cn);
-      font-weight: 900;
-      font-size: 18.5px;
-      line-height: 1.32;
-      letter-spacing: -0.01em;
-      color: var(--ink);
-      transition: color 0.2s;
+    .m-card:hover .m-card-art-img {
+      transform: scale(1.035);
+      filter: sepia(0.02) contrast(1.02) saturate(1.02) brightness(1);
     }
-    .m-card:hover .m-card-title { color: var(--accent); }
+    .m-card:hover .m-card-art-fallback svg { transform: scale(1.035); }
+
+    /* 独立报刊眉标行（固定 22px 高度，彻底杜绝各列标题/摘要基线错位） */
+    .m-card-kicker {
+      margin-top: 14px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+    }
+    .m-kicker-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+    }
+    .m-kicker-num {
+      color: var(--ink);
+      font-weight: 500;
+    }
+    .m-kicker-cat {
+      font-family: var(--font-sans-cn);
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+    }
     .m-badge {
       display: inline-block;
       background: var(--accent);
       color: var(--accent-text);
       font-family: var(--font-sans-cn);
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: 600;
-      padding: 2px 6px;
-      border-radius: 2px;
-      line-height: 1.25;
+      padding: 1px 6px;
+      border-radius: 1px;
+      line-height: 1.35;
+      letter-spacing: 0.04em;
       flex-shrink: 0;
     }
-    .m-badge.outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .m-badge.outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
     .m-placeholder-tag {
-      display: inline-block;
-      border: 1px solid var(--rule);
-      color: var(--ink-muted);
       font-family: var(--font-sans-cn);
       font-size: 10.5px;
-      padding: 1px 5px;
-      line-height: 1.2;
+      color: var(--ink-muted);
+      letter-spacing: 0.03em;
+      opacity: 0.85;
       flex-shrink: 0;
     }
-    .m-card-summary {
+
+    /* 报刊雕版衬线标题（锁定 2 行基线槽位，全行左右对齐） */
+    .m-card-title {
       margin-top: 8px;
+      font-family: var(--font-serif-cn);
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.36;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      min-height: calc(1.36em * 2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: color 0.2s;
+    }
+    .m-card:hover .m-card-title {
+      color: var(--accent);
+    }
+
+    /* 标题与摘要间极细印刷分隔线 */
+    .m-card-rule {
+      width: 100%;
+      height: 1px;
+      background: var(--rule-light);
+      margin: 10px 0 11px;
+      flex-shrink: 0;
+    }
+
+    /* 报刊两端对齐正文摘要（严格 3 行，左右切齐竖栏线） */
+    .m-card-summary {
       font-family: var(--font-sans-cn);
-      font-size: 14.5px;
-      line-height: 1.66;
+      font-size: 13.8px;
+      line-height: 1.74;
+      letter-spacing: 0.015em;
       color: var(--ink-body);
+      text-align: justify;
+      text-justify: inter-ideograph;
       display: -webkit-box;
       -webkit-line-clamp: 3;
       -webkit-box-orient: vertical;
       overflow: hidden;
     }
 
+    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带 ========== */
     .masthead-wrap { padding: 0 32px; }
     .masthead-black-band { width: 100%; background: var(--ink); padding: 12px 16px 6px; display: block; }
     .masthead-svg { width: 100%; height: auto; display: block; }
 
-    .feed-section { padding: 18px 32px 44px; }
+    /* ========== 5. 下半区报刊双线分类索引 + 严格等宽三栏网格 ========== */
+    .feed-section { padding: 20px 32px 48px; }
     .index-bar {
       display: flex; align-items: center; justify-content: space-between; gap: 14px;
-      padding: 12px 0; border-top: 1px solid var(--ink); border-bottom: 1.5px solid var(--ink); flex-wrap: wrap;
+      padding: 11px 0;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      box-shadow: inset 0 3px 0 0 var(--paper-bg), inset 0 4px 0 0 var(--rule-strong);
+      padding-top: 15px;
+      flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
     .cat-btn {
       background: transparent; border: 1px solid transparent; color: var(--ink);
-      font-family: var(--font-sans-cn); font-size: 14px; font-weight: 500;
+      font-family: var(--font-sans-cn); font-size: 13.5px; font-weight: 500;
       padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: flex-start; gap: 4px;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
     }
     .cat-btn:hover { border-color: var(--rule); }
     .cat-btn.active { background: var(--ink); color: var(--paper-bg); }
     .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
-    .index-meta { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+    .index-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em; color: var(--ink-muted); }
 
+    /* 关键修复：所有三栏采用完全对称的 padding（左右均为 28px），保证三列配图宽高 100% 像素级一致 */
     .broadsheet-grid {
-      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-      border-bottom: 1.5px solid var(--ink);
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 2px solid var(--ink);
+      margin-left: -28px;
+      margin-right: -28px;
     }
-    .grid-cell { padding: 28px 26px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
-    .grid-cell:nth-child(3n) { border-right: none; padding-right: 0; }
-    .grid-cell:nth-child(3n + 1) { padding-left: 0; }
-    .empty-msg { grid-column: 1 / -1; padding: 54px 20px; text-align: center; font-size: 16px; color: var(--ink-muted); }
+    .grid-cell {
+      padding: 30px 28px 32px;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+    .grid-cell:nth-child(3n) { border-right: none; }
+    .empty-msg { grid-column: 1 / -1; padding: 54px 28px; text-align: center; font-size: 15px; color: var(--ink-muted); }
 
     .colophon {
-      padding: 22px 0 8px; display: flex; align-items: center; justify-content: space-between;
-      flex-wrap: wrap; gap: 12px; font-family: var(--font-sans-cn); font-size: 12.5px; color: var(--ink-muted);
+      padding: 20px 0 8px; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted);
     }
     .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 
+    /* ========== 6. 详情剪报弹窗 ========== */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
       display: none; align-items: center; justify-content: center; padding: 20px;
@@ -296,7 +414,7 @@
     .modal-top {
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
       padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
-      font-family: var(--font-sans-cn); font-size: 12.5px; color: var(--ink-muted);
+      font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted);
     }
     .modal-close {
       background: transparent; border: 1px solid var(--ink); color: var(--ink);
@@ -310,8 +428,9 @@
       border: 1px solid var(--ink);
       border-radius: 0;
       overflow: hidden;
-      background: #1C1B19;
+      background: #B8B0A5;
     }
+    .modal-art .m-card-art-img { filter: none; }
     .modal-art-caption {
       margin-top: 6px;
       font-family: var(--font-sans-cn);
@@ -321,18 +440,21 @@
       justify-content: space-between;
       gap: 8px;
     }
-    .modal-title { font-family: var(--font-serif-cn); font-weight: 900; font-size: 25px; line-height: 1.32; margin-bottom: 14px; }
-    .modal-summary { font-family: var(--font-sans-cn); font-size: 15.5px; line-height: 1.82; color: var(--ink-body); margin-bottom: 22px; }
+    .modal-title { font-family: var(--font-serif-cn); font-weight: 700; font-size: 24px; line-height: 1.36; margin-bottom: 14px; }
+    .modal-summary {
+      font-family: var(--font-sans-cn); font-size: 15px; line-height: 1.84; color: var(--ink-body);
+      margin-bottom: 22px; text-align: justify; text-justify: inter-ideograph;
+    }
 
     .impact-box {
       border: 1px dashed var(--ink); border-left: 4px solid var(--ink); background: var(--paper-bg);
       padding: 16px 18px; margin-bottom: 22px;
     }
     .impact-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
-    .impact-head h4 { font-family: var(--font-serif-cn); font-size: 16px; font-weight: 700; }
+    .impact-head h4 { font-family: var(--font-serif-cn); font-size: 15.5px; font-weight: 700; }
     .draft-pill { border: 1px dashed var(--ink); font-family: var(--font-sans-cn); font-size: 11px; padding: 1px 6px; color: var(--ink-muted); flex-shrink: 0; }
-    .impact-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-family: var(--font-sans-cn); font-size: 14.5px; line-height: 1.7; color: var(--ink-body); }
-    .impact-list li { padding-left: 14px; position: relative; }
+    .impact-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-family: var(--font-sans-cn); font-size: 14px; line-height: 1.72; color: var(--ink-body); }
+    .impact-list li { padding-left: 14px; position: relative; text-align: justify; text-justify: inter-ideograph; }
     .impact-list li::before { content: "▪"; position: absolute; left: 0; color: var(--accent); }
 
     .modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
@@ -349,8 +471,9 @@
     .btn-outline:hover { background: var(--paper-bg); }
     .modal-note { font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted); border-top: 1px solid var(--rule-light); padding-top: 10px; line-height: 1.6; }
 
+    /* ========== 7. 移动端单列适配（375px 零横向溢出） ========== */
     body.mobile-preview .top-bar { padding: 0 14px; height: 58px; }
-    body.mobile-preview .top-left { font-size: 11px; }
+    body.mobile-preview .top-left { font-size: 10.5px; }
     body.mobile-preview .top-center { font-size: 15px; }
     body.mobile-preview .drawer { padding: 14px 16px; }
     body.mobile-preview .drawer-search { width: 100%; }
@@ -362,15 +485,16 @@
     body.mobile-preview .feed-section { padding: 12px 14px 32px; }
     body.mobile-preview .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
     body.mobile-preview .cat-btn { white-space: nowrap; font-size: 13.5px; }
-    body.mobile-preview .broadsheet-grid { grid-template-columns: 1fr; }
-    body.mobile-preview .grid-cell { padding: 20px 0; border-right: none; }
+    body.mobile-preview .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
+    body.mobile-preview .grid-cell { padding: 22px 0; border-right: none; }
+    body.mobile-preview .m-card-title { min-height: auto; font-size: 18px; }
     body.mobile-preview .modal-sheet { padding: 18px 16px; }
     body.mobile-preview .modal-title { font-size: 20px; }
     body.mobile-preview .btn-ink { min-width: 100%; }
 
     @media (max-width: 960px) {
       .top-bar { padding: 0 16px; height: 60px; }
-      .top-left { font-size: 11.5px; }
+      .top-left { font-size: 11px; }
       .top-center { font-size: 16px; }
       .drawer { padding: 14px 16px; }
       .drawer-search { width: 100%; }
@@ -378,8 +502,9 @@
       .masthead-wrap, .feed-section { padding-left: 16px; padding-right: 16px; }
       .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
       .cat-btn { white-space: nowrap; font-size: 13.5px; }
-      .broadsheet-grid { grid-template-columns: 1fr; }
-      .grid-cell { padding: 22px 0 !important; border-right: none !important; }
+      .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
+      .grid-cell { padding: 24px 0 !important; border-right: none !important; }
+      .m-card-title { min-height: auto; }
       .viewport-mini { display: none; }
       .modal-sheet { padding: 20px 16px; }
       .modal-title { font-size: 21px; }
@@ -391,7 +516,7 @@
   <div class="stage-wrapper">
     <div class="paper-page">
       <header class="top-bar">
-        <div class="top-left" id="topDateText">Beijing · 2026-11-22</div>
+        <div class="top-left" id="topDateText">BEIJING · 2026-11-22</div>
         <div class="top-center">The Legal AI Daily</div>
         <div class="top-right">
           <div class="viewport-mini" aria-label="视口切换">
@@ -498,69 +623,11 @@
     function getFallbackIllustrationSVG(category) {
       const slug = CATEGORY_SLUG_MAP[category] || "regulation";
       const arts = {
-        regulation: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="reg-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8FAEE0"/><stop offset="100%" stop-color="#6B8DC6"/></linearGradient>
-            <linearGradient id="reg-beam" x1="0.3" y1="0" x2="0.9" y2="1"><stop offset="0%" stop-color="#FFF2B8" stop-opacity="0.92"/><stop offset="100%" stop-color="#F6D57C" stop-opacity="0.15"/></linearGradient>
-          </defs>
-          <rect width="480" height="210" fill="url(#reg-bg)"/>
-          <polygon points="240,0 480,0 480,210 190,210" fill="url(#reg-beam)"/>
-          <rect x="292" y="92" width="118" height="72" fill="#F5EFE2" stroke="#D9CEB8" stroke-width="2"/>
-          <rect x="292" y="92" width="16" height="72" fill="#E3D6BF"/>
-          <circle cx="384" cy="146" r="19" fill="#C95224" stroke="#F4D3A1" stroke-width="1.5"/>
-          <circle cx="384" cy="146" r="11" fill="none" stroke="#F4D3A1" stroke-width="1.2"/>
-        </svg>`,
-        models: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="mod-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#8AA4B8"/><stop offset="100%" stop-color="#5D7890"/></linearGradient>
-            <radialGradient id="mod-sky" cx="72%" cy="48%" r="46%"><stop offset="0%" stop-color="#FFE0C2"/><stop offset="55%" stop-color="#7EBCE8" stop-opacity="0.85"/><stop offset="100%" stop-color="#5D7890" stop-opacity="0"/></radialGradient>
-          </defs>
-          <rect width="480" height="210" fill="url(#mod-bg)"/>
-          <ellipse cx="345" cy="126" rx="120" ry="56" fill="url(#mod-sky)"/>
-          <polygon points="332,54 388,154 276,154" fill="#E9F5FF" fill-opacity="0.62" stroke="#FFFFFF" stroke-width="1.8"/>
-          <line x1="332" y1="54" x2="348" y2="154" stroke="#B7DBF7" stroke-width="1.5"/>
-          <ellipse cx="412" cy="144" rx="16" ry="8" transform="rotate(-24 412 144)" fill="#6FA868"/>
-        </svg>`,
-        practice: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="pra-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#E7C6C8"/><stop offset="100%" stop-color="#D4A9AE"/></linearGradient>
-            <linearGradient id="pra-beam" x1="0.4" y1="0" x2="1" y2="0.9"><stop offset="0%" stop-color="#FFF7DF" stop-opacity="0.92"/><stop offset="100%" stop-color="#FCE8C3" stop-opacity="0.2"/></linearGradient>
-          </defs>
-          <rect width="480" height="210" fill="url(#pra-bg)"/>
-          <polygon points="255,0 480,0 480,210 210,210" fill="url(#pra-beam)"/>
-          <rect x="288" y="96" width="130" height="74" fill="#FBF6EA" stroke="#DFD4C0" stroke-width="1.6"/>
-          <line x1="353" y1="96" x2="353" y2="170" stroke="#D5C8B2" stroke-width="1.5"/>
-          <line x1="388" y1="78" x2="424" y2="152" stroke="#3C4E63" stroke-width="4" stroke-linecap="round"/>
-        </svg>`,
-        cases: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="cas-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#A8C4B4"/><stop offset="100%" stop-color="#7FA392"/></linearGradient>
-            <linearGradient id="cas-beam" x1="0.4" y1="0" x2="0.95" y2="1"><stop offset="0%" stop-color="#FFE4AE" stop-opacity="0.9"/><stop offset="100%" stop-color="#F5C07A" stop-opacity="0.18"/></linearGradient>
-          </defs>
-          <rect width="480" height="210" fill="url(#cas-bg)"/>
-          <polygon points="250,0 480,0 480,210 205,210" fill="url(#cas-beam)"/>
-          <g stroke="#B8893D" stroke-width="2.2" fill="none">
-            <line x1="356" y1="54" x2="356" y2="162"/>
-            <line x1="306" y1="80" x2="406" y2="74"/>
-            <path d="M292 118 Q306 132 320 118 Z" fill="#D4A657" fill-opacity="0.55"/>
-            <path d="M392 112 Q406 126 420 112 Z" fill="#D4A657" fill-opacity="0.55"/>
-            <line x1="306" y1="80" x2="296" y2="118"/><line x1="306" y1="80" x2="316" y2="118"/>
-            <line x1="406" y1="74" x2="396" y2="112"/><line x1="406" y1="74" x2="416" y2="112"/>
-            <line x1="330" y1="162" x2="382" y2="162"/>
-          </g>
-        </svg>`,
-        industry: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <linearGradient id="ind-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#B9A6C9"/><stop offset="100%" stop-color="#8F7AA3"/></linearGradient>
-            <linearGradient id="ind-beam" x1="0.35" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#FFE39E" stop-opacity="0.9"/><stop offset="100%" stop-color="#EBB562" stop-opacity="0.2"/></linearGradient>
-          </defs>
-          <rect width="480" height="210" fill="url(#ind-bg)"/>
-          <polygon points="245,0 480,0 480,210 198,210" fill="url(#ind-beam)"/>
-          <path d="M332 104 Q324 166 356 168 Q388 166 380 104 Z" fill="#C95A2B" stroke="#EBC194" stroke-width="1.5"/>
-          <path d="M356 104 Q342 74 322 66 M356 104 Q366 68 392 54" stroke="#5E8F56" stroke-width="2.4" fill="none"/>
-          <ellipse cx="322" cy="66" rx="14" ry="7" transform="rotate(-20 322 66)" fill="#6FA364"/>
-          <ellipse cx="392" cy="54" rx="15" ry="7" transform="rotate(-32 392 54)" fill="#7EB571"/>
-        </svg>`
+        regulation: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#8FAEE0"/><polygon points="240,0 480,0 480,210 190,210" fill="#FFF2B8" fill-opacity="0.72"/><rect x="292" y="92" width="118" height="72" fill="#F5EFE2" stroke="#D9CEB8" stroke-width="2"/><circle cx="384" cy="146" r="19" fill="#C95224"/></svg>`,
+        models: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#8AA4B8"/><ellipse cx="345" cy="126" rx="120" ry="56" fill="#FFE0C2" fill-opacity="0.65"/><polygon points="332,54 388,154 276,154" fill="#E9F5FF" fill-opacity="0.7" stroke="#FFFFFF" stroke-width="1.8"/></svg>`,
+        practice: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#E7C6C8"/><polygon points="255,0 480,0 480,210 210,210" fill="#FFF7DF" fill-opacity="0.75"/><rect x="288" y="96" width="130" height="74" fill="#FBF6EA" stroke="#DFD4C0" stroke-width="1.6"/></svg>`,
+        cases: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#A8C4B4"/><polygon points="250,0 480,0 480,210 205,210" fill="#FFE4AE" fill-opacity="0.72"/><g stroke="#B8893D" stroke-width="2.2" fill="none"><line x1="356" y1="54" x2="356" y2="162"/><line x1="306" y1="80" x2="406" y2="74"/></g></svg>`,
+        industry: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#B9A6C9"/><polygon points="245,0 480,0 480,210 198,210" fill="#FFE39E" fill-opacity="0.75"/><path d="M332 104 Q324 166 356 168 Q388 166 380 104 Z" fill="#C95A2B"/></svg>`
       };
       return arts[slug] || arts.regulation;
     }
@@ -591,7 +658,7 @@
             ]
           },
           {
-            id: "1122-02", badge: "模型与技术", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            id: "1122-02", badge: "", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
             placeholder: true, sourceDomain: "example.com/benchmarks/legal-mm-2026", date: "2026-11-22",
             title: "多模态中文法律推理基准发布，纳入 1200 份真实庭审笔录",
             summary: "研究团队公开覆盖合同审查、证据链核验与诉讼推演的新一代评测集，实测显示主流大模型在跨页表格引用与多跳法条推理上幻觉率仍高于 14%。",
@@ -611,28 +678,28 @@
             ]
           },
           {
-            id: "1122-04", badge: "实务与工具", badgeOutline: false, category: "实务与工具", factLevel: "已证实事实",
+            id: "1122-04", badge: "", badgeOutline: false, category: "实务与工具", factLevel: "已证实事实",
             placeholder: true, sourceDomain: "example.com/tools/rag-plugin-v2", date: "2026-11-22",
             title: "头部律所知识库 RAG 插件灰度测试，支持法条逐句溯源",
             summary: "插件直接嵌入 Word 合同起草环境，选中条款后自动召回所内脱敏范本与现行有效法规，未命中权威依据时强制拒答以控制幻觉风险。",
             impact: ["【知识管理团队】“无依据即拒答”的约束机制显著降低了合伙人审稿成本，可作为律所内部 AI 工具验收红线。"]
           },
           {
-            id: "1122-05", badge: "监管与合规", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            id: "1122-05", badge: "", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
             placeholder: true, sourceDomain: "example.com/compliance/cross-border", date: "2026-11-22",
             title: "跨境数据流动合规评估新指引发布，增设法律科技简化通道",
             summary: "新指引明确了非关键信息基础设施运营者在跨境合同审阅与合规自查场景下的豁免清单，并缩短标准合同备案审查周期。",
             impact: ["【跨国企业法务】可重新梳理跨境共享的脱敏合同模板与合规清单，评估是否满足简化申报条件。"]
           },
           {
-            id: "1122-06", badge: "判例与学术", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            id: "1122-06", badge: "", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
             placeholder: true, sourceDomain: "example.com/cases/copyright-tdm", date: "2026-11-22",
             title: "大模型训练数据著作权案一审落槌，厘清公开抓取合理使用边界",
             summary: "判决书围绕“转换性使用”与“市场替代效应”两项要件展开论证，明确商业化模型不得以科研豁免规避 robots 协议与付费墙限制。",
             impact: ["【AI 企业与数据采购】训练语料尽调需留存来源网站 robots.txt 快照与授权链路记录，避免直接抓取付费专业数据库。"]
           },
           {
-            id: "1122-07", badge: "行业与资本", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            id: "1122-07", badge: "", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
             placeholder: true, sourceDomain: "example.com/capital/q4-legaltech", date: "2026-11-22",
             title: "2026 Q4 LegalTech 投融资观察：垂直合规工作流占比创新高",
             summary: "季度统计显示，资本正从泛法律聊天机器人撤出，转向深度嵌入 ERP 与 CLM 系统的合同审查、反洗钱与监管自动追踪赛道。",
@@ -652,14 +719,14 @@
             impact: ["【知产律师与专利代理师】撰写 AI 专利申请文件时，需更详尽披露算法与具体业务场景的耦合关系。"]
           },
           {
-            id: "1121-02", badge: "判例与学术", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            id: "1121-02", badge: "", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
             placeholder: true, sourceDomain: "example.com/cases/deepfake-evidence", date: "2026-11-21",
             title: "多地法院发布深度伪造音视频电子证据审查指南，强化原始载体存证",
             summary: "指南针对涉案录音录像被质疑经由 AI 换声或合成的情形，明确了当事人的初步举证责任分配及委托司法鉴定的启动门槛。",
             impact: ["【诉讼律师】日常取证应优先保留原始录制设备及区块链时间戳存证，仅提交转发压缩音频将面临高采信风险。"]
           },
           {
-            id: "1121-03", badge: "模型与技术", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            id: "1121-03", badge: "", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
             placeholder: true, sourceDomain: "example.com/models/open-lex-14b", date: "2026-11-21",
             title: "14B 参数开源中文法律推理模型发布，单卡部署用于合同初筛",
             summary: "项目采用 Apache-2.0 许可开源权重，在本地化部署环境下对常见商事合同风险点识别准确率较上一代提升 11%。",
@@ -685,17 +752,27 @@
       document.getElementById("menuBtn").classList.toggle("open");
     }
 
-    function renderCardHTML(item, isRail = false) {
+    function renderCardHTML(item, indexNum, isRail = false) {
       const clickHandler = isRail ? `handleRailCardClick('${item.id}')` : `openModal('${item.id}')`;
-      const placeholderBadge = item.placeholder ? `<span class="m-placeholder-tag">示例</span>` : "";
+      const seq = String(indexNum + 1).padStart(2, "0");
+      const badgeHTML = item.badge
+        ? `<span class="m-badge ${item.badgeOutline ? "outline" : ""}">${item.badge}</span>`
+        : "";
+      const placeholderHTML = item.placeholder ? `<span class="m-placeholder-tag">〔示例〕</span>` : "";
       return `
         <article class="m-card" onclick="${clickHandler}">
           <div class="m-card-art-frame">${renderArtFrameHTML(item.category, item.category + " 主题插画")}</div>
-          <div class="m-card-head">
-            <h3 class="m-card-title">${item.title}</h3>
-            <span class="m-badge ${item.badgeOutline ? "outline" : ""}">${item.badge}</span>
-            ${placeholderBadge}
+          <div class="m-card-kicker">
+            <div class="m-kicker-left">
+              <span class="m-kicker-num">NO.${seq}</span>
+              <span>·</span>
+              <span class="m-kicker-cat">${item.category}</span>
+              ${badgeHTML}
+            </div>
+            ${placeholderHTML}
           </div>
+          <h3 class="m-card-title">${item.title}</h3>
+          <div class="m-card-rule"></div>
           <p class="m-card-summary">${item.summary}</p>
         </article>
       `;
@@ -716,16 +793,16 @@
 
     function render() {
       const ed = EDITIONS[currentDate];
-      document.getElementById("topDateText").textContent = `Beijing · ${currentDate}`;
+      document.getElementById("topDateText").textContent = `BEIJING · ${currentDate}`;
       document.getElementById("drawerDates").innerHTML = Object.keys(EDITIONS).map(d =>
         `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
       ).join(" ");
 
       const singleSetParts = [];
-      if (ed.items[0]) singleSetParts.push(`<div class="rail-item">${renderCardHTML(ed.items[0], true)}</div>`);
+      if (ed.items[0]) singleSetParts.push(`<div class="rail-item">${renderCardHTML(ed.items[0], 0, true)}</div>`);
       singleSetParts.push(renderDigestSlotHTML(ed));
-      ed.items.slice(1).forEach(item => {
-        singleSetParts.push(`<div class="rail-item">${renderCardHTML(item, true)}</div>`);
+      ed.items.slice(1).forEach((item, idx) => {
+        singleSetParts.push(`<div class="rail-item">${renderCardHTML(item, idx + 1, true)}</div>`);
       });
       const setHTML = singleSetParts.join("");
       document.getElementById("heroTrack").innerHTML = setHTML + setHTML;
@@ -747,7 +824,7 @@
       const grid = document.getElementById("broadsheetGrid");
       grid.innerHTML = filtered.length === 0
         ? `<div class="empty-msg">当前筛选条件下暂无情报，可切换分类或日期查看往期。</div>`
-        : filtered.map(item => `<div class="grid-cell">${renderCardHTML(item, false)}</div>`).join("");
+        : filtered.map((item, idx) => `<div class="grid-cell">${renderCardHTML(item, idx, false)}</div>`).join("");
     }
 
     function tickRail() {
