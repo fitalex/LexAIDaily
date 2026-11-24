@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V11</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V12</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
@@ -44,7 +44,7 @@
       overflow-x: hidden;
     }
 
-    /* ========== 0. 经典复古报刊开屏动效（底部升起 → 短暂停顿 → 360° 旋入满屏） ========== */
+    /* ========== 0. 经典复古报刊 4 秒开屏动效（GPU 合成线程驱动，零卡顿） ========== */
     body.intro-playing {
       background-color: #1D1D1B;
       overflow: hidden;
@@ -53,52 +53,35 @@
     body.intro-playing .stage-wrapper {
       transform-origin: 50% 24vh;
       will-change: transform;
-      animation: newspaperIntro 2.35s linear forwards;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
     }
-    body.intro-playing .paper-page {
-      outline: 1px solid rgba(255, 255, 255, 0.08);
-      pointer-events: none;
-    }
-    @keyframes newspaperIntro {
-      0% {
-        transform: translate3d(0, 86vh, 0) scale(0.42) rotate(0deg);
-        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-      }
-      44% {
-        transform: translate3d(0, -4vh, 0) scale(0.42) rotate(0deg);
-        animation-timing-function: linear;
-      }
-      54% {
-        transform: translate3d(0, -4vh, 0) scale(0.42) rotate(0deg);
-        animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
-      }
-      100% {
-        transform: translate3d(0, 0, 0) scale(1) rotate(-360deg);
-      }
+    /* 首帧预停在底部之外，避免字体/图片首帧解析引起白屏或跳闪 */
+    body.intro-ready .stage-wrapper {
+      transform: translate3d(0, 94vh, 0) scale(0.40) rotate(0deg);
     }
     @media (max-width: 960px) {
-      @keyframes newspaperIntro {
-        0% {
-          transform: translate3d(0, 82vh, 0) scale(0.56) rotate(0deg);
-          animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        44% {
-          transform: translate3d(0, -2vh, 0) scale(0.56) rotate(0deg);
-          animation-timing-function: linear;
-        }
-        54% {
-          transform: translate3d(0, -2vh, 0) scale(0.56) rotate(0deg);
-          animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
-        }
-        100% {
-          transform: translate3d(0, 0, 0) scale(1) rotate(-360deg);
-        }
+      body.intro-ready .stage-wrapper {
+        transform: translate3d(0, 88vh, 0) scale(0.54) rotate(0deg);
       }
     }
+    body.intro-playing .paper-page {
+      outline: 1px solid rgba(255, 255, 255, 0.09);
+      pointer-events: none;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    /* 旋转缩放期间暂停整页表层正片叠底重绘，落位后平滑淡入，确保 60/120fps 丝滑 */
+    body.intro-playing .paper-page::after {
+      opacity: 0;
+    }
     @media (prefers-reduced-motion: reduce) {
-      body.intro-playing { background-color: var(--paper-bg); overflow: auto; height: auto; }
-      body.intro-playing .stage-wrapper { animation: none; transform: none; }
+      body.intro-playing,
+      body.intro-ready { background-color: var(--paper-bg); overflow: auto; height: auto; }
+      body.intro-playing .stage-wrapper,
+      body.intro-ready .stage-wrapper { transform: none !important; will-change: auto; }
       body.intro-playing .paper-page { outline: none; pointer-events: auto; }
+      body.intro-playing .paper-page::after { opacity: 0.42; }
     }
 
     .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
@@ -131,6 +114,7 @@
       background-repeat: repeat;
       mix-blend-mode: multiply;
       opacity: 0.42;
+      transition: opacity 0.45s ease;
     }
     body.mobile-preview .paper-page {
       max-width: 375px;
@@ -797,7 +781,7 @@
     }
   </style>
 </head>
-<body class="intro-playing">
+<body class="intro-playing intro-ready">
   <div class="stage-wrapper" id="stageWrapper">
     <div class="paper-page">
       <header class="top-bar">
@@ -917,18 +901,6 @@
   </div>
 
   <script>
-    /* 开屏复古报刊旋入结束后释放 transform 与滚动锁定 */
-    (function initNewspaperIntro() {
-      const finishIntro = () => document.body.classList.remove("intro-playing");
-      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        finishIntro();
-        return;
-      }
-      const stage = document.getElementById("stageWrapper");
-      stage.addEventListener("animationend", finishIntro, { once: true });
-      setTimeout(finishIntro, 2500);
-    })();
-
     const CATEGORIES = ["全部", "监管与合规", "模型与技术", "实务与工具", "判例与学术", "行业与资本"];
 
     const CATEGORY_SLUG_MAP = {
@@ -1295,8 +1267,67 @@
       if (e.key === "Escape") { closeModal(); closeArchivePopover(); }
     });
 
+    /* 首屏内容先渲染完毕，再在 GPU 合成线程启动 4.0s 丝滑开屏报刊动效 */
     render();
     requestAnimationFrame(tickRail);
+
+    (function runSmoothNewspaperIntro() {
+      const cleanup = () => {
+        document.body.classList.remove("intro-playing", "intro-ready");
+      };
+      if ((window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) || !Element.prototype.animate) {
+        cleanup();
+        return;
+      }
+
+      const stage = document.getElementById("stageWrapper");
+      const isNarrow = window.innerWidth <= 960;
+      const baseScale = isNarrow ? 0.54 : 0.40;
+      const breathScale = isNarrow ? 0.56 : 0.415;
+      const startY = isNarrow ? "88vh" : "94vh";
+      const midY = isNarrow ? "-2vh" : "-3vh";
+      const peakY = isNarrow ? "-3vh" : "-4.2vh";
+
+      const waitFonts = document.fonts && document.fonts.ready
+        ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 180))])
+        : Promise.resolve();
+
+      waitFonts.then(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            document.body.classList.remove("intro-ready");
+            const anim = stage.animate(
+              [
+                {
+                  offset: 0,
+                  transform: `translate3d(0, ${startY}, 0) scale(${baseScale}) rotate(0deg)`,
+                  easing: "cubic-bezier(0.16, 1, 0.3, 1)"
+                },
+                {
+                  offset: 0.38,
+                  transform: `translate3d(0, ${midY}, 0) scale(${baseScale}) rotate(0deg)`,
+                  easing: "cubic-bezier(0.45, 0, 0.55, 1)"
+                },
+                {
+                  offset: 0.52,
+                  transform: `translate3d(0, ${peakY}, 0) scale(${breathScale}) rotate(0deg)`,
+                  easing: "cubic-bezier(0.77, 0, 0.175, 1)"
+                },
+                {
+                  offset: 1,
+                  transform: "translate3d(0, 0, 0) scale(1) rotate(-360deg)"
+                }
+              ],
+              { duration: 4000, fill: "forwards" }
+            );
+            anim.finished.then(() => {
+              anim.cancel();
+              cleanup();
+            }).catch(cleanup);
+          });
+        });
+      });
+    })();
   </script>
 </body>
 </html>
