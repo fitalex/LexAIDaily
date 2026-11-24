@@ -23,7 +23,7 @@
 - **输入**：
   - `design/illustration-spec.md`（v2.0 清透日光厚涂油画自动配图规范）
   - `design/card-fields-v0.md`（现有字段表基线）
-  - `design/gemini-code-1795400982825.html`（已确认的 V3.2 报刊交互原型参考）
+  - `design/gemini-code-1795426339744.html`（已确认的 V3.2 报刊交互原型参考）
   - [Niccolò Miranda — Paper Portfolio](https://www.niccolomiranda.com/) 视觉与首屏结构参考
 - **输出**：
   - `design/prototype/index.html`（含配套独立样式或单文件自包含，支持桌面端 1440px 与移动端 375px 响应式视图）
