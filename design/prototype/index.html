@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V12</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V13</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper-bg: #CCC4BA;
-      --paper-inset: #C2B9AE;
-      --paper-modal: #DCD5CB;
+      --paper-bg: #CAC2B8;
+      --paper-inset: #C0B7AC;
+      --paper-modal: #DAD3C9;
       --ink: #1D1D1B;
       --ink-body: #2A2825;
       --ink-muted: #524D46;
@@ -21,9 +21,9 @@
       --accent: #C03F13;
       --accent-text: #F4EDE4;
 
-      /* 方案 A｜手工冷压棉纸：无黑点柔和凹凸冷压肌理 + 细腻棉浆层次（Handmade Paper + Rice Paper 2，CC BY-SA 3.0 via Transparent Textures / Subtle Patterns） */
-      --paper-cotton-relief: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
-      --paper-cotton-pulp: url("https://www.transparenttextures.com/patterns/rice-paper-2.png");
+      /* 方案 C｜细腻棉质书页纸：哑光细齿棉纸（Rice Paper 2，CC BY-SA 3.0 via Transparent Textures / Subtle Patterns）+ 极轻天然棉纤维丝 */
+      --paper-book-matte: url("https://www.transparenttextures.com/patterns/rice-paper-2.png");
+      --paper-cotton-wisps: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340' viewBox='0 0 340 340'%3E%3Cg fill='none' stroke='%237D7367' stroke-linecap='round'%3E%3Cpath d='M36 52 Q48 44 58 51' stroke-width='0.65' opacity='0.22'/%3E%3Cpath d='M168 28 Q176 42 169 55' stroke-width='0.6' opacity='0.18'/%3E%3Cpath d='M282 78 Q298 74 309 83' stroke-width='0.65' opacity='0.20'/%3E%3Cpath d='M92 146 Q104 156 98 172' stroke-width='0.6' opacity='0.19'/%3E%3Cpath d='M214 134 Q228 128 242 135' stroke-width='0.55' opacity='0.17'/%3E%3Cpath d='M48 232 Q60 224 74 229' stroke-width='0.6' opacity='0.20'/%3E%3Cpath d='M154 256 Q162 271 174 276' stroke-width='0.65' opacity='0.18'/%3E%3Cpath d='M276 218 Q266 234 273 248' stroke-width='0.6' opacity='0.21'/%3E%3Cpath d='M118 308 Q132 302 144 310' stroke-width='0.55' opacity='0.17'/%3E%3Cpath d='M304 304 Q316 294 326 302' stroke-width='0.6' opacity='0.19'/%3E%3C/g%3E%3C/svg%3E");
 
       --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
       --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
@@ -56,7 +56,6 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
-    /* 首帧预停在底部之外，避免字体/图片首帧解析引起白屏或跳闪 */
     body.intro-ready .stage-wrapper {
       transform: translate3d(0, 94vh, 0) scale(0.40) rotate(0deg);
     }
@@ -71,7 +70,6 @@
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
     }
-    /* 旋转缩放期间暂停整页表层正片叠底重绘，落位后平滑淡入，确保 60/120fps 丝滑 */
     body.intro-playing .paper-page::after {
       opacity: 0;
     }
@@ -81,39 +79,39 @@
       body.intro-playing .stage-wrapper,
       body.intro-ready .stage-wrapper { transform: none !important; will-change: auto; }
       body.intro-playing .paper-page { outline: none; pointer-events: auto; }
-      body.intro-playing .paper-page::after { opacity: 0.42; }
+      body.intro-playing .paper-page::after { opacity: 0.22; }
     }
 
     .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
     body.mobile-preview { background: #262522; }
     body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
 
-    /* 整张手工冷压棉纸版面：柔和压纹（140px）叠加无黑点棉浆肌理（485px），互质错周期避免视觉重复 */
+    /* 整张细腻棉质书页纸面：哑光细齿棉纸（485px）叠加极轻天然棉纤维丝（340px 互质错周期） */
     .paper-page {
       position: relative;
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
       background-color: var(--paper-bg);
-      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
-      background-size: 140px 140px, 485px 485px;
+      background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
+      background-size: 340px 340px, 485px 485px;
       background-repeat: repeat, repeat;
-      background-blend-mode: multiply, multiply;
+      background-blend-mode: normal, multiply;
       transition: max-width 0.35s var(--ease);
       overflow-x: hidden;
     }
-    /* 表层轻度棉纸吃墨层：让文字、1px 细线与报头带与冷压棉纸自然贴合（零投影、零毛玻璃） */
+    /* 表层极轻书页吃墨层：克制细腻，最大化中文小字长时间阅读舒适度（零投影、零毛玻璃） */
     .paper-page::after {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 45;
-      background-image: var(--paper-cotton-relief);
-      background-size: 140px 140px;
+      background-image: var(--paper-book-matte);
+      background-size: 485px 485px;
       background-repeat: repeat;
       mix-blend-mode: multiply;
-      opacity: 0.42;
+      opacity: 0.22;
       transition: opacity 0.45s ease;
     }
     body.mobile-preview .paper-page {
@@ -411,7 +409,7 @@
       padding: 15px 0 11px;
       border-top: 2px solid var(--ink);
       border-bottom: 1px solid var(--ink);
-      box-shadow: inset 0 3px 0 0 rgba(204, 196, 186, 0.72), inset 0 4px 0 0 var(--rule-strong);
+      box-shadow: inset 0 3px 0 0 rgba(202, 194, 184, 0.72), inset 0 4px 0 0 var(--rule-strong);
       flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -464,7 +462,7 @@
     .date-more-btn:hover,
     .date-more-btn.open { background: var(--ink); color: var(--paper-bg); border-style: solid; }
 
-    /* 更多日期历史归档弹出面板（同款冷压棉纸肌理 + 直角 1.5px 黑框，零投影） */
+    /* 更多日期历史归档弹出面板（同款细腻棉质书页纸 + 直角 1.5px 黑框，零投影） */
     .archive-popover {
       display: none;
       position: absolute;
@@ -473,9 +471,9 @@
       z-index: 60;
       width: 280px;
       background-color: var(--paper-modal);
-      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
-      background-size: 140px 140px, 485px 485px;
-      background-blend-mode: multiply, multiply;
+      background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
+      background-size: 340px 340px, 485px 485px;
+      background-blend-mode: normal, multiply;
       border: 1.5px solid var(--ink);
       padding: 14px 16px;
     }
@@ -523,7 +521,7 @@
     }
     .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 
-    /* ========== 6. 详情剪报弹窗（同款手工冷压棉纸肌理） ========== */
+    /* ========== 6. 详情剪报弹窗（同款细腻棉质书页纸） ========== */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
       display: none; align-items: center; justify-content: center; padding: 20px;
@@ -531,9 +529,9 @@
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
       background-color: var(--paper-modal);
-      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
-      background-size: 140px 140px, 485px 485px;
-      background-blend-mode: multiply, multiply;
+      background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
+      background-size: 340px 340px, 485px 485px;
+      background-blend-mode: normal, multiply;
       color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
       overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 26px 32px 30px;
     }
@@ -575,8 +573,8 @@
     .impact-box {
       border: 1px dashed var(--ink); border-left: 4px solid var(--ink);
       background-color: var(--paper-bg);
-      background-image: var(--paper-cotton-relief);
-      background-size: 140px 140px;
+      background-image: var(--paper-book-matte);
+      background-size: 485px 485px;
       background-blend-mode: multiply;
       padding: 16px 18px; margin-bottom: 22px;
     }
