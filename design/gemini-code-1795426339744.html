@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Legal AI Daily — LEXAI DAILY｜Miranda 报刊原型 V3.2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500&family=Noto+Serif+SC:wght@500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper-bg: #C8C0B6;
+      --paper-inset: #BEB5AA;
+      --paper-modal: #D8D1C7;
+      --ink: #1D1D1B;
+      --ink-body: #2B2926;
+      --ink-muted: #4C4842;
+      --rule: rgba(29, 29, 27, 0.42);
+      --rule-light: rgba(29, 29, 27, 0.2);
+      --accent: #C03F13;
+      --accent-text: #F4EDE4;
+
+      --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
+      --font-serif-cn: "Noto Serif SC", "Songti SC", "STSong", serif;
+      --font-sans-cn: "Noto Sans SC", -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: #B8B0A5; }
+    body {
+      font-family: var(--font-serif-cn);
+      background-color: var(--paper-bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* 旧报纸纤维微噪点 */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.055;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
+    body.mobile-preview { background: #262522; }
+    body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
+
+    .paper-page {
+      width: 100%;
+      max-width: 1480px;
+      margin: 0 auto;
+      background: var(--paper-bg);
+      transition: max-width 0.35s var(--ease);
+    }
+    body.mobile-preview .paper-page {
+      max-width: 396px;
+      box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    /* ========== 1. 顶部极简 1px 报眉 ========== */
+    .top-bar {
+      height: 74px;
+      padding: 0 32px;
+      border-bottom: 1px solid var(--rule);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .top-left { font-family: var(--font-serif-cn); font-size: 13.5px; color: var(--ink-body); }
+    .top-center { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; text-align: center; }
+    .top-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
+
+    .viewport-mini { display: inline-flex; border: 1px solid var(--rule); }
+    .vp-btn {
+      background: transparent; border: none; padding: 3px 9px;
+      font-family: var(--font-sans-cn); font-size: 11.5px; color: var(--ink-muted); cursor: pointer;
+    }
+    .vp-btn.active { background: var(--ink); color: var(--paper-bg); }
+
+    .menu-btn {
+      width: 34px; height: 28px; background: transparent; border: none; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 2px;
+    }
+    .menu-btn span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: transform 0.25s var(--ease); }
+    .menu-btn.open span:first-child { transform: translateY(3.25px) rotate(12deg); }
+    .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
+
+    .drawer {
+      display: none; padding: 16px 32px; border-bottom: 1px solid var(--ink); background: var(--paper-inset);
+      align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
+    }
+    .drawer.open { display: flex; }
+    .drawer-group { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-family: var(--font-sans-cn); font-size: 13px; }
+    .date-pill {
+      background: transparent; border: 1px solid var(--rule); padding: 4px 11px;
+      font-family: var(--font-mono); font-size: 12px; color: var(--ink); cursor: pointer;
+    }
+    .date-pill.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .drawer-search {
+      background: transparent; border: none; border-bottom: 1px solid var(--ink);
+      padding: 4px 6px; font-family: var(--font-sans-cn); font-size: 13px; color: var(--ink); width: 210px; outline: none;
+    }
+
+    /* ========== 2. 首屏缓缓流动横轨（卡片 + 今日综述） ========== */
+    .hero-section {
+      padding: 30px 0 26px;
+    }
+
+    .hero-rail-viewport {
+      width: 100%;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      margin-bottom: 30px;
+      padding: 4px 0;
+    }
+    .hero-rail-viewport.dragging {
+      cursor: grabbing;
+    }
+
+    .hero-rail-track {
+      display: flex;
+      align-items: stretch;
+      will-change: transform;
+    }
+
+    /* 每个轨道单元严格占首屏 1/3 宽，1px 竖线分隔，1:1 复刻录屏节奏 */
+    .rail-item {
+      flex: 0 0 33.3333%;
+      min-width: 33.3333%;
+      padding: 0 32px;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* 今日综述居中面板 */
+    .digest-rail-card {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      gap: 14px;
+      padding-top: 6px;
+      padding-bottom: 6px;
+    }
+    .digest-kicker-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .digest-kicker {
+      font-family: var(--font-serif-cn);
+      font-weight: 900;
+      font-size: clamp(32px, 3vw, 46px);
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .digest-draft-tag {
+      border: 1px dashed var(--ink);
+      font-family: var(--font-sans-cn);
+      font-size: 11px;
+      color: var(--ink-muted);
+      padding: 2px 6px;
+      line-height: 1.2;
+    }
+    .digest-text {
+      font-family: var(--font-serif-cn);
+      font-weight: 500;
+      font-size: 16.5px;
+      line-height: 1.65;
+      color: var(--ink-body);
+      max-width: 34ch;
+    }
+    .digest-tip {
+      margin-top: 6px;
+      font-family: var(--font-sans-cn);
+      font-size: 12px;
+      color: var(--ink-muted);
+      letter-spacing: 0.02em;
+    }
+    .digest-tip strong {
+      font-family: var(--font-mono);
+      color: var(--ink);
+      margin-right: 4px;
+    }
+
+    /* ========== 3. 单张情报卡片（零底色/零外链/零实务影响） ========== */
+    .m-card {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+    .m-card-art-frame {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      border: 1px solid var(--ink);
+      overflow: hidden;
+      background: #1C1B19;
+    }
+    .m-card-art-frame svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      pointer-events: none;
+      transition: transform 0.55s var(--ease);
+    }
+    .m-card:hover .m-card-art-frame svg { transform: scale(1.045); }
+    .m-card-head {
+      margin-top: 13px;
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .m-card-title {
+      font-family: var(--font-serif-cn);
+      font-weight: 900;
+      font-size: 18.5px;
+      line-height: 1.32;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+      transition: color 0.2s;
+    }
+    .m-card:hover .m-card-title { color: var(--accent); }
+    .m-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-family: var(--font-sans-cn);
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 2px;
+      line-height: 1.25;
+      flex-shrink: 0;
+    }
+    .m-badge.outline {
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+    }
+    .m-card-summary {
+      margin-top: 8px;
+      font-family: var(--font-sans-cn);
+      font-size: 14.5px;
+      line-height: 1.66;
+      color: var(--ink-body);
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带 ========== */
+    .masthead-wrap {
+      padding: 0 32px;
+    }
+    .masthead-black-band {
+      width: 100%;
+      background: var(--ink);
+      padding: 12px 16px 6px;
+      display: block;
+    }
+    .masthead-svg { width: 100%; height: auto; display: block; }
+
+    /* ========== 5. 下半区分类索引 + 报刊三栏全量网格 ========== */
+    .feed-section { padding: 18px 32px 44px; }
+    .index-bar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      padding: 12px 0; border-top: 1px solid var(--ink); border-bottom: 1.5px solid var(--ink); flex-wrap: wrap;
+    }
+    .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .cat-btn {
+      background: transparent; border: 1px solid transparent; color: var(--ink);
+      font-family: var(--font-sans-cn); font-size: 14px; font-weight: 500;
+      padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: flex-start; gap: 4px;
+    }
+    .cat-btn:hover { border-color: var(--rule); }
+    .cat-btn.active { background: var(--ink); color: var(--paper-bg); }
+    .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
+    .index-meta { font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted); }
+
+    .broadsheet-grid {
+      display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 1.5px solid var(--ink);
+    }
+    .grid-cell { padding: 28px 26px; border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+    .grid-cell:nth-child(3n) { border-right: none; padding-right: 0; }
+    .grid-cell:nth-child(3n + 1) { padding-left: 0; }
+    .empty-msg { grid-column: 1 / -1; padding: 54px 20px; text-align: center; font-size: 16px; color: var(--ink-muted); }
+
+    .colophon {
+      padding: 22px 0 8px; display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px; font-family: var(--font-sans-cn); font-size: 12.5px; color: var(--ink-muted);
+    }
+    .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
+
+    /* ========== 6. 详情剪报弹窗 ========== */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(29, 29, 27, 0.76); z-index: 300;
+      display: none; align-items: center; justify-content: center; padding: 22px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-sheet {
+      background: var(--paper-modal); color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
+      overflow-y: auto; border: 2px solid var(--ink); padding: 26px 32px 30px;
+    }
+    .modal-top {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+      font-family: var(--font-sans-cn); font-size: 12.5px; color: var(--ink-muted);
+    }
+    .modal-close {
+      background: transparent; border: 1px solid var(--ink); color: var(--ink);
+      padding: 4px 12px; font-family: var(--font-mono); font-size: 12px; cursor: pointer;
+    }
+    .modal-close:hover { background: var(--ink); color: var(--paper-modal); }
+    .modal-art { width: 100%; aspect-ratio: 16 / 6.2; border: 1px solid var(--ink); overflow: hidden; margin-bottom: 18px; }
+    .modal-art svg { width: 100%; height: 100%; display: block; }
+    .modal-title { font-family: var(--font-serif-cn); font-weight: 900; font-size: 26px; line-height: 1.3; margin-bottom: 14px; }
+    .modal-summary { font-family: var(--font-sans-cn); font-size: 15.5px; line-height: 1.82; color: var(--ink-body); margin-bottom: 22px; }
+
+    .impact-box {
+      border: 1px dashed var(--ink); border-left: 4px solid var(--ink); background: var(--paper-bg);
+      padding: 16px 18px; margin-bottom: 22px;
+    }
+    .impact-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .impact-head h4 { font-family: var(--font-serif-cn); font-size: 16px; font-weight: 700; }
+    .draft-pill { border: 1px dashed var(--ink); font-family: var(--font-sans-cn); font-size: 11px; padding: 1px 6px; color: var(--ink-muted); }
+    .impact-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-family: var(--font-sans-cn); font-size: 14.5px; line-height: 1.7; color: var(--ink-body); }
+    .impact-list li { padding-left: 14px; position: relative; }
+    .impact-list li::before { content: "▪"; position: absolute; left: 0; color: var(--accent); }
+
+    .modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .btn-ink {
+      flex: 1; min-width: 220px; background: var(--ink); color: var(--paper-modal);
+      border: 1px solid var(--ink); padding: 12px 18px; text-align: center; text-decoration: none;
+      font-family: var(--font-sans-cn); font-size: 14px; cursor: pointer;
+    }
+    .btn-ink:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-outline {
+      background: transparent; color: var(--ink); border: 1px solid var(--ink);
+      padding: 12px 16px; font-family: var(--font-sans-cn); font-size: 13.5px; cursor: pointer;
+    }
+    .btn-outline:hover { background: var(--paper-bg); }
+    .modal-note { font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted); border-top: 1px solid var(--rule-light); padding-top: 10px; }
+
+    /* ========== 7. 移动端单列适配 ========== */
+    body.mobile-preview .top-bar { padding: 0 16px; height: 60px; }
+    body.mobile-preview .top-left { font-size: 11.5px; }
+    body.mobile-preview .top-center { font-size: 16px; }
+    body.mobile-preview .hero-section { padding: 18px 0 16px; }
+    body.mobile-preview .rail-item { flex: 0 0 84%; min-width: 84%; padding: 0 16px; }
+    body.mobile-preview .digest-kicker { font-size: 28px; }
+    body.mobile-preview .digest-text { font-size: 14.5px; }
+    body.mobile-preview .masthead-wrap { padding: 0 16px; }
+    body.mobile-preview .feed-section { padding: 12px 16px 32px; }
+    body.mobile-preview .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
+    body.mobile-preview .cat-btn { white-space: nowrap; font-size: 13.5px; }
+    body.mobile-preview .broadsheet-grid { grid-template-columns: 1fr; }
+    body.mobile-preview .grid-cell { padding: 22px 0; border-right: none; }
+    body.mobile-preview .modal-sheet { padding: 20px 18px; }
+    body.mobile-preview .modal-title { font-size: 21px; }
+
+    @media (max-width: 960px) {
+      .rail-item { flex: 0 0 82%; min-width: 82%; padding: 0 18px; }
+      .masthead-wrap, .feed-section { padding-left: 16px; padding-right: 16px; }
+      .broadsheet-grid { grid-template-columns: 1fr; }
+      .grid-cell { padding: 22px 0 !important; border-right: none !important; }
+      .viewport-mini { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage-wrapper">
+    <div class="paper-page">
+      <!-- 1. 顶部 1px 报眉 -->
+      <header class="top-bar">
+        <div class="top-left" id="topDateText">Beijing · 2026-11-22</div>
+        <div class="top-center">The Legal AI Daily</div>
+        <div class="top-right">
+          <div class="viewport-mini" aria-label="视口切换">
+            <button class="vp-btn active" id="vpDesktop" onclick="setViewport('desktop')">桌面</button>
+            <button class="vp-btn" id="vpMobile" onclick="setViewport('mobile')">移动</button>
+          </div>
+          <button class="menu-btn" id="menuBtn" onclick="toggleDrawer()" aria-label="展开日期与检索菜单">
+            <span></span><span></span>
+          </button>
+        </div>
+      </header>
+
+      <!-- 折叠抽屉（日期切换 + 关键词检索） -->
+      <div class="drawer" id="drawer">
+        <div class="drawer-group">
+          <span>期号日期：</span>
+          <div id="drawerDates"></div>
+        </div>
+        <div class="drawer-group">
+          <input class="drawer-search" id="searchInput" type="text" placeholder="检索关键词 / 法条 / 模型..." />
+        </div>
+      </div>
+
+      <!-- 2. 首屏缓缓流动横轨（包含卡片与今日综述） + 满宽墨黑反白报头 -->
+      <section class="hero-section">
+        <div class="hero-rail-viewport" id="heroViewport" aria-label="首屏流动情报与今日综述">
+          <div class="hero-rail-track" id="heroTrack"></div>
+        </div>
+
+        <div class="masthead-wrap">
+          <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
+            <svg class="masthead-svg" viewBox="0 0 1200 225" preserveAspectRatio="xMidYMid meet">
+              <text x="600" y="196" text-anchor="middle" fill="#C8C0B6"
+                font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
+                font-weight="900" font-size="214" letter-spacing="-7"
+                textLength="1168" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. 分类索引条 + 全量带插画情报分栏 -->
+      <section class="feed-section">
+        <nav class="index-bar" aria-label="分类筛选">
+          <div class="cat-list" id="catList"></div>
+          <div class="index-meta" id="indexMeta">VOL.04 NO.326 · 7 DISPATCHES</div>
+        </nav>
+
+        <div class="broadsheet-grid" id="broadsheetGrid"></div>
+
+        <footer class="colophon">
+          <div><strong>LEXAI DAILY© 2026</strong> · 法律人的 AI 情报雷达 · 严格区分事实与观点</div>
+          <div>点击任意卡片查看「实务影响研判」与「一手信源」</div>
+        </footer>
+      </section>
+    </div>
+  </div>
+
+  <!-- 4. 详情剪报弹窗 -->
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true">
+    <div class="modal-sheet">
+      <div class="modal-top">
+        <div id="modalMeta"></div>
+        <button class="modal-close" onclick="closeModal()">ESC / 关闭</button>
+      </div>
+      <div class="modal-art" id="modalArt"></div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-summary" id="modalSummary"></p>
+
+      <div class="impact-box">
+        <div class="impact-head">
+          <h4>实务影响锚点（执业律师与企业法务视角）</h4>
+          <span class="draft-pill">AI 初稿</span>
+        </div>
+        <ul class="impact-list" id="modalImpactList"></ul>
+      </div>
+
+      <div class="modal-actions">
+        <a class="btn-ink" id="modalSourceBtn" href="#" target="_blank" rel="noopener noreferrer">直达一手信源 ↗</a>
+        <button class="btn-outline" id="modalCopyBtn" onclick="copyCitation()">复制法律人引用格式</button>
+      </div>
+      <p class="modal-note">合规提示：原型示例链接使用保留占位域名；标有“AI 初稿”之实务影响仅供初步研判，不构成正式法律意见。</p>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = ["全部", "监管与合规", "模型与技术", "实务与工具", "判例与学术", "行业与资本"];
+
+    function getIllustration(key) {
+      const arts = {
+        watermark: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#102530"/><stop offset="100%" stop-color="#071218"/></linearGradient>
+            <radialGradient id="g1a" cx="52%" cy="48%" r="42%"><stop offset="0%" stop-color="#F6B84C"/><stop offset="55%" stop-color="#B95D1C" stop-opacity="0.7"/><stop offset="100%" stop-color="#102530" stop-opacity="0"/></radialGradient>
+          </defs>
+          <rect width="480" height="210" fill="url(#g1)"/><rect width="480" height="210" fill="url(#g1a)"/>
+          <path d="M0 168 L480 168 L480 210 L0 210 Z" fill="#6D1F10"/>
+          <g stroke="#F8D27D" stroke-width="1.2" fill="none" opacity="0.82">
+            <rect x="172" y="28" width="136" height="140" rx="68" fill="#D98B2B" fill-opacity="0.22"/>
+            <circle cx="240" cy="98" r="46"/><circle cx="240" cy="98" r="30"/><circle cx="240" cy="98" r="14"/>
+            <line x1="120" y1="98" x2="360" y2="98" stroke-dasharray="4 4"/>
+          </g>
+          <rect x="208" y="82" width="64" height="32" fill="#C03F13" stroke="#F8D27D" stroke-width="1.4"/>
+          <text x="240" y="102" text-anchor="middle" fill="#F8E7C2" font-family="Georgia,serif" font-size="13" font-weight="700" letter-spacing="2">SEAL</text>
+        </svg>`,
+        benchmark: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#6B9FD4"/><stop offset="100%" stop-color="#294D7D"/></linearGradient></defs>
+          <rect width="480" height="210" fill="url(#g2)"/>
+          <polygon points="0,0 130,35 130,175 0,210" fill="#4673A8" opacity="0.65"/>
+          <polygon points="480,0 350,35 350,175 480,210" fill="#1D3A61" opacity="0.72"/>
+          <rect x="130" y="35" width="220" height="140" fill="#8BB7E3" fill-opacity="0.35" stroke="#DDECFB" stroke-width="1"/>
+          <g stroke="#E9F3FC" stroke-width="1.2" fill="none">
+            <rect x="172" y="54" width="136" height="96" fill="#163257" fill-opacity="0.55"/>
+            <line x1="186" y1="78" x2="294" y2="78"/><line x1="186" y1="98" x2="278" y2="98"/>
+            <line x1="186" y1="118" x2="290" y2="118"/><line x1="186" y1="136" x2="246" y2="136"/>
+          </g>
+          <circle cx="308" cy="54" r="18" fill="#C03F13" stroke="#F4EDE4" stroke-width="1.4"/>
+          <text x="308" y="58" text-anchor="middle" fill="#F4EDE4" font-family="monospace" font-size="10">1200</text>
+        </svg>`,
+        sentencing: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <rect width="480" height="210" fill="#211210"/>
+          <circle cx="240" cy="105" r="78" fill="#9E3A24" opacity="0.28"/>
+          <g stroke="#E6C9A2" stroke-width="1.6" fill="none">
+            <line x1="240" y1="30" x2="240" y2="176"/><line x1="130" y1="68" x2="350" y2="54"/>
+            <line x1="130" y1="68" x2="105" y2="122"/><line x1="130" y1="68" x2="155" y2="122"/>
+            <path d="M98 122 Q130 144 162 122 Z" fill="#C03F13" fill-opacity="0.55"/>
+            <line x1="350" y1="54" x2="325" y2="108"/><line x1="350" y1="54" x2="375" y2="108"/>
+            <path d="M318 108 Q350 130 382 108 Z" fill="#E6C9A2" fill-opacity="0.28"/>
+            <rect x="200" y="176" width="80" height="10" fill="#E6C9A2"/>
+          </g>
+        </svg>`,
+        rag: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <rect width="480" height="210" fill="#18241E"/>
+          <g fill="#2B3E34" stroke="#8FB39E" stroke-width="1">
+            <rect x="36" y="28" width="52" height="154"/><rect x="96" y="42" width="44" height="140"/>
+            <rect x="148" y="20" width="56" height="162"/><rect x="330" y="34" width="48" height="148"/>
+            <rect x="386" y="22" width="58" height="160"/>
+          </g>
+          <rect x="214" y="26" width="106" height="156" fill="#D4A359" stroke="#F8E7C2" stroke-width="1.5"/>
+          <line x1="230" y1="58" x2="304" y2="58" stroke="#18241E" stroke-width="2"/>
+          <line x1="230" y1="78" x2="294" y2="78" stroke="#18241E" stroke-width="1.5"/>
+          <line x1="230" y1="98" x2="300" y2="98" stroke="#18241E" stroke-width="1.5"/>
+          <circle cx="267" cy="140" r="18" fill="#18241E"/><circle cx="267" cy="140" r="8" fill="#C03F13"/>
+        </svg>`,
+        crossborder: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <rect width="480" height="210" fill="#152336"/>
+          <g stroke="#7CA6CC" stroke-width="1" fill="none" opacity="0.55">
+            <ellipse cx="240" cy="105" rx="175" ry="74"/><ellipse cx="240" cy="105" rx="115" ry="74"/>
+            <ellipse cx="240" cy="105" rx="52" ry="74"/><line x1="40" y1="105" x2="440" y2="105"/>
+          </g>
+          <path d="M90 135 Q240 24 390 120" stroke="#F2B84B" stroke-width="2.5" fill="none"/>
+          <circle cx="90" cy="135" r="7" fill="#C03F13"/><circle cx="390" cy="120" r="7" fill="#F2B84B"/>
+        </svg>`,
+        copyright: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <rect width="480" height="210" fill="#2A231D"/>
+          <rect x="64" y="24" width="150" height="162" fill="#D8CBB8" stroke="#1D1D1B" stroke-width="1.5"/>
+          <rect x="266" y="24" width="150" height="162" fill="#B59F84" stroke="#1D1D1B" stroke-width="1.5"/>
+          <line x1="88" y1="60" x2="190" y2="60" stroke="#2A231D" stroke-width="2"/>
+          <line x1="88" y1="84" x2="180" y2="84" stroke="#2A231D" stroke-width="1.5"/>
+          <circle cx="240" cy="105" r="34" fill="#C03F13" stroke="#F4EDE4" stroke-width="1.8"/>
+          <text x="240" y="116" text-anchor="middle" fill="#F4EDE4" font-family="Georgia,serif" font-size="34" font-weight="700">©</text>
+        </svg>`,
+        capital: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg">
+          <rect width="480" height="210" fill="#1C2329"/>
+          <g fill="#374C59" stroke="#A6BDC9" stroke-width="1">
+            <rect x="70" y="128" width="44" height="58"/><rect x="136" y="102" width="44" height="84"/>
+            <rect x="202" y="84" width="44" height="102"/><rect x="268" y="62" width="44" height="124"/>
+            <rect x="334" y="38" width="52" height="148" fill="#C03F13" stroke="#F4EDE4"/>
+          </g>
+          <polyline points="92,118 158,92 224,74 290,52 360,28" fill="none" stroke="#F2C464" stroke-width="2.2"/>
+        </svg>`
+      };
+      return arts[key] || arts.watermark;
+    }
+
+    const EDITIONS = {
+      "2026-11-22": {
+        vol: "VOL.04 NO.326", label: "11-22 今日",
+        digest: "今日聚焦生成内容双轨标识新规与多模态法律推理评测——合规重点正从原则宣示落向水印留痕，律所工具全面转向“无依据即拒答”的幻觉审计。",
+        items: [
+          {
+            id: "1122-01", badge: "头条", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            art: "watermark", sourceDomain: "example.com/rules/2026/aic-01", date: "2026-11-22",
+            title: "某法域生成内容标识管理办法公布，明确多模态双轨标注义务",
+            summary: "新规对面向公众的生成式 AI 服务确立全流程显式与隐式标识标准，要求在音视频与文本显著位置附带人类可见提示，并在底层写入机器可读追溯水印。",
+            impact: [
+              "【平台与企业法务】需在 90 天过渡期内同步更新用户协议、API 接入免责条款及下游传播方责任分担机制。",
+              "【技术合规协同】隐式水印需通过压缩与截断鲁棒性测试，建议联合安全团队留存生成日志作为尽职免责证据链。"
+            ]
+          },
+          {
+            id: "1122-02", badge: "模型与技术", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            art: "benchmark", sourceDomain: "example.com/benchmarks/legal-mm-2026", date: "2026-11-22",
+            title: "多模态中文法律推理基准发布，纳入 1200 份真实庭审笔录",
+            summary: "研究团队公开覆盖合同审查、证据链核验与诉讼推演的新一代评测集，实测显示主流大模型在跨页表格引用与多跳法条推理上幻觉率仍高于 14%。",
+            impact: [
+              "【律所选型参考】采购法律大模型时应要求供应商在“跨页证据核验”与“法条现行有效性”上给出独立实测报告。",
+              "【工作流设计】对超过 50 页的尽调材料，仍须采用“结构化切分 + 人工抽检”的复核机制。"
+            ]
+          },
+          {
+            id: "1122-03", badge: "未核实", badgeOutline: true, category: "判例与学术", factLevel: "市场观点",
+            art: "sentencing", sourceDomain: "example.com/academic/sentencing-bias", date: "2026-11-22",
+            title: "算法辅助量刑系统偏见实证研究：类案推送透明度探讨",
+            summary: "学者抽样分析 3000 余份公开裁判文书，评估自动化类案检索工具在不同地区的采纳倾向，指出特征权重不透明可能放大历史量刑偏差。",
+            impact: [
+              "【刑辩与诉讼实务】在涉及类案检索报告的庭审质证中，辩护方可重点关注检索库覆盖范围、时间截点与相似度权重依据。",
+              "【核验提示】该论文处于预印本阶段，抽样口径与地方法院最新系统版本尚未完全核实。"
+            ]
+          },
+          {
+            id: "1122-04", badge: "实务与工具", badgeOutline: false, category: "实务与工具", factLevel: "已证实事实",
+            art: "rag", sourceDomain: "example.com/tools/rag-plugin-v2", date: "2026-11-22",
+            title: "头部律所知识库 RAG 插件灰度测试，支持法条逐句溯源",
+            summary: "插件直接嵌入 Word 合同起草环境，选中条款后自动召回所内脱敏范本与现行有效法规，未命中权威依据时强制拒答以控制幻觉风险。",
+            impact: ["【知识管理团队】“无依据即拒答”的约束机制显著降低了合伙人审稿成本，可作为律所内部 AI 工具验收红线。"]
+          },
+          {
+            id: "1122-05", badge: "监管与合规", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            art: "crossborder", sourceDomain: "example.com/compliance/cross-border", date: "2026-11-22",
+            title: "跨境数据流动合规评估新指引发布，增设法律科技简化通道",
+            summary: "新指引明确了非关键信息基础设施运营者在跨境合同审阅与合规自查场景下的豁免清单，并缩短标准合同备案审查周期。",
+            impact: ["【跨国企业法务】可重新梳理跨境共享的脱敏合同模板与合规清单，评估是否满足简化申报条件。"]
+          },
+          {
+            id: "1122-06", badge: "判例与学术", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            art: "copyright", sourceDomain: "example.com/cases/copyright-tdm", date: "2026-11-22",
+            title: "大模型训练数据著作权案一审落槌，厘清公开抓取合理使用边界",
+            summary: "判决书围绕“转换性使用”与“市场替代效应”两项要件展开论证，明确商业化模型不得以科研豁免规避 robots 协议与付费墙限制。",
+            impact: ["【AI 企业与数据采购】训练语料尽调需留存来源网站 robots.txt 快照与授权链路记录，避免直接抓取付费专业数据库。"]
+          },
+          {
+            id: "1122-07", badge: "行业与资本", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            art: "capital", sourceDomain: "example.com/capital/q4-legaltech", date: "2026-11-22",
+            title: "2026 Q4 LegalTech 投融资观察：垂直合规工作流占比创新高",
+            summary: "季度统计显示，资本正从泛法律聊天机器人撤出，转向深度嵌入 ERP 与 CLM 系统的合同审查、反洗钱与监管自动追踪赛道。",
+            impact: ["【LegalTech 从业者】单纯对话套壳形态已难以续费，护城河正转向“行业工作流深度集成 + 权威结构化法规库”。"]
+          }
+        ]
+      },
+      "2026-11-21": {
+        vol: "VOL.04 NO.325", label: "11-21 昨日",
+        digest: "昨日焦点围绕 AI 专利审查细则与深度伪造音视频举证标准展开，同时 14B 开源法律模型降低了中小律所本地化部署门槛。",
+        items: [
+          {
+            id: "1121-01", badge: "头条", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            art: "watermark", sourceDomain: "example.com/rules/patent-ai-2026", date: "2026-11-21",
+            title: "知识产权局就深度学习算法发明专利审查细则公开征求意见",
+            summary: "征求意见稿细化了 AI 辅助发明的创造性判断基准与说明书充分公开要件，明确模型架构改进在何种情形下构成可专利技术方案。",
+            impact: ["【知产律师与专利代理师】撰写 AI 专利申请文件时，需更详尽披露算法与具体业务场景的耦合关系。"]
+          },
+          {
+            id: "1121-02", badge: "判例与学术", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            art: "sentencing", sourceDomain: "example.com/cases/deepfake-evidence", date: "2026-11-21",
+            title: "多地法院发布深度伪造音视频电子证据审查指南，强化原始载体存证",
+            summary: "指南针对涉案录音录像被质疑经由 AI 换声或合成的情形，明确了当事人的初步举证责任分配及委托司法鉴定的启动门槛。",
+            impact: ["【诉讼律师】日常取证应优先保留原始录制设备及区块链时间戳存证，仅提交转发压缩音频将面临高采信风险。"]
+          },
+          {
+            id: "1121-03", badge: "模型与技术", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            art: "rag", sourceDomain: "example.com/models/open-lex-14b", date: "2026-11-21",
+            title: "14B 参数开源中文法律推理模型发布，单卡部署用于合同初筛",
+            summary: "项目采用 Apache-2.0 许可开源权重，在本地化部署环境下对常见商事合同风险点识别准确率较上一代提升 11%。",
+            impact: ["【律所 IT 与合规】可在断网内网服务器验证合同初筛流程，彻底消除客户文档上传公有云的合规顾虑。"]
+          }
+        ]
+      }
+    };
+
+    let currentDate = "2026-11-22", currentCategory = "全部", currentSearch = "", currentModalItem = null;
+
+    // 缓缓流动 + 拖拽状态控制
+    let railOffset = 0;
+    let isHovered = false;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartOffset = 0;
+    let totalDragDist = 0;
+    const DRIFT_SPEED = 0.42; // 约 25px/s，沉稳舒缓
+
+    function setViewport(mode) {
+      document.body.classList.toggle("mobile-preview", mode === "mobile");
+      document.getElementById("vpDesktop").classList.toggle("active", mode === "desktop");
+      document.getElementById("vpMobile").classList.toggle("active", mode === "mobile");
+      railOffset = 0;
+    }
+
+    function toggleDrawer() {
+      document.getElementById("drawer").classList.toggle("open");
+      document.getElementById("menuBtn").classList.toggle("open");
+    }
+
+    function renderCardHTML(item, isRail = false) {
+      const clickHandler = isRail ? `handleRailCardClick('${item.id}')` : `openModal('${item.id}')`;
+      return `
+        <article class="m-card" onclick="${clickHandler}">
+          <div class="m-card-art-frame">${getIllustration(item.art)}</div>
+          <div class="m-card-head">
+            <h3 class="m-card-title">${item.title}</h3>
+            <span class="m-badge ${item.badgeOutline ? "outline" : ""}">${item.badge}</span>
+          </div>
+          <p class="m-card-summary">${item.summary}</p>
+        </article>
+      `;
+    }
+
+    function renderDigestSlotHTML(ed) {
+      return `
+        <div class="rail-item digest-rail-card">
+          <div class="digest-kicker-row">
+            <div class="digest-kicker">今日综述</div>
+            <span class="digest-draft-tag">AI 初稿</span>
+          </div>
+          <p class="digest-text">${ed.digest}</p>
+          <div class="digest-tip"><strong>TIP!</strong>悬停暂停流动 · 左右拖拽或点击卡片查看详情</div>
+        </div>
+      `;
+    }
+
+    function render() {
+      const ed = EDITIONS[currentDate];
+      document.getElementById("topDateText").textContent = `Beijing · ${currentDate}`;
+      document.getElementById("drawerDates").innerHTML = Object.keys(EDITIONS).map(d =>
+        `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
+      ).join(" ");
+
+      // 构造首屏无缝循环滑轨：初始屏严格呈现 [卡片1] | [今日综述] | [卡片2]，随后承接其余卡片并双倍无缝循环
+      const singleSetParts = [];
+      if (ed.items[0]) singleSetParts.push(`<div class="rail-item">${renderCardHTML(ed.items[0], true)}</div>`);
+      singleSetParts.push(renderDigestSlotHTML(ed));
+      ed.items.slice(1).forEach(item => {
+        singleSetParts.push(`<div class="rail-item">${renderCardHTML(item, true)}</div>`);
+      });
+      const setHTML = singleSetParts.join("");
+      document.getElementById("heroTrack").innerHTML = setHTML + setHTML;
+      railOffset = 0;
+
+      // 下半区分类索引条与三栏全量网格
+      document.getElementById("catList").innerHTML = CATEGORIES.map(cat => {
+        const count = cat === "全部" ? ed.items.length : ed.items.filter(i => i.category === cat).length;
+        return `<button class="cat-btn ${cat === currentCategory ? "active" : ""}" onclick="selectCategory('${cat}')">${cat}<span class="cat-num">${count}</span></button>`;
+      }).join("");
+
+      const q = currentSearch.trim().toLowerCase();
+      const filtered = ed.items.filter(item => {
+        const matchCat = currentCategory === "全部" || item.category === currentCategory;
+        const matchQ = !q || item.title.toLowerCase().includes(q) || item.summary.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
+        return matchCat && matchQ;
+      });
+      document.getElementById("indexMeta").textContent = `${ed.vol} · ${filtered.length} DISPATCHES`;
+
+      const grid = document.getElementById("broadsheetGrid");
+      grid.innerHTML = filtered.length === 0
+        ? `<div class="empty-msg">当前筛选条件下暂无情报，可切换分类或日期查看往期。</div>`
+        : filtered.map(item => `<div class="grid-cell">${renderCardHTML(item, false)}</div>`).join("");
+    }
+
+    // 平滑持续流动动画循环
+    function tickRail() {
+      const track = document.getElementById("heroTrack");
+      if (track && track.scrollWidth > 0) {
+        const half = track.scrollWidth / 2;
+        if (!isHovered && !isDragging) {
+          railOffset += DRIFT_SPEED;
+        }
+        if (railOffset >= half) railOffset -= half;
+        if (railOffset < 0) railOffset += half;
+        track.style.transform = `translate3d(${-railOffset}px, 0, 0)`;
+      }
+      requestAnimationFrame(tickRail);
+    }
+
+    function handleRailCardClick(id) {
+      if (totalDragDist > 6) return; // 拖拽结束不误触弹窗
+      openModal(id);
+    }
+
+    // 绑定首屏轨道的悬停暂停与鼠标/触控双向拖拽
+    const heroVp = document.getElementById("heroViewport");
+    heroVp.addEventListener("mouseenter", () => { isHovered = true; });
+    heroVp.addEventListener("mouseleave", () => { isHovered = false; isDragging = false; heroVp.classList.remove("dragging"); });
+
+    heroVp.addEventListener("pointerdown", (e) => {
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragStartOffset = railOffset;
+      totalDragDist = 0;
+      heroVp.classList.add("dragging");
+      heroVp.setPointerCapture(e.pointerId);
+    });
+    heroVp.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX;
+      totalDragDist = Math.abs(dx);
+      railOffset = dragStartOffset - dx;
+    });
+    heroVp.addEventListener("pointerup", (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      heroVp.classList.remove("dragging");
+      heroVp.releasePointerCapture(e.pointerId);
+    });
+
+    function selectCategory(cat) { currentCategory = cat; render(); }
+    function selectDate(d) { currentDate = d; currentCategory = "全部"; render(); }
+
+    function openModal(id) {
+      const item = EDITIONS[currentDate].items.find(i => i.id === id);
+      if (!item) return;
+      currentModalItem = item;
+      document.getElementById("modalMeta").textContent = `${item.category} · ${item.factLevel} · ${item.date}`;
+      document.getElementById("modalArt").innerHTML = getIllustration(item.art);
+      document.getElementById("modalTitle").textContent = item.title;
+      document.getElementById("modalSummary").textContent = item.summary;
+      document.getElementById("modalImpactList").innerHTML = item.impact.map(line => `<li>${line}</li>`).join("");
+      const srcBtn = document.getElementById("modalSourceBtn");
+      srcBtn.href = `https://${item.sourceDomain}`;
+      srcBtn.textContent = `直达一手信源（${item.sourceDomain}）↗`;
+      document.getElementById("modalCopyBtn").textContent = "复制法律人引用格式";
+      document.getElementById("modalBackdrop").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      document.getElementById("modalBackdrop").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function copyCitation() {
+      if (!currentModalItem) return;
+      const cite = `【LexAIDaily ${currentModalItem.date}｜${currentModalItem.category}】${currentModalItem.title}（${currentModalItem.factLevel}；一手信源：https://${currentModalItem.sourceDomain}）`;
+      navigator.clipboard?.writeText(cite).catch(() => {});
+      const btn = document.getElementById("modalCopyBtn");
+      btn.textContent = "已复制引用格式 ✓";
+      setTimeout(() => { btn.textContent = "复制法律人引用格式"; }, 1800);
+    }
+
+    document.getElementById("searchInput").addEventListener("input", e => { currentSearch = e.target.value; render(); });
+    document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeModal(); });
+
+    render();
+    requestAnimationFrame(tickRail);
+  </script>
+</body>
+</html>

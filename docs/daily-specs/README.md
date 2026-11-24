@@ -18,7 +18,8 @@
 |---|---|---|---|---|---|
 | LD-GOV-01 | 2026-11-04 | 多 Agent 协作规范 V1、协调者手册、模板与状态看板 | B | Claude | [PR #3](https://github.com/fitalex/LexAIDaily/pull/3)（已合并 `3ea52c0`） |
 | LD-GOV-02 | 2026-11-07 | 修订 AGENTS.md 过时表述 | B | Claude | [LD-GOV-02](LD-GOV-02.md)（已合并 `9551b6e`） |
-| LD-GOV-03 | 2026-11-22 | 重组多 Agent 协作架构与治理文档（V2.0：Gemini 接任协调者、GPT 网页版退出、Codex 移出主表、交叉独立审计） | B | Gemini | [LD-GOV-03](LD-GOV-03.md)（Human 豁免审计，D-025/D-026） |
+| LD-GOV-03 | 2026-11-22 | 重组多 Agent 协作架构与治理文档（V2.0：Gemini 接任协调者、GPT 网页版退出、Codex 移出主表、交叉独立审计） | B | Gemini | [LD-GOV-03](LD-GOV-03.md)（PR #22 已合并 `f035894`） |
+| LD-GOV-04 | 2026-11-23 | 收口 GEMINI.md 对话输出与决策规范并清理下游冲突 | B | Gemini | 无独立任务书（[PR #23](https://github.com/fitalex/LexAIDaily/pull/23) 已合并 `1c64319`） |
 | LD-G0-01 | 待定 | README 增加协作规范文档入口（不改定位与路线图段落） | A | Antigravity | 待 LD-GOV-01 生效后发布任务书 |
 | LD-G0-02 | 待定 | ROADMAP.md 入库与 README 对齐（以 ROADMAP 为准，操作员原样提交；D-007） | B（冻结基线） | GPT 网页版（操作员） | [PR #4](https://github.com/fitalex/LexAIDaily/pull/4)（已合并 `0570956`） |
 | LD-G0-03 | 待定 | README 与 ROADMAP 一致性核对（勾选状态、Gate 名称、阶段划分），只出报告不改基线 | A | Claude | 报告已写完，完成确认待 Human；摘要见 [验收清单第三节](../coordination/GATE0_ACCEPTANCE.md) |
@@ -28,8 +29,9 @@
 | LD-G1-01A | 2026-11-11 | 字段表定稿：写入 Human 对三个待决问题的答复（D-016） | A | DeepSeek Harness（D-011） | [LD-G1-01A](LD-G1-01A.md) |
 | LD-G1-02 | 2026-11-09 | 设计系统与 Web 桌面/移动原型 | B | Antigravity（D-012） | [LD-G1-02](LD-G1-02.md)（Human 已授权） |
 | LD-G1-02A | 2026-11-11 | 设计系统与 Web 原型返工（推倒重做） | B | Antigravity（D-012） | [LD-G1-02A](LD-G1-02A.md)（Human 2026-11-11 指示，待其在 PR 中确认） |
-| LD-G1-01B | 2026-11-11 | 字段表 v0.2：卡片字段瘦身、重要度、占位标记 | A | DeepSeek Harness（D-011） | [LD-G1-01B](LD-G1-01B.md)；独立审计待 Human 决定 |
-| LD-G1-02B | 2026-11-11 | 设计系统与 Web 原型第二版（宣纸墨色 × 导航玻璃） | B | Antigravity（D-012） | [LD-G1-02B](LD-G1-02B.md)（取代 02A 的视觉约束；待 Human 确认） |
+| LD-G1-01B | 2026-11-11 | 字段表 v0.2：卡片字段瘦身、重要度、占位标记 | A | DeepSeek Harness（D-011） | [LD-G1-01B](LD-G1-01B.md)（PR #19 已合并 `2307eed`） |
+| LD-G1-02B | 2026-11-11 | 设计系统与 Web 原型第二版（宣纸墨色 × 导航玻璃） | B | Antigravity（D-012） | [LD-G1-02B](LD-G1-02B.md)（PR #16 已合并 `cec7d31`） |
+| LD-G1-02C | 2026-11-23 | 复古报刊风 Design-in-Code HTML 原型与 v2.0 AI 配图规范落地（放弃 Penpot；D-027） | B | DeepSeek Harness（代码线）｜Antigravity（视觉资产线） | [LD-G1-02C](LD-G1-02C.md)（分支 `gemini/ld-g1-02c-spec-sync` 待合并） |
 | LD-G1-03 | 2026-11-09 | 公众号内联排版模板原型（juice 依赖，D-009） | B | DeepSeek Harness（D-011） | [LD-G1-03](LD-G1-03.md)（Human 已授权） |
 | LD-G1-04 | 2026-11-09 | 真实资讯样本集（用于原型填充与 3 分钟扫读评审，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | [LD-G1-04](LD-G1-04.md)；触发 6.1(d) 交叉核验或 Human 豁免 |
 | LD-G1-05 | 2026-11-09 | Gate 1 验收清单（只转写 ROADMAP 既有标准） | A | Gemini（接替 Claude） | [LD-G1-05](LD-G1-05.md) |
