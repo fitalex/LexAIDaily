@@ -3,11 +3,11 @@
 - 任务类型：Design / Engineering
 - 级别：B（理由：变更 Gate 1 设计交付方式——放弃 Penpot 改用 Design-in-Code 静态 HTML/CSS 分层迭代，更新决策 `D-027` 与卡片字段展示分层，需 Human Maintainer 终审验收）
 - 授权来源：B 级：Human Maintainer（2026-11-23 确认放弃 Penpot 路线，定稿 V3.2 复古报刊布局与 v2.0 清透日光厚涂油画自动配图规范）
-- 任务 Owner：DeepSeek Harness（HTML/CSS 分层原型与 `card-fields-v0.md` v0.3 更新）｜Antigravity（按 `design/illustration-spec.md` 生成 5 类基准插画并归档至 `design/ASSETS.md`）
-- 复核者：Gemini（Coordinator）
-- 独立审计：否（仅涉及 Gate 1 前端静态原型、字段说明与视觉资产规范，不触及法务正文发布与后端鉴权）
+- 任务 Owner：Gemini（代码线，Human 2026-11-23 调整：原型设计阶段代码线暂由 Gemini 负责）｜Antigravity（按 `design/illustration-spec.md` 生成 5 类基准插画并归档至 `design/ASSETS.md`）
+- 复核者：Human Maintainer（代码线直接视觉验收）；Gemini（视觉资产线复核）
+- 独立审计：否（代码线由 Human 于 2026-11-23 会话书面豁免 6.1(d) 独立审计：“DeepSeek Harness 不复核了，你出V1，我来视觉验收”；视觉资产线仅涉静态资产规范）
 - Final Approver：Human Maintainer
-- 基准：`main`（执行前由 Owner 记录当前 `HEAD` Commit SHA）｜分支：`ds/ld-g1-02c-miranda-html`（代码线） / `ag/ld-g1-02c-illustrations`（视觉资产线）｜PR：待创建
+- 基准：`main`（执行前由 Owner 记录当前 `HEAD` Commit SHA）｜分支：`gemini/ld-g1-02c-miranda-html`（代码线） / `ag/ld-g1-02c-illustrations`（视觉资产线）｜PR：待创建
 - 所属 Gate：Gate 1｜对应验收标准：完成桌面端与移动端 3 分钟扫读高保真可交互原型、字段规范冻结及视觉资产基线
 - 依赖：`LD-G1-02B`（审计结论）、`design/illustration-spec.md`（已落盘）｜被依赖：`LD-G1-03` 及后续 Gate 2 前端实现
 
@@ -63,7 +63,7 @@
 
 ## 五、验证与证据要求
 
-- **DeepSeek Harness（代码线）必须执行**：
+- **代码线必须执行**：
   - 在无外网/弱网 fallback 下检查中英文字体退化表现；
   - 验证 1440px 桌面端与 375px 移动端零横向滚动条（`document.documentElement.scrollWidth <= window.innerWidth`）；
   - 验证控制台零 JS/CSS 报错，提交 L1–L4 关键状态截图（首屏、列表区、详情弹窗、移动端单栏）。
