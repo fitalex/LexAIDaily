@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V7</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V8</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
@@ -89,14 +89,49 @@
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
     }
-    .top-left {
-      font-family: var(--font-mono);
-      font-size: 12.5px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      color: var(--ink-body);
-      white-space: nowrap;
+    /* 左上角媒体矩阵图标栏（微信 / 小红书 / 抖音 / GitHub） */
+    .social-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
     }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 3px;
+      transition: color 0.18s var(--ease), transform 0.18s var(--ease);
+      cursor: pointer;
+    }
+    .social-link:hover {
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .social-link svg {
+      display: block;
+      height: 18px;
+      width: auto;
+    }
+    .social-toast {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 10px);
+      z-index: 70;
+      background: var(--ink);
+      color: var(--paper-bg);
+      font-family: var(--font-sans-cn);
+      font-size: 11.5px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .social-toast.show { opacity: 1; }
+
     .top-center {
       font-family: var(--font-masthead-cn);
       font-weight: 400;
@@ -123,29 +158,13 @@
     }
     .vp-btn.active { background: var(--ink); color: var(--paper-bg); }
 
+    /* 右上角双横杠菜单入口（已移除旧抽屉，保留为后续扩展板块入口） */
     .menu-btn {
       width: 34px; height: 28px; background: transparent; border: none; cursor: pointer;
       display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 2px;
     }
-    .menu-btn span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: transform 0.25s var(--ease); }
-    .menu-btn.open span:first-child { transform: translateY(3.25px) rotate(12deg); }
-    .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
-
-    /* 顶部抽屉仅保留关键词检索与卷期说明（同款冷压棉纸肌理） */
-    .drawer {
-      display: none; padding: 14px 40px; border-bottom: 1px solid var(--ink);
-      background-color: var(--paper-inset);
-      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
-      background-size: 140px 140px, 485px 485px;
-      background-blend-mode: multiply, multiply;
-      align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
-    }
-    .drawer.open { display: flex; }
-    .drawer-meta { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.04em; color: var(--ink-muted); }
-    .drawer-search {
-      background: transparent; border: none; border-bottom: 1px solid var(--ink);
-      padding: 4px 6px; font-family: var(--font-sans-cn); font-size: 13px; color: var(--ink); width: 260px; outline: none;
-    }
+    .menu-btn span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: background 0.2s; }
+    .menu-btn:hover span { background: var(--accent); }
 
     /* ========== 2. 首屏流动三卡横轨（左右边缘与底部 LEXAI DAILY 严格同宽对齐） ========== */
     .hero-section { padding: 30px 40px 26px; }
@@ -537,11 +556,10 @@
 
     /* ========== 7. 移动端单列适配（375px 零横向溢出） ========== */
     body.mobile-preview .top-bar { padding: 0 14px; height: 62px; }
-    body.mobile-preview .top-left { font-size: 10px; }
-    body.mobile-preview .top-center { font-size: 17px; letter-spacing: 0.04em; }
-    body.mobile-preview .top-center-latin { font-size: 14px; }
-    body.mobile-preview .drawer { padding: 14px 16px; }
-    body.mobile-preview .drawer-search { width: 100%; }
+    body.mobile-preview .social-bar { gap: 7px; }
+    body.mobile-preview .social-link svg { height: 15px; }
+    body.mobile-preview .top-center { font-size: 16px; letter-spacing: 0.04em; }
+    body.mobile-preview .top-center-latin { font-size: 13px; }
     body.mobile-preview .hero-section { padding: 16px 14px 14px; }
     body.mobile-preview .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
     body.mobile-preview .digest-rail-card { padding: 0 16px; }
@@ -561,11 +579,10 @@
 
     @media (max-width: 960px) {
       .top-bar { padding: 0 16px; height: 64px; }
-      .top-left { font-size: 10.5px; }
-      .top-center { font-size: 18px; letter-spacing: 0.04em; }
-      .top-center-latin { font-size: 15px; }
-      .drawer { padding: 14px 16px; }
-      .drawer-search { width: 100%; }
+      .social-bar { gap: 9px; }
+      .social-link svg { height: 15px; }
+      .top-center { font-size: 17px; letter-spacing: 0.04em; }
+      .top-center-latin { font-size: 14px; }
       .hero-section { padding: 18px 16px 16px; }
       .rail-item { flex: 0 0 86%; min-width: 86%; padding: 0 16px; }
       .digest-rail-card { padding: 0 18px; }
@@ -589,23 +606,47 @@
   <div class="stage-wrapper">
     <div class="paper-page">
       <header class="top-bar">
-        <div class="top-left" id="topDateText">BEIJING · 2026-11-22</div>
+        <div class="social-bar" aria-label="媒体矩阵">
+          <!-- 微信 -->
+          <a class="social-link" href="#media-wechat" title="微信公众号（待配置）" aria-label="微信" onclick="showSocialToast(event, '微信公众号链接待配置')">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M9.5 4C5.36 4 2 6.82 2 10.3c0 1.98 1.09 3.74 2.79 4.9L4.1 17.6l2.63-1.32c.87.24 1.8.37 2.77.37.34 0 .68-.02 1.01-.06a5.4 5.4 0 0 1-.26-1.64c0-3.23 2.94-5.85 6.56-5.85.18 0 .35.01.53.02C16.73 6.22 13.45 4 9.5 4zm-2.4 5.1a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.9 1.5c-2.87 0-5.2 2-5.2 4.46 0 2.47 2.33 4.47 5.2 4.47.62 0 1.22-.1 1.77-.27l1.93.98-.52-1.76c1.22-.81 2.02-2.04 2.02-3.42 0-2.46-2.33-4.46-5.2-4.46zm-1.75 3.65a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm3.5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/>
+            </svg>
+          </a>
+          <!-- 小红书 -->
+          <a class="social-link" href="#media-xiaohongshu" title="小红书主页（待配置）" aria-label="小红书" onclick="showSocialToast(event, '小红书主页链接待配置')">
+            <svg viewBox="0 0 38 22" fill="none" aria-hidden="true">
+              <rect x="1" y="1.5" width="36" height="19" rx="3.5" stroke="currentColor" stroke-width="1.6"/>
+              <text x="19" y="14.6" text-anchor="middle" fill="currentColor" font-family="'Noto Sans SC', sans-serif" font-size="9.5" font-weight="700" letter-spacing="0.5">小红书</text>
+            </svg>
+          </a>
+          <!-- 抖音 -->
+          <a class="social-link" href="#media-douyin" title="抖音主页（待配置）" aria-label="抖音" onclick="showSocialToast(event, '抖音主页链接待配置')">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/>
+            </svg>
+          </a>
+          <!-- GitHub -->
+          <a class="social-link" href="https://github.com/fitalex/LexAIDaily" target="_blank" rel="noopener noreferrer" title="GitHub 仓库：fitalex/LexAIDaily" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.54 2.87 8.39 6.84 9.75.5.09.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85 0 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.59.69.49A10.27 10.27 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/>
+            </svg>
+          </a>
+          <div class="social-toast" id="socialToast" role="status" aria-live="polite"></div>
+        </div>
+
         <div class="top-center">法律人的<span class="top-center-latin">AI</span>情报雷达</div>
+
         <div class="top-right">
           <div class="viewport-mini" aria-label="视口切换">
             <button class="vp-btn active" id="vpDesktop" onclick="setViewport('desktop')">桌面</button>
             <button class="vp-btn" id="vpMobile" onclick="setViewport('mobile')">移动</button>
           </div>
-          <button class="menu-btn" id="menuBtn" onclick="toggleDrawer()" aria-label="展开检索栏">
+          <button class="menu-btn" id="menuBtn" type="button" title="更多板块（后续扩展）" aria-label="更多板块入口">
             <span></span><span></span>
           </button>
         </div>
       </header>
-
-      <div class="drawer" id="drawer">
-        <div class="drawer-meta" id="drawerMeta">VOL.04 NO.326 · 7 DISPATCHES</div>
-        <input class="drawer-search" id="searchInput" type="text" placeholder="检索关键词 / 法条 / 模型..." />
-      </div>
 
       <section class="hero-section">
         <div class="hero-rail-viewport" id="heroViewport" aria-label="首屏流动情报与今日综述">
@@ -855,8 +896,9 @@
       }
     };
 
-    let currentDate = "2026-11-22", currentCategory = "全部", currentSearch = "", currentModalItem = null;
+    let currentDate = "2026-11-22", currentCategory = "全部", currentModalItem = null;
     let railOffset = 0, isHovered = false, isDragging = false, dragStartX = 0, dragStartOffset = 0, totalDragDist = 0;
+    let socialToastTimer = null;
     const DRIFT_SPEED = 0.42;
 
     function setViewport(mode) {
@@ -866,9 +908,13 @@
       railOffset = 0;
     }
 
-    function toggleDrawer() {
-      document.getElementById("drawer").classList.toggle("open");
-      document.getElementById("menuBtn").classList.toggle("open");
+    function showSocialToast(e, msg) {
+      e.preventDefault();
+      const toast = document.getElementById("socialToast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(socialToastTimer);
+      socialToastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
     }
 
     function toggleArchivePopover(e) {
@@ -925,7 +971,6 @@
 
     function render() {
       const ed = EDITIONS[currentDate];
-      document.getElementById("topDateText").textContent = `BEIJING · ${currentDate}`;
 
       const singleSetParts = [];
       if (ed.items[0]) singleSetParts.push(`<div class="rail-item">${renderCardHTML(ed.items[0], 0, true)}</div>`);
@@ -956,13 +1001,7 @@
         return `<button class="archive-item ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')"><span>${d} · ${itemEd.label}</span><span>${itemEd.items.length} 条</span></button>`;
       }).join("");
 
-      const q = currentSearch.trim().toLowerCase();
-      const filtered = ed.items.filter(item => {
-        const matchCat = currentCategory === "全部" || item.category === currentCategory;
-        const matchQ = !q || item.title.toLowerCase().includes(q) || item.summary.toLowerCase().includes(q) || item.category.toLowerCase().includes(q);
-        return matchCat && matchQ;
-      });
-      document.getElementById("drawerMeta").textContent = `${ed.vol} · ${filtered.length} DISPATCHES`;
+      const filtered = ed.items.filter(item => currentCategory === "全部" || item.category === currentCategory);
 
       const grid = document.getElementById("broadsheetGrid");
       grid.innerHTML = filtered.length === 0
@@ -1042,7 +1081,6 @@
       setTimeout(() => { btn.textContent = "复制法律人引用格式"; }, 1800);
     }
 
-    document.getElementById("searchInput").addEventListener("input", e => { currentSearch = e.target.value; render(); });
     document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
     document.addEventListener("click", e => {
       if (!e.target.closest(".edition-nav")) closeArchivePopover();
