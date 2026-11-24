@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V10</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V11</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
@@ -34,7 +34,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; background: #B8B0A5; overflow-x: hidden; }
+    html { scroll-behavior: smooth; background: #1D1D1B; overflow-x: hidden; }
     body {
       font-family: var(--font-serif-cn);
       background-color: var(--paper-bg);
@@ -42,6 +42,63 @@
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
       overflow-x: hidden;
+    }
+
+    /* ========== 0. 经典复古报刊开屏动效（底部升起 → 短暂停顿 → 360° 旋入满屏） ========== */
+    body.intro-playing {
+      background-color: #1D1D1B;
+      overflow: hidden;
+      height: 100vh;
+    }
+    body.intro-playing .stage-wrapper {
+      transform-origin: 50% 24vh;
+      will-change: transform;
+      animation: newspaperIntro 2.35s linear forwards;
+    }
+    body.intro-playing .paper-page {
+      outline: 1px solid rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+    }
+    @keyframes newspaperIntro {
+      0% {
+        transform: translate3d(0, 86vh, 0) scale(0.42) rotate(0deg);
+        animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      44% {
+        transform: translate3d(0, -4vh, 0) scale(0.42) rotate(0deg);
+        animation-timing-function: linear;
+      }
+      54% {
+        transform: translate3d(0, -4vh, 0) scale(0.42) rotate(0deg);
+        animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+      }
+      100% {
+        transform: translate3d(0, 0, 0) scale(1) rotate(-360deg);
+      }
+    }
+    @media (max-width: 960px) {
+      @keyframes newspaperIntro {
+        0% {
+          transform: translate3d(0, 82vh, 0) scale(0.56) rotate(0deg);
+          animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        44% {
+          transform: translate3d(0, -2vh, 0) scale(0.56) rotate(0deg);
+          animation-timing-function: linear;
+        }
+        54% {
+          transform: translate3d(0, -2vh, 0) scale(0.56) rotate(0deg);
+          animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+        100% {
+          transform: translate3d(0, 0, 0) scale(1) rotate(-360deg);
+        }
+      }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body.intro-playing { background-color: var(--paper-bg); overflow: auto; height: auto; }
+      body.intro-playing .stage-wrapper { animation: none; transform: none; }
+      body.intro-playing .paper-page { outline: none; pointer-events: auto; }
     }
 
     .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
@@ -611,7 +668,6 @@
       gap: 10px;
       padding: 12px 0;
     }
-    /* 6 项分类排为 3×2 齐整方格，零横向滚动条、零文字截断 */
     body.mobile-preview .cat-list {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -624,7 +680,6 @@
       border: 1px solid var(--rule-light);
       width: 100%;
     }
-    /* 近三天 + 更多日期单行四列等宽对齐 */
     body.mobile-preview .edition-nav {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -651,7 +706,6 @@
     body.mobile-preview .modal-title { font-size: 20px; }
     body.mobile-preview .btn-ink { min-width: 100%; }
 
-    /* 真实移动设备视口（≤960px）与 375px 预览保持同一套清晰排版 */
     @media (max-width: 960px) {
       .top-bar {
         height: auto;
@@ -743,8 +797,8 @@
     }
   </style>
 </head>
-<body>
-  <div class="stage-wrapper">
+<body class="intro-playing">
+  <div class="stage-wrapper" id="stageWrapper">
     <div class="paper-page">
       <header class="top-bar">
         <div class="social-bar" aria-label="媒体矩阵">
@@ -863,6 +917,18 @@
   </div>
 
   <script>
+    /* 开屏复古报刊旋入结束后释放 transform 与滚动锁定 */
+    (function initNewspaperIntro() {
+      const finishIntro = () => document.body.classList.remove("intro-playing");
+      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        finishIntro();
+        return;
+      }
+      const stage = document.getElementById("stageWrapper");
+      stage.addEventListener("animationend", finishIntro, { once: true });
+      setTimeout(finishIntro, 2500);
+    })();
+
     const CATEGORIES = ["全部", "监管与合规", "模型与技术", "实务与工具", "判例与学术", "行业与资本"];
 
     const CATEGORY_SLUG_MAP = {
@@ -1151,7 +1217,7 @@
 
     function tickRail() {
       const track = document.getElementById("heroTrack");
-      if (track && track.scrollWidth > 0) {
+      if (track && track.scrollWidth > 0 && !document.body.classList.contains("intro-playing")) {
         const half = track.scrollWidth / 2;
         if (!isHovered && !isDragging) railOffset += DRIFT_SPEED;
         if (railOffset >= half) railOffset -= half;
