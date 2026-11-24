@@ -19,6 +19,7 @@
 | LD-GOV-01 | 2026-11-04 | 多 Agent 协作规范 V1、协调者手册、模板与状态看板 | B | Claude | [PR #3](https://github.com/fitalex/LexAIDaily/pull/3)（已合并 `3ea52c0`） |
 | LD-GOV-02 | 2026-11-07 | 修订 AGENTS.md 过时表述 | B | Claude | [LD-GOV-02](LD-GOV-02.md)（已合并 `9551b6e`） |
 | LD-GOV-03 | 2026-11-22 | 重组多 Agent 协作架构与治理文档（V2.0：Gemini 接任协调者、GPT 网页版退出、Codex 移出主表、交叉独立审计） | B | Gemini | [LD-GOV-03](LD-GOV-03.md)（PR #22 已合并 `f035894`） |
+| LD-GOV-04 | 2026-11-23 | 收口 GEMINI.md 对话输出与决策规范并清理下游冲突 | B | Gemini | 无独立任务书（[PR #23](https://github.com/fitalex/LexAIDaily/pull/23) 已合并 `1c64319`） |
 | LD-G0-01 | 待定 | README 增加协作规范文档入口（不改定位与路线图段落） | A | Antigravity | 待 LD-GOV-01 生效后发布任务书 |
 | LD-G0-02 | 待定 | ROADMAP.md 入库与 README 对齐（以 ROADMAP 为准，操作员原样提交；D-007） | B（冻结基线） | GPT 网页版（操作员） | [PR #4](https://github.com/fitalex/LexAIDaily/pull/4)（已合并 `0570956`） |
 | LD-G0-03 | 待定 | README 与 ROADMAP 一致性核对（勾选状态、Gate 名称、阶段划分），只出报告不改基线 | A | Claude | 报告已写完，完成确认待 Human；摘要见 [验收清单第三节](../coordination/GATE0_ACCEPTANCE.md) |
