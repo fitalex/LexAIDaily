@@ -325,17 +325,9 @@
       color: var(--accent);
     }
 
-    /* 标题与摘要间极细印刷分隔线 */
-    .m-card-rule {
-      width: 100%;
-      height: 1px;
-      background: var(--rule-light);
-      margin: 10px 0 11px;
-      flex-shrink: 0;
-    }
-
     /* 报刊两端对齐正文摘要（严格 3 行，左右切齐竖栏线） */
     .m-card-summary {
+      margin-top: 10px;
       font-family: var(--font-sans-cn);
       font-size: 13.8px;
       line-height: 1.74;
@@ -772,7 +764,6 @@
             ${placeholderHTML}
           </div>
           <h3 class="m-card-title">${item.title}</h3>
-          <div class="m-card-rule"></div>
           <p class="m-card-summary">${item.summary}</p>
         </article>
       `;
