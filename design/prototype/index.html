@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V6</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V7</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper-bg: #CEC6BC;
-      --paper-inset: #C4BBB0;
-      --paper-modal: #DDD6CC;
+      --paper-bg: #CCC4BA;
+      --paper-inset: #C2B9AE;
+      --paper-modal: #DCD5CB;
       --ink: #1D1D1B;
       --ink-body: #2A2825;
       --ink-muted: #524D46;
@@ -21,9 +21,9 @@
       --accent: #C03F13;
       --accent-text: #F4EDE4;
 
-      /* 方案 B｜复古新闻报刊纸：真实扫描无拼接纸纹（Textured Paper + Natural Paper，CC BY-SA 3.0 via Transparent Textures / Subtle Patterns） */
-      --paper-newsprint: url("https://www.transparenttextures.com/patterns/textured-paper.png");
-      --paper-flecks: url("https://www.transparenttextures.com/patterns/natural-paper.png");
+      /* 方案 A｜手工冷压棉纸：无黑点柔和凹凸冷压肌理 + 细腻棉浆层次（Handmade Paper + Rice Paper 2，CC BY-SA 3.0 via Transparent Textures / Subtle Patterns） */
+      --paper-cotton-relief: url("https://www.transparenttextures.com/patterns/handmade-paper.png");
+      --paper-cotton-pulp: url("https://www.transparenttextures.com/patterns/rice-paper-2.png");
 
       --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
       --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
@@ -48,32 +48,32 @@
     body.mobile-preview { background: #262522; }
     body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
 
-    /* 整张复古新闻报刊纸面：双层错周期无缝真实纸纹（500px × 523px 互质尺寸避免视觉重复） */
+    /* 整张手工冷压棉纸版面：柔和压纹（140px）叠加无黑点棉浆肌理（485px），互质错周期避免视觉重复 */
     .paper-page {
       position: relative;
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
       background-color: var(--paper-bg);
-      background-image: var(--paper-flecks), var(--paper-newsprint);
-      background-size: 523px 384px, 500px 500px;
+      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
+      background-size: 140px 140px, 485px 485px;
       background-repeat: repeat, repeat;
       background-blend-mode: multiply, multiply;
       transition: max-width 0.35s var(--ease);
       overflow-x: hidden;
     }
-    /* 表层极轻纸纹吃墨层：让文字、1px 细线与报头带与新闻纸自然咬合（零投影、零毛玻璃） */
+    /* 表层轻度棉纸吃墨层：让文字、1px 细线与报头带与冷压棉纸自然贴合（零投影、零毛玻璃） */
     .paper-page::after {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 45;
-      background-image: var(--paper-newsprint);
-      background-size: 500px 500px;
+      background-image: var(--paper-cotton-relief);
+      background-size: 140px 140px;
       background-repeat: repeat;
       mix-blend-mode: multiply;
-      opacity: 0.32;
+      opacity: 0.42;
     }
     body.mobile-preview .paper-page {
       max-width: 375px;
@@ -131,12 +131,12 @@
     .menu-btn.open span:first-child { transform: translateY(3.25px) rotate(12deg); }
     .menu-btn.open span:last-child { transform: translateY(-3.25px) rotate(-12deg); }
 
-    /* 顶部抽屉仅保留关键词检索与卷期说明（同款新闻纸肌理） */
+    /* 顶部抽屉仅保留关键词检索与卷期说明（同款冷压棉纸肌理） */
     .drawer {
       display: none; padding: 14px 40px; border-bottom: 1px solid var(--ink);
       background-color: var(--paper-inset);
-      background-image: var(--paper-flecks), var(--paper-newsprint);
-      background-size: 523px 384px, 500px 500px;
+      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
+      background-size: 140px 140px, 485px 485px;
       background-blend-mode: multiply, multiply;
       align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;
     }
@@ -348,7 +348,7 @@
       padding: 15px 0 11px;
       border-top: 2px solid var(--ink);
       border-bottom: 1px solid var(--ink);
-      box-shadow: inset 0 3px 0 0 rgba(206, 198, 188, 0.72), inset 0 4px 0 0 var(--rule-strong);
+      box-shadow: inset 0 3px 0 0 rgba(204, 196, 186, 0.72), inset 0 4px 0 0 var(--rule-strong);
       flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -397,7 +397,7 @@
     .date-more-btn:hover,
     .date-more-btn.open { background: var(--ink); color: var(--paper-bg); border-style: solid; }
 
-    /* 更多日期历史归档弹出面板（同款新闻纸肌理 + 直角 1.5px 黑框，零投影） */
+    /* 更多日期历史归档弹出面板（同款冷压棉纸肌理 + 直角 1.5px 黑框，零投影） */
     .archive-popover {
       display: none;
       position: absolute;
@@ -406,8 +406,8 @@
       z-index: 60;
       width: 280px;
       background-color: var(--paper-modal);
-      background-image: var(--paper-flecks), var(--paper-newsprint);
-      background-size: 523px 384px, 500px 500px;
+      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
+      background-size: 140px 140px, 485px 485px;
       background-blend-mode: multiply, multiply;
       border: 1.5px solid var(--ink);
       padding: 14px 16px;
@@ -457,7 +457,7 @@
     }
     .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 
-    /* ========== 6. 详情剪报弹窗（同款复古新闻纸肌理） ========== */
+    /* ========== 6. 详情剪报弹窗（同款手工冷压棉纸肌理） ========== */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
       display: none; align-items: center; justify-content: center; padding: 20px;
@@ -465,8 +465,8 @@
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
       background-color: var(--paper-modal);
-      background-image: var(--paper-flecks), var(--paper-newsprint);
-      background-size: 523px 384px, 500px 500px;
+      background-image: var(--paper-cotton-relief), var(--paper-cotton-pulp);
+      background-size: 140px 140px, 485px 485px;
       background-blend-mode: multiply, multiply;
       color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
       overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 26px 32px 30px;
@@ -509,8 +509,8 @@
     .impact-box {
       border: 1px dashed var(--ink); border-left: 4px solid var(--ink);
       background-color: var(--paper-bg);
-      background-image: var(--paper-newsprint);
-      background-size: 500px 500px;
+      background-image: var(--paper-cotton-relief);
+      background-size: 140px 140px;
       background-blend-mode: multiply;
       padding: 16px 18px; margin-bottom: 22px;
     }
