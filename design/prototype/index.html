@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V9</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V10</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
@@ -139,6 +139,7 @@
       letter-spacing: 0.08em;
       text-align: center;
       line-height: 1.1;
+      white-space: nowrap;
     }
     .top-center-latin {
       font-family: var(--font-display);
@@ -150,10 +151,11 @@
     }
     .top-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
 
-    .viewport-mini { display: inline-flex; border: 1px solid var(--rule-strong); }
+    .viewport-mini { display: inline-flex; border: 1px solid var(--rule-strong); flex-shrink: 0; }
     .vp-btn {
       background: transparent; border: none; padding: 3px 10px;
       font-family: var(--font-sans-cn); font-size: 11.5px; color: var(--ink-muted); cursor: pointer;
+      white-space: nowrap;
       transition: background 0.2s, color 0.2s;
     }
     .vp-btn.active { background: var(--ink); color: var(--paper-bg); }
@@ -162,6 +164,7 @@
     .menu-btn {
       width: 34px; height: 28px; background: transparent; border: none; cursor: pointer;
       display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 2px;
+      flex-shrink: 0;
     }
     .menu-btn span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: background 0.2s; }
     .menu-btn:hover span { background: var(--accent); }
@@ -374,11 +377,12 @@
     .cat-btn {
       background: transparent; border: 1px solid transparent; color: var(--ink);
       font-family: var(--font-sans-cn); font-size: 13.5px; font-weight: 500;
-      padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: flex-start; gap: 4px;
+      padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
       transition: background 0.18s, color 0.18s, border-color 0.18s;
+      white-space: nowrap;
     }
     .cat-btn:hover { border-color: var(--rule); }
-    .cat-btn.active { background: var(--ink); color: var(--paper-bg); }
+    .cat-btn.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
     .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
 
     /* 第二屏右上角期号切换条（近三天 + 更多日期） */
@@ -389,6 +393,7 @@
       gap: 6px;
       flex-wrap: wrap;
     }
+    .recent-dates-wrap { display: contents; }
     .date-pill {
       background: transparent;
       border: 1px solid var(--rule);
@@ -399,6 +404,7 @@
       cursor: pointer;
       transition: background 0.18s, color 0.18s, border-color 0.18s;
       white-space: nowrap;
+      text-align: center;
     }
     .date-pill:hover { border-color: var(--ink); }
     .date-pill.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
@@ -411,6 +417,7 @@
       color: var(--ink);
       cursor: pointer;
       white-space: nowrap;
+      text-align: center;
       transition: background 0.18s, color 0.18s;
     }
     .date-more-btn:hover,
@@ -553,22 +560,90 @@
     .btn-outline:hover { background: rgba(29, 29, 27, 0.06); }
     .modal-note { font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted); border-top: 1px solid var(--rule-light); padding-top: 10px; line-height: 1.6; }
 
-    /* ========== 7. 移动端单列适配（375px 零横向溢出） ========== */
-    body.mobile-preview .top-bar { padding: 0 14px; height: 62px; }
-    body.mobile-preview .social-bar { gap: 7px; }
-    body.mobile-preview .social-link svg { height: 15px; }
-    body.mobile-preview .top-center { font-size: 16px; letter-spacing: 0.04em; }
-    body.mobile-preview .top-center-latin { font-size: 13px; }
+    /* ========== 7. 移动端精细报刊排版（桌面切换预览 375px） ========== */
+    body.mobile-preview .top-bar {
+      height: auto;
+      padding: 12px 14px 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "title title"
+        "social tools";
+      row-gap: 10px;
+      column-gap: 8px;
+      align-items: center;
+    }
+    body.mobile-preview .top-center {
+      grid-area: title;
+      font-size: 21px;
+      letter-spacing: 0.06em;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--rule-light);
+      width: 100%;
+    }
+    body.mobile-preview .top-center-latin { font-size: 17px; }
+    body.mobile-preview .social-bar {
+      grid-area: social;
+      gap: 12px;
+      justify-self: start;
+    }
+    body.mobile-preview .social-link svg { height: 16px; }
+    body.mobile-preview .top-right {
+      grid-area: tools;
+      gap: 10px;
+      justify-self: end;
+    }
+    body.mobile-preview .vp-btn { padding: 3px 8px; font-size: 11px; }
+    body.mobile-preview .menu-btn { width: 28px; height: 24px; }
+
     body.mobile-preview .hero-section { padding: 16px 14px 14px; }
+    body.mobile-preview .hero-rail-viewport { margin-bottom: 18px; }
     body.mobile-preview .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
-    body.mobile-preview .digest-rail-card { padding: 0 16px; }
-    body.mobile-preview .digest-kicker { font-size: 26px; }
-    body.mobile-preview .digest-text { margin-top: 14px; font-size: 14px; }
-    body.mobile-preview .feed-section { padding: 12px 14px 32px; }
-    body.mobile-preview .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
-    body.mobile-preview .cat-btn { white-space: nowrap; font-size: 13.5px; }
-    body.mobile-preview .edition-nav { width: 100%; justify-content: flex-start; }
-    body.mobile-preview .archive-popover { right: auto; left: 0; width: 100%; }
+    body.mobile-preview .digest-rail-card { padding: 0 14px; }
+    body.mobile-preview .digest-kicker { font-size: 28px; }
+    body.mobile-preview .digest-text { margin-top: 14px; font-size: 14px; line-height: 1.72; }
+    body.mobile-preview .masthead-black-band { padding: 6px 8px 5px; }
+
+    body.mobile-preview .feed-section { padding: 14px 14px 32px; }
+    body.mobile-preview .index-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      padding: 12px 0;
+    }
+    /* 6 项分类排为 3×2 齐整方格，零横向滚动条、零文字截断 */
+    body.mobile-preview .cat-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      width: 100%;
+    }
+    body.mobile-preview .cat-btn {
+      padding: 6px 4px;
+      font-size: 12px;
+      border: 1px solid var(--rule-light);
+      width: 100%;
+    }
+    /* 近三天 + 更多日期单行四列等宽对齐 */
+    body.mobile-preview .edition-nav {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 5px;
+      width: 100%;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule-light);
+    }
+    body.mobile-preview .date-pill {
+      padding: 5px 2px;
+      font-size: 10.5px;
+      letter-spacing: -0.02em;
+    }
+    body.mobile-preview .date-more-btn {
+      padding: 5px 2px;
+      font-size: 11px;
+    }
+    body.mobile-preview .archive-popover { right: 0; left: 0; width: 100%; }
+
     body.mobile-preview .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
     body.mobile-preview .grid-cell { padding: 22px 0; border-right: none; }
     body.mobile-preview .m-card-title { min-height: auto; font-size: 18px; }
@@ -576,25 +651,92 @@
     body.mobile-preview .modal-title { font-size: 20px; }
     body.mobile-preview .btn-ink { min-width: 100%; }
 
+    /* 真实移动设备视口（≤960px）与 375px 预览保持同一套清晰排版 */
     @media (max-width: 960px) {
-      .top-bar { padding: 0 16px; height: 64px; }
-      .social-bar { gap: 9px; }
-      .social-link svg { height: 15px; }
-      .top-center { font-size: 17px; letter-spacing: 0.04em; }
-      .top-center-latin { font-size: 14px; }
-      .hero-section { padding: 18px 16px 16px; }
-      .rail-item { flex: 0 0 86%; min-width: 86%; padding: 0 16px; }
-      .digest-rail-card { padding: 0 18px; }
-      .digest-text { margin-top: 14px; font-size: 14.5px; }
-      .feed-section { padding-left: 16px; padding-right: 16px; }
-      .cat-list { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
-      .cat-btn { white-space: nowrap; font-size: 13.5px; }
-      .edition-nav { width: 100%; justify-content: flex-start; }
-      .archive-popover { right: auto; left: 0; width: 100%; }
-      .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
-      .grid-cell { padding: 24px 0 !important; border-right: none !important; }
-      .m-card-title { min-height: auto; }
+      .top-bar {
+        height: auto;
+        padding: 12px 16px 10px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "title title"
+          "social tools";
+        row-gap: 10px;
+        column-gap: 8px;
+        align-items: center;
+      }
+      .top-center {
+        grid-area: title;
+        font-size: 21px;
+        letter-spacing: 0.06em;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--rule-light);
+        width: 100%;
+      }
+      .top-center-latin { font-size: 17px; }
+      .social-bar {
+        grid-area: social;
+        gap: 14px;
+        justify-self: start;
+      }
+      .social-link svg { height: 16px; }
+      .top-right {
+        grid-area: tools;
+        gap: 10px;
+        justify-self: end;
+      }
       .viewport-mini { display: none; }
+      .menu-btn { width: 28px; height: 24px; }
+
+      .hero-section { padding: 16px 16px 14px; }
+      .hero-rail-viewport { margin-bottom: 18px; }
+      .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
+      .digest-rail-card { padding: 0 14px; }
+      .digest-kicker { font-size: 28px; }
+      .digest-text { margin-top: 14px; font-size: 14.5px; line-height: 1.72; }
+      .masthead-black-band { padding: 6px 8px 5px; }
+
+      .feed-section { padding: 14px 16px 32px; }
+      .index-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 0;
+      }
+      .cat-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        width: 100%;
+      }
+      .cat-btn {
+        padding: 6px 4px;
+        font-size: 12px;
+        border: 1px solid var(--rule-light);
+        width: 100%;
+      }
+      .edition-nav {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+        width: 100%;
+        padding-top: 10px;
+        border-top: 1px solid var(--rule-light);
+      }
+      .date-pill {
+        padding: 5px 2px;
+        font-size: 10.5px;
+        letter-spacing: -0.02em;
+      }
+      .date-more-btn {
+        padding: 5px 2px;
+        font-size: 11px;
+      }
+      .archive-popover { right: 0; left: 0; width: 100%; }
+
+      .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
+      .grid-cell { padding: 22px 0 !important; border-right: none !important; }
+      .m-card-title { min-height: auto; }
       .modal-sheet { padding: 20px 16px; }
       .modal-title { font-size: 21px; }
       .btn-ink { min-width: 100%; }
@@ -666,7 +808,7 @@
         <nav class="index-bar" aria-label="分类与期号筛选">
           <div class="cat-list" id="catList"></div>
           <div class="edition-nav" aria-label="近三天期号与历史归档">
-            <div id="recentDates" style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;"></div>
+            <div class="recent-dates-wrap" id="recentDates"></div>
             <button class="date-more-btn" id="moreDatesBtn" onclick="toggleArchivePopover(event)">更多日期 ▾</button>
             <div class="archive-popover" id="archivePopover">
               <div class="archive-pop-title">
