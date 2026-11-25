@@ -138,13 +138,13 @@ function validateSample(data, sourcePath) {
   return data;
 }
 
-function renderTocInline(items) {
-  const counts = new Map(CATEGORIES.map((name) => [name, 0]));
-  for (const item of items) counts.set(item.category, counts.get(item.category) + 1);
-  return CATEGORY_META.map(
-    (cat) =>
-      `<span class="wx-toc-num">${cat.num}</span> ${escapeHtml(cat.name)}（${counts.get(cat.name)}）`,
-  ).join(' · ');
+function renderTocHeadlines(orderedItems) {
+  return orderedItems
+    .map((item, idx) => {
+      const cls = idx === orderedItems.length - 1 ? 'wx-toc-item-last' : 'wx-toc-item';
+      return `    <p class="${cls}"><span class="wx-toc-num">${escapeHtml(item.num)}</span>&nbsp; ${escapeHtml(item.title)}</p>`;
+    })
+    .join('\n');
 }
 
 function sourceDomainOf(item) {
@@ -165,10 +165,12 @@ function renderItem(item, itemTemplate, { isLead, isLast }) {
     : '';
   const imageBlock = item.image
     ? [
-        '<section class="wx-art-frame">',
-        `  <img class="wx-art-img" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" />`,
+        '<section class="wx-art-wrap">',
+        '  <section class="wx-art-frame">',
+        `    <img class="wx-art-img" src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" />`,
+        '  </section>',
+        '  <p class="wx-art-caption">插画由 AI 生成</p>',
         '</section>',
-        '<p class="wx-art-caption">插画由 AI 生成</p>',
       ].join('\n')
     : '';
 
@@ -212,6 +214,7 @@ function renderDocument(template, sample, imageBase) {
 
   const normalizedImageBase = imageBase.replace(/\/+$/, '');
   const chaptersHtml = [];
+  const orderedItems = [];
   let globalIdx = 0;
 
   for (const cat of CATEGORY_META) {
@@ -223,6 +226,7 @@ function renderDocument(template, sample, imageBase) {
         const isLead = Boolean(item.headline) || globalIdx === 0;
         const isLast = idx === catItems.length - 1;
         globalIdx += 1;
+        orderedItems.push(item);
         return renderItem(item, itemTemplate, { isLead, isLast });
       })
       .join('\n');
@@ -248,26 +252,36 @@ function renderDocument(template, sample, imageBase) {
   const tocSection = [
     '  <section class="wx-toc">',
     '    <p class="wx-toc-head">本期目录 · CONTENTS</p>',
-    `    <p class="wx-toc-line">${renderTocInline(sample.items)}</p>`,
+    renderTocHeadlines(orderedItems),
     '  </section>',
   ].join('\n');
 
-  const digestBlock = meta.digest
+  const digestInner = meta.digest
     ? [
-        '<section class="wx-digest">',
-        '  <p class="wx-digest-head">今日综述<span class="wx-draft-pill">AI 初稿</span></p>',
-        `  <p class="wx-digest-text">${escapeHtml(meta.digest)}</p>`,
+        '  <section class="wx-digest">',
+        '    <p class="wx-digest-head">今日综述<span class="wx-draft-pill">AI 初稿</span></p>',
+        `    <p class="wx-digest-text">${escapeHtml(meta.digest)}</p>`,
         tocSection,
-        '</section>',
+        '  </section>',
       ].join('\n')
     : [
-        '<section class="wx-digest">',
+        '  <section class="wx-digest">',
         tocSection,
-        '</section>',
+        '  </section>',
       ].join('\n');
 
+  const digestBlock = [
+    '<section class="wx-digest-wrap">',
+    digestInner,
+    '</section>',
+  ].join('\n');
+
   const internalBanner = meta.internal
-    ? `<p class="wx-banner">${escapeHtml(meta.internalNote || '内部样稿 · 不对外发布')}</p>`
+    ? [
+        '<section class="wx-banner-wrap">',
+        `  <p class="wx-banner">${escapeHtml(meta.internalNote || '内部样稿 · 不对外发布')}</p>`,
+        '</section>',
+      ].join('\n')
     : '';
 
   const issueNum = (meta.issue || '').replace(/[^\d]/g, '') || '001';

@@ -8,7 +8,7 @@
     /* ============================================================
        LexAIDaily 微信公众号「每日情报简报」模板（LD-G1-03 · NYT 报刊改版）
        视觉基线：与 Web 原型同款暖调新闻纸 #D5C5AE ｜ 卡片衬底 #E2D5C2 ｜ 墨黑 #1D1D1B ｜ 朱红 #C03F13
-       采用双层嵌套 <section> 防止微信编辑器粘贴剥离纸面底色；零 <table>、零固定宽度、零圆角/投影/外部字体。
+       每个子区块均独立声明 background-color: #D5C5AE 与 margin: 0（零间距缝隙），确保微信粘贴剥离外层容器后仍保持整张暖报纸底色；零 <table>、零固定宽度、零圆角/投影/外部字体。
        本文件 CSS 仅作为 juice 内联来源；成品 HTML 不含 <style> 与 class。
        ============================================================ */
     html,
@@ -17,13 +17,9 @@
       padding: 0;
       background-color: #D5C5AE;
     }
-    .wx-outer {
-      margin: 0;
-      padding: 1px 0;
-    }
     .wx-root {
       margin: 0;
-      padding: 14px 14px 22px;
+      padding: 0;
       background-color: #D5C5AE;
       color: #1D1D1B;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
@@ -32,8 +28,14 @@
       text-align: left;
       box-sizing: border-box;
     }
+    .wx-banner-wrap {
+      margin: 0;
+      padding: 12px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-banner {
-      margin: 0 0 10px;
+      margin: 0;
       padding: 6px 10px;
       background-color: #1D1D1B;
       color: #D5C5AE;
@@ -43,9 +45,16 @@
       letter-spacing: 0.12em;
       text-align: center;
     }
+    .wx-folio-wrap {
+      margin: 0;
+      padding: 12px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-folio {
       margin: 0;
       padding: 0 0 7px;
+      background-color: #D5C5AE;
       border-bottom: 1px solid #1D1D1B;
       text-align: center;
     }
@@ -61,8 +70,14 @@
       font-family: ui-monospace, Menlo, Consolas, monospace;
       font-size: 9px;
     }
+    .wx-masthead-wrap {
+      margin: 0;
+      padding: 10px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-masthead {
-      margin: 10px 0 0;
+      margin: 0;
       padding: 12px 10px 10px;
       background-color: #1D1D1B;
       text-align: center;
@@ -84,17 +99,30 @@
       letter-spacing: 0.16em;
       color: #C9B9A3;
     }
+    .wx-rule-wrap {
+      margin: 0;
+      padding: 8px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-double-rule {
-      margin: 8px 0 0;
+      margin: 0;
       padding: 0;
+      background-color: #D5C5AE;
       border-top: 2px solid #1D1D1B;
       border-bottom: 1px solid #1D1D1B;
       height: 3px;
       font-size: 0;
       line-height: 0;
     }
+    .wx-digest-wrap {
+      margin: 0;
+      padding: 12px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-digest {
-      margin: 12px 0 0;
+      margin: 0;
       padding: 12px 13px 12px;
       background-color: #E2D5C2;
       border-top: 1px solid #1D1D1B;
@@ -131,11 +159,12 @@
     }
     .wx-toc {
       margin: 10px 0 0;
-      padding: 8px 0 0;
+      padding: 9px 0 0;
+      background-color: #E2D5C2;
       border-top: 1px solid #BBA992;
     }
     .wx-toc-head {
-      margin: 0 0 4px;
+      margin: 0 0 5px;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
       font-size: 9px;
       font-weight: 700;
@@ -143,26 +172,39 @@
       letter-spacing: 0.14em;
       color: #524D46;
     }
-    .wx-toc-line {
+    .wx-toc-item {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 9.5px;
-      line-height: 1.8;
-      letter-spacing: 0.02em;
-      color: #3D3832;
+      padding: 3px 0;
+      border-bottom: 1px dotted #C4B49D;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
+      font-size: 10.5px;
+      line-height: 1.55;
+      color: #1D1D1B;
+    }
+    .wx-toc-item-last {
+      margin: 0;
+      padding: 3px 0 0;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
+      font-size: 10.5px;
+      line-height: 1.55;
+      color: #1D1D1B;
     }
     .wx-toc-num {
       font-family: ui-monospace, Menlo, Consolas, monospace;
-      color: #C03F13;
+      font-size: 9.5px;
       font-weight: 700;
+      color: #C03F13;
     }
     .wx-chapter {
-      margin: 22px 0 0;
-      padding: 0;
+      margin: 0;
+      padding: 20px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
     }
     .wx-chapter-head {
       margin: 0;
       padding: 8px 0 6px;
+      background-color: #D5C5AE;
       border-top: 2px solid #1D1D1B;
       border-bottom: 1px solid #A89984;
     }
@@ -193,8 +235,13 @@
       letter-spacing: 0.1em;
       color: #5C544B;
     }
+    .wx-art-wrap {
+      margin: 0;
+      padding: 10px 0 0;
+      background-color: #D5C5AE;
+    }
     .wx-art-frame {
-      margin: 10px 0 0;
+      margin: 0;
       padding: 0;
       border: 1px solid #1D1D1B;
       background-color: #C7B69D;
@@ -220,11 +267,13 @@
     .wx-item {
       margin: 0;
       padding: 15px 0 16px;
+      background-color: #D5C5AE;
       border-bottom: 1px solid #A89984;
     }
     .wx-item-last {
       margin: 0;
       padding: 15px 0 6px;
+      background-color: #D5C5AE;
     }
     .wx-kicker {
       margin: 0;
@@ -328,16 +377,28 @@
       color: #24221F;
       text-align: left;
     }
+    .wx-ornament-wrap {
+      margin: 0;
+      padding: 18px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-ornament {
-      margin: 18px 0 0;
+      margin: 0;
       font-size: 9.5px;
       line-height: 1;
       letter-spacing: 0.35em;
       color: #6E655A;
       text-align: center;
     }
+    .wx-readmore-wrap {
+      margin: 0;
+      padding: 14px 14px 0;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-readmore {
-      margin: 14px 0 0;
+      margin: 0;
       padding: 13px 14px 12px;
       background-color: #E2D5C2;
       border-top: 2px solid #1D1D1B;
@@ -378,9 +439,16 @@
       letter-spacing: 0.06em;
       color: #C03F13;
     }
+    .wx-foot-wrap {
+      margin: 0;
+      padding: 14px 14px 20px;
+      background-color: #D5C5AE;
+      box-sizing: border-box;
+    }
     .wx-foot {
-      margin: 14px 0 0;
-      padding: 11px 0 4px;
+      margin: 0;
+      padding: 11px 0 0;
+      background-color: #D5C5AE;
       border-top: 1px solid #A89984;
     }
     .wx-foot-text {
@@ -408,49 +476,61 @@
   </style>
 </head>
 <body>
-  <section class="wx-outer">
-    <section class="wx-root">
-      {{INTERNAL_BANNER}}
+  <section class="wx-root">
+    {{INTERNAL_BANNER}}
+    <section class="wx-folio-wrap">
       <section class="wx-folio">
         <p class="wx-folio-line">{{FOLIO_SLOGAN}} · <span class="wx-folio-mono">{{FOLIO_ISSUE}}</span> · <span class="wx-folio-mono">{{DATE}}</span></p>
       </section>
+    </section>
+    <section class="wx-masthead-wrap">
       <section class="wx-masthead">
         <p class="wx-masthead-title">{{SITE_DISPLAY}}</p>
         <p class="wx-masthead-sub">{{MASTHEAD_SUB}}</p>
       </section>
+    </section>
+    <section class="wx-rule-wrap">
       <section class="wx-double-rule">&nbsp;</section>
-      {{DIGEST_BLOCK}}
-      <!-- CHAPTER_TEMPLATE_START -->
-      <section class="wx-chapter">
-        <section class="wx-chapter-head">
-          <p class="wx-chapter-line"><span class="wx-chapter-sec">{{CHAPTER_SEC}}</span><span class="wx-chapter-cn">{{CHAPTER_CN}}</span><span class="wx-chapter-en">· {{CHAPTER_EN}}</span></p>
-        </section>
+    </section>
+    {{DIGEST_BLOCK}}
+    <!-- CHAPTER_TEMPLATE_START -->
+    <section class="wx-chapter">
+      <section class="wx-chapter-head">
+        <p class="wx-chapter-line"><span class="wx-chapter-sec">{{CHAPTER_SEC}}</span><span class="wx-chapter-cn">{{CHAPTER_CN}}</span><span class="wx-chapter-en">· {{CHAPTER_EN}}</span></p>
+      </section>
+      <section class="wx-art-wrap">
         <section class="wx-art-frame">
           <img class="wx-art-img" src="{{CHAPTER_IMG_SRC}}" alt="{{CHAPTER_CN}} 复古报刊插画" />
         </section>
         <p class="wx-art-caption">{{CHAPTER_CN}}主题版画 · 插画由 AI 生成</p>
-        <!-- ITEM_TEMPLATE_START -->
-        <section class="{{ITEM_WRAP_CLASS}}">
-          <p class="{{ITEM_KICKER_CLASS}}">NO.{{ITEM_NUM}} · {{ITEM_CATEGORY}}{{ITEM_HEADLINE_BADGE}}{{ITEM_UNVERIFIED_BADGE}}</p>
-          <p class="{{ITEM_TITLE_CLASS}}">{{ITEM_TITLE}}</p>
-          <p class="wx-byline">信源 <strong>{{ITEM_SOURCE}}</strong> · {{ITEM_SOURCE_DATE}} · {{ITEM_FACT_LEVEL}} · <span class="wx-domain">{{ITEM_SOURCE_DOMAIN}}</span></p>
-          {{ITEM_IMAGE_BLOCK}}
-          <p class="wx-summary">{{ITEM_SUMMARY}}</p>
-          <section class="wx-impact">
-            <p class="wx-impact-head">实务影响<span class="wx-draft-inline">· AI 初稿</span></p>
-            <p class="wx-impact-text">{{ITEM_IMPACT}}</p>
-          </section>
-        </section>
-        <!-- ITEM_TEMPLATE_END -->
       </section>
-      <!-- CHAPTER_TEMPLATE_END -->
+      <!-- ITEM_TEMPLATE_START -->
+      <section class="{{ITEM_WRAP_CLASS}}">
+        <p class="{{ITEM_KICKER_CLASS}}">NO.{{ITEM_NUM}} · {{ITEM_CATEGORY}}{{ITEM_HEADLINE_BADGE}}{{ITEM_UNVERIFIED_BADGE}}</p>
+        <p class="{{ITEM_TITLE_CLASS}}">{{ITEM_TITLE}}</p>
+        <p class="wx-byline">信源 <strong>{{ITEM_SOURCE}}</strong> · {{ITEM_SOURCE_DATE}} · {{ITEM_FACT_LEVEL}} · <span class="wx-domain">{{ITEM_SOURCE_DOMAIN}}</span></p>
+        {{ITEM_IMAGE_BLOCK}}
+        <p class="wx-summary">{{ITEM_SUMMARY}}</p>
+        <section class="wx-impact">
+          <p class="wx-impact-head">实务影响<span class="wx-draft-inline">· AI 初稿</span></p>
+          <p class="wx-impact-text">{{ITEM_IMPACT}}</p>
+        </section>
+      </section>
+      <!-- ITEM_TEMPLATE_END -->
+    </section>
+    <!-- CHAPTER_TEMPLATE_END -->
+    <section class="wx-ornament-wrap">
       <p class="wx-ornament">— ◆ —</p>
+    </section>
+    <section class="wx-readmore-wrap">
       <section class="wx-readmore">
         <p class="wx-readmore-eyebrow">FULL EDITION &amp; PRIMARY SOURCES</p>
         <p class="wx-readmore-title">查看今日完整版与一手信源</p>
         <p class="wx-readmore-text">本期 {{TOTAL}} 条资讯的完整实务影响锚点与原始信源链接，均已汇总至当日 Web 详情页。</p>
         <p class="wx-readmore-cta">↙ 点击左下角「阅读原文」直达</p>
       </section>
+    </section>
+    <section class="wx-foot-wrap">
       <section class="wx-foot">
         <p class="wx-foot-text">{{DISCLAIMER}}</p>
         <p class="wx-foot-url">Web 详情页占位：{{WEB_URL}}（{{READ_ORIGINAL_NOTE}}）</p>
