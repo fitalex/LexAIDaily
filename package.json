@@ -1,0 +1,16 @@
+{
+  "name": "lexaidaily-wechat-prototype",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）：仅用于把模板样式内联为可粘贴进公众号后台的成品 HTML。",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "build:samples": "node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out design/wechat/samples/ld-g1-04-2026-11-24.html"
+  },
+  "dependencies": {
+    "juice": "12.2.6"
+  }
+}
