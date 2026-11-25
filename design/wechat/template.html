@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{DOC_TITLE}}</title>
+  <style>
+    /* ============================================================
+       LexAIDaily 微信公众号「每日固定栏目」模板（LD-G1-03）
+       视觉基线：design/prototype/index.html 与 D-030
+       暖调新闻纸 #D5C5AE ｜ 印刷墨黑 #1D1D1B ｜ 朱红微标 #C03F13
+       1px 直角细线 ｜ 零毛玻璃 ｜ 零投影 ｜ 零圆角
+       本文件的 CSS 仅作为 juice 内联来源；成品 HTML 不含 <style>。
+       微信公众号不支持外部字体，故全部使用系统字体回退栈。
+       ============================================================ */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #D5C5AE;
+    }
+    .wx-root {
+      margin: 0;
+      padding: 0;
+      background-color: #D5C5AE;
+      color: #1D1D1B;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      text-align: left;
+    }
+    .wx-banner {
+      margin: 0;
+      padding: 7px 12px;
+      background-color: #1D1D1B;
+      color: #F4EDE4;
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: 0.18em;
+      text-align: center;
+    }
+    .wx-head {
+      margin: 0;
+      padding: 22px 20px 15px;
+      border-bottom: 2px solid #1D1D1B;
+      text-align: center;
+    }
+    .wx-site {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: #524D46;
+    }
+    .wx-column {
+      margin: 7px 0 0;
+      font-family: "Songti SC", "STSong", "SimSun", Georgia, serif;
+      font-size: 26px;
+      font-weight: 700;
+      line-height: 1.25;
+      letter-spacing: 0.08em;
+      color: #1D1D1B;
+    }
+    .wx-date {
+      margin: 7px 0 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+      color: #524D46;
+    }
+    .wx-index {
+      margin: 0;
+      padding: 10px 20px 9px;
+      border-bottom: 1px solid #1D1D1B;
+    }
+    .wx-index-label {
+      margin: 0 0 5px;
+      font-size: 10.5px;
+      line-height: 1.5;
+      letter-spacing: 0.16em;
+      color: #524D46;
+    }
+    .wx-index-cats {
+      margin: 0;
+      font-size: 0;
+      line-height: 0;
+    }
+    .wx-cat {
+      display: inline-block;
+      margin: 0 6px 3px 0;
+      padding: 1px 6px;
+      border: 1px solid #C03F13;
+      color: #C03F13;
+      font-size: 10.5px;
+      line-height: 1.55;
+      letter-spacing: 0.04em;
+    }
+    .wx-digest {
+      margin: 0;
+      padding: 13px 20px 15px;
+      border-bottom: 1px solid rgba(29, 29, 27, 0.36);
+    }
+    .wx-digest-head {
+      margin: 0 0 5px;
+      font-family: "Songti SC", "STSong", "SimSun", Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.6;
+      letter-spacing: 0.06em;
+      color: #1D1D1B;
+    }
+    .wx-draft {
+      display: inline-block;
+      margin-left: 6px;
+      padding: 0 4px;
+      border: 1px dashed rgba(29, 29, 27, 0.85);
+      color: #524D46;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      line-height: 1.6;
+      letter-spacing: 0.02em;
+      vertical-align: 1px;
+    }
+    .wx-digest-text {
+      margin: 0;
+      font-family: "Songti SC", "STSong", "SimSun", Georgia, serif;
+      font-size: 15px;
+      line-height: 1.85;
+      color: #2A2825;
+      text-align: justify;
+    }
+    .wx-items {
+      margin: 0;
+      padding: 0 20px;
+    }
+    .wx-item {
+      margin: 0;
+      padding: 17px 0 15px;
+      border-top: 1px solid rgba(29, 29, 27, 0.36);
+    }
+    .wx-meta {
+      margin: 0 0 6px;
+      line-height: 1.8;
+    }
+    .wx-num {
+      margin-right: 8px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      color: #1D1D1B;
+    }
+    .wx-tag {
+      display: inline-block;
+      margin-right: 8px;
+      padding: 1px 7px;
+      background-color: #C03F13;
+      color: #F4EDE4;
+      font-size: 10.5px;
+      font-weight: 600;
+      line-height: 1.6;
+      letter-spacing: 0.06em;
+      vertical-align: 1px;
+    }
+    .wx-tag-headline {
+      background-color: #1D1D1B;
+      color: #F4EDE4;
+    }
+    .wx-tag-unverified {
+      background-color: transparent;
+      border: 1px solid #C03F13;
+      color: #C03F13;
+    }
+    .wx-fact {
+      font-size: 10.5px;
+      letter-spacing: 0.04em;
+      color: #524D46;
+    }
+    .wx-title {
+      margin: 0;
+      font-family: "Songti SC", "STSong", "SimSun", Georgia, serif;
+      font-size: 19px;
+      font-weight: 700;
+      line-height: 1.45;
+      letter-spacing: -0.01em;
+      color: #1D1D1B;
+    }
+    .wx-summary {
+      margin: 8px 0 0;
+      font-size: 15px;
+      line-height: 1.8;
+      color: #2A2825;
+      text-align: justify;
+    }
+    .wx-impact {
+      margin: 11px 0 0;
+      padding: 9px 12px;
+      border: 1px dashed rgba(29, 29, 27, 0.85);
+      border-left: 3px solid #1D1D1B;
+      background-color: #CAB9A0;
+    }
+    .wx-impact-head {
+      margin: 0 0 3px;
+      font-size: 11px;
+      font-weight: 700;
+      line-height: 1.6;
+      letter-spacing: 0.08em;
+      color: #1D1D1B;
+    }
+    .wx-impact-text {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.75;
+      color: #2A2825;
+      text-align: justify;
+    }
+    .wx-source {
+      margin: 9px 0 0;
+      font-size: 11.5px;
+      line-height: 1.6;
+      color: #524D46;
+    }
+    .wx-source strong {
+      color: #1D1D1B;
+      font-weight: 600;
+    }
+    .wx-domain {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 10.5px;
+      letter-spacing: 0.01em;
+      color: #524D46;
+    }
+    .wx-guide {
+      margin: 4px 0 0;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #524D46;
+    }
+    .wx-guide-em {
+      color: #C03F13;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .wx-readmore {
+      margin: 20px 0 0;
+      padding: 15px 17px 14px;
+      border: 1px solid #1D1D1B;
+      background-color: #E2D5C2;
+    }
+    .wx-readmore-title {
+      margin: 0;
+      font-family: "Songti SC", "STSong", "SimSun", Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.1em;
+      color: #1D1D1B;
+    }
+    .wx-readmore-text {
+      margin: 5px 0 0;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #2A2825;
+    }
+    .wx-url {
+      margin: 7px 0 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 11px;
+      line-height: 1.6;
+      color: #1D1D1B;
+      word-break: break-all;
+    }
+    .wx-note {
+      margin: 7px 0 0;
+      font-size: 10.5px;
+      line-height: 1.7;
+      color: #524D46;
+    }
+    .wx-foot {
+      margin: 18px 0 0;
+      padding: 11px 0 8px;
+      border-top: 1px solid #1D1D1B;
+    }
+    .wx-foot-text {
+      margin: 0;
+      font-size: 10.5px;
+      line-height: 1.75;
+      color: #524D46;
+    }
+    .wx-foot-line {
+      margin: 6px 0 0;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 10px;
+      line-height: 1.6;
+      letter-spacing: 0.04em;
+      color: #524D46;
+    }
+  </style>
+</head>
+<body>
+  <section class="wx-root">
+    {{INTERNAL_BANNER}}
+    <section class="wx-head">
+      <p class="wx-site">{{SITE}}</p>
+      <p class="wx-column">{{COLUMN}}</p>
+      <p class="wx-date">{{DATE_LINE}}</p>
+    </section>
+    <section class="wx-index">
+      <p class="wx-index-label">本期分类 · 五类官方标签</p>
+      <p class="wx-index-cats">{{CATEGORY_INDEX}}</p>
+    </section>
+    {{DIGEST_BLOCK}}
+    <section class="wx-items">
+      <!-- ITEM_TEMPLATE_START -->
+      <section class="wx-item">
+        <p class="wx-meta"><span class="wx-num">{{ITEM_NUM}}</span><span class="wx-tag">{{ITEM_CATEGORY}}</span>{{ITEM_HEADLINE_BADGE}}{{ITEM_UNVERIFIED_BADGE}}<span class="wx-fact">{{ITEM_FACT_LEVEL}}</span></p>
+        <p class="wx-title">{{ITEM_TITLE}}</p>
+        <p class="wx-summary">{{ITEM_SUMMARY}}</p>
+        <section class="wx-impact">
+          <p class="wx-impact-head">实务影响<span class="wx-draft">AI 初稿</span></p>
+          <p class="wx-impact-text">{{ITEM_IMPACT}}</p>
+        </section>
+        <p class="wx-source">信源｜<strong>{{ITEM_SOURCE}}</strong>｜{{ITEM_SOURCE_DATE}}｜<span class="wx-domain">{{ITEM_SOURCE_DOMAIN}}</span></p>
+        <p class="wx-guide">{{ITEM_READMORE}}<span class="wx-guide-em"> → 阅读原文</span></p>
+      </section>
+      <!-- ITEM_TEMPLATE_END -->
+      <section class="wx-readmore">
+        <p class="wx-readmore-title">阅读原文</p>
+        <p class="wx-readmore-text">查看本期 {{TOTAL}} 条资讯的完整实务锚点与一手信源。</p>
+        <p class="wx-url">{{WEB_URL}}</p>
+        <p class="wx-note">{{READ_ORIGINAL_NOTE}}</p>
+      </section>
+      <section class="wx-foot">
+        <p class="wx-foot-text">{{DISCLAIMER}}</p>
+        <p class="wx-foot-line">{{FOOTER_LINE}}</p>
+      </section>
+    </section>
+  </section>
+</body>
+</html>
