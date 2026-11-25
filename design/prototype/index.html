@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V14</title>
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V15</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --paper-bg: #CAC2B8;
-      --paper-inset: #C0B7AC;
-      --paper-modal: #DAD3C9;
+      --paper-bg: #C8C0B6;
+      --paper-inset: #BEB5AA;
+      --paper-modal: #D8D1C7;
       --ink: #1D1D1B;
       --ink-body: #2A2825;
       --ink-muted: #524D46;
@@ -21,9 +21,10 @@
       --accent: #C03F13;
       --accent-text: #F4EDE4;
 
-      /* 方案 C｜细腻棉质书页纸：哑光细齿棉纸（Rice Paper 2，CC BY-SA 3.0 via Transparent Textures / Subtle Patterns）+ 极轻天然棉纤维丝 */
-      --paper-book-matte: url("https://www.transparenttextures.com/patterns/rice-paper-2.png");
-      --paper-cotton-wisps: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340' viewBox='0 0 340 340'%3E%3Cg fill='none' stroke='%237D7367' stroke-linecap='round'%3E%3Cpath d='M36 52 Q48 44 58 51' stroke-width='0.65' opacity='0.22'/%3E%3Cpath d='M168 28 Q176 42 169 55' stroke-width='0.6' opacity='0.18'/%3E%3Cpath d='M282 78 Q298 74 309 83' stroke-width='0.65' opacity='0.20'/%3E%3Cpath d='M92 146 Q104 156 98 172' stroke-width='0.6' opacity='0.19'/%3E%3Cpath d='M214 134 Q228 128 242 135' stroke-width='0.55' opacity='0.17'/%3E%3Cpath d='M48 232 Q60 224 74 229' stroke-width='0.6' opacity='0.20'/%3E%3Cpath d='M154 256 Q162 271 174 276' stroke-width='0.65' opacity='0.18'/%3E%3Cpath d='M276 218 Q266 234 273 248' stroke-width='0.6' opacity='0.21'/%3E%3Cpath d='M118 308 Q132 302 144 310' stroke-width='0.55' opacity='0.17'/%3E%3Cpath d='M304 304 Q316 294 326 302' stroke-width='0.6' opacity='0.19'/%3E%3C/g%3E%3C/svg%3E");
+      /* 方案 C 精修｜丝滑热压棉质书页纸（零粗糙颗粒、零外链）：极柔和纸浆呼吸云影 + 稀疏纤细天然棉纤维丝（深浅双色微丝） */
+      --paper-satin-cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.014' numOctaves='3' seed='11' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.38  0 0 0 0 0.34  0 0 0 0 0.29  0 0 0 0.055 0'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23c)'/%3E%3C/svg%3E");
+      --paper-cotton-wisps: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='420' viewBox='0 0 420 420'%3E%3Cg fill='none' stroke-linecap='round'%3E%3Cpath d='M42 58 Q56 47 71 54' stroke='%23887D70' stroke-width='0.6' opacity='0.22'/%3E%3Cpath d='M188 34 Q198 51 190 68' stroke='%23887D70' stroke-width='0.55' opacity='0.18'/%3E%3Cpath d='M328 84 Q348 78 362 90' stroke='%23887D70' stroke-width='0.6' opacity='0.20'/%3E%3Cpath d='M114 166 Q126 181 118 198' stroke='%23887D70' stroke-width='0.55' opacity='0.19'/%3E%3Cpath d='M254 152 Q272 145 289 154' stroke='%23887D70' stroke-width='0.5' opacity='0.17'/%3E%3Cpath d='M56 276 Q72 266 88 273' stroke='%23887D70' stroke-width='0.55' opacity='0.20'/%3E%3Cpath d='M196 298 Q208 318 224 324' stroke='%23887D70' stroke-width='0.6' opacity='0.18'/%3E%3Cpath d='M338 256 Q326 276 335 294' stroke='%23887D70' stroke-width='0.55' opacity='0.21'/%3E%3Cpath d='M142 374 Q160 366 176 376' stroke='%23887D70' stroke-width='0.5' opacity='0.17'/%3E%3Cpath d='M364 366 Q378 354 392 364' stroke='%23887D70' stroke-width='0.55' opacity='0.19'/%3E%3Cpath d='M96 98 Q112 92 124 102' stroke='%23EAE2D8' stroke-width='0.65' opacity='0.30'/%3E%3Cpath d='M266 72 Q258 88 267 101' stroke='%23EAE2D8' stroke-width='0.6' opacity='0.26'/%3E%3Cpath d='M38 196 Q50 208 44 222' stroke='%23EAE2D8' stroke-width='0.6' opacity='0.28'/%3E%3Cpath d='M224 222 Q240 216 254 224' stroke='%23EAE2D8' stroke-width='0.65' opacity='0.26'/%3E%3Cpath d='M302 332 Q292 348 300 362' stroke='%23EAE2D8' stroke-width='0.6' opacity='0.28'/%3E%3C/g%3E%3C/svg%3E");
+      --paper-velvet-tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220' viewBox='0 0 220 220'%3E%3Cfilter id='v' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.48' numOctaves='2' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23v)'/%3E%3C/svg%3E");
 
       --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
       --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
@@ -79,38 +80,38 @@
       body.intro-playing .stage-wrapper,
       body.intro-ready .stage-wrapper { transform: none !important; will-change: auto; }
       body.intro-playing .paper-page { outline: none; pointer-events: auto; }
-      body.intro-playing .paper-page::after { opacity: 0.22; }
+      body.intro-playing .paper-page::after { opacity: 0.032; }
     }
 
     .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
     body.mobile-preview { background: #262522; }
     body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
 
-    /* 整张细腻棉质书页纸面：哑光细齿棉纸（485px）叠加极轻天然棉纤维丝（340px 互质错周期） */
+    /* 整张丝滑棉质书页纸面：温润纸浆云影（512px）+ 稀疏纤细天然棉丝（420px），细腻克制零粗糙 */
     .paper-page {
       position: relative;
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
       background-color: var(--paper-bg);
-      background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
-      background-size: 340px 340px, 485px 485px;
+      background-image: var(--paper-cotton-wisps), var(--paper-satin-cloud);
+      background-size: 420px 420px, 512px 512px;
       background-repeat: repeat, repeat;
-      background-blend-mode: normal, multiply;
       transition: max-width 0.35s var(--ease);
       overflow-x: hidden;
     }
+    /* 表层极微弱天鹅绒哑光质感（3.2%），消除电子屏生硬感但不显颗粒粗糙 */
     .paper-page::after {
       content: "";
       position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 45;
-      background-image: var(--paper-book-matte);
-      background-size: 485px 485px;
+      background-image: var(--paper-velvet-tooth);
+      background-size: 220px 220px;
       background-repeat: repeat;
       mix-blend-mode: multiply;
-      opacity: 0.22;
+      opacity: 0.032;
       transition: opacity 0.45s ease;
     }
     body.mobile-preview .paper-page {
@@ -405,7 +406,7 @@
       padding: 15px 0 11px;
       border-top: 2px solid var(--ink);
       border-bottom: 1px solid var(--ink);
-      box-shadow: inset 0 3px 0 0 rgba(202, 194, 184, 0.72), inset 0 4px 0 0 var(--rule-strong);
+      box-shadow: inset 0 3px 0 0 rgba(200, 192, 182, 0.72), inset 0 4px 0 0 var(--rule-strong);
       flex-wrap: wrap;
     }
     .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
@@ -420,7 +421,6 @@
     .cat-btn.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
     .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
 
-    /* 第二屏右上角期号切换条（近三天完整日报 + 按周精选历史归档） */
     .edition-nav {
       position: relative;
       display: flex;
@@ -459,7 +459,7 @@
     .date-more-btn.open,
     .date-more-btn.active { background: var(--ink); color: var(--paper-bg); border-style: solid; border-color: var(--ink); }
 
-    /* 按周精选历史归档弹出面板（D-029 归档规范：每周仅留存优质精选，其余清理） */
+    /* 按周精选历史归档弹出面板（同款丝滑棉质书页纸 + 直角 1.5px 黑框，零投影） */
     .archive-popover {
       display: none;
       position: absolute;
@@ -468,9 +468,8 @@
       z-index: 60;
       width: 310px;
       background-color: var(--paper-modal);
-      background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
-      background-size: 340px 340px, 485px 485px;
-      background-blend-mode: normal, multiply;
+      background-image: var(--paper-cotton-wisps), var(--paper-satin-cloud);
+      background-size: 420px 420px, 512px 512px;
       border: 1.5px solid var(--ink);
       padding: 14px 16px;
     }
@@ -524,7 +523,7 @@
     }
     .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
 
-    /* ========== 6. 详情剪报弹窗（同款细腻棉质书页纸） ========== */
+    /* ========== 6. 详情剪报弹窗（同款丝滑棉质书页纸） ========== */
     .modal-backdrop {
       position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
       display: none; align-items: center; justify-content: center; padding: 20px;
@@ -532,9 +531,8 @@
     .modal-backdrop.open { display: flex; }
     .modal-sheet {
       background-color: var(--paper-modal);
-      background-image: var(--paper-cotton-wisps), var(--paper-book-matte);
-      background-size: 340px 340px, 485px 485px;
-      background-blend-mode: normal, multiply;
+      background-image: var(--paper-cotton-wisps), var(--paper-satin-cloud);
+      background-size: 420px 420px, 512px 512px;
       color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
       overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 26px 32px 30px;
     }
@@ -576,9 +574,8 @@
     .impact-box {
       border: 1px dashed var(--ink); border-left: 4px solid var(--ink);
       background-color: var(--paper-bg);
-      background-image: var(--paper-book-matte);
-      background-size: 485px 485px;
-      background-blend-mode: multiply;
+      background-image: var(--paper-satin-cloud);
+      background-size: 512px 512px;
       padding: 16px 18px; margin-bottom: 22px;
     }
     .impact-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
@@ -1061,7 +1058,6 @@
           }
         ]
       },
-      /* ===== 按周分类历史精选归档（依 D-029 归档规范：每周仅留存优质情报，其余清理） ===== */
       "2026-W46": {
         vol: "WEEKLY 2026-W46", label: "W46 精选", rangeText: "2026-W46 · 11/09–11/15", isWeekly: true,
         digest: "W46 周度精选归档：本周仅留存 3 条具有长期参考价值的里程碑情报，聚焦跨境数据豁免、开源裁判语料库与大模型著作权规则。",
