@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEXAI DAILY｜法律人的 AI 情报雷达 — Gate 1 复古报刊原型 V15</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,600;0,6..96,800;0,6..96,900;1,6..96,500&family=JetBrains+Mono:wght@400;500&family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@500;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --paper-bg: #D5C5AE;
+      --paper-inset: #CAB9A0;
+      --paper-modal: #E2D5C2;
+      --ink: #1D1D1B;
+      --ink-body: #2A2825;
+      --ink-muted: #524D46;
+      --rule-strong: rgba(29, 29, 27, 0.85);
+      --rule: rgba(29, 29, 27, 0.36);
+      --rule-light: rgba(29, 29, 27, 0.16);
+      --accent: #C03F13;
+      --accent-text: #F4EDE4;
+
+      /* 方案 A 暖调加颗粒版｜欧式复古新闻纸（零外链无缝平铺）：暖赭木浆云影 + 压延纤维肌理 + 明显哑光纸粒 */
+      --paper-pulp-cloud: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'%3E%3Cfilter id='c' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.022' numOctaves='4' seed='14' stitchTiles='stitch' result='n'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.45  0 0 0 0 0.34  0 0 0 0 0.22  0 0 0 0.088 0'/%3E%3C/filter%3E%3Crect width='512' height='512' filter='url(%23c)'/%3E%3C/svg%3E");
+      --paper-pulp-weave: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='360' height='360' viewBox='0 0 360 360'%3E%3Cfilter id='w' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14 0.34' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.38  0 0 0 0 0.28  0 0 0 0 0.18  0 0 0 0.072 0'/%3E%3C/filter%3E%3Crect width='360' height='360' filter='url(%23w)'/%3E%3C/svg%3E");
+      --paper-newsprint-tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240'%3E%3Cfilter id='v' x='0' y='0' width='100%25' height='100%25' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.58' numOctaves='4' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23v)'/%3E%3C/svg%3E");
+
+      --font-display: "Bodoni Moda", Georgia, "Times New Roman", serif;
+      --font-masthead-cn: "Ma Shan Zheng", "Kaiti SC", "STKaiti", "KaiTi", serif;
+      --font-serif-cn: "Noto Serif SC", "Songti SC", "STSong", "SimSun", Georgia, serif;
+      --font-sans-cn: "Noto Sans SC", -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; background: #1D1D1B; overflow-x: hidden; }
+    body {
+      font-family: var(--font-serif-cn);
+      background-color: var(--paper-bg);
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ========== 0. 经典复古报刊 4 秒开屏动效（GPU 合成线程驱动，零卡顿） ========== */
+    body.intro-playing {
+      background-color: #1D1D1B;
+      overflow: hidden;
+      height: 100vh;
+    }
+    body.intro-playing .stage-wrapper {
+      transform-origin: 50% 24vh;
+      will-change: transform;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    body.intro-ready .stage-wrapper {
+      transform: translate3d(0, 94vh, 0) scale(0.40) rotate(0deg);
+    }
+    @media (max-width: 960px) {
+      body.intro-ready .stage-wrapper {
+        transform: translate3d(0, 88vh, 0) scale(0.54) rotate(0deg);
+      }
+    }
+    body.intro-playing .paper-page {
+      outline: 1px solid rgba(255, 255, 255, 0.09);
+      pointer-events: none;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    body.intro-playing .paper-page::after {
+      opacity: 0;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      body.intro-playing,
+      body.intro-ready { background-color: var(--paper-bg); overflow: auto; height: auto; }
+      body.intro-playing .stage-wrapper,
+      body.intro-ready .stage-wrapper { transform: none !important; will-change: auto; }
+      body.intro-playing .paper-page { outline: none; pointer-events: auto; }
+      body.intro-playing .paper-page::after { opacity: 0.095; }
+    }
+
+    .stage-wrapper { width: 100%; transition: padding 0.35s var(--ease); }
+    body.mobile-preview { background: #262522; }
+    body.mobile-preview .stage-wrapper { padding: 24px 14px 56px; display: flex; justify-content: center; }
+
+    /* 方案 A 暖调加颗粒版欧式复古新闻纸：压延木浆纤维（360px）+ 暖赭纸浆云影（512px） */
+    .paper-page {
+      position: relative;
+      width: 100%;
+      max-width: 100%;
+      margin: 0 auto;
+      background-color: var(--paper-bg);
+      background-image: var(--paper-pulp-weave), var(--paper-pulp-cloud);
+      background-size: 360px 360px, 512px 512px;
+      background-repeat: repeat, repeat;
+      transition: max-width 0.35s var(--ease);
+      overflow-x: hidden;
+    }
+    /* 表层新闻纸哑光颗粒纸齿（9.5%），增强真实纸面触感且保持墨黑文字锐利 */
+    .paper-page::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 45;
+      background-image: var(--paper-newsprint-tooth);
+      background-size: 240px 240px;
+      background-repeat: repeat;
+      mix-blend-mode: multiply;
+      opacity: 0.095;
+      transition: opacity 0.45s ease;
+    }
+    body.mobile-preview .paper-page {
+      max-width: 375px;
+      border: 1px solid #4C4842;
+    }
+
+    /* ========== 1. 顶部报眉 ========== */
+    .top-bar {
+      height: 84px;
+      padding: 0 40px;
+      border-bottom: 1px solid var(--rule-strong);
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+    }
+    .social-bar {
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      position: relative;
+    }
+    .social-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      text-decoration: none;
+      padding: 3px;
+      transition: color 0.18s var(--ease), transform 0.18s var(--ease);
+      cursor: pointer;
+    }
+    .social-link:hover {
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+    .social-link svg {
+      display: block;
+      height: 18px;
+      width: auto;
+    }
+    .social-toast {
+      position: absolute;
+      left: 0;
+      top: calc(100% + 10px);
+      z-index: 70;
+      background: var(--ink);
+      color: var(--paper-bg);
+      font-family: var(--font-sans-cn);
+      font-size: 11.5px;
+      padding: 4px 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s var(--ease);
+    }
+    .social-toast.show { opacity: 1; }
+
+    .top-center {
+      font-family: var(--font-masthead-cn);
+      font-weight: 400;
+      font-size: 26px;
+      letter-spacing: 0.08em;
+      text-align: center;
+      line-height: 1.1;
+      white-space: nowrap;
+    }
+    .top-center-latin {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 21px;
+      letter-spacing: 0.02em;
+      margin: 0 3px;
+      vertical-align: 1px;
+    }
+    .top-right { display: flex; justify-content: flex-end; align-items: center; gap: 16px; }
+
+    .viewport-mini { display: inline-flex; border: 1px solid var(--rule-strong); flex-shrink: 0; }
+    .vp-btn {
+      background: transparent; border: none; padding: 3px 10px;
+      font-family: var(--font-sans-cn); font-size: 11.5px; color: var(--ink-muted); cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
+    }
+    .vp-btn.active { background: var(--ink); color: var(--paper-bg); }
+
+    .menu-btn {
+      width: 34px; height: 28px; background: transparent; border: none; cursor: pointer;
+      display: flex; flex-direction: column; justify-content: center; gap: 5px; padding: 2px;
+      flex-shrink: 0;
+    }
+    .menu-btn span { display: block; width: 100%; height: 1.5px; background: var(--ink); transition: background 0.2s; }
+    .menu-btn:hover span { background: var(--accent); }
+
+    /* ========== 2. 首屏流动三卡横轨（左右边缘与底部 LEXAI DAILY 严格同宽对齐） ========== */
+    .hero-section { padding: 30px 40px 26px; }
+    .hero-rail-viewport {
+      width: 100%;
+      overflow: hidden;
+      cursor: grab;
+      user-select: none;
+      margin-bottom: 28px;
+      padding: 4px 0;
+      touch-action: pan-y;
+    }
+    .hero-rail-viewport.dragging { cursor: grabbing; }
+    .hero-rail-track { display: flex; align-items: stretch; will-change: transform; }
+    .rail-item {
+      flex: 0 0 33.3333%;
+      min-width: 33.3333%;
+      padding: 0 28px;
+      border-right: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .digest-rail-card {
+      justify-content: flex-start;
+      align-items: center;
+      text-align: center;
+      gap: 0;
+      padding: 0 34px;
+    }
+    .digest-kicker-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: -3px;
+    }
+    .digest-kicker {
+      font-family: var(--font-serif-cn);
+      font-weight: 900;
+      font-size: clamp(34px, 3.2vw, 48px);
+      line-height: 0.98;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+    }
+    .digest-draft-tag {
+      border: 1px dashed var(--rule-strong);
+      font-family: var(--font-sans-cn);
+      font-size: 10.5px;
+      color: var(--ink-muted);
+      padding: 2px 6px;
+      line-height: 1.2;
+    }
+    .digest-text {
+      margin-top: 22px;
+      font-family: var(--font-serif-cn);
+      font-weight: 500;
+      font-size: 16.5px;
+      line-height: 1.82;
+      color: var(--ink-body);
+      max-width: 32ch;
+      text-align: justify;
+      text-justify: inter-ideograph;
+      text-align-last: center;
+    }
+    .digest-tip {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--rule-light);
+      font-family: var(--font-sans-cn);
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      letter-spacing: 0.03em;
+      width: 100%;
+    }
+    .digest-tip strong { font-family: var(--font-mono); color: var(--ink); margin-right: 5px; }
+
+    /* ========== 3. 报刊印制级卡片 ========== */
+    .m-card { cursor: pointer; display: flex; flex-direction: column; height: 100%; }
+    .m-card-art-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      border: 1px solid var(--rule-strong);
+      border-radius: 0;
+      overflow: hidden;
+      background: #B8B0A5;
+      flex-shrink: 0;
+    }
+    .m-card-art-frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(213, 197, 174, 0.14);
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      transition: opacity 0.45s var(--ease);
+    }
+    .m-card:hover .m-card-art-frame::after { opacity: 0; }
+
+    .m-card-art-img {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: cover;
+      object-position: center;
+      pointer-events: none;
+      filter: sepia(0.11) contrast(1.03) saturate(0.88) brightness(0.96);
+      transition: transform 0.55s var(--ease), filter 0.45s var(--ease);
+    }
+    .m-card-art-fallback { width: 100%; height: 100%; display: none; }
+    .m-card-art-frame.is-fallback .m-card-art-img { display: none; }
+    .m-card-art-frame.is-fallback .m-card-art-fallback { display: block; }
+    .m-card-art-fallback svg { width: 100%; height: 100%; display: block; pointer-events: none; transition: transform 0.55s var(--ease); }
+    .m-card:hover .m-card-art-img {
+      transform: scale(1.035);
+      filter: sepia(0.02) contrast(1.02) saturate(1.02) brightness(1);
+    }
+    .m-card:hover .m-card-art-fallback svg { transform: scale(1.035); }
+
+    .m-card-kicker {
+      margin-top: 14px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+    }
+    .m-kicker-left { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+    .m-kicker-num { color: var(--ink); font-weight: 500; }
+    .m-kicker-cat { font-family: var(--font-sans-cn); font-size: 11.5px; color: var(--ink-muted); letter-spacing: 0.02em; }
+    .m-badge {
+      display: inline-block;
+      background: var(--accent);
+      color: var(--accent-text);
+      font-family: var(--font-sans-cn);
+      font-size: 10.5px;
+      font-weight: 600;
+      padding: 1px 6px;
+      border-radius: 1px;
+      line-height: 1.35;
+      letter-spacing: 0.04em;
+      flex-shrink: 0;
+    }
+    .m-badge.outline { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+    .m-placeholder-tag {
+      font-family: var(--font-sans-cn);
+      font-size: 10.5px;
+      color: var(--ink-muted);
+      letter-spacing: 0.03em;
+      opacity: 0.85;
+      flex-shrink: 0;
+    }
+
+    .m-card-title {
+      margin-top: 8px;
+      font-family: var(--font-serif-cn);
+      font-weight: 700;
+      font-size: 19px;
+      line-height: 1.36;
+      letter-spacing: -0.015em;
+      color: var(--ink);
+      min-height: calc(1.36em * 2);
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      transition: color 0.2s;
+    }
+    .m-card:hover .m-card-title { color: var(--accent); }
+
+    .m-card-summary {
+      margin-top: 10px;
+      font-family: var(--font-sans-cn);
+      font-size: 13.8px;
+      line-height: 1.74;
+      letter-spacing: 0.015em;
+      color: var(--ink-body);
+      text-align: justify;
+      text-justify: inter-ideograph;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* ========== 4. 首屏底部满宽巨型墨黑反白报头带 ========== */
+    .masthead-black-band { width: 100%; background: var(--ink); padding: 10px 14px 8px; display: block; }
+    .masthead-svg { width: 100%; height: auto; display: block; }
+
+    /* ========== 5. 第二屏：左侧分类索引 + 右上角近三日日报与按周历史归档 ========== */
+    .feed-section { padding: 20px 40px 48px; }
+    .index-bar {
+      position: relative;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 15px 0 11px;
+      border-top: 2px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      box-shadow: inset 0 3px 0 0 rgba(213, 197, 174, 0.78), inset 0 4px 0 0 var(--rule-strong);
+      flex-wrap: wrap;
+    }
+    .cat-list { display: flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+    .cat-btn {
+      background: transparent; border: 1px solid transparent; color: var(--ink);
+      font-family: var(--font-sans-cn); font-size: 13.5px; font-weight: 500;
+      padding: 5px 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      white-space: nowrap;
+    }
+    .cat-btn:hover { border-color: var(--rule); }
+    .cat-btn.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .cat-num { font-family: var(--font-mono); font-size: 10px; opacity: 0.72; }
+
+    .edition-nav {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .recent-dates-wrap { display: contents; }
+    .date-pill {
+      background: transparent;
+      border: 1px solid var(--rule);
+      padding: 4px 10px;
+      font-family: var(--font-mono);
+      font-size: 11.5px;
+      color: var(--ink);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, border-color 0.18s;
+      white-space: nowrap;
+      text-align: center;
+    }
+    .date-pill:hover { border-color: var(--ink); }
+    .date-pill.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .date-more-btn {
+      background: transparent;
+      border: 1px dashed var(--rule-strong);
+      padding: 4px 10px;
+      font-family: var(--font-sans-cn);
+      font-size: 12px;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      text-align: center;
+      transition: background 0.18s, color 0.18s;
+    }
+    .date-more-btn:hover,
+    .date-more-btn.open,
+    .date-more-btn.active { background: var(--ink); color: var(--paper-bg); border-style: solid; border-color: var(--ink); }
+
+    /* 按周精选历史归档弹出面板（同款丝滑棉质书页纸 + 直角 1.5px 黑框，零投影） */
+    .archive-popover {
+      display: none;
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      z-index: 60;
+      width: 310px;
+      background-color: var(--paper-modal);
+      background-image: var(--paper-pulp-weave), var(--paper-pulp-cloud);
+      background-size: 360px 360px, 512px 512px;
+      border: 1.5px solid var(--ink);
+      padding: 14px 16px;
+    }
+    .archive-popover.open { display: block; }
+    .archive-pop-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.04em;
+      color: var(--ink-muted);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+    }
+    .archive-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .archive-item {
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+      background: transparent; border: 1px solid var(--rule-light); padding: 7px 10px;
+      font-family: var(--font-mono); font-size: 11.5px; color: var(--ink); cursor: pointer; text-align: left;
+    }
+    .archive-item:hover { border-color: var(--ink); background: rgba(29, 29, 27, 0.05); }
+    .archive-item.active { background: var(--ink); color: var(--paper-bg); border-color: var(--ink); }
+    .archive-count-tag {
+      font-family: var(--font-sans-cn);
+      font-size: 10.5px;
+      opacity: 0.85;
+      white-space: nowrap;
+    }
+    .archive-note { font-family: var(--font-sans-cn); font-size: 11px; color: var(--ink-muted); line-height: 1.55; }
+
+    .broadsheet-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      border-bottom: 2px solid var(--ink);
+      margin-left: -32px;
+      margin-right: -32px;
+    }
+    .grid-cell {
+      padding: 32px 32px 34px;
+      border-right: 1px solid var(--rule);
+      border-bottom: 1px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+    }
+    .grid-cell:nth-child(3n) { border-right: none; }
+    .empty-msg { grid-column: 1 / -1; padding: 54px 32px; text-align: center; font-size: 15px; color: var(--ink-muted); }
+
+    .colophon {
+      padding: 20px 0 8px; display: flex; align-items: center; justify-content: flex-start;
+    }
+    .colophon strong { font-family: var(--font-display); font-size: 16px; color: var(--ink); }
+
+    /* ========== 6. 详情剪报弹窗（同款丝滑棉质书页纸） ========== */
+    .modal-backdrop {
+      position: fixed; inset: 0; background: rgba(29, 29, 27, 0.78); z-index: 300;
+      display: none; align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-sheet {
+      background-color: var(--paper-modal);
+      background-image: var(--paper-pulp-weave), var(--paper-pulp-cloud);
+      background-size: 360px 360px, 512px 512px;
+      color: var(--ink); width: 100%; max-width: 740px; max-height: 90vh;
+      overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 26px 32px 30px;
+    }
+    .modal-top {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 18px;
+      font-family: var(--font-mono); font-size: 12px; color: var(--ink-muted);
+    }
+    .modal-close {
+      background: transparent; border: 1px solid var(--ink); color: var(--ink);
+      padding: 4px 12px; font-family: var(--font-mono); font-size: 12px; cursor: pointer; flex-shrink: 0;
+    }
+    .modal-close:hover { background: var(--ink); color: var(--paper-modal); }
+    .modal-art-wrap { margin-bottom: 18px; }
+    .modal-art {
+      width: 100%;
+      aspect-ratio: 16 / 7;
+      border: 1px solid var(--ink);
+      border-radius: 0;
+      overflow: hidden;
+      background: #B8B0A5;
+    }
+    .modal-art .m-card-art-img { filter: none; }
+    .modal-art-caption {
+      margin-top: 6px;
+      font-family: var(--font-sans-cn);
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .modal-title { font-family: var(--font-serif-cn); font-weight: 700; font-size: 24px; line-height: 1.36; margin-bottom: 14px; }
+    .modal-summary {
+      font-family: var(--font-sans-cn); font-size: 15px; line-height: 1.84; color: var(--ink-body);
+      margin-bottom: 22px; text-align: justify; text-justify: inter-ideograph;
+    }
+
+    .impact-box {
+      border: 1px dashed var(--ink); border-left: 4px solid var(--ink);
+      background-color: var(--paper-bg);
+      background-image: var(--paper-pulp-cloud);
+      background-size: 512px 512px;
+      padding: 16px 18px; margin-bottom: 22px;
+    }
+    .impact-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .impact-head h4 { font-family: var(--font-serif-cn); font-size: 15.5px; font-weight: 700; }
+    .draft-pill { border: 1px dashed var(--ink); font-family: var(--font-sans-cn); font-size: 11px; padding: 1px 6px; color: var(--ink-muted); flex-shrink: 0; }
+    .impact-list { list-style: none; display: flex; flex-direction: column; gap: 8px; font-family: var(--font-sans-cn); font-size: 14px; line-height: 1.72; color: var(--ink-body); }
+    .impact-list li { padding-left: 14px; position: relative; text-align: justify; text-justify: inter-ideograph; }
+    .impact-list li::before { content: "▪"; position: absolute; left: 0; color: var(--accent); }
+
+    .modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .btn-ink {
+      flex: 1; min-width: 220px; background: var(--ink); color: var(--paper-modal);
+      border: 1px solid var(--ink); padding: 12px 18px; text-align: center; text-decoration: none;
+      font-family: var(--font-sans-cn); font-size: 14px; cursor: pointer; word-break: break-all;
+    }
+    .btn-ink:hover { background: var(--accent); border-color: var(--accent); }
+    .btn-outline {
+      background: transparent; color: var(--ink); border: 1px solid var(--ink);
+      padding: 12px 16px; font-family: var(--font-sans-cn); font-size: 13.5px; cursor: pointer;
+    }
+    .btn-outline:hover { background: rgba(29, 29, 27, 0.06); }
+    .modal-note { font-family: var(--font-sans-cn); font-size: 12px; color: var(--ink-muted); border-top: 1px solid var(--rule-light); padding-top: 10px; line-height: 1.6; }
+
+    /* ========== 7. 移动端精细报刊排版（桌面切换预览 375px） ========== */
+    body.mobile-preview .top-bar {
+      height: auto;
+      padding: 12px 14px 10px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-areas:
+        "title title"
+        "social tools";
+      row-gap: 10px;
+      column-gap: 8px;
+      align-items: center;
+    }
+    body.mobile-preview .top-center {
+      grid-area: title;
+      font-size: 21px;
+      letter-spacing: 0.06em;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--rule-light);
+      width: 100%;
+    }
+    body.mobile-preview .top-center-latin { font-size: 17px; }
+    body.mobile-preview .social-bar {
+      grid-area: social;
+      gap: 12px;
+      justify-self: start;
+    }
+    body.mobile-preview .social-link svg { height: 16px; }
+    body.mobile-preview .top-right {
+      grid-area: tools;
+      gap: 10px;
+      justify-self: end;
+    }
+    body.mobile-preview .vp-btn { padding: 3px 8px; font-size: 11px; }
+    body.mobile-preview .menu-btn { width: 28px; height: 24px; }
+
+    body.mobile-preview .hero-section { padding: 16px 14px 14px; }
+    body.mobile-preview .hero-rail-viewport { margin-bottom: 18px; }
+    body.mobile-preview .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
+    body.mobile-preview .digest-rail-card { padding: 0 14px; }
+    body.mobile-preview .digest-kicker { font-size: 28px; }
+    body.mobile-preview .digest-text { margin-top: 14px; font-size: 14px; line-height: 1.72; }
+    body.mobile-preview .masthead-black-band { padding: 6px 8px 5px; }
+
+    body.mobile-preview .feed-section { padding: 14px 14px 32px; }
+    body.mobile-preview .index-bar {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+      padding: 12px 0;
+    }
+    body.mobile-preview .cat-list {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+      width: 100%;
+    }
+    body.mobile-preview .cat-btn {
+      padding: 6px 4px;
+      font-size: 12px;
+      border: 1px solid var(--rule-light);
+      width: 100%;
+    }
+    body.mobile-preview .edition-nav {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 5px;
+      width: 100%;
+      padding-top: 10px;
+      border-top: 1px solid var(--rule-light);
+    }
+    body.mobile-preview .date-pill {
+      padding: 5px 2px;
+      font-size: 10.5px;
+      letter-spacing: -0.02em;
+    }
+    body.mobile-preview .date-more-btn {
+      padding: 5px 2px;
+      font-size: 11px;
+    }
+    body.mobile-preview .archive-popover { right: 0; left: 0; width: 100%; }
+
+    body.mobile-preview .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
+    body.mobile-preview .grid-cell { padding: 22px 0; border-right: none; }
+    body.mobile-preview .m-card-title { min-height: auto; font-size: 18px; }
+    body.mobile-preview .modal-sheet { padding: 18px 16px; }
+    body.mobile-preview .modal-title { font-size: 20px; }
+    body.mobile-preview .btn-ink { min-width: 100%; }
+
+    @media (max-width: 960px) {
+      .top-bar {
+        height: auto;
+        padding: 12px 16px 10px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        grid-template-areas:
+          "title title"
+          "social tools";
+        row-gap: 10px;
+        column-gap: 8px;
+        align-items: center;
+      }
+      .top-center {
+        grid-area: title;
+        font-size: 21px;
+        letter-spacing: 0.06em;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--rule-light);
+        width: 100%;
+      }
+      .top-center-latin { font-size: 17px; }
+      .social-bar {
+        grid-area: social;
+        gap: 14px;
+        justify-self: start;
+      }
+      .social-link svg { height: 16px; }
+      .top-right {
+        grid-area: tools;
+        gap: 10px;
+        justify-self: end;
+      }
+      .viewport-mini { display: none; }
+      .menu-btn { width: 28px; height: 24px; }
+
+      .hero-section { padding: 16px 16px 14px; }
+      .hero-rail-viewport { margin-bottom: 18px; }
+      .rail-item { flex: 0 0 88%; min-width: 88%; padding: 0 14px; }
+      .digest-rail-card { padding: 0 14px; }
+      .digest-kicker { font-size: 28px; }
+      .digest-text { margin-top: 14px; font-size: 14.5px; line-height: 1.72; }
+      .masthead-black-band { padding: 6px 8px 5px; }
+
+      .feed-section { padding: 14px 16px 32px; }
+      .index-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+        padding: 12px 0;
+      }
+      .cat-list {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 6px;
+        width: 100%;
+      }
+      .cat-btn {
+        padding: 6px 4px;
+        font-size: 12px;
+        border: 1px solid var(--rule-light);
+        width: 100%;
+      }
+      .edition-nav {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 5px;
+        width: 100%;
+        padding-top: 10px;
+        border-top: 1px solid var(--rule-light);
+      }
+      .date-pill {
+        padding: 5px 2px;
+        font-size: 10.5px;
+        letter-spacing: -0.02em;
+      }
+      .date-more-btn {
+        padding: 5px 2px;
+        font-size: 11px;
+      }
+      .archive-popover { right: 0; left: 0; width: 100%; }
+
+      .broadsheet-grid { grid-template-columns: 1fr; margin-left: 0; margin-right: 0; }
+      .grid-cell { padding: 22px 0 !important; border-right: none !important; }
+      .m-card-title { min-height: auto; }
+      .modal-sheet { padding: 20px 16px; }
+      .modal-title { font-size: 21px; }
+      .btn-ink { min-width: 100%; }
+    }
+  </style>
+</head>
+<body class="intro-playing intro-ready">
+  <div class="stage-wrapper" id="stageWrapper">
+    <div class="paper-page">
+      <header class="top-bar">
+        <div class="social-bar" aria-label="媒体矩阵">
+          <!-- 微信 -->
+          <a class="social-link" href="#media-wechat" title="微信公众号（待配置）" aria-label="微信" onclick="showSocialToast(event, '微信公众号链接待配置')">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M9.5 4C5.36 4 2 6.82 2 10.3c0 1.98 1.09 3.74 2.79 4.9L4.1 17.6l2.63-1.32c.87.24 1.8.37 2.77.37.34 0 .68-.02 1.01-.06a5.4 5.4 0 0 1-.26-1.64c0-3.23 2.94-5.85 6.56-5.85.18 0 .35.01.53.02C16.73 6.22 13.45 4 9.5 4zm-2.4 5.1a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.8 0a.95.95 0 1 1 0-1.9.95.95 0 0 1 0 1.9zm4.9 1.5c-2.87 0-5.2 2-5.2 4.46 0 2.47 2.33 4.47 5.2 4.47.62 0 1.22-.1 1.77-.27l1.93.98-.52-1.76c1.22-.81 2.02-2.04 2.02-3.42 0-2.46-2.33-4.46-5.2-4.46zm-1.75 3.65a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5zm3.5 0a.75.75 0 1 1 0-1.5.75.75 0 0 1 0 1.5z"/>
+            </svg>
+          </a>
+          <!-- 小红书 -->
+          <a class="social-link" href="#media-xiaohongshu" title="小红书主页（待配置）" aria-label="小红书" onclick="showSocialToast(event, '小红书主页链接待配置')">
+            <svg viewBox="0 0 38 22" fill="none" aria-hidden="true">
+              <rect x="1" y="1.5" width="36" height="19" rx="3.5" stroke="currentColor" stroke-width="1.6"/>
+              <text x="19" y="14.6" text-anchor="middle" fill="currentColor" font-family="'Noto Sans SC', sans-serif" font-size="9.5" font-weight="700" letter-spacing="0.5">小红书</text>
+            </svg>
+          </a>
+          <!-- 抖音 -->
+          <a class="social-link" href="#media-douyin" title="抖音主页（待配置）" aria-label="抖音" onclick="showSocialToast(event, '抖音主页链接待配置')">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M16.6 5.82A4.28 4.28 0 0 1 15.54 3h-3.09v12.4a2.59 2.59 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6 0-1.72 1.66-3.01 3.37-2.48V9.66c-3.45-.46-6.47 2.22-6.47 5.64 0 3.33 2.76 5.7 5.69 5.7 3.14 0 5.69-2.55 5.69-5.7V9.01a7.35 7.35 0 0 0 4.3 1.38V7.3s-1.88.09-3.24-1.48z"/>
+            </svg>
+          </a>
+          <!-- GitHub -->
+          <a class="social-link" href="https://github.com/fitalex/LexAIDaily" target="_blank" rel="noopener noreferrer" title="GitHub 仓库：fitalex/LexAIDaily" aria-label="GitHub">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2C6.48 2 2 6.58 2 12.26c0 4.54 2.87 8.39 6.84 9.75.5.09.68-.22.68-.49 0-.24-.01-.88-.01-1.73-2.78.62-3.37-1.37-3.37-1.37-.45-1.18-1.11-1.5-1.11-1.5-.91-.64.07-.63.07-.63 1 .07 1.53 1.06 1.53 1.06.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.07 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.3.1-2.71 0 0 .84-.28 2.75 1.05A9.38 9.38 0 0 1 12 6.84c.85 0 1.71.12 2.51.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.41.2 2.45.1 2.71.64.72 1.03 1.63 1.03 2.75 0 3.94-2.34 4.81-4.57 5.06.36.32.68.94.68 1.9 0 1.37-.01 2.48-.01 2.82 0 .27.18.59.69.49A10.27 10.27 0 0 0 22 12.26C22 6.58 17.52 2 12 2z"/>
+            </svg>
+          </a>
+          <div class="social-toast" id="socialToast" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="top-center">法律人的<span class="top-center-latin">AI</span>情报雷达</div>
+
+        <div class="top-right">
+          <div class="viewport-mini" aria-label="视口切换">
+            <button class="vp-btn active" id="vpDesktop" onclick="setViewport('desktop')">桌面</button>
+            <button class="vp-btn" id="vpMobile" onclick="setViewport('mobile')">移动</button>
+          </div>
+          <button class="menu-btn" id="menuBtn" type="button" title="更多板块（后续扩展）" aria-label="更多板块入口">
+            <span></span><span></span>
+          </button>
+        </div>
+      </header>
+
+      <section class="hero-section">
+        <div class="hero-rail-viewport" id="heroViewport" aria-label="首屏流动情报与今日综述">
+          <div class="hero-rail-track" id="heroTrack"></div>
+        </div>
+
+        <div class="masthead-black-band" aria-label="LEXAI DAILY 报头">
+          <svg class="masthead-svg" viewBox="0 0 1200 350" preserveAspectRatio="xMidYMid meet">
+            <text x="600" y="312" text-anchor="middle" fill="#D5C5AE"
+              font-family="'Bodoni Moda', Georgia, 'Times New Roman', serif"
+              font-weight="900" font-size="340" letter-spacing="-10"
+              textLength="1166" lengthAdjust="spacingAndGlyphs">LEXAI DAILY</text>
+          </svg>
+        </div>
+      </section>
+
+      <section class="feed-section">
+        <nav class="index-bar" aria-label="分类与期号筛选">
+          <div class="cat-list" id="catList"></div>
+          <div class="edition-nav" aria-label="近三日日报与按周历史归档">
+            <div class="recent-dates-wrap" id="recentDates"></div>
+            <button class="date-more-btn" id="moreDatesBtn" onclick="toggleArchivePopover(event)">历史归档 ▾</button>
+            <div class="archive-popover" id="archivePopover">
+              <div class="archive-pop-title">
+                <span>按周精选归档</span>
+                <span>WEEKLY CURATED</span>
+              </div>
+              <div class="archive-list" id="archiveList"></div>
+              <p class="archive-note">归档规范：近 3 日保留完整日报；超期按周分类归档，每周仅留存高价值优质情报，其余信息直接清理。</p>
+            </div>
+          </div>
+        </nav>
+
+        <div class="broadsheet-grid" id="broadsheetGrid"></div>
+
+        <footer class="colophon">
+          <div><strong>LEXAI DAILY© 2026</strong></div>
+        </footer>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-sheet">
+      <div class="modal-top">
+        <div id="modalMeta"></div>
+        <button class="modal-close" onclick="closeModal()">ESC / 关闭</button>
+      </div>
+      <div class="modal-art-wrap">
+        <div class="modal-art" id="modalArt"></div>
+        <div class="modal-art-caption">
+          <span>插画由 AI 生成（依 D-014 规范登记于 design/ASSETS.md）</span>
+          <span id="modalArtSlug"></span>
+        </div>
+      </div>
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <p class="modal-summary" id="modalSummary"></p>
+
+      <div class="impact-box">
+        <div class="impact-head">
+          <h4>实务影响锚点（执业律师与企业法务视角）</h4>
+          <span class="draft-pill">AI 初稿</span>
+        </div>
+        <ul class="impact-list" id="modalImpactList"></ul>
+      </div>
+
+      <div class="modal-actions">
+        <a class="btn-ink" id="modalSourceBtn" href="#" target="_blank" rel="noopener noreferrer">直达一手信源 ↗</a>
+        <button class="btn-outline" id="modalCopyBtn" onclick="copyCitation()">复制法律人引用格式</button>
+      </div>
+      <p class="modal-note">合规提示：当前原型数据为标注「示例」之虚构占位内容，外链使用保留域名 example.com；标有「AI 初稿」之实务影响仅供初步研判，不构成正式法律意见。</p>
+    </div>
+  </div>
+
+  <script>
+    const CATEGORIES = ["全部", "监管与合规", "模型与技术", "实务与工具", "判例与学术", "行业与资本"];
+
+    const CATEGORY_SLUG_MAP = {
+      "监管与合规": "regulation",
+      "模型与技术": "models",
+      "实务与工具": "practice",
+      "判例与学术": "cases",
+      "行业与资本": "industry"
+    };
+
+    function getBaselineWebpPath(category) {
+      const slug = CATEGORY_SLUG_MAP[category] || "regulation";
+      return `../assets/illustrations/baseline-${slug}-v2.webp`;
+    }
+
+    function getFallbackIllustrationSVG(category) {
+      const slug = CATEGORY_SLUG_MAP[category] || "regulation";
+      const arts = {
+        regulation: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#8FAEE0"/><polygon points="240,0 480,0 480,210 190,210" fill="#FFF2B8" fill-opacity="0.72"/><rect x="292" y="92" width="118" height="72" fill="#F5EFE2" stroke="#D9CEB8" stroke-width="2"/><circle cx="384" cy="146" r="19" fill="#C95224"/></svg>`,
+        models: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#8AA4B8"/><ellipse cx="345" cy="126" rx="120" ry="56" fill="#FFE0C2" fill-opacity="0.65"/><polygon points="332,54 388,154 276,154" fill="#E9F5FF" fill-opacity="0.7" stroke="#FFFFFF" stroke-width="1.8"/></svg>`,
+        practice: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#E7C6C8"/><polygon points="255,0 480,0 480,210 210,210" fill="#FFF7DF" fill-opacity="0.75"/><rect x="288" y="96" width="130" height="74" fill="#FBF6EA" stroke="#DFD4C0" stroke-width="1.6"/></svg>`,
+        cases: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#A8C4B4"/><polygon points="250,0 480,0 480,210 205,210" fill="#FFE4AE" fill-opacity="0.72"/><g stroke="#B8893D" stroke-width="2.2" fill="none"><line x1="356" y1="54" x2="356" y2="162"/><line x1="306" y1="80" x2="406" y2="74"/></g></svg>`,
+        industry: `<svg viewBox="0 0 480 210" xmlns="http://www.w3.org/2000/svg"><rect width="480" height="210" fill="#B9A6C9"/><polygon points="245,0 480,0 480,210 198,210" fill="#FFE39E" fill-opacity="0.75"/><path d="M332 104 Q324 166 356 168 Q388 166 380 104 Z" fill="#C95A2B"/></svg>`
+      };
+      return arts[slug] || arts.regulation;
+    }
+
+    function renderArtFrameHTML(category, altText) {
+      const src = getBaselineWebpPath(category);
+      const fallback = getFallbackIllustrationSVG(category);
+      return `
+        <img class="m-card-art-img" src="${src}" alt="${altText}" loading="lazy"
+          onerror="this.parentElement.classList.add('is-fallback')" />
+        <div class="m-card-art-fallback" aria-hidden="true">${fallback}</div>
+      `;
+    }
+
+    const RECENT_KEYS = ["2026-11-22", "2026-11-21", "2026-11-20"];
+    const WEEKLY_ARCHIVE_KEYS = ["2026-W46", "2026-W45", "2026-W44"];
+
+    const EDITIONS = {
+      "2026-11-22": {
+        vol: "VOL.04 NO.326", label: "11-22 今日", isWeekly: false,
+        digest: "今日聚焦生成内容双轨标识新规与多模态法律推理评测——合规重点正从原则宣示落向水印留痕，律所工具全面转向“无依据即拒答”的幻觉审计。",
+        items: [
+          {
+            id: "1122-01", badge: "头条", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/rules/2026/aic-01", date: "2026-11-22",
+            title: "某法域生成内容标识管理办法公布，明确多模态双轨标注义务",
+            summary: "新规对面向公众的生成式 AI 服务确立全流程显式与隐式标识标准，要求在音视频与文本显著位置附带人类可见提示，并在底层写入机器可读追溯水印。",
+            impact: [
+              "【平台与企业法务】需在 90 天过渡期内同步更新用户协议、API 接入免责条款及下游传播方责任分担机制。",
+              "【技术合规协同】隐式水印需通过压缩与截断鲁棒性测试，建议联合安全团队留存生成日志作为尽职免责证据链。"
+            ]
+          },
+          {
+            id: "1122-02", badge: "", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/benchmarks/legal-mm-2026", date: "2026-11-22",
+            title: "多模态中文法律推理基准发布，纳入 1200 份真实庭审笔录",
+            summary: "研究团队公开覆盖合同审查、证据链核验与诉讼推演的新一代评测集，实测显示主流大模型在跨页表格引用与多跳法条推理上幻觉率仍高于 14%。",
+            impact: [
+              "【律所选型参考】采购法律大模型时应要求供应商在“跨页证据核验”与“法条现行有效性”上给出独立实测报告。",
+              "【工作流设计】对超过 50 页的尽调材料，仍须采用“结构化切分 + 人工抽检”的复核机制。"
+            ]
+          },
+          {
+            id: "1122-03", badge: "未核实", badgeOutline: true, category: "判例与学术", factLevel: "市场观点",
+            placeholder: true, sourceDomain: "example.com/academic/sentencing-bias", date: "2026-11-22",
+            title: "算法辅助量刑系统偏见实证研究：类案推送透明度探讨",
+            summary: "学者抽样分析 3000 余份公开裁判文书，评估自动化类案检索工具在不同地区的采纳倾向，指出特征权重不透明可能放大历史量刑偏差。",
+            impact: [
+              "【刑辩与诉讼实务】在涉及类案检索报告的庭审质证中，辩护方可重点关注检索库覆盖范围、时间截点与相似度权重依据。",
+              "【核验提示】该论文处于预印本阶段，抽样口径与地方法院最新系统版本尚未完全核实。"
+            ]
+          },
+          {
+            id: "1122-04", badge: "", badgeOutline: false, category: "实务与工具", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/tools/rag-plugin-v2", date: "2026-11-22",
+            title: "头部律所知识库 RAG 插件灰度测试，支持法条逐句溯源",
+            summary: "插件直接嵌入 Word 合同起草环境，选中条款后自动召回所内脱敏范本与现行有效法规，未命中权威依据时强制拒答以控制幻觉风险。",
+            impact: ["【知识管理团队】“无依据即拒答”的约束机制显著降低了合伙人审稿成本，可作为律所内部 AI 工具验收红线。"]
+          },
+          {
+            id: "1122-05", badge: "", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/compliance/cross-border", date: "2026-11-22",
+            title: "跨境数据流动合规评估新指引发布，增设法律科技简化通道",
+            summary: "新指引明确了非关键信息基础设施运营者在跨境合同审阅与合规自查场景下的豁免清单，并缩短标准合同备案审查周期。",
+            impact: ["【跨国企业法务】可重新梳理跨境共享的脱敏合同模板与合规清单，评估是否满足简化申报条件。"]
+          },
+          {
+            id: "1122-06", badge: "", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/cases/copyright-tdm", date: "2026-11-22",
+            title: "大模型训练数据著作权案一审落槌，厘清公开抓取合理使用边界",
+            summary: "判决书围绕“转换性使用”与“市场替代效应”两项要件展开论证，明确商业化模型不得以科研豁免规避 robots 协议与付费墙限制。",
+            impact: ["【AI 企业与数据采购】训练语料尽调需留存来源网站 robots.txt 快照与授权链路记录，避免直接抓取付费专业数据库。"]
+          },
+          {
+            id: "1122-07", badge: "", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            placeholder: true, sourceDomain: "example.com/capital/q4-legaltech", date: "2026-11-22",
+            title: "2026 Q4 LegalTech 投融资观察：垂直合规工作流占比创新高",
+            summary: "季度统计显示，资本正从泛法律聊天机器人撤出，转向深度嵌入 ERP 与 CLM 系统的合同审查、反洗钱与监管自动追踪赛道。",
+            impact: ["【LegalTech 从业者】单纯对话套壳形态已难以续费，护城河正转向“行业工作流深度集成 + 权威结构化法规库”。"]
+          }
+        ]
+      },
+      "2026-11-21": {
+        vol: "VOL.04 NO.325", label: "11-21 昨日", isWeekly: false,
+        digest: "昨日焦点围绕 AI 专利审查细则与深度伪造音视频举证标准展开，同时 14B 开源法律模型降低了中小律所本地化部署门槛。",
+        items: [
+          {
+            id: "1121-01", badge: "头条", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/rules/patent-ai-2026", date: "2026-11-21",
+            title: "知识产权局就深度学习算法发明专利审查细则公开征求意见",
+            summary: "征求意见稿细化了 AI 辅助发明的创造性判断基准与说明书充分公开要件，明确模型架构改进在何种情形下构成可专利技术方案。",
+            impact: ["【知产律师与专利代理师】撰写 AI 专利申请文件时，需更详尽披露算法与具体业务场景的耦合关系。"]
+          },
+          {
+            id: "1121-02", badge: "", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/cases/deepfake-evidence", date: "2026-11-21",
+            title: "多地法院发布深度伪造音视频电子证据审查指南，强化原始载体存证",
+            summary: "指南针对涉案录音录像被质疑经由 AI 换声或合成的情形，明确了当事人的初步举证责任分配及委托司法鉴定的启动门槛。",
+            impact: ["【诉讼律师】日常取证应优先保留原始录制设备及区块链时间戳存证，仅提交转发压缩音频将面临高采信风险。"]
+          },
+          {
+            id: "1121-03", badge: "", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/models/open-lex-14b", date: "2026-11-21",
+            title: "14B 参数开源中文法律推理模型发布，单卡部署用于合同初筛",
+            summary: "项目采用 Apache-2.0 许可开源权重，在本地化部署环境下对常见商事合同风险点识别准确率较上一代提升 11%。",
+            impact: ["【律所 IT 与合规】可在断网内网服务器验证合同初筛流程，彻底消除客户文档上传公有云的合规顾虑。"]
+          }
+        ]
+      },
+      "2026-11-20": {
+        vol: "VOL.04 NO.324", label: "11-20 前日", isWeekly: false,
+        digest: "前日关注律协发布生成式 AI 执业伦理指引与法务合同生命周期自动对标工具，合规披露正成为律师代理协议新标配。",
+        items: [
+          {
+            id: "1120-01", badge: "头条", badgeOutline: false, category: "实务与工具", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/bar/ai-ethics-2026", date: "2026-11-20",
+            title: "某地律师协会发布生成式 AI 辅助执业指引，明确客户知情同意边界",
+            summary: "指引要求律所在使用外部大模型处理案卷前完成脱敏评估，并明确律师对 AI 生成法律检索意见承担最终核验责任。",
+            impact: ["【律所合伙人】建议在委托代理合同中增设 AI 工具使用披露与保密条款，统一所内脱敏操作底线。"]
+          },
+          {
+            id: "1120-02", badge: "", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            placeholder: true, sourceDomain: "example.com/capital/clm-consolidation", date: "2026-11-20",
+            title: "企业法务 CLM 平台加速并购整合，合同履约追踪成核心溢价点",
+            summary: "行业观察指出，单纯提供条款比对的独立插件估值承压，能与财务与采购审批流直连的履约风控平台获得更高续费率。",
+            impact: ["【企业总法律顾问】采购法务数字化系统时可优先考察与现有 ERP/OA 系统的双向集成能力。"]
+          },
+          {
+            id: "1120-03", badge: "", badgeOutline: false, category: "监管与合规", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/rules/ai-audit-standard", date: "2026-11-20",
+            title: "金融与医疗高风险 AI 算法年度合规审计标准草案公开",
+            summary: "草案细化了自动化决策可解释性文档与偏见复测频次要求，明确第三方合规审计机构的独立性门槛。",
+            impact: ["【合规业务律师】高风险行业算法年度审计有望形成周期性专项法律服务需求。"]
+          }
+        ]
+      },
+      "2026-W46": {
+        vol: "WEEKLY 2026-W46", label: "W46 精选", rangeText: "2026-W46 · 11/09–11/15", isWeekly: true,
+        digest: "W46 周度精选归档：本周仅留存 3 条具有长期参考价值的里程碑情报，聚焦跨境数据豁免、开源裁判语料库与大模型著作权规则。",
+        items: [
+          {
+            id: "w46-01", badge: "周度精选", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w46/legal-corpus", date: "2026-11-14",
+            title: "法学院联合发布结构化裁判要旨开源语料库，覆盖商事与知产纠纷",
+            summary: "语料库按争议焦点、裁判理由与法条引用三层结构进行人工校对，供学术研究与低幻觉检索评测免费使用。",
+            impact: ["【法律研究者与 LegalTech 团队】可直接复用该开源标注体例构建内部高质量检索评测集。"]
+          },
+          {
+            id: "w46-02", badge: "周度精选", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/archive/w46/eu-ai-compliance", date: "2026-11-12",
+            title: "欧盟通用人工智能模型合规行为准则最终版公布，明确版权摘要披露模板",
+            summary: "准则要求通用大模型提供方公开训练数据来源类别摘要，并建立面向权利人的标准化申诉与撤回响应通道。",
+            impact: ["【涉外合规律师】出海 AI 产品须提前对照行为准则准备训练语料披露清单与版权合规档案。"]
+          },
+          {
+            id: "w46-03", badge: "周度精选", badgeOutline: false, category: "实务与工具", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w46/ediscovery-eval", date: "2026-11-10",
+            title: "跨国诉讼电子取证 AI 审阅白皮书发布，建立抽样复核置信度门槛",
+            summary: "白皮书结合多起大型商事仲裁经验，提出 AI 辅助电子证据初筛后的分层随机抽样比例与可审计日志规范。",
+            impact: ["【争议解决律师】在向仲裁庭说明 AI 辅助取证流程时，可直接援引该抽样验证框架增强程序正当性。"]
+          }
+        ]
+      },
+      "2026-W45": {
+        vol: "WEEKLY 2026-W45", label: "W45 精选", rangeText: "2026-W45 · 11/02–11/08", isWeekly: true,
+        digest: "W45 周度精选归档：本周精选留存 2 条高价值情报，涵盖生成式 AI 侵权举证分配与企业法务隐私计算部署实践。",
+        items: [
+          {
+            id: "w45-01", badge: "周度精选", badgeOutline: false, category: "判例与学术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w45/ai-tort-burden", date: "2026-11-06",
+            title: "互联网法院就 AI 生成内容人格权侵权案确立平台过错分层认定标准",
+            summary: "判决区分基础模型提供方与应用分发平台的注意义务边界，明确接到有效通知后的合理处置时限与显著标识抗辩条件。",
+            impact: ["【平台法务与诉讼律师】建议对照判决要点完善侵权投诉工单响应 SLA 与生成内容显著提示位置。"]
+          },
+          {
+            id: "w45-02", badge: "周度精选", badgeOutline: false, category: "模型与技术", factLevel: "已证实事实",
+            placeholder: true, sourceDomain: "example.com/archive/w45/private-rag-bench", date: "2026-11-04",
+            title: "面向律所内网的零数据留存合同审查评测框架开源",
+            summary: "框架提供 400 份脱敏商事合同对照集，重点评估本地化模型在违约金、管辖条款与知识产权归属条款上的漏检率。",
+            impact: ["【律所技术负责人】可用于内部 POC 选型对比，量化不同开源模型在关键风险条款上的召回表现。"]
+          }
+        ]
+      },
+      "2026-W44": {
+        vol: "WEEKLY 2026-W44", label: "W44 精选", rangeText: "2026-W44 · 10/26–11/01", isWeekly: true,
+        digest: "W44 周度精选归档：本周精选留存 2 条长期有效情报，聚焦法律科技采购合规清单与 AI 代理签约效力探讨。",
+        items: [
+          {
+            id: "w44-01", badge: "周度精选", badgeOutline: false, category: "监管与合规", factLevel: "官方数据",
+            placeholder: true, sourceDomain: "example.com/archive/w44/agent-contract", date: "2026-10-30",
+            title: "商事法学界发布 AI Agent 自动化缔约意思表示效力研究报告",
+            summary: "报告系统梳理了授权边界明确与越权下单两类情形下，智能体代为签署标准采购订单的表见代理认定路径。",
+            impact: ["【公司法务】在接入自动化采购 Agent 前，应在平台协议中明确单笔金额上限与人工二次确认触发阈值。"]
+          },
+          {
+            id: "w44-02", badge: "周度精选", badgeOutline: false, category: "行业与资本", factLevel: "市场观点",
+            placeholder: true, sourceDomain: "example.com/archive/w44/legaltech-pricing", date: "2026-10-28",
+            title: "年度法律科技订阅定价趋势：按席位收费正加速转向按案件工作流计费",
+            summary: "调研覆盖 180 家大中型律所，指出传统 SaaS 席位制难以体现 AI 审查效率差异，基于文档量与审阅深度的弹性计费接受度上升。",
+            impact: ["【律所管委会】续签法律科技年度合同时可要求供应商提供基于实际用量的阶梯报价方案。"]
+          }
+        ]
+      }
+    };
+
+    let currentDate = "2026-11-22", currentCategory = "全部", currentModalItem = null;
+    let railOffset = 0, isHovered = false, isDragging = false, dragStartX = 0, dragStartOffset = 0, totalDragDist = 0;
+    let socialToastTimer = null;
+    const DRIFT_SPEED = 0.42;
+
+    function setViewport(mode) {
+      document.body.classList.toggle("mobile-preview", mode === "mobile");
+      document.getElementById("vpDesktop").classList.toggle("active", mode === "desktop");
+      document.getElementById("vpMobile").classList.toggle("active", mode === "mobile");
+      railOffset = 0;
+    }
+
+    function showSocialToast(e, msg) {
+      e.preventDefault();
+      const toast = document.getElementById("socialToast");
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(socialToastTimer);
+      socialToastTimer = setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    function toggleArchivePopover(e) {
+      e.stopPropagation();
+      const pop = document.getElementById("archivePopover");
+      const btn = document.getElementById("moreDatesBtn");
+      const next = !pop.classList.contains("open");
+      pop.classList.toggle("open", next);
+      btn.classList.toggle("open", next);
+    }
+
+    function closeArchivePopover() {
+      document.getElementById("archivePopover").classList.remove("open");
+      document.getElementById("moreDatesBtn").classList.remove("open");
+    }
+
+    function renderCardHTML(item, indexNum, isRail = false) {
+      const clickHandler = isRail ? `handleRailCardClick('${item.id}')` : `openModal('${item.id}')`;
+      const seq = String(indexNum + 1).padStart(2, "0");
+      const badgeHTML = item.badge
+        ? `<span class="m-badge ${item.badgeOutline ? "outline" : ""}">${item.badge}</span>`
+        : "";
+      const placeholderHTML = item.placeholder ? `<span class="m-placeholder-tag">〔示例〕</span>` : "";
+      return `
+        <article class="m-card" onclick="${clickHandler}">
+          <div class="m-card-art-frame">${renderArtFrameHTML(item.category, item.category + " 主题插画")}</div>
+          <div class="m-card-kicker">
+            <div class="m-kicker-left">
+              <span class="m-kicker-num">NO.${seq}</span>
+              <span>·</span>
+              <span class="m-kicker-cat">${item.category}</span>
+              ${badgeHTML}
+            </div>
+            ${placeholderHTML}
+          </div>
+          <h3 class="m-card-title">${item.title}</h3>
+          <p class="m-card-summary">${item.summary}</p>
+        </article>
+      `;
+    }
+
+    function renderDigestSlotHTML(ed) {
+      const heading = ed.isWeekly ? "本周精选" : "今日综述";
+      return `
+        <div class="rail-item digest-rail-card">
+          <div class="digest-kicker-row">
+            <div class="digest-kicker">${heading}</div>
+            <span class="digest-draft-tag">AI 初稿</span>
+          </div>
+          <p class="digest-text">${ed.digest}</p>
+          <div class="digest-tip"><strong>TIP!</strong>悬停暂停流动 · 左右拖拽或点击卡片查看详情</div>
+        </div>
+      `;
+    }
+
+    function render() {
+      const ed = EDITIONS[currentDate];
+
+      const singleSetParts = [];
+      if (ed.items[0]) singleSetParts.push(`<div class="rail-item">${renderCardHTML(ed.items[0], 0, true)}</div>`);
+      singleSetParts.push(renderDigestSlotHTML(ed));
+      ed.items.slice(1).forEach((item, idx) => {
+        singleSetParts.push(`<div class="rail-item">${renderCardHTML(item, idx + 1, true)}</div>`);
+      });
+      const setHTML = singleSetParts.join("");
+      document.getElementById("heroTrack").innerHTML = setHTML + setHTML;
+      railOffset = 0;
+
+      document.getElementById("catList").innerHTML = CATEGORIES.map(cat => {
+        const count = cat === "全部" ? ed.items.length : ed.items.filter(i => i.category === cat).length;
+        return `<button class="cat-btn ${cat === currentCategory ? "active" : ""}" onclick="selectCategory('${cat}')">${cat}<span class="cat-num">${count}</span></button>`;
+      }).join("");
+
+      document.getElementById("recentDates").innerHTML = RECENT_KEYS.map(d =>
+        `<button class="date-pill ${d === currentDate ? "active" : ""}" onclick="selectDate('${d}')">${EDITIONS[d].label}</button>`
+      ).join("");
+
+      const isWeeklySelected = WEEKLY_ARCHIVE_KEYS.includes(currentDate);
+      const moreBtn = document.getElementById("moreDatesBtn");
+      moreBtn.classList.toggle("active", isWeeklySelected);
+      moreBtn.textContent = isWeeklySelected ? `${EDITIONS[currentDate].label} ▾` : "历史归档 ▾";
+
+      document.getElementById("archiveList").innerHTML = WEEKLY_ARCHIVE_KEYS.map(w => {
+        const weekEd = EDITIONS[w];
+        return `<button class="archive-item ${w === currentDate ? "active" : ""}" onclick="selectDate('${w}')"><span>${weekEd.rangeText}</span><span class="archive-count-tag">精选 ${weekEd.items.length} 条</span></button>`;
+      }).join("");
+
+      const filtered = ed.items.filter(item => currentCategory === "全部" || item.category === currentCategory);
+
+      const grid = document.getElementById("broadsheetGrid");
+      grid.innerHTML = filtered.length === 0
+        ? `<div class="empty-msg">当前筛选条件下暂无情报，可切换分类或查看其他期次。</div>`
+        : filtered.map((item, idx) => `<div class="grid-cell">${renderCardHTML(item, idx, false)}</div>`).join("");
+    }
+
+    function tickRail() {
+      const track = document.getElementById("heroTrack");
+      if (track && track.scrollWidth > 0 && !document.body.classList.contains("intro-playing")) {
+        const half = track.scrollWidth / 2;
+        if (!isHovered && !isDragging) railOffset += DRIFT_SPEED;
+        if (railOffset >= half) railOffset -= half;
+        if (railOffset < 0) railOffset += half;
+        track.style.transform = `translate3d(${-railOffset}px, 0, 0)`;
+      }
+      requestAnimationFrame(tickRail);
+    }
+
+    function handleRailCardClick(id) {
+      if (totalDragDist > 6) return;
+      openModal(id);
+    }
+
+    const heroVp = document.getElementById("heroViewport");
+    heroVp.addEventListener("mouseenter", () => { isHovered = true; });
+    heroVp.addEventListener("mouseleave", () => { isHovered = false; isDragging = false; heroVp.classList.remove("dragging"); });
+    heroVp.addEventListener("pointerdown", (e) => {
+      isDragging = true; dragStartX = e.clientX; dragStartOffset = railOffset; totalDragDist = 0;
+      heroVp.classList.add("dragging"); heroVp.setPointerCapture(e.pointerId);
+    });
+    heroVp.addEventListener("pointermove", (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragStartX; totalDragDist = Math.abs(dx); railOffset = dragStartOffset - dx;
+    });
+    heroVp.addEventListener("pointerup", (e) => {
+      if (!isDragging) return;
+      isDragging = false; heroVp.classList.remove("dragging"); heroVp.releasePointerCapture(e.pointerId);
+    });
+
+    function selectCategory(cat) { currentCategory = cat; render(); }
+    function selectDate(d) { currentDate = d; currentCategory = "全部"; closeArchivePopover(); render(); }
+
+    function openModal(id) {
+      const item = EDITIONS[currentDate].items.find(i => i.id === id);
+      if (!item) return;
+      currentModalItem = item;
+      const slug = CATEGORY_SLUG_MAP[item.category] || "regulation";
+      const sampleText = item.placeholder ? " · 示例占位" : "";
+      document.getElementById("modalMeta").textContent = `${item.category} · ${item.factLevel} · ${item.date}${sampleText}`;
+      const modalArt = document.getElementById("modalArt");
+      modalArt.classList.remove("is-fallback");
+      modalArt.innerHTML = renderArtFrameHTML(item.category, item.category + " 主题插画");
+      document.getElementById("modalArtSlug").textContent = `baseline-${slug}-v2.webp`;
+      document.getElementById("modalTitle").textContent = item.title;
+      document.getElementById("modalSummary").textContent = item.summary;
+      document.getElementById("modalImpactList").innerHTML = item.impact.map(line => `<li>${line}</li>`).join("");
+      const srcBtn = document.getElementById("modalSourceBtn");
+      srcBtn.href = `https://${item.sourceDomain}`;
+      srcBtn.textContent = `直达一手信源（${item.sourceDomain}）↗`;
+      document.getElementById("modalCopyBtn").textContent = "复制法律人引用格式";
+      document.getElementById("modalBackdrop").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      document.getElementById("modalBackdrop").classList.remove("open");
+      document.body.style.overflow = "";
+    }
+
+    function copyCitation() {
+      if (!currentModalItem) return;
+      const cite = `【LexAIDaily ${currentModalItem.date}｜${currentModalItem.category}】${currentModalItem.title}（${currentModalItem.factLevel}；一手信源：https://${currentModalItem.sourceDomain}）`;
+      navigator.clipboard?.writeText(cite).catch(() => {});
+      const btn = document.getElementById("modalCopyBtn");
+      btn.textContent = "已复制引用格式 ✓";
+      setTimeout(() => { btn.textContent = "复制法律人引用格式"; }, 1800);
+    }
+
+    document.getElementById("modalBackdrop").addEventListener("click", e => { if (e.target.id === "modalBackdrop") closeModal(); });
+    document.addEventListener("click", e => {
+      if (!e.target.closest(".edition-nav")) closeArchivePopover();
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape") { closeModal(); closeArchivePopover(); }
+    });
+
+    /* 首屏内容先渲染完毕，再在 GPU 合成线程启动 4.0s 丝滑开屏报刊动效 */
+    render();
+    requestAnimationFrame(tickRail);
+
+    (function runSmoothNewspaperIntro() {
+      const cleanup = () => {
+        document.body.classList.remove("intro-playing", "intro-ready");
+      };
+      if ((window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) || !Element.prototype.animate) {
+        cleanup();
+        return;
+      }
+
+      const stage = document.getElementById("stageWrapper");
+      const isNarrow = window.innerWidth <= 960;
+      const baseScale = isNarrow ? 0.54 : 0.40;
+      const breathScale = isNarrow ? 0.56 : 0.415;
+      const startY = isNarrow ? "88vh" : "94vh";
+      const midY = isNarrow ? "-2vh" : "-3vh";
+      const peakY = isNarrow ? "-3vh" : "-4.2vh";
+
+      const waitFonts = document.fonts && document.fonts.ready
+        ? Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 180))])
+        : Promise.resolve();
+
+      waitFonts.then(() => {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            document.body.classList.remove("intro-ready");
+            const anim = stage.animate(
+              [
+                {
+                  offset: 0,
+                  transform: `translate3d(0, ${startY}, 0) scale(${baseScale}) rotate(0deg)`,
+                  easing: "cubic-bezier(0.16, 1, 0.3, 1)"
+                },
+                {
+                  offset: 0.38,
+                  transform: `translate3d(0, ${midY}, 0) scale(${baseScale}) rotate(0deg)`,
+                  easing: "cubic-bezier(0.45, 0, 0.55, 1)"
+                },
+                {
+                  offset: 0.52,
+                  transform: `translate3d(0, ${peakY}, 0) scale(${breathScale}) rotate(0deg)`,
+                  easing: "cubic-bezier(0.77, 0, 0.175, 1)"
+                },
+                {
+                  offset: 1,
+                  transform: "translate3d(0, 0, 0) scale(1) rotate(-360deg)"
+                }
+              ],
+              { duration: 4000, fill: "forwards" }
+            );
+            anim.finished.then(() => {
+              anim.cancel();
+              cleanup();
+            }).catch(cleanup);
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
