@@ -1,72 +1,70 @@
-# LexAIDaily AI 自动配图统一规范（v2.0｜清透日光厚涂油画）
+# LexAIDaily AI 自动配图统一规范（v3.0｜复古报刊半调网点档案拼贴）
 
-- **状态**：已确认（Human Maintainer，2026-11-23）
-- **适用范围**：Gate 1 静态原型（`LD-G1-02C`）、Gate 2 每日自动配图流水线、公众号头图衍生裁切
-- **关联决策**：`D-014`（AI 生图合规与溯源登记）、`D-027`（Miranda 报刊视觉路线与 Design-in-Code 迭代）
-- **视觉参考**：复古新闻纸基色 `#C8C0B6` / 印刷墨黑 `#1D1D1B` / 朱红微标 `#C03F13`（参考 [Niccolò Miranda — Paper Portfolio](https://www.niccolomiranda.com/)）
+- **状态**：已确认（Human Maintainer，2026-11-24；替代 v2.0 清透日光厚涂油画规范）
+- **适用范围**：Gate 1 静态原型基准图库（`LD-G1-02C` / PR #26 返工）、Gate 2 每日自动配图流水线、公众号头图衍生裁切
+- **关联决策**：`D-014`（AI 生图合规与溯源登记）、`D-027`（Miranda 复古报刊视觉路线）、`D-030`（暖调加颗粒欧式新闻纸基色 `#D5C5AE`）
+- **视觉参考**：暖调加颗粒欧式新闻纸 `#D5C5AE` / 印刷墨黑 `#1D1D1B` / 朱红微标 `#C03F13`（参考 [Niccolò Miranda — Paper Portfolio](https://www.niccolomiranda.com/) 复古纪实报刊美学）
 
 ## 一、核心风格 DNA（硬性锁定）
 
-为了在 `#C8C0B6` 复古报刊纸底色上实现画廊级阅读质感，同时彻底避开科技媒体常见的赛博霓虹、全息网格与低质 3D 渲染感，全站配图统一锁定为**当代印象派清透日光厚涂油画（Clean Sunlit Impasto Palette-Knife Oil Painting）**：
+为与 `#D5C5AE` 暖调加颗粒欧式复古新闻纸、`1px #1D1D1B` 直角黑线及 `#C03F13` 朱红微标形成高度统一的铅印报刊语境，全站配图统一锁定为**复古报刊半调网点档案拼贴（Vintage European Newspaper Archival Halftone Print & Editorial Photo-Collage）**：
 
-1. **100% 满涂不透明颜料（严禁裸露生麻布）**
-   - 必须使用厚重如黄油般的刮刀油画颜料（thick buttery palette-knife strokes）完整覆盖整张画面，保留清晰的刀锋堆叠与笔触起伏。
-   - 仅允许在厚颜料下方隐约透出细腻画布织纹，**严禁出现未上色的灰褐色生麻布或粗糙亚麻留白**（避免画面发灰、发脏、显未完成）。
-2. **清透粉彩阴影 + 强方向性斜射日光（严禁灰褐浑浊色）**
-   - 阴影必须是干净的**有彩色粉彩阴影**（矢车菊蓝、淡玫瑰粉、青石蓝灰、浅鼠尾草青、薰衣草紫），**严禁泥褐色（muddy browns）、脏米灰（dusty beige）或沉重深色老木头**。
-   - **日光本身是画面主角**：一道锐利而温润的斜射晨光或午后斜阳（奶油黄、乳白、暖杏金、金蜜色）切过干净墙面或桌面，形成通透明快的冷暖对比。
-3. **极简构图与呼吸留白**
-   - 采用超宽 `21:9` 构图，**画面左侧 55%–60% 保持平静、干净的纯色满涂留白区**（墙面、石板或柔光树影）。
-   - 视觉焦点集中于右侧日光光斑内，**仅放置 1 个核心隐喻主物（最多加 1 个辅助小物）**，杜绝杂物堆砌与繁复古董摆件。
-4. **零文字纯净画面**
-   - 画面内**严禁出现任何文字、字母、数字、印章字迹、水印或签名**，确保与卡片下方的中文新闻标题、朱红微标不发生视觉冲突。
+1. **三色印刷克制体系（炭黑暖棕网点 + 暖调新闻纸 + 单点朱红）**
+   - 主影像采用高对比**炭黑/暖棕双色调（charcoal-sepia duotone `#1D1D1B`）**，呈现细腻真实的**报纸半调网点（newspaper halftone dot screen）**与轻微暗房胶片颗粒，直接印制在 `#D5C5AE` 暖调新闻纸基色上。
+   - **唯一彩色点睛**：仅允许使用一处克制的**朱红（`#C03F13`）**作为编辑部套色印记（几何圆印、水平定位细线、丝带书签、双线档案框或雷达准星），严禁引入其他高饱和彩色、霓虹光效或厚涂粉彩。
+2. **构图多样化（打破单一“左空右物”格局）**
+   - 保持 `21:9` 超宽画幅不变，但**严禁所有卡片千篇一律采用“左侧留白 + 右侧单物”**。
+   - 围绕五大官方分类定义 **5 套差异化报刊构图原型**（满幅对称建筑、错位双格剪报拼贴、满幅俯拍桌面静物、左重右轻对角景深、宽幅水平剪报条），在三栏网格中形成满幅/留白、俯拍/仰拍、拼贴/景深的错落节奏。
+3. **实体隐喻优先（严禁赛博与廉价科技元素）**
+   - 将抽象的法律与 AI 议题转译为真实、可触摸的物理场景与静物（古典建筑石柱、玻璃棱镜与光学镜头、卷宗笔记本与钢笔、法典与天平、金融区建筑剪影），**严禁出现电脑屏幕、手机、发光电路、代码瀑布、机器人或全息投影**。
+4. **零文字、零人脸纯净画面**
+   - 画面内**严禁出现任何文字、字母、数字、印章字迹、真实机构 Logo、人物肖像或水印**，确保与卡片下方的中文新闻标题和朱红微标不产生视觉冲突。
 
-## 二、五大官方分类色谱与「标题 → 静物隐喻」映射表
+## 二、五大官方分类构图原型与「标题 → 隐喻」映射表
 
-自动化配图节点必须严格遵守**「分类锁死色系，标题决定静物」**原则——分类名称严格沿用 `ROADMAP.md` 五大官方分类，不得改名或缩写：
+自动化配图节点遵循**「分类定构图原型，标题定主体隐喻」**原则——分类名称严格沿用 `ROADMAP.md` 五大官方分类，不得改名或缩写：
 
-| 官方分类 | 英文 `category_slug` | 锁死阴影底色 (`{SHADOW_HUE}`) | 锁死日光焦点色 (`{SUNLIGHT_HUE}`) | 标题主题 → 极简实体隐喻映射（限 1–2 件日常可触摸物体） |
+| 官方分类 | `category_slug` | 锁死构图原型 (`{COMPOSITION_LAYOUT}`) | 朱红点睛元素 (`{VERMILION_ACCENT}`) | 标题主题 → 实体隐喻示例 (`{SUBJECT_METAPHOR}`) |
 | :--- | :--- | :--- | :--- | :--- |
-| **监管与合规** | `regulation` | 矢车菊浅蓝 (`clean bright cornflower periwinkle-blue`) | 奶油黄晨光 + 赤陶橘 (`radiant butter-yellow morning light and burnt-tangerine`) | 立法/新规/白皮书 → 象牙白精装法典与赤陶火漆印章；执法/处罚 → 极简黄铜砝码或戒尺；跨境数据合规 → 白瓷盘与黄铜罗盘 |
-| **模型与技术** | `models` | 雨后青石蓝灰 (`crisp cool blue-grey wet slate`) | 晴空天蓝 + 暖桃云光 (`cerulean sky and warm peach-cream cloud reflection`) | 新模型/多模态突破 → 透明玻璃三棱镜与折射光斑；开源/轻量化 → 雨后晴空水洼与单枚鲜绿叶；推理/检索升级 → 玻璃镇纸或极简放大镜 |
-| **实务与工具** | `practice` | 淡玫瑰粉墙面 (`clean pastel blush-rose plaster`) | 乳白奶油窗光 (`luminous butter-cream morning light`) | 合同审查/文书工具 → 摊开的米白笔记本与钢笔；知识库/检索 → 叠放的米色索引卡片与丝带书签；工作流提效 → 白窗微扬纱帘与清茶杯 |
-| **判例与学术** | `cases` | 浅鼠尾草青绿 (`luminous pastel sage-celadon`) | 暖杏金斜阳 (`warm golden-apricot afternoon sunlight`) | 经典判例/司法裁判 → 摊开的厚米白判例卷宗与极简黄铜天平；学术论文/实证报告 → 摊开的精装书卷与极简金属书签 |
-| **行业与资本** | `industry` | 薰衣草紫 (`velvety dusty-lavender violet`) | 金蜜斜阳 (`glowing golden-honey afternoon sunlight`) | 融资/并购/估值 → 极简黄铜沙漏或暖橘陶罐（配窗外鲜绿枝叶）；律所战略/行业趋势 → 黄铜罗盘或窗外日光下的建筑剪影 |
+| **监管与合规** | `regulation` | 满幅低角度对称建筑摄影（`Full-bleed symmetrical low-angle architectural shot`） | 右偏实心几何圆印（`a single clean vermilion-red #C03F13 solid geometric circle stamp overlapping off-center`） | 立法/监管新规 → 古典法院石柱廊与日光阴影；数据跨境/执法 → 宏大石质拱门与精密黄铜刻度尺 |
+| **模型与技术** | `models` | 错位双格剪报拼贴（`Asymmetric split-frame diptych photo-collage with two overlapping halftone clippings on #D5C5AE newsprint`） | 贯穿画面的水平细线与定位圆点（`a delicate vermilion-red #C03F13 thin horizontal registration hairline and tiny graphic dot`） | 多模态/推理评测 → 左侧玻璃三棱镜折射光束 + 右侧黄铜光学镜头；RAG/检索架构 → 左侧索引抽屉卡片 + 右侧放大镜特写 |
+| **实务与工具** | `practice` | 满幅俯拍桌面几何（`Full-bleed overhead top-down flat-lay desk study with diagonal Venetian-blind shadows`） | 斜切书页的朱红丝带书签（`a single vermilion-red #C03F13 silk bookmark ribbon cutting diagonally across the page`） | 合同审查/办公插件 → 摊开空白笔记本、钢笔、索引卡与金属长尾夹；案管/取证工具 → 整齐排列的卷宗夹与黄铜标尺 |
+| **判例与学术** | `cases` | 左重右轻对角景深摄影（`Left-weighted diagonal depth-of-field photograph with sharp foreground on the left receding into soft halftone bokeh on the right`） | 右下角双线矩形档案印框（`a subtle vermilion-red #C03F13 stamped double-line rectangular archive tab mark near the lower-right`） | 司法裁判/前沿学术 → 左侧精装判例卷宗与黄铜天平 + 右侧日光法学图书馆书架；证据规则 → 左侧老式放大镜与案卷 + 右侧档案柜景深 |
+| **行业与资本** | `industry` | 宽幅水平裁切剪报条 + 暖纸留白（`Dramatic panoramic horizontal newspaper clipping band with clean cut edges and open warm #D5C5AE newsprint margins`） | 居中朱红同心圆准星与纵轴（`a crisp minimalist vermilion-red #C03F13 geometric concentric ring and thin vertical axis line evoking a precision radar`） | 行业报告/律所商业模式 → 金融区现代石材与玻璃建筑群剪影；产业资助/并购趋势 → 城市天际线或拱形交易所大厅剪影 |
 
-## 三、标准化 AI 自动配图 Prompt 模板（v2.0 固定底座）
+## 三、标准化 AI 自动配图 Prompt 模板（v3.0 固定底座）
 
-所有单条资讯自动配图时，固定使用下方英文底座，仅动态替换花括号内的 4 个字段：
+Gate 1 基准图库与 Gate 2 每日自动配图流水线统一使用下方英文底座，仅动态替换花括号内的 3 个字段：
 
 ```text
-Fully painted opaque impasto oil painting with thick buttery palette-knife strokes and subtle fine canvas weave beneath rich luminous paint, zero raw or unpainted canvas. Minimalist serene scene inspired by sunlit contemporary impressionism: {CLEAN_SURFACE_AND_LIGHT_BEAM}, with {SINGLE_MINIMAL_OBJECT}. Clean, airy, fresh color harmony with pure chromatic pastel shadows ({SHADOW_HUE}) and glowing sunlit highlights ({SUNLIGHT_HUE}), zero muddy browns, zero dusty beige, zero dark cluttered corners, zero heavy dark wood or antiques. Ultra-wide 21:9 composition with 55% calm breathing negative space on the left. Strictly no text, no letters, no numbers, no watermark, no signature, no human faces, no logos.
+Ultra-wide 21:9 vintage European newspaper archival halftone print photography and editorial collage. {COMPOSITION_LAYOUT}, depicting {SUBJECT_METAPHOR}. Rendered in crisp charcoal-sepia duotone ink (#1D1D1B) with authentic fine newspaper halftone dot screen and subtle film grain printed on warm grainy vintage newsprint paper (#D5C5AE). Accented solely by {VERMILION_ACCENT}. High-craft museum-grade broadsheet editorial aesthetic, zero bright pastel colors, zero oil paint, zero modern neon or sci-fi elements. Strictly no text, no letters, no numbers, no human faces, no logos, no watermark, no outer border frame.
 ```
 
-### LLM 标题转译静物隐喻规则（供 Gate 2 自动流水线调用）
+### Gate 2 每日自动配图流水线衔接规则（供 Gate 2 实现，Gate 1 不写代码）
 
-在调用生图模型前，先由文本模型读取当日快讯的 `title`、`category` 与 `summary`，按以下规则生成 `{CLEAN_SURFACE_AND_LIGHT_BEAM}` 与 `{SINGLE_MINIMAL_OBJECT}`：
-
-1. **具象转译原则**：将抽象的法律或 AI 概念转译为安静、可触摸的日常物理静物（纸、书、玻璃、黄铜、陶瓷、植物、窗光、水洼），**严禁直接出现电脑屏幕、手机、代码、芯片、机器人、机械手、发光电路或全息投影**。
-2. **数量上限**：`{SINGLE_MINIMAL_OBJECT}` 控制在 **12–22 个英文词**，最多 1 个主物 + 1 个辅助小物，且明确位于右侧阳光光斑内。
-3. **色系锁定**：`{SHADOW_HUE}` 与 `{SUNLIGHT_HUE}` 必须直接查上表硬编码填入，不允许模型自由发挥偏色。
+1. **触发时机（Human-in-the-Loop 降本红线）**：不在“全网采集”阶段生图，而是在运营者**人工勾选完当日 5–8 条最终入选快讯后**再批量触发，控制单日成本与耗时。
+2. **LLM 标题转译步骤**：先由文本模型读取每条入选快讯的 `title`、`category` 与 `summary`，查上表锁定 `{COMPOSITION_LAYOUT}` 与 `{VERMILION_ACCENT}`，仅动态生成 **15–28 个英文词**的 `{SUBJECT_METAPHOR}`（必须为具体可触摸的物理静物/建筑光影，禁止科技陈词滥调）。
+3. **自动后处理与兜底**：生图后自动裁切/校验 `21:9`、压缩为 WebP（≤ 120 KB）、写入当日元数据与 `ASSETS.md` 溯源记录；若单条生图失败或触发审核拦截，自动回退至对应分类的 `baseline-{category_slug}-v3.webp` 基准图，保证日更零中断。
 
 ## 四、工程参数与 D-014 合规验收清单
 
 ### 1. 前端与图片工程规格
-- **生成比例**：固定 `21:9`（推荐分辨率 `1584 × 672`），与前端卡片画框 `aspect-ratio: 16 / 7` 像素级吻合，零拉伸变形。
-- **前端样式**：图片容器采用 `1px solid #1D1D1B` 直角黑框（`border-radius: 0`），无弥散投影、无毛玻璃遮罩；图片设置 `width: 100%; height: 100%; object-fit: cover; object-position: center;`。
-- **格式与体积**：上线前统一压缩为 WebP（备选 JPG），单张体积 **≤ 120 KB**。
-- **文件命名**：`YYYY-MM-DD-{category_slug}-{item_id}.webp`（Gate 1 基准图库命名为 `baseline-{category_slug}-v2.webp`）。
+- **生成比例**：固定 `21:9`（推荐分辨率 `1584 × 672`），与前端卡片画框 `aspect-ratio: 16 / 7` 像素级吻合。
+- **前端样式**：图片容器 `1px solid #1D1D1B` 直角黑框（`border-radius: 0`），无阴影、无毛玻璃；`object-fit: cover`。
+- **格式与体积**：统一压缩为 WebP（备选 JPG），单张体积 **≤ 120 KB**。
+- **文件命名**：
+  - Gate 1 基准图库：`design/assets/illustrations/baseline-{category_slug}-v3.webp`（同步保留或清理旧 v2 并在 `index.html` 中指向 v3）。
+  - Gate 2 每日自动配图：`YYYY-MM-DD-{category_slug}-{item_id}.webp`。
 
 ### 2. D-014 合规红线与归档要求
 - **必登台账**：每张入库插画必须在 `design/ASSETS.md` 中完整登记：文件路径、所属分类、生成工具与模型版本、完整英文 Prompt、生成日期、授权状态（AI 生成原创）。
-- **页面标识**：在详情跳板页（或页面页脚/图注区）保留「插画由 AI 生成」说明，不伪装为人类摄影或手绘版权作品。
-- **零侵权底线**：严禁生成真实人物肖像（法官、律师、高管、学者），严禁仿冒真实法院徽标、政府机关印章、律所或科技公司 Logo。
+- **页面标识**：在详情弹窗保留「插画由 AI 生成」说明，不伪装为人类摄影或版权图库作品。
+- **零侵权底线**：严禁生成真实人物肖像，严禁仿冒真实法院徽标、政府机关印章、律所或科技公司 Logo。
 
-## 五、视觉验收核对项（审图必查）
+## 五、视觉验收核对项（PR #26 返工审图必查）
 
-- [ ] 画面 100% 满涂油画颜料，无未上色的灰褐生麻布外露。
-- [ ] 阴影色调清透干净，无发灰、发脏的泥褐色或沉重暗角。
-- [ ] 左侧约 55%–60% 为平静呼吸留白区，视觉重心落在右侧自然光斑内。
-- [ ] 画面中的 1–2 件静物隐喻与该条资讯分类及标题语义贴合，无科技/赛博违和元素。
-- [ ] 全图零文字、零数字、零水印、零人物肖像、零真实机构 Logo。
-- [ ] 嵌入 `#C8C0B6` 复古纸面与 `1px #1D1D1B` 黑色直角边框后，与中文标题及朱红微标和谐统一。
+- [ ] 5 张基准图均严格呈现 `#D5C5AE` 暖调新闻纸 + `#1D1D1B` 炭黑暖棕半调网点 + 单点 `#C03F13` 朱红印刷质感。
+- [ ] 5 张基准图分别落地 5 种差异化构图（满幅对称建筑、错位双格拼贴、满幅俯拍桌面、左实右虚景深、宽幅剪报条），放入三栏网格不显单调。
+- [ ] 画面实体隐喻贴合各自官方分类，无电脑屏幕、代码、机器人、霓虹电路等违和科技元素。
+- [ ] 全图零文字、零数字、零水印、零人物肖像、零真实机构 Logo、无多余画框边框。
+- [ ] 单张 WebP 体积 ≤ 120 KB，完整登记于 `design/ASSETS.md`。
