@@ -8,7 +8,7 @@
 | 项 | 值 |
 |---|---|
 | 成品 HTML | `design/wechat/samples/ld-g1-04-2026-11-24.html` |
-| 样稿 sha256 | 待 `LD-G1-06` 交叉测试运行 `npm run build:samples` 后填入实测值 |
+| 样稿 sha256 | `f2e6171bd45039100b64aa878471fb0d9582caa8aa04106270179e785ffc19f9` |
 | 样本来源 | `docs/samples/LD-G1-04-sample-set.md`（14 条，2026-11-24 核验） |
 | 模板 | `design/wechat/template.html`（NYT 报刊文字排版改版） |
 | 构建脚本 | `scripts/wechat-prototype/build.mjs`（juice 12.2.6） |
