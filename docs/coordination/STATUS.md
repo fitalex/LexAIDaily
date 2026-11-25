@@ -26,8 +26,8 @@
 | LD-G1-01B | 字段表 v0.2：列表卡片不含实务影响、新增重要度（头条/常规）、占位标记改为字段 | A | DeepSeek Harness（D-011） | Gemini（接替 Claude）；Human 已在 PR #18 豁免审计 | ✅ DONE（PR #19 已合并 `2307eed`） | [任务书](../daily-specs/LD-G1-01B.md)；公众号栏目是否含实务影响待 Human 另定 |
 | LD-G1-02B | 设计系统与 Web 原型第二版（宣纸 × 楷体标题 × 导航玻璃，深海军蓝，D-019） | B（同 LD-G1-02） | Antigravity（D-012） | Gemini（接替 Claude）；字体许可增量复审已由 Human 豁免（D-026）；Human 视觉验收 | ✅ DONE（[PR #16](https://github.com/fitalex/LexAIDaily/pull/16) 已合并 `cec7d31`；视觉与交付路线随后由 D-027 与 LD-G1-02C 替代升级） | [任务书](../daily-specs/LD-G1-02B.md)；Penpot 阶段归档完成 |
 | LD-G1-02C | 复古报刊风 Design-in-Code HTML 原型与 v2.0 AI 配图规范落地（放弃 Penpot，替代 D-013；D-027） | B（跨 Gate） | Gemini（代码线，Human 2026-11-23 调整）｜Antigravity（视觉资产线） | 代码线：Human 书面豁免 6.1(d) 审计并直接视觉验收；视觉资产线：Gemini 复核通过（ACCEPT）+ Human 视觉验收 | 👀 READY_FOR_REVIEW（代码线 [PR #25](https://github.com/fitalex/LexAIDaily/pull/25) 与视觉资产线 [PR #26](https://github.com/fitalex/LexAIDaily/pull/26) 均待 Human 终审合并） | [任务书](../daily-specs/LD-G1-02C.md)；代码原型：[index.html](../../design/prototype/index.html)；配图规范：[illustration-spec.md](../../design/illustration-spec.md) |
-| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（D-011，原 Codex） | LD-G1-06 交叉测试（Antigravity，D-015）；Gemini；按 6.1(c) 独立审计（Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 PR #11 授权；待 LD-G1-02C 定稿及 Human 确认公众号字段后开工） | [任务书](../daily-specs/LD-G1-03.md)；juice 依赖已授权（D-009）；微信 iOS/Android 真机预览由 Human 执行 |
-| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | DeepSeek Harness 抽查核验（或 Human 书面豁免，6.1(d)） | 🟢 AUTHORIZED_TO_EXECUTE（A 级，已登记台账；随 LD-GOV-03 转由 Gemini 执行） | [任务书](../daily-specs/LD-G1-04.md)；可与 LD-G1-02C 双轨并行 |
+| LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（D-011，原 Codex） | LD-G1-06 交叉测试（Antigravity，D-015）；Gemini；按 6.1(c) 独立审计（Human 可豁免）；Human 视觉验收 | 🟢 AUTHORIZED_TO_EXECUTE（Human 已于 PR #11 授权；公众号字段已按 D-030 确认，待 PR #25/#26 合并后开工） | [任务书](../daily-specs/LD-G1-03.md)；juice 依赖已授权（D-009）；字段规则见 D-030；微信 iOS/Android 真机预览由 Human 执行 |
+| LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | DeepSeek Harness 抽查核验（或 Human 书面豁免，6.1(d)） | 👀 READY_FOR_REVIEW（[PR #27](https://github.com/fitalex/LexAIDaily/pull/27) 已提交，14 条一手信源，待 Human 确认抽查或豁免合并） | [任务书](../daily-specs/LD-G1-04.md)；交付文件：`docs/samples/LD-G1-04-sample-set.md` |
 | LD-G1-05 | Gate 1 验收清单（只转写 ROADMAP 既有验收标准） | A | Gemini（接替 Claude） | 独立审计已豁免（D-010）；Human 签署 | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-05.md)；依赖 LD-G1-01 至 04、06 完成 |
 | LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | Antigravity（D-015） | Gemini（接替 Claude） | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-06.md)；依赖 LD-G1-03 READY_FOR_REVIEW；Antigravity 不是 LD-G1-03 的实现者，符合交叉测试要求 |
 | LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Gemini（接替 Claude） | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-07.md)；依赖 LD-G1-01、02C、03 中已合并者，可分批 |
@@ -41,10 +41,10 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 - [x] （已于 PR #3 评论 `6679648988` 确认选甲）明确确认 Gate 范围（D-005）：甲 = Gate 1 只做 UI 展示字段、正式采集数据契约放 Gate 2（建议，与 ROADMAP 一致）；乙 = 提前并调整 ROADMAP。你说“以路线图为准”，我按甲记录，请在 PR 留言确认
 - [x] （已完成，PR #22 已合并 `f035894`）审阅并合并 `LD-GOV-03` PR（分支 `gemini/ld-gov-03-collab-reorg`），确认 D-025、D-026
 - [x] （已完成，PR #24 已合并 `aa01a5d`）审阅并合并 `gemini/ld-g1-02c-spec-sync` PR（入库 `LD-G1-02C` 任务书、`illustration-spec.md` 与 V3.2 参考原型，刷新 `STATUS.md`），确认 D-027
-- [ ] 在本地浏览器视觉验收 `design/prototype/index.html`（桌面 1440px 与移动 375px）并审阅合并 [PR #25](https://github.com/fitalex/LexAIDaily/pull/25) 与 [PR #26](https://github.com/fitalex/LexAIDaily/pull/26)，确认 D-028、D-029
+- [ ] 审阅合并 [PR #25](https://github.com/fitalex/LexAIDaily/pull/25)（含已确认的暖调加颗粒新闻纸背景 `#D5C5AE`）、[PR #26](https://github.com/fitalex/LexAIDaily/pull/26) 与 [PR #27](https://github.com/fitalex/LexAIDaily/pull/27)（`LD-G1-04` 真实样本集），确认 D-028、D-029、D-030
 - [x] （已完成）合并 LD-G1-02A 任务书 PR #17，确认 D-017，D-018 同意；阶段 1 已交付并被否决（D-019）
 - [x] （已完成，PR #18 已合并，Human 已确认 D-019 并豁免 01B 审计）确认 LD-G1-01B、LD-G1-02B 任务书 PR
-- [ ] 另定：公众号栏目的资讯单元是否沿用“含实务影响”（LD-G1-03 开工前确认）；README/ROADMAP 里“标准单元四要素”文字是否需要由你修改
+- [x] （已按 D-030 确认选方案 1，2026-11-24）另定：公众号栏目的资讯单元保留 1 句极简「实务影响」+ 引导「阅读原文」跳 Web 详情页查看完整实务锚点与一手信源；README/ROADMAP 文字暂不改
 - [x] （已完成，Penpot 已连通，Antigravity 已交付 PR #16）注册 Penpot 免费账号并新建文件，在 Antigravity 连接 Penpot MCP（见 LD-G1-02 第八节）；访问令牌只放你本机或 Antigravity 所在环境，不入库
 - [x] 合并 PR #11：Human 2026-11-09 17:07 会话原话“直接帮我合并合并 PR #11”，授权 Claude 执行合并（Claude 不自行决定合并）
 - [x] 对 DeepSeek Harness 说“执行 LD-G1-01”：已完成，PR #12 已合并（2026-11-11）
@@ -108,5 +108,6 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收，LD-G1 系列可按依赖顺�
 | D-027 | 2026-11-23 | Gate 1 放弃 Penpot（替代 D-013），改用 Design-in-Code 静态 HTML/CSS 分层迭代（`LD-G1-02C`）；视觉对标 Niccolò Miranda 复古报刊纸美学（`#C8C0B6` 纸底、`#1D1D1B` 墨黑、`#C03F13` 朱红微标、1px 锐利黑线、零毛玻璃与零阴影）；列表卡片隐藏来源外链与「实务影响」，二者下沉至点击详情弹窗；全站 AI 配图统一采用 `design/illustration-spec.md` v2.0「清透日光厚涂油画」规范 | Human | Human 2026-11-23 会话确认放弃 Penpot 路线，定稿 V3.2 复古报刊交互原型与 v2.0 清透日光厚涂油画自动配图规范；PR #24 已合并 |
 | D-028 | 2026-11-23 | `LD-G1-02C` 原型设计阶段代码线暂由 Gemini 负责（分支 `gemini/ld-g1-02c-miranda-html`），并书面豁免本任务代码线的 `AGENTS.md` 6.1(d) 独立审计，由 Human 直接视觉验收；Antigravity 视觉资产线分工不变 | Human | Human 2026-11-23 会话原话：“我思考了一下，原型设计阶段的代码线暂时改由你负责吧”、“DeepSeek Harness 不复核了，你出V1，我来视觉验收”；待 Human 在 PR #25 中确认 |
 | D-029 | 2026-11-24 | 历史归档与信息留存规范：前端近 3 日保留完整日报；超期归入「历史归档」按周（ISO 周次）分类归档，每周仅留存高价值优质情报，其余低价值信息直接删除，不做全量堆积 | Human | Human 2026-11-24 会话原话：“更多日期改为历史归档，按照周进行分类归档，每周只保存优质的信息，其余直接删除，这也是归档规范”；待 Human 在 PR #25 中确认 |
+| D-030 | 2026-11-24 | 公众号每日固定栏目字段规范（`LD-G1-03`）与 Web 纸面基色微调：(1) 公众号单条资讯保留 1 句极简「实务影响」（控制在 1–2 句内）并引导「阅读原文」跳转 Web 详情页查看完整实务锚点与一手信源；(2) Web 复古报刊原型纸面基色确认采用暖调加颗粒欧式新闻纸（主纸底 `#D5C5AE`、弹窗 `#E2D5C2`） | Human | Human 2026-11-24 会话原话：“背景确认”、“同意你的顺序，选方案1”；待 Human 在 PR #25 中确认 |
 
 决策记录须附 Human 原话或链接，并经 Human 在 PR 中确认后生效；协调者起草的记录不单独构成授权。
