@@ -1,138 +1,132 @@
 # 图像生成与设计素材登记表（ASSETS.md）
 
-> **依据**：任务书 LD-G1-02C DoD D03、AGENTS.md 10.10、决策记录 D-014、D-027 及 `design/illustration-spec.md`（v2.0）。
-> **要求**：使用 AI 图像生成时，每个素材须登记文件路径、所属分类、生成工具与模型版本、完整英文 Prompt、生成日期、授权状态（AI 生成原创）；严格核验无真实人物肖像、无仿冒真实机构标识、零文字、100% 满涂厚涂油画、单张 WebP ≤ 120 KB。
+> **依据**：任务书 LD-G1-02C DoD D03、AGENTS.md 10.10、决策记录 D-014、D-027、D-030 及 `design/illustration-spec.md`（v3.0｜复古报刊半调网点档案拼贴）。
+> **要求**：使用 AI 图像生成时，每个素材须登记文件路径、所属分类、生成工具、完整英文 Prompt、生成日期、授权状态（AI 生成原创）；严格核验无真实人物肖像、无仿冒真实机构标识、零文字、三色印刷克制体系（`#D5C5AE` 暖调新闻纸 + `#1D1D1B` 炭黑暖棕半调网点 + 单点 `#C03F13` 朱红）、五类构图多样化与单张 WebP ≤ 120 KB。
 
 ---
 
-## 一、LD-G1-02C v2.0 清透日光厚涂油画基准插画台账（D-014）
+## 一、LD-G1-02C v3.0 复古报刊半调网点档案拼贴基准插画台账（D-014）
 
-本批素材由 **Antigravity (Gemini 3.8 Flash)** 依据 `design/illustration-spec.md`（v2.0 清透日光厚涂油画自动配图规范）第三节标准化 Prompt 模板与第二节官方五大分类锁死色谱，通过内置 **Nano Banana (`gemini-nano-banana-2.1`)** 图像生成引擎生成，经由垂直居中裁切至 `21:9`（`1584 × 672`）并压缩为 WebP 格式。
+本批素材为 PR #26 返工交付，已彻底清理旧 `v2.0` 清透日光厚涂油画占位图（`baseline-*-v2.webp`），并由 **Antigravity (Gemini 3.8 Flash)** 依据 `design/illustration-spec.md`（v3.0 复古报刊半调网点档案拼贴规范）第二节五类构图原型矩阵与第三节标准化 Prompt 模板，调用内置 **Image Generator（Nano Banana）** 生图子智能体生成原图后，经由居中 `21:9` 裁切重采样至 `1584 × 672` 并以 `cwebp`（`-m 6 -pass 10 -af`）压缩为 WebP 格式（`design/prototype/index.html` 已同步切换指向 `-v3.webp`）。
 
 ### 1. 基准插画概览表
 
-| 序号 | 官方分类 | 分类 Slug | 相对路径 | 分辨率 | 比例 | 格式 | 体积 | 授权状态 |
-|:---:|:---|:---|:---|:---:|:---:|:---:|:---:|:---|
-| 1 | 监管与合规 | `regulation` | `design/assets/illustrations/baseline-regulation-v2.webp` | 1584 × 672 | 21:9 | WebP | 105.81 KB | AI 生成原创 |
-| 2 | 模型与技术 | `models` | `design/assets/illustrations/baseline-models-v2.webp` | 1584 × 672 | 21:9 | WebP | 116.29 KB | AI 生成原创 |
-| 3 | 实务与工具 | `practice` | `design/assets/illustrations/baseline-practice-v2.webp` | 1584 × 672 | 21:9 | WebP | 112.36 KB | AI 生成原创 |
-| 4 | 判例与学术 | `cases` | `design/assets/illustrations/baseline-cases-v2.webp` | 1584 × 672 | 21:9 | WebP | 93.97 KB | AI 生成原创 |
-| 5 | 行业与资本 | `industry` | `design/assets/illustrations/baseline-industry-v2.webp` | 1584 × 672 | 21:9 | WebP | 115.96 KB | AI 生成原创 |
+| 序号 | 官方分类 | 分类 Slug | 构图原型 | 相对路径 | 分辨率 | 比例 | 格式 | 体积 | 授权状态 |
+|:---:|:---|:---|:---|:---|:---:|:---:|:---:|:---:|:---|
+| 1 | 监管与合规 | `regulation` | 满幅低角度对称建筑 + 朱红圆印 | `design/assets/illustrations/baseline-regulation-v3.webp` | 1584 × 672 | 21:9 | WebP | 110.04 KiB (112,676 B) | AI 生成原创 |
+| 2 | 模型与技术 | `models` | 错位双格剪报拼贴 + 朱红细线圆点 | `design/assets/illustrations/baseline-models-v3.webp` | 1584 × 672 | 21:9 | WebP | 109.44 KiB (112,062 B) | AI 生成原创 |
+| 3 | 实务与工具 | `practice` | 满幅俯拍桌面几何 + 朱红丝带 | `design/assets/illustrations/baseline-practice-v3.webp` | 1584 × 672 | 21:9 | WebP | 105.94 KiB (108,480 B) | AI 生成原创 |
+| 4 | 判例与学术 | `cases` | 左重右轻对角景深 + 朱红双线档案框 | `design/assets/illustrations/baseline-cases-v3.webp` | 1584 × 672 | 21:9 | WebP | 113.41 KiB (116,132 B) | AI 生成原创 |
+| 5 | 行业与资本 | `industry` | 宽幅水平剪报条 + 朱红同心圆准星 | `design/assets/illustrations/baseline-industry-v3.webp` | 1584 × 672 | 21:9 | WebP | 109.48 KiB (112,112 B) | AI 生成原创 |
 
-> **体积合规核验**：5 张基准插画体积均在 93.97 KB ～ 116.29 KB 之间，**严格满足单张 ≤ 120 KB 的红线要求**。
+> **体积合规核验**：5 张基准插画体积均在 `108,480 B` ～ `116,132 B`（`105.94 KiB` ～ `113.41 KiB` / `108.48 KB` ～ `116.13 KB`）之间，在十进制与二进制口径下均**严格满足单张 ≤ 120 KB 的红线要求**。
 
 ---
 
 ### 2. 逐张详细档案
 
-#### (1) 监管与合规（`baseline-regulation-v2.webp`）
-- **文件路径**：`design/assets/illustrations/baseline-regulation-v2.webp`
+#### (1) 监管与合规（`baseline-regulation-v3.webp`）
+- **文件路径**：`design/assets/illustrations/baseline-regulation-v3.webp`
 - **所属分类**：监管与合规（`regulation`）
 - **分辨率与比例**：1584 × 672（21:9 超宽构图）
-- **文件大小**：105.81 KB
-- **生成工具与模型版本**：Antigravity 内置生图子智能体（Image Generator）/ Nano Banana (`gemini-nano-banana-2.1`)
-- **生成日期**：2026-11-24
+- **文件大小**：110.04 KiB（112,676 bytes）
+- **生成与后处理工具**：Antigravity 内置生图子智能体（Image Generator / Nano Banana）+ Pillow `21:9` 居中裁切 + `cwebp`（`-q 30 -m 6 -pass 10 -af`）
+- **生成日期**：2026-11-25
 - **授权状态**：AI 生成原创（根据 D-014 授权，标注「AI 生成」）
-- **色谱与隐喻参数**：
-  - `{SHADOW_HUE}`：`clean bright cornflower periwinkle-blue`（矢车菊浅蓝）
-  - `{SUNLIGHT_HUE}`：`radiant butter-yellow morning light and burnt-tangerine`（奶油黄晨光 + 赤陶橘）
-  - `{CLEAN_SURFACE_AND_LIGHT_BEAM}`：`a clean pale limestone surface bathed in a crisp diagonal morning light beam`
-  - `{SINGLE_MINIMAL_OBJECT}`：`an ivory-white cloth-bound legal ledger and a smooth terracotta wax seal resting in the sunlight on the right`
+- **v3.0 模板字段**：
+  - `{COMPOSITION_LAYOUT}`：`Full-bleed symmetrical low-angle architectural shot`
+  - `{SUBJECT_METAPHOR}`：`grand neoclassical courthouse stone colonnade with fluted marble pillars and sharp sunlit geometric shadows converging symmetrically overhead`
+  - `{VERMILION_ACCENT}`：`a single clean vermilion-red #C03F13 solid geometric circle stamp overlapping off-center`
 - **完整英文 Prompt**：
   ```text
-  Fully painted opaque impasto oil painting with thick buttery palette-knife strokes and subtle fine canvas weave beneath rich luminous paint, zero raw or unpainted canvas. Minimalist serene scene inspired by sunlit contemporary impressionism: a clean pale limestone surface bathed in a crisp diagonal morning light beam, with an ivory-white cloth-bound legal ledger and a smooth terracotta wax seal resting in the sunlight on the right. Clean, airy, fresh color harmony with pure chromatic pastel shadows (clean bright cornflower periwinkle-blue) and glowing sunlit highlights (radiant butter-yellow morning light and burnt-tangerine), zero muddy browns, zero dusty beige, zero dark cluttered corners, zero heavy dark wood or antiques. Ultra-wide 21:9 composition with 55% calm breathing negative space on the left. Strictly no text, no letters, no numbers, no watermark, no signature, no human faces, no logos.
+  Ultra-wide 21:9 vintage European newspaper archival halftone print photography and editorial collage. Full-bleed symmetrical low-angle architectural shot, depicting grand neoclassical courthouse stone colonnade with fluted marble pillars and sharp sunlit geometric shadows converging symmetrically overhead. Rendered in crisp charcoal-sepia duotone ink (#1D1D1B) with authentic fine newspaper halftone dot screen and subtle film grain printed on warm grainy vintage newsprint paper (#D5C5AE). Accented solely by a single clean vermilion-red #C03F13 solid geometric circle stamp overlapping off-center. High-craft museum-grade broadsheet editorial aesthetic, zero bright pastel colors, zero oil paint, zero modern neon or sci-fi elements. Strictly no text, no letters, no numbers, no human faces, no logos, no watermark, no outer border frame.
   ```
 
 ---
 
-#### (2) 模型与技术（`baseline-models-v2.webp`）
-- **文件路径**：`design/assets/illustrations/baseline-models-v2.webp`
+#### (2) 模型与技术（`baseline-models-v3.webp`）
+- **文件路径**：`design/assets/illustrations/baseline-models-v3.webp`
 - **所属分类**：模型与技术（`models`）
 - **分辨率与比例**：1584 × 672（21:9 超宽构图）
-- **文件大小**：116.29 KB
-- **生成工具与模型版本**：Antigravity 内置生图子智能体（Image Generator）/ Nano Banana (`gemini-nano-banana-2.1`)
-- **生成日期**：2026-11-24
+- **文件大小**：109.44 KiB（112,062 bytes）
+- **生成与后处理工具**：Antigravity 内置生图子智能体（Image Generator / Nano Banana）+ Pillow `21:9` 居中裁切 + `cwebp`（`-q 26 -m 6 -pass 10 -af`）
+- **生成日期**：2026-11-25
 - **授权状态**：AI 生成原创（根据 D-014 授权，标注「AI 生成」）
-- **色谱与隐喻参数**：
-  - `{SHADOW_HUE}`：`crisp cool blue-grey wet slate`（雨后青石蓝灰）
-  - `{SUNLIGHT_HUE}`：`cerulean sky and warm peach-cream cloud reflection`（晴空天蓝 + 暖桃云光）
-  - `{CLEAN_SURFACE_AND_LIGHT_BEAM}`：`a clean wet slate surface reflecting cool open sky with a bright diagonal beam of morning sunlight`
-  - `{SINGLE_MINIMAL_OBJECT}`：`a transparent optical glass prism casting pure refracted spectral highlights on the right`
+- **v3.0 模板字段**：
+  - `{COMPOSITION_LAYOUT}`：`Asymmetric split-frame diptych photo-collage with two overlapping halftone clippings on #D5C5AE newsprint`
+  - `{SUBJECT_METAPHOR}`：`a faceted crystal optical glass prism refracting light beams on the left panel paired with a precision vintage brass camera lens barrel on the right`
+  - `{VERMILION_ACCENT}`：`a delicate vermilion-red #C03F13 thin horizontal registration hairline and tiny graphic dot`
 - **完整英文 Prompt**：
   ```text
-  Fully painted opaque impasto oil painting with thick buttery palette-knife strokes and subtle fine canvas weave beneath rich luminous paint, zero raw or unpainted canvas. Minimalist serene scene inspired by sunlit contemporary impressionism: a clean wet slate surface reflecting cool open sky with a bright diagonal beam of morning sunlight, with a transparent optical glass prism casting pure refracted spectral highlights on the right. Clean, airy, fresh color harmony with pure chromatic pastel shadows (crisp cool blue-grey wet slate) and glowing sunlit highlights (cerulean sky and warm peach-cream cloud reflection), zero muddy browns, zero dusty beige, zero dark cluttered corners, zero heavy dark wood or antiques. Ultra-wide 21:9 composition with 55% calm breathing negative space on the left. Strictly no text, no letters, no numbers, no watermark, no signature, no human faces, no logos.
+  Ultra-wide 21:9 vintage European newspaper archival halftone print photography and editorial collage. Asymmetric split-frame diptych photo-collage with two overlapping halftone clippings on #D5C5AE newsprint, depicting a faceted crystal optical glass prism refracting light beams on the left panel paired with a precision vintage brass camera lens barrel on the right. Rendered in crisp charcoal-sepia duotone ink (#1D1D1B) with authentic fine newspaper halftone dot screen and subtle film grain printed on warm grainy vintage newsprint paper (#D5C5AE). Accented solely by a delicate vermilion-red #C03F13 thin horizontal registration hairline and tiny graphic dot. High-craft museum-grade broadsheet editorial aesthetic, zero bright pastel colors, zero oil paint, zero modern neon or sci-fi elements. Strictly no text, no letters, no numbers, no human faces, no logos, no watermark, no outer border frame.
   ```
 
 ---
 
-#### (3) 实务与工具（`baseline-practice-v2.webp`）
-- **文件路径**：`design/assets/illustrations/baseline-practice-v2.webp`
+#### (3) 实务与工具（`baseline-practice-v3.webp`）
+- **文件路径**：`design/assets/illustrations/baseline-practice-v3.webp`
 - **所属分类**：实务与工具（`practice`）
 - **分辨率与比例**：1584 × 672（21:9 超宽构图）
-- **文件大小**：112.36 KB
-- **生成工具与模型版本**：Antigravity 内置生图子智能体（Image Generator）/ Nano Banana (`gemini-nano-banana-2.1`)
-- **生成日期**：2026-11-24
+- **文件大小**：105.94 KiB（108,480 bytes）
+- **生成与后处理工具**：Antigravity 内置生图子智能体（Image Generator / Nano Banana）+ Pillow `21:9` 居中裁切 + `cwebp`（`-q 22 -m 6 -pass 10 -af`）
+- **生成日期**：2026-11-25
 - **授权状态**：AI 生成原创（根据 D-014 授权，标注「AI 生成」）
-- **色谱与隐喻参数**：
-  - `{SHADOW_HUE}`：`clean pastel blush-rose plaster`（淡玫瑰粉墙面）
-  - `{SUNLIGHT_HUE}`：`luminous butter-cream morning light`（乳白奶油窗光）
-  - `{CLEAN_SURFACE_AND_LIGHT_BEAM}`：`a clean pastel plaster table bathed in a warm angle of window sunlight`
-  - `{SINGLE_MINIMAL_OBJECT}`：`an open blank off-white linen notebook and a minimalist brass fountain pen on the right`
+- **v3.0 模板字段**：
+  - `{COMPOSITION_LAYOUT}`：`Full-bleed overhead top-down flat-lay desk study with diagonal Venetian-blind shadows`
+  - `{SUBJECT_METAPHOR}`：`an open blank unprinted paper notebook, a classic fountain pen, blank archival index cards, and steel binder clips arranged neatly on a desk`
+  - `{VERMILION_ACCENT}`：`a single vermilion-red #C03F13 silk bookmark ribbon cutting diagonally across the page`
 - **完整英文 Prompt**：
   ```text
-  Fully painted opaque impasto oil painting with thick buttery palette-knife strokes and subtle fine canvas weave beneath rich luminous paint, zero raw or unpainted canvas. Minimalist serene scene inspired by sunlit contemporary impressionism: a clean pastel plaster table bathed in a warm angle of window sunlight, with an open blank off-white linen notebook and a minimalist brass fountain pen on the right. Clean, airy, fresh color harmony with pure chromatic pastel shadows (clean pastel blush-rose plaster) and glowing sunlit highlights (luminous butter-cream morning light), zero muddy browns, zero dusty beige, zero dark cluttered corners, zero heavy dark wood or antiques. Ultra-wide 21:9 composition with 55% calm breathing negative space on the left. Strictly no text, no letters, no numbers, no watermark, no signature, no human faces, no logos.
+  Ultra-wide 21:9 vintage European newspaper archival halftone print photography and editorial collage. Full-bleed overhead top-down flat-lay desk study with diagonal Venetian-blind shadows, depicting an open blank unprinted paper notebook, a classic fountain pen, blank archival index cards, and steel binder clips arranged neatly on a desk. Rendered in crisp charcoal-sepia duotone ink (#1D1D1B) with authentic fine newspaper halftone dot screen and subtle film grain printed on warm grainy vintage newsprint paper (#D5C5AE). Accented solely by a single vermilion-red #C03F13 silk bookmark ribbon cutting diagonally across the page. High-craft museum-grade broadsheet editorial aesthetic, zero bright pastel colors, zero oil paint, zero modern neon or sci-fi elements. Strictly no text, no letters, no numbers, no human faces, no logos, no watermark, no outer border frame.
   ```
 
 ---
 
-#### (4) 判例与学术（`baseline-cases-v2.webp`）
-- **文件路径**：`design/assets/illustrations/baseline-cases-v2.webp`
+#### (4) 判例与学术（`baseline-cases-v3.webp`）
+- **文件路径**：`design/assets/illustrations/baseline-cases-v3.webp`
 - **所属分类**：判例与学术（`cases`）
 - **分辨率与比例**：1584 × 672（21:9 超宽构图）
-- **文件大小**：93.97 KB
-- **生成工具与模型版本**：Antigravity 内置生图子智能体（Image Generator）/ Nano Banana (`gemini-nano-banana-2.1`)
-- **生成日期**：2026-11-24
+- **文件大小**：113.41 KiB（116,132 bytes）
+- **生成与后处理工具**：Antigravity 内置生图子智能体（Image Generator / Nano Banana）+ 同相位网点（`9×9` 周期）将右下角朱红双线框无痕上移至 `21:9` 安全区内 + Pillow `21:9` 居中裁切 + `cwebp`（`-q 22 -m 6 -pass 10 -af`）
+- **生成日期**：2026-11-25
 - **授权状态**：AI 生成原创（根据 D-014 授权，标注「AI 生成」）
-- **色谱与隐喻参数**：
-  - `{SHADOW_HUE}`：`luminous pastel sage-celadon`（浅鼠尾草青绿）
-  - `{SUNLIGHT_HUE}`：`warm golden-apricot afternoon sunlight`（暖杏金斜阳）
-  - `{CLEAN_SURFACE_AND_LIGHT_BEAM}`：`a clean pale stone desk illuminated by a broad diagonal golden afternoon sunbeam`
-  - `{SINGLE_MINIMAL_OBJECT}`：`an open thick parchment jurisprudence folio and a small minimalist brass balance scale on the right`
+- **v3.0 模板字段**：
+  - `{COMPOSITION_LAYOUT}`：`Left-weighted diagonal depth-of-field photograph with sharp foreground on the left receding into soft halftone bokeh on the right`
+  - `{SUBJECT_METAPHOR}`：`a thick blank cloth-bound case folio with unmarked pages and a minimalist brass balance scale in sharp focus, receding into sunlit library bookshelves`
+  - `{VERMILION_ACCENT}`：`a subtle vermilion-red #C03F13 stamped double-line rectangular archive tab mark near the lower-right`
 - **完整英文 Prompt**：
   ```text
-  Fully painted opaque impasto oil painting with thick buttery palette-knife strokes and subtle fine canvas weave beneath rich luminous paint, zero raw or unpainted canvas. Minimalist serene scene inspired by sunlit contemporary impressionism: a clean pale stone desk illuminated by a broad diagonal golden afternoon sunbeam, with an open thick parchment jurisprudence folio and a small minimalist brass balance scale on the right. Clean, airy, fresh color harmony with pure chromatic pastel shadows (luminous pastel sage-celadon) and glowing sunlit highlights (warm golden-apricot afternoon sunlight), zero muddy browns, zero dusty beige, zero dark cluttered corners, zero heavy dark wood or antiques. Ultra-wide 21:9 composition with 55% calm breathing negative space on the left. Strictly no text, no letters, no numbers, no watermark, no signature, no human faces, no logos.
+  Ultra-wide 21:9 vintage European newspaper archival halftone print photography and editorial collage. Left-weighted diagonal depth-of-field photograph with sharp foreground on the left receding into soft halftone bokeh on the right, depicting a thick blank cloth-bound case folio with unmarked pages and a minimalist brass balance scale in sharp focus, receding into sunlit library bookshelves. Rendered in crisp charcoal-sepia duotone ink (#1D1D1B) with authentic fine newspaper halftone dot screen and subtle film grain printed on warm grainy vintage newsprint paper (#D5C5AE). Accented solely by a subtle vermilion-red #C03F13 stamped double-line rectangular archive tab mark near the lower-right. High-craft museum-grade broadsheet editorial aesthetic, zero bright pastel colors, zero oil paint, zero modern neon or sci-fi elements. Strictly no text, no letters, no numbers, no human faces, no logos, no watermark, no outer border frame.
   ```
 
 ---
 
-#### (5) 行业与资本（`baseline-industry-v2.webp`）
-- **文件路径**：`design/assets/illustrations/baseline-industry-v2.webp`
+#### (5) 行业与资本（`baseline-industry-v3.webp`）
+- **文件路径**：`design/assets/illustrations/baseline-industry-v3.webp`
 - **所属分类**：行业与资本（`industry`）
 - **分辨率与比例**：1584 × 672（21:9 超宽构图）
-- **文件大小**：115.96 KB
-- **生成工具与模型版本**：Antigravity 内置生图子智能体（Image Generator）/ Nano Banana (`gemini-nano-banana-2.1`)
-- **生成日期**：2026-11-24
+- **文件大小**：109.48 KiB（112,112 bytes）
+- **生成与后处理工具**：Antigravity 内置生图子智能体（Image Generator / Nano Banana）+ Pillow `21:9` 居中裁切 + `cwebp`（`-q 54 -m 6 -pass 10 -af`）
+- **生成日期**：2026-11-25
 - **授权状态**：AI 生成原创（根据 D-014 授权，标注「AI 生成」）
-- **色谱与隐喻参数**：
-  - `{SHADOW_HUE}`：`velvety dusty-lavender violet`（薰衣草紫）
-  - `{SUNLIGHT_HUE}`：`glowing golden-honey afternoon sunlight`（金蜜斜阳）
-  - `{CLEAN_SURFACE_AND_LIGHT_BEAM}`：`a quiet architectural stone sill illuminated by a deep diagonal golden-honey light shaft`
-  - `{SINGLE_MINIMAL_OBJECT}`：`a minimalist brass hourglass with trickle of golden sand and a warm terracotta vessel on the right`
+- **v3.0 模板字段**：
+  - `{COMPOSITION_LAYOUT}`：`Dramatic panoramic horizontal newspaper clipping band with clean cut edges and open warm #D5C5AE newsprint margins`
+  - `{SUBJECT_METAPHOR}`：`a sleek financial district skyline silhouette of modern stone and glass architectural towers rising against stark sunlit broadsheet contrast`
+  - `{VERMILION_ACCENT}`：`a crisp minimalist vermilion-red #C03F13 geometric concentric ring and thin vertical axis line evoking a precision radar`
 - **完整英文 Prompt**：
   ```text
-  Fully painted opaque impasto oil painting with thick buttery palette-knife strokes and subtle fine canvas weave beneath rich luminous paint, zero raw or unpainted canvas. Minimalist serene scene inspired by sunlit contemporary impressionism: a quiet architectural stone sill illuminated by a deep diagonal golden-honey light shaft, with a minimalist brass hourglass with trickle of golden sand and a warm terracotta vessel on the right. Clean, airy, fresh color harmony with pure chromatic pastel shadows (velvety dusty-lavender violet) and glowing sunlit highlights (glowing golden-honey afternoon sunlight), zero muddy browns, zero dusty beige, zero dark cluttered corners, zero heavy dark wood or antiques. Ultra-wide 21:9 composition with 55% calm breathing negative space on the left. Strictly no text, no letters, no numbers, no watermark, no signature, no human faces, no logos.
+  Ultra-wide 21:9 vintage European newspaper archival halftone print photography and editorial collage. Dramatic panoramic horizontal newspaper clipping band with clean cut edges and open warm #D5C5AE newsprint margins, depicting a sleek financial district skyline silhouette of modern stone and glass architectural towers rising against stark sunlit broadsheet contrast. Rendered in crisp charcoal-sepia duotone ink (#1D1D1B) with authentic fine newspaper halftone dot screen and subtle film grain printed on warm grainy vintage newsprint paper (#D5C5AE). Accented solely by a crisp minimalist vermilion-red #C03F13 geometric concentric ring and thin vertical axis line evoking a precision radar. High-craft museum-grade broadsheet editorial aesthetic, zero bright pastel colors, zero oil paint, zero modern neon or sci-fi elements. Strictly no text, no letters, no numbers, no human faces, no logos, no watermark, no outer border frame.
   ```
 
 ---
 
-### 3. 视觉验收清单逐条核对（design/illustration-spec.md 第五节）
+### 3. 视觉验收清单逐条核对（`design/illustration-spec.md` v3.0 第五节）
 
-- [x] **100% 满涂油画颜料**：全画面采用刮刀厚涂油画质感完整覆盖，无任何未上色的灰褐粗糙生麻布外露。
-- [x] **清透彩色阴影**：阴影严格呈现矢车菊蓝、青石蓝灰、淡玫瑰粉、鼠尾草绿与薰衣草紫，无泥褐、脏米灰或浑浊死黑暗角。
-- [x] **呼吸留白构图**：左侧 55%–60% 保持纯净光影留白，视觉焦点锁定在右侧斜射日光光斑内。
-- [x] **贴合分类的极简静物**：仅含 1–2 件日常可触摸静物（法典与印章、光学棱镜、米白笔记本与钢笔、判例卷宗与天平、黄铜沙漏与陶罐），彻底杜绝芯片、发光电路、全息投影与机器人等违和科技元素。
-- [x] **全图零文字与侵权要素**：全图零文字、零字母、零数字、零水印签名、零真实人物肖像、零仿冒机构 Logo。
-- [x] **报刊纸面协调性**：与 `#C8C0B6` 报刊纸底、`1px #1D1D1B` 黑色直角边框、`#C03F13` 朱红微标及中文标题浑然一体。
+- [x] **三色印刷克制体系**：5 张基准图均严格呈现 `#D5C5AE` 暖调新闻纸 + `#1D1D1B` 炭黑暖棕半调网点 + 单点 `#C03F13` 朱红印刷质感，彻底摒弃 v2.0 粉彩厚涂油画风格。
+- [x] **五类构图多样化**：分别落地满幅对称古典建筑（`regulation`）、错位双格剪报拼贴（`models`）、满幅俯拍桌面静物（`practice`）、左实右虚对角景深（`cases`）、宽幅水平剪报条（`industry`），在三栏网格中节奏错落。
+- [x] **实体隐喻合规**：画面实体隐喻贴合各自官方分类（石柱廊、光学棱镜与镜头、空白笔记本与钢笔、卷宗与天平、金融区建筑剪影），无电脑屏幕、代码、机器人、霓虹电路等违和科技元素。
+- [x] **全图零文字与零侵权要素**：全图零文字、零数字、零水印、零人物肖像、零真实机构 Logo、无多余画框边框。
+- [x] **工程体积与台账登记**：5 张图均为 `1584 × 672`（21:9）WebP，单张体积 `105.94 KiB` ～ `113.41 KiB`（≤ 120 KB），已完整登记于本表，并在 `design/prototype/index.html` 同步指向 `-v3.webp`。
 
 ---
 

@@ -911,7 +911,7 @@
 
     function getBaselineWebpPath(category) {
       const slug = CATEGORY_SLUG_MAP[category] || "regulation";
-      return `../assets/illustrations/baseline-${slug}-v2.webp`;
+      return `../assets/illustrations/baseline-${slug}-v3.webp`;
     }
 
     function getFallbackIllustrationSVG(category) {
@@ -1287,7 +1287,7 @@
       const modalArt = document.getElementById("modalArt");
       modalArt.classList.remove("is-fallback");
       modalArt.innerHTML = renderArtFrameHTML(item.category, item.category + " 主题插画");
-      document.getElementById("modalArtSlug").textContent = `baseline-${slug}-v2.webp`;
+      document.getElementById("modalArtSlug").textContent = `baseline-${slug}-v3.webp`;
       document.getElementById("modalTitle").textContent = item.title;
       document.getElementById("modalSummary").textContent = item.summary;
       document.getElementById("modalImpactList").innerHTML = item.impact.map(line => `<li>${line}</li>`).join("");
