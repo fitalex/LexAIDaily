@@ -25,11 +25,11 @@ const DEFAULT_TEMPLATE = resolve(REPO_ROOT, 'design/wechat/template.html');
 const DEFAULT_IMAGE_BASE = '../../assets/illustrations';
 
 const CATEGORY_META = [
-  { name: '监管与合规', sec: 'SEC. 01', roman: 'I', en: 'REGULATION', slug: 'regulation' },
-  { name: '模型与技术', sec: 'SEC. 02', roman: 'II', en: 'MODELS & TECH', slug: 'models' },
-  { name: '实务与工具', sec: 'SEC. 03', roman: 'III', en: 'PRACTICE & TOOLS', slug: 'practice' },
-  { name: '判例与学术', sec: 'SEC. 04', roman: 'IV', en: 'CASES & ACADEMIA', slug: 'cases' },
-  { name: '行业与资本', sec: 'SEC. 05', roman: 'V', en: 'INDUSTRY & CAPITAL', slug: 'industry' },
+  { name: '监管与合规', num: '01', sec: 'SEC. 01', en: 'REGULATION', slug: 'regulation' },
+  { name: '模型与技术', num: '02', sec: 'SEC. 02', en: 'MODELS & TECH', slug: 'models' },
+  { name: '实务与工具', num: '03', sec: 'SEC. 03', en: 'PRACTICE & TOOLS', slug: 'practice' },
+  { name: '判例与学术', num: '04', sec: 'SEC. 04', en: 'CASES & ACADEMIA', slug: 'cases' },
+  { name: '行业与资本', num: '05', sec: 'SEC. 05', en: 'INDUSTRY & CAPITAL', slug: 'industry' },
 ];
 const CATEGORIES = CATEGORY_META.map((c) => c.name);
 
@@ -138,13 +138,13 @@ function validateSample(data, sourcePath) {
   return data;
 }
 
-function renderCategoryIndex(items) {
+function renderTocInline(items) {
   const counts = new Map(CATEGORIES.map((name) => [name, 0]));
   for (const item of items) counts.set(item.category, counts.get(item.category) + 1);
   return CATEGORY_META.map(
     (cat) =>
-      `<span class="wx-index-roman">${cat.roman}</span> ${escapeHtml(cat.name)} ${counts.get(cat.name)}`,
-  ).join(' &nbsp;·&nbsp; ');
+      `<span class="wx-toc-num">${cat.num}</span> ${escapeHtml(cat.name)}（${counts.get(cat.name)}）`,
+  ).join(' · ');
 }
 
 function sourceDomainOf(item) {
@@ -245,36 +245,48 @@ function renderDocument(template, sample, imageBase) {
   }
 
   const meta = sample.meta;
+  const tocSection = [
+    '  <section class="wx-toc">',
+    '    <p class="wx-toc-head">本期目录 · CONTENTS</p>',
+    `    <p class="wx-toc-line">${renderTocInline(sample.items)}</p>`,
+    '  </section>',
+  ].join('\n');
+
   const digestBlock = meta.digest
     ? [
         '<section class="wx-digest">',
-        '  <p class="wx-digest-head">THE MORNING BRIEF · 今日综述<span class="wx-draft-pill">AI 初稿</span></p>',
+        '  <p class="wx-digest-head">今日综述<span class="wx-draft-pill">AI 初稿</span></p>',
         `  <p class="wx-digest-text">${escapeHtml(meta.digest)}</p>`,
+        tocSection,
         '</section>',
       ].join('\n')
-    : '';
+    : [
+        '<section class="wx-digest">',
+        tocSection,
+        '</section>',
+      ].join('\n');
+
   const internalBanner = meta.internal
     ? `<p class="wx-banner">${escapeHtml(meta.internalNote || '内部样稿 · 不对外发布')}</p>`
     : '';
 
-  const issueLabel = meta.issue ? `VOL. I · ${meta.issue}` : 'VOL. I';
+  const issueNum = (meta.issue || '').replace(/[^\d]/g, '') || '001';
   const globals = {
     DOC_TITLE: escapeHtml(
       `${meta.site}｜${meta.column}｜${meta.date}${meta.internal ? '（内部样稿）' : ''}`,
     ),
     INTERNAL_BANNER: internalBanner,
-    FOLIO_ISSUE: escapeHtml(issueLabel),
+    FOLIO_ISSUE: escapeHtml(`VOL.I NO.${issueNum}`),
     FOLIO_SLOGAN: '法律人的 AI 情报雷达',
     DATE: escapeHtml(meta.date),
     SITE_DISPLAY: 'LEXAI DAILY',
     MASTHEAD_SUB: escapeHtml(`THE LEGAL AI DAILY DISPATCH · ${meta.dateLine}`),
-    CATEGORY_INDEX: renderCategoryIndex(sample.items),
     DIGEST_BLOCK: digestBlock,
     TOTAL: String(sample.items.length),
     WEB_URL: escapeHtml(meta.webDetailUrl),
     READ_ORIGINAL_NOTE: escapeHtml(meta.readOriginalNote || ''),
     DISCLAIMER: escapeHtml(meta.disclaimer),
-    FOOTER_LINE: escapeHtml(`LEXAI DAILY © ${meta.date.slice(0, 4)} · ${meta.issue || meta.date}`),
+    FOOTER_LINE: escapeHtml(`LEXAI DAILY © ${meta.date.slice(0, 4)} · VOL.I NO.${issueNum}`),
   };
 
   let html =
@@ -326,12 +338,13 @@ function assertOutput(html, itemCount, hasDigest, chapterCount) {
     ['backdrop-filter', /backdrop-filter/i],
     ['box-shadow', /box-shadow/i],
     ['border-radius', /border-radius/i],
+    ['<table>', /<table[\s>]/i],
   ];
   for (const [label, pattern] of forbidden) {
     if (pattern.test(html)) throw new Error(`成品 HTML 含禁止内容：${label}`);
   }
-  if (!/background-color:\s*#EBE2D4/i.test(html)) {
-    throw new Error('成品 HTML 未保留浅新闻纸主底色 #EBE2D4');
+  if (!/background-color:\s*#D5C5AE/i.test(html)) {
+    throw new Error('成品 HTML 未保留暖调新闻纸主底色 #D5C5AE');
   }
   const impactDraftMarks = html.match(/实务影响<span[^>]*>\s*·?\s*AI 初稿<\/span>/g) || [];
   if (impactDraftMarks.length !== itemCount) {

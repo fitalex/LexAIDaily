@@ -7,82 +7,85 @@
   <style>
     /* ============================================================
        LexAIDaily 微信公众号「每日情报简报」模板（LD-G1-03 · NYT 报刊改版）
-       视觉基线：design/prototype/index.html + D-030 + NYT 报刊文字排版
-       浅新闻纸 #EBE2D4 ｜ 引文衬底 #E4D8C6 ｜ 印刷墨黑 #1D1D1B ｜ 朱红微标 #C03F13
-       1px/2px/3px 报刊细线 ｜ 零 <table> ｜ 零固定宽度 ｜ 零圆角/投影/外部字体
+       视觉基线：与 Web 原型同款暖调新闻纸 #D5C5AE ｜ 卡片衬底 #E2D5C2 ｜ 墨黑 #1D1D1B ｜ 朱红 #C03F13
+       采用双层嵌套 <section> 防止微信编辑器粘贴剥离纸面底色；零 <table>、零固定宽度、零圆角/投影/外部字体。
        本文件 CSS 仅作为 juice 内联来源；成品 HTML 不含 <style> 与 class。
        ============================================================ */
     html,
     body {
       margin: 0;
       padding: 0;
-      background-color: #EBE2D4;
+      background-color: #D5C5AE;
+    }
+    .wx-outer {
+      margin: 0;
+      padding: 1px 0;
     }
     .wx-root {
       margin: 0;
-      padding: 14px 14px 24px;
-      background-color: #EBE2D4;
+      padding: 14px 14px 22px;
+      background-color: #D5C5AE;
       color: #1D1D1B;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 15px;
-      line-height: 1.85;
+      font-size: 12px;
+      line-height: 1.8;
       text-align: left;
       box-sizing: border-box;
     }
     .wx-banner {
-      margin: 0 0 12px;
-      padding: 7px 12px;
+      margin: 0 0 10px;
+      padding: 6px 10px;
       background-color: #1D1D1B;
-      color: #EBE2D4;
+      color: #D5C5AE;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10.5px;
-      line-height: 1.5;
-      letter-spacing: 0.14em;
+      font-size: 9px;
+      line-height: 1.45;
+      letter-spacing: 0.12em;
       text-align: center;
     }
     .wx-folio {
       margin: 0;
-      padding: 0 0 8px;
+      padding: 0 0 7px;
       border-bottom: 1px solid #1D1D1B;
       text-align: center;
     }
     .wx-folio-line {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10.5px;
-      line-height: 1.6;
-      letter-spacing: 0.1em;
-      color: #524D46;
+      font-size: 9.5px;
+      line-height: 1.4;
+      letter-spacing: 0.03em;
+      color: #4A443D;
     }
     .wx-folio-mono {
       font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 10px;
+      font-size: 9px;
     }
     .wx-masthead {
-      margin: 12px 0 0;
-      padding: 14px 10px 12px;
+      margin: 10px 0 0;
+      padding: 12px 10px 10px;
       background-color: #1D1D1B;
       text-align: center;
     }
     .wx-masthead-title {
       margin: 0;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 30px;
+      font-size: 24px;
       font-weight: 900;
       line-height: 1.08;
       letter-spacing: 0.08em;
-      color: #EBE2D4;
-    }
-    .wx-masthead-sub {
-      margin: 6px 0 0;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 9.5px;
-      line-height: 1.4;
-      letter-spacing: 0.18em;
       color: #D5C5AE;
     }
+    .wx-masthead-sub {
+      margin: 5px 0 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 8.5px;
+      line-height: 1.4;
+      letter-spacing: 0.16em;
+      color: #C9B9A3;
+    }
     .wx-double-rule {
-      margin: 10px 0 0;
+      margin: 8px 0 0;
       padding: 0;
       border-top: 2px solid #1D1D1B;
       border-bottom: 1px solid #1D1D1B;
@@ -91,28 +94,29 @@
       line-height: 0;
     }
     .wx-digest {
-      margin: 14px 0 0;
-      padding: 15px 15px 15px;
-      background-color: #E4D8C6;
+      margin: 12px 0 0;
+      padding: 12px 13px 12px;
+      background-color: #E2D5C2;
       border-top: 1px solid #1D1D1B;
       border-bottom: 1px solid #1D1D1B;
     }
     .wx-digest-head {
-      margin: 0 0 9px;
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10.5px;
+      margin: 0 0 7px;
+      font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
+      font-size: 12px;
       font-weight: 700;
       line-height: 1.4;
-      letter-spacing: 0.14em;
+      letter-spacing: 0.12em;
       color: #1D1D1B;
       text-align: center;
     }
     .wx-draft-pill {
       display: inline-block;
-      margin-left: 7px;
+      margin-left: 6px;
       padding: 0 4px;
       border: 1px solid #8F8372;
-      font-size: 9.5px;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 8.5px;
       font-weight: 400;
       letter-spacing: 0.04em;
       color: #524D46;
@@ -120,72 +124,80 @@
     .wx-digest-text {
       margin: 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 15px;
-      line-height: 1.88;
+      font-size: 12px;
+      line-height: 1.8;
       color: #1D1D1B;
       text-align: left;
     }
-    .wx-index {
-      margin: 12px 0 0;
-      padding: 8px 0;
-      border-bottom: 1px solid #C4B6A1;
-      text-align: center;
+    .wx-toc {
+      margin: 10px 0 0;
+      padding: 8px 0 0;
+      border-top: 1px solid #BBA992;
     }
-    .wx-index-line {
-      margin: 0;
+    .wx-toc-head {
+      margin: 0 0 4px;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10.5px;
-      line-height: 1.85;
-      letter-spacing: 0.03em;
+      font-size: 9px;
+      font-weight: 700;
+      line-height: 1.4;
+      letter-spacing: 0.14em;
       color: #524D46;
     }
-    .wx-index-roman {
+    .wx-toc-line {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      font-size: 9.5px;
+      line-height: 1.8;
+      letter-spacing: 0.02em;
+      color: #3D3832;
+    }
+    .wx-toc-num {
       font-family: ui-monospace, Menlo, Consolas, monospace;
       color: #C03F13;
       font-weight: 700;
     }
     .wx-chapter {
-      margin: 26px 0 0;
+      margin: 22px 0 0;
       padding: 0;
     }
     .wx-chapter-head {
       margin: 0;
-      padding: 9px 0 8px;
-      border-top: 3px solid #1D1D1B;
-      border-bottom: 1px solid #C4B6A1;
+      padding: 8px 0 6px;
+      border-top: 2px solid #1D1D1B;
+      border-bottom: 1px solid #A89984;
     }
     .wx-chapter-line {
       margin: 0;
-      line-height: 1.45;
+      line-height: 1.4;
     }
     .wx-chapter-sec {
       font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 10.5px;
+      font-size: 9.5px;
       font-weight: 700;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       color: #C03F13;
     }
     .wx-chapter-cn {
-      margin-left: 7px;
+      margin-left: 6px;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 16.5px;
+      font-size: 13.5px;
       font-weight: 700;
       letter-spacing: 0.06em;
       color: #1D1D1B;
     }
     .wx-chapter-en {
-      margin-left: 7px;
+      margin-left: 6px;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 600;
-      letter-spacing: 0.12em;
-      color: #786F64;
+      letter-spacing: 0.1em;
+      color: #5C544B;
     }
     .wx-art-frame {
-      margin: 12px 0 0;
+      margin: 10px 0 0;
       padding: 0;
       border: 1px solid #1D1D1B;
-      background-color: #D5C5AE;
+      background-color: #C7B69D;
       font-size: 0;
       line-height: 0;
       box-sizing: border-box;
@@ -197,78 +209,78 @@
       border: 0;
     }
     .wx-art-caption {
-      margin: 5px 0 0;
+      margin: 4px 0 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10px;
-      line-height: 1.5;
-      letter-spacing: 0.03em;
-      color: #786F64;
+      font-size: 8.5px;
+      line-height: 1.45;
+      letter-spacing: 0.02em;
+      color: #5C544B;
       text-align: right;
     }
     .wx-item {
       margin: 0;
-      padding: 20px 0 22px;
-      border-bottom: 1px solid #C4B6A1;
+      padding: 15px 0 16px;
+      border-bottom: 1px solid #A89984;
     }
     .wx-item-last {
       margin: 0;
-      padding: 20px 0 8px;
+      padding: 15px 0 6px;
     }
     .wx-kicker {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10px;
+      font-size: 9px;
       font-weight: 700;
-      line-height: 1.5;
-      letter-spacing: 0.12em;
-      color: #665E54;
+      line-height: 1.45;
+      letter-spacing: 0.1em;
+      color: #524D46;
     }
     .wx-kicker-lead {
       color: #C03F13;
     }
     .wx-badge-headline {
       display: inline-block;
-      margin-left: 7px;
-      padding: 0 5px;
+      margin-left: 6px;
+      padding: 0 4px;
       background-color: #C03F13;
-      color: #EBE2D4;
-      font-size: 9.5px;
+      color: #E2D5C2;
+      font-size: 8.5px;
       font-weight: 600;
-      line-height: 1.55;
-      letter-spacing: 0.06em;
+      line-height: 1.5;
+      letter-spacing: 0.05em;
     }
     .wx-badge-unverified {
       display: inline-block;
-      margin-left: 7px;
-      padding: 0 5px;
+      margin-left: 6px;
+      padding: 0 4px;
       border: 1px solid #C03F13;
       color: #C03F13;
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 600;
-      line-height: 1.5;
+      line-height: 1.45;
       letter-spacing: 0.04em;
     }
     .wx-title {
-      margin: 6px 0 0;
+      margin: 5px 0 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 18.5px;
+      font-size: 14.5px;
       font-weight: 700;
-      line-height: 1.38;
+      line-height: 1.42;
       letter-spacing: -0.01em;
       color: #1D1D1B;
     }
     .wx-title-lead {
-      font-size: 20px;
-      line-height: 1.36;
+      font-size: 15.5px;
+      line-height: 1.4;
     }
     .wx-byline {
-      margin: 8px 0 0;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #D5C8B5;
+      margin: 6px 0 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #BAA992;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 11px;
-      line-height: 1.55;
-      color: #665E54;
+      font-size: 9.5px;
+      line-height: 1.5;
+      color: #524D46;
     }
     .wx-byline strong {
       color: #1D1D1B;
@@ -276,58 +288,58 @@
     }
     .wx-domain {
       font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 10px;
-      color: #665E54;
+      font-size: 8.5px;
+      color: #524D46;
     }
     .wx-summary {
-      margin: 12px 0 0;
+      margin: 9px 0 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 15px;
-      line-height: 1.86;
+      font-size: 12px;
+      line-height: 1.8;
       color: #24221F;
       text-align: left;
     }
     .wx-impact {
-      margin: 14px 0 0;
-      padding: 10px 13px;
-      background-color: #E4D8C6;
+      margin: 11px 0 0;
+      padding: 8px 11px;
+      background-color: #E2D5C2;
       border-left: 2px solid #1D1D1B;
     }
     .wx-impact-head {
-      margin: 0 0 4px;
+      margin: 0 0 3px;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10.5px;
+      font-size: 9.5px;
       font-weight: 700;
       line-height: 1.4;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       color: #1D1D1B;
     }
     .wx-draft-inline {
-      margin-left: 4px;
+      margin-left: 3px;
       font-weight: 400;
-      letter-spacing: 0.04em;
-      color: #665E54;
+      letter-spacing: 0.03em;
+      color: #5C544B;
     }
     .wx-impact-text {
       margin: 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 13.5px;
-      line-height: 1.78;
+      font-size: 11px;
+      line-height: 1.72;
       color: #24221F;
       text-align: left;
     }
     .wx-ornament {
-      margin: 22px 0 0;
-      font-size: 11px;
+      margin: 18px 0 0;
+      font-size: 9.5px;
       line-height: 1;
-      letter-spacing: 0.4em;
-      color: #8F8372;
+      letter-spacing: 0.35em;
+      color: #6E655A;
       text-align: center;
     }
     .wx-readmore {
-      margin: 18px 0 0;
-      padding: 16px 16px 15px;
-      background-color: #E4D8C6;
+      margin: 14px 0 0;
+      padding: 13px 14px 12px;
+      background-color: #E2D5C2;
       border-top: 2px solid #1D1D1B;
       border-bottom: 2px solid #1D1D1B;
       border-left: 1px solid #1D1D1B;
@@ -336,115 +348,114 @@
     .wx-readmore-eyebrow {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 9.5px;
+      font-size: 8.5px;
       font-weight: 700;
-      line-height: 1.5;
-      letter-spacing: 0.16em;
-      color: #665E54;
+      line-height: 1.45;
+      letter-spacing: 0.14em;
+      color: #5C544B;
     }
     .wx-readmore-title {
-      margin: 6px 0 0;
+      margin: 4px 0 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 17px;
+      font-size: 13.5px;
       font-weight: 700;
       line-height: 1.4;
       color: #1D1D1B;
     }
     .wx-readmore-text {
-      margin: 7px 0 0;
+      margin: 5px 0 0;
       font-family: "Songti SC", "STSong", "Noto Serif SC", Georgia, "Times New Roman", serif;
-      font-size: 13.5px;
-      line-height: 1.78;
+      font-size: 11px;
+      line-height: 1.72;
       color: #24221F;
     }
     .wx-readmore-cta {
-      margin: 10px 0 0;
+      margin: 8px 0 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 11.5px;
+      font-size: 10px;
       font-weight: 700;
-      line-height: 1.5;
-      letter-spacing: 0.08em;
+      line-height: 1.45;
+      letter-spacing: 0.06em;
       color: #C03F13;
     }
     .wx-foot {
-      margin: 18px 0 0;
-      padding: 14px 0 6px;
-      border-top: 1px solid #C4B6A1;
+      margin: 14px 0 0;
+      padding: 11px 0 4px;
+      border-top: 1px solid #A89984;
     }
     .wx-foot-text {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-      font-size: 10.5px;
-      line-height: 1.75;
-      color: #786F64;
+      font-size: 9px;
+      line-height: 1.7;
+      color: #5C544B;
     }
     .wx-foot-url {
-      margin: 6px 0 0;
+      margin: 5px 0 0;
       font-family: ui-monospace, Menlo, Consolas, monospace;
-      font-size: 10px;
-      line-height: 1.6;
-      color: #786F64;
+      font-size: 8.5px;
+      line-height: 1.55;
+      color: #5C544B;
       word-break: break-all;
     }
     .wx-foot-line {
-      margin: 8px 0 0;
+      margin: 6px 0 0;
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 10.5px;
-      letter-spacing: 0.14em;
-      color: #524D46;
+      font-size: 9px;
+      letter-spacing: 0.12em;
+      color: #4A443D;
     }
   </style>
 </head>
 <body>
-  <section class="wx-root">
-    {{INTERNAL_BANNER}}
-    <section class="wx-folio">
-      <p class="wx-folio-line">{{FOLIO_SLOGAN}} · <span class="wx-folio-mono">{{FOLIO_ISSUE}}</span> · <span class="wx-folio-mono">{{DATE}}</span></p>
-    </section>
-    <section class="wx-masthead">
-      <p class="wx-masthead-title">{{SITE_DISPLAY}}</p>
-      <p class="wx-masthead-sub">{{MASTHEAD_SUB}}</p>
-    </section>
-    <section class="wx-double-rule">&nbsp;</section>
-    {{DIGEST_BLOCK}}
-    <section class="wx-index">
-      <p class="wx-index-line">{{CATEGORY_INDEX}}</p>
-    </section>
-    <!-- CHAPTER_TEMPLATE_START -->
-    <section class="wx-chapter">
-      <section class="wx-chapter-head">
-        <p class="wx-chapter-line"><span class="wx-chapter-sec">{{CHAPTER_SEC}}</span><span class="wx-chapter-cn">{{CHAPTER_CN}}</span><span class="wx-chapter-en">· {{CHAPTER_EN}}</span></p>
+  <section class="wx-outer">
+    <section class="wx-root">
+      {{INTERNAL_BANNER}}
+      <section class="wx-folio">
+        <p class="wx-folio-line">{{FOLIO_SLOGAN}} · <span class="wx-folio-mono">{{FOLIO_ISSUE}}</span> · <span class="wx-folio-mono">{{DATE}}</span></p>
       </section>
-      <section class="wx-art-frame">
-        <img class="wx-art-img" src="{{CHAPTER_IMG_SRC}}" alt="{{CHAPTER_CN}} 复古报刊插画" />
+      <section class="wx-masthead">
+        <p class="wx-masthead-title">{{SITE_DISPLAY}}</p>
+        <p class="wx-masthead-sub">{{MASTHEAD_SUB}}</p>
       </section>
-      <p class="wx-art-caption">{{CHAPTER_CN}}主题版画 · 插画由 AI 生成</p>
-      <!-- ITEM_TEMPLATE_START -->
-      <section class="{{ITEM_WRAP_CLASS}}">
-        <p class="{{ITEM_KICKER_CLASS}}">NO.{{ITEM_NUM}} · {{ITEM_CATEGORY}}{{ITEM_HEADLINE_BADGE}}{{ITEM_UNVERIFIED_BADGE}}</p>
-        <p class="{{ITEM_TITLE_CLASS}}">{{ITEM_TITLE}}</p>
-        <p class="wx-byline">信源 <strong>{{ITEM_SOURCE}}</strong> · {{ITEM_SOURCE_DATE}} · {{ITEM_FACT_LEVEL}} · <span class="wx-domain">{{ITEM_SOURCE_DOMAIN}}</span></p>
-        {{ITEM_IMAGE_BLOCK}}
-        <p class="wx-summary">{{ITEM_SUMMARY}}</p>
-        <section class="wx-impact">
-          <p class="wx-impact-head">实务影响<span class="wx-draft-inline">· AI 初稿</span></p>
-          <p class="wx-impact-text">{{ITEM_IMPACT}}</p>
+      <section class="wx-double-rule">&nbsp;</section>
+      {{DIGEST_BLOCK}}
+      <!-- CHAPTER_TEMPLATE_START -->
+      <section class="wx-chapter">
+        <section class="wx-chapter-head">
+          <p class="wx-chapter-line"><span class="wx-chapter-sec">{{CHAPTER_SEC}}</span><span class="wx-chapter-cn">{{CHAPTER_CN}}</span><span class="wx-chapter-en">· {{CHAPTER_EN}}</span></p>
         </section>
+        <section class="wx-art-frame">
+          <img class="wx-art-img" src="{{CHAPTER_IMG_SRC}}" alt="{{CHAPTER_CN}} 复古报刊插画" />
+        </section>
+        <p class="wx-art-caption">{{CHAPTER_CN}}主题版画 · 插画由 AI 生成</p>
+        <!-- ITEM_TEMPLATE_START -->
+        <section class="{{ITEM_WRAP_CLASS}}">
+          <p class="{{ITEM_KICKER_CLASS}}">NO.{{ITEM_NUM}} · {{ITEM_CATEGORY}}{{ITEM_HEADLINE_BADGE}}{{ITEM_UNVERIFIED_BADGE}}</p>
+          <p class="{{ITEM_TITLE_CLASS}}">{{ITEM_TITLE}}</p>
+          <p class="wx-byline">信源 <strong>{{ITEM_SOURCE}}</strong> · {{ITEM_SOURCE_DATE}} · {{ITEM_FACT_LEVEL}} · <span class="wx-domain">{{ITEM_SOURCE_DOMAIN}}</span></p>
+          {{ITEM_IMAGE_BLOCK}}
+          <p class="wx-summary">{{ITEM_SUMMARY}}</p>
+          <section class="wx-impact">
+            <p class="wx-impact-head">实务影响<span class="wx-draft-inline">· AI 初稿</span></p>
+            <p class="wx-impact-text">{{ITEM_IMPACT}}</p>
+          </section>
+        </section>
+        <!-- ITEM_TEMPLATE_END -->
       </section>
-      <!-- ITEM_TEMPLATE_END -->
-    </section>
-    <!-- CHAPTER_TEMPLATE_END -->
-    <p class="wx-ornament">— ◆ —</p>
-    <section class="wx-readmore">
-      <p class="wx-readmore-eyebrow">FULL EDITION &amp; PRIMARY SOURCES</p>
-      <p class="wx-readmore-title">查看今日完整版与一手信源</p>
-      <p class="wx-readmore-text">本期 {{TOTAL}} 条资讯的完整实务影响锚点与原始信源链接，均已汇总至当日 Web 详情页。</p>
-      <p class="wx-readmore-cta">↙ 点击左下角「阅读原文」直达</p>
-    </section>
-    <section class="wx-foot">
-      <p class="wx-foot-text">{{DISCLAIMER}}</p>
-      <p class="wx-foot-url">Web 详情页占位：{{WEB_URL}}（{{READ_ORIGINAL_NOTE}}）</p>
-      <p class="wx-foot-line">{{FOOTER_LINE}}</p>
+      <!-- CHAPTER_TEMPLATE_END -->
+      <p class="wx-ornament">— ◆ —</p>
+      <section class="wx-readmore">
+        <p class="wx-readmore-eyebrow">FULL EDITION &amp; PRIMARY SOURCES</p>
+        <p class="wx-readmore-title">查看今日完整版与一手信源</p>
+        <p class="wx-readmore-text">本期 {{TOTAL}} 条资讯的完整实务影响锚点与原始信源链接，均已汇总至当日 Web 详情页。</p>
+        <p class="wx-readmore-cta">↙ 点击左下角「阅读原文」直达</p>
+      </section>
+      <section class="wx-foot">
+        <p class="wx-foot-text">{{DISCLAIMER}}</p>
+        <p class="wx-foot-url">Web 详情页占位：{{WEB_URL}}（{{READ_ORIGINAL_NOTE}}）</p>
+        <p class="wx-foot-line">{{FOOTER_LINE}}</p>
+      </section>
     </section>
   </section>
 </body>
