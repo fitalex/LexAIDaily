@@ -541,7 +541,7 @@
       color: var(--ink); width: 100%; max-width: 720px; max-height: 90vh;
       overflow-y: auto; border: 2px solid var(--ink); border-radius: 0; padding: 24px 38px 32px;
     }
-    /* NYT 三栏期号报眉 + 厚薄双线 */
+    /* NYT 三栏期号报眉（整合 VOL.XX -NO.XX-分类）+ 厚薄双线 */
     .modal-folio {
       display: grid;
       grid-template-columns: 1fr auto 1fr;
@@ -550,11 +550,21 @@
       padding-bottom: 10px;
     }
     .modal-folio-vol {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 7px;
       font-family: var(--font-mono);
-      font-size: 10.5px;
-      letter-spacing: 0.08em;
+      font-size: 11px;
+      letter-spacing: 0.06em;
       color: var(--ink-muted);
       text-align: left;
+    }
+    .modal-folio-cat {
+      font-family: var(--font-sans-cn);
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.04em;
     }
     .modal-folio-brand {
       font-family: var(--font-display);
@@ -582,20 +592,7 @@
       margin-bottom: 20px;
     }
 
-    /* NYT 小眉题 + 紧行距大号衬线标题 + 署名电头栏（置于配图与正文之前） */
-    .modal-kicker {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-      font-family: var(--font-sans-cn);
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.14em;
-      color: var(--ink-muted);
-      margin-bottom: 8px;
-    }
-    .modal-kicker-accent { color: var(--accent); }
+    /* NYT 紧行距大号衬线标题 + 顶部可点击信源电头栏（置于配图与正文之前） */
     .modal-title {
       font-family: var(--font-serif-cn);
       font-weight: 700;
@@ -614,8 +611,19 @@
       border-bottom: 1px solid var(--rule-byline);
       margin-bottom: 18px;
     }
-    .modal-byline strong { color: var(--ink); font-weight: 600; }
-    .modal-byline-domain { font-family: var(--font-mono); font-size: 11px; color: var(--ink-muted); }
+    .modal-source-link {
+      color: var(--ink);
+      font-weight: 600;
+      text-decoration: underline;
+      text-decoration-color: rgba(29, 29, 27, 0.45);
+      text-underline-offset: 3px;
+      word-break: break-all;
+      transition: color 0.18s, text-decoration-color 0.18s;
+    }
+    .modal-source-link:hover {
+      color: var(--accent);
+      text-decoration-color: var(--accent);
+    }
 
     /* 21:9 复古网点插画 + 右对齐图注 */
     .modal-art-wrap { margin-bottom: 20px; }
@@ -689,7 +697,7 @@
     .impact-list li { padding-left: 14px; position: relative; text-align: left; }
     .impact-list li::before { content: "▪"; position: absolute; left: 0; color: var(--accent); }
 
-    /* 报刊菱形分隔符 + 操作栏 + 低调合规底注 */
+    /* 报刊菱形分隔符 + 精简操作栏 + 低调合规底注 */
     .modal-ornament {
       font-size: 11px;
       line-height: 1;
@@ -698,20 +706,13 @@
       text-align: center;
       margin: 0 0 18px;
     }
-    .modal-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-    .btn-ink {
-      flex: 1; min-width: 220px; background: var(--ink); color: var(--paper-modal);
-      border: 1px solid var(--ink); padding: 12px 18px; text-align: center; text-decoration: none;
-      font-family: var(--font-sans-cn); font-size: 13.5px; letter-spacing: 0.03em;
-      cursor: pointer; word-break: break-all; transition: background 0.18s, border-color 0.18s;
-    }
-    .btn-ink:hover { background: var(--accent); border-color: var(--accent); }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
     .btn-outline {
       background: transparent; color: var(--ink); border: 1px solid var(--ink);
-      padding: 12px 16px; font-family: var(--font-sans-cn); font-size: 13px; letter-spacing: 0.03em;
-      cursor: pointer; transition: background 0.18s;
+      padding: 10px 18px; font-family: var(--font-sans-cn); font-size: 13px; letter-spacing: 0.03em;
+      cursor: pointer; transition: background 0.18s, color 0.18s;
     }
-    .btn-outline:hover { background: rgba(29, 29, 27, 0.06); }
+    .btn-outline:hover { background: var(--ink); color: var(--paper-modal); }
     .modal-note {
       font-family: var(--font-sans-cn);
       font-size: 11.5px;
@@ -811,7 +812,7 @@
     body.mobile-preview .modal-folio { grid-template-columns: 1fr auto; }
     body.mobile-preview .modal-title { font-size: 20px; line-height: 1.38; }
     body.mobile-preview .modal-summary { font-size: 15px; line-height: 1.86; }
-    body.mobile-preview .btn-ink { min-width: 100%; }
+    body.mobile-preview .btn-outline { width: 100%; }
 
     @media (max-width: 960px) {
       .top-bar {
@@ -903,7 +904,7 @@
       .modal-folio { grid-template-columns: 1fr auto; }
       .modal-title { font-size: 21px; line-height: 1.38; }
       .modal-summary { font-size: 15px; line-height: 1.86; }
-      .btn-ink { min-width: 100%; }
+      .btn-outline { width: 100%; }
     }
   </style>
 </head>
@@ -1006,7 +1007,6 @@
       </div>
       <div class="modal-double-rule" aria-hidden="true"></div>
 
-      <div class="modal-kicker" id="modalKicker"></div>
       <h2 class="modal-title" id="modalTitle"></h2>
       <div class="modal-byline" id="modalByline"></div>
 
@@ -1028,7 +1028,6 @@
       <div class="modal-ornament" aria-hidden="true">— ◆ —</div>
 
       <div class="modal-actions">
-        <a class="btn-ink" id="modalSourceBtn" href="#" target="_blank" rel="noopener noreferrer">直达一手信源 ↗</a>
         <button class="btn-outline" id="modalCopyBtn" onclick="copyCitation()">复制法律人引用格式</button>
       </div>
       <p class="modal-note">合规提示：当前原型数据为标注「示例」之虚构占位内容，外链使用保留域名 example.com；标有「AI 初稿」之实务影响仅供初步研判，不构成正式法律意见。</p>
@@ -1434,18 +1433,17 @@
       currentModalItem = item;
       const seq = String(idx + 1).padStart(2, "0");
       const slug = CATEGORY_SLUG_MAP[item.category] || "regulation";
+      const volPrefix = ed.vol.startsWith("VOL.") ? ed.vol.split(" ")[0] : ed.vol;
       const badgeHTML = item.badge
         ? `<span class="m-badge ${item.badgeOutline ? "outline" : ""}">${item.badge}</span>`
         : "";
-      const isLead = Boolean(item.badge && !item.badgeOutline) || idx === 0;
 
-      document.getElementById("modalFolioVol").textContent = `${ed.vol} · NO.${seq}`;
-      document.getElementById("modalKicker").innerHTML =
-        `<span class="${isLead ? "modal-kicker-accent" : ""}">NO.${seq} · ${item.category}</span>${badgeHTML}`;
+      document.getElementById("modalFolioVol").innerHTML =
+        `<span>${volPrefix} -NO.${seq}-<span class="modal-folio-cat">${item.category}</span></span>${badgeHTML}`;
       document.getElementById("modalTitle").textContent = item.title;
       const sampleFlag = item.placeholder ? " · 示例占位" : "";
       document.getElementById("modalByline").innerHTML =
-        `信源 <strong>${item.sourceDomain}</strong> · ${item.date} · ${item.factLevel}${sampleFlag}`;
+        `信源 <a class="modal-source-link" href="https://${item.sourceDomain}" target="_blank" rel="noopener noreferrer">${item.sourceDomain} ↗</a> · ${item.date} · ${item.factLevel}${sampleFlag}`;
 
       const modalArt = document.getElementById("modalArt");
       modalArt.classList.remove("is-fallback");
@@ -1455,9 +1453,6 @@
 
       document.getElementById("modalSummary").textContent = item.summary;
       document.getElementById("modalImpactList").innerHTML = item.impact.map(line => `<li>${line}</li>`).join("");
-      const srcBtn = document.getElementById("modalSourceBtn");
-      srcBtn.href = `https://${item.sourceDomain}`;
-      srcBtn.textContent = `直达一手信源（${item.sourceDomain}）↗`;
       document.getElementById("modalCopyBtn").textContent = "复制法律人引用格式";
       document.getElementById("modalBackdrop").classList.add("open");
       document.body.style.overflow = "hidden";
