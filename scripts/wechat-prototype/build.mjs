@@ -254,6 +254,12 @@ function assertOutput(html, itemCount, hasDigest) {
   if (impactHeads.length !== itemCount) {
     throw new Error(`“实务影响”区块数量不符：期望 ${itemCount} 处，实际 ${impactHeads.length} 处`);
   }
+  const impactDraftMarks = html.match(/实务影响<span[^>]*>AI 初稿<\/span>/g) || [];
+  if (impactDraftMarks.length !== itemCount) {
+    throw new Error(
+      `带“AI 初稿”标识的实务影响区块数量不符：期望 ${itemCount} 处，实际 ${impactDraftMarks.length} 处`,
+    );
+  }
   const draftMarks = html.match(/AI 初稿/g) || [];
   const minimumDraftMarks = itemCount + (hasDigest ? 1 : 0); // 每条资讯 1 处 + 今日综述 1 处（如有）
   if (draftMarks.length < minimumDraftMarks) {
