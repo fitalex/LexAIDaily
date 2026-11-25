@@ -1,46 +1,40 @@
 <!DOCTYPE html>
-<html lang="zh-CN" style="margin: 0; padding: 0; background-color: #2B2926;">
+<html lang="zh-CN" style="margin: 0; padding: 0; background-color: #EBE2D4;">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LEXAI DAILY｜公众号 NYT 报刊文字排版预览（2026-11-24）</title>
+  <title>LEXAI DAILY｜公众号 NYT 报刊文字排版预览（2026-11-24 · 微信零溢出修复版）</title>
 </head>
-<body style="margin: 0; padding: 28px 14px 48px; background-color: #2B2926;">
+<body style="margin: 0; padding: 0; background-color: #EBE2D4;">
 
-  <!-- 以下为公众号正文完整内联区块（NYT 报刊文字排版体系｜零 <style>、零 class、零 <script>、零圆角/投影） -->
-  <section style="max-width: 430px; margin: 0 auto; padding: 0; background-color: #EBE2D4; color: #1D1D1B; border: 1px solid #1D1D1B; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, 'Times New Roman', serif; font-size: 15px; line-height: 1.85; text-align: left;">
+  <!-- 公众号正文完整内联区块（零 <table>、零固定宽度、零 <style>/class/<script>，直接 Cmd+A 全选复制即可粘贴） -->
+  <section style="margin: 0; padding: 14px 14px 24px; background-color: #EBE2D4; color: #1D1D1B; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, 'Times New Roman', serif; font-size: 15px; line-height: 1.85; text-align: left; box-sizing: border-box;">
 
-    <!-- 1. NYT 经典三栏报眉期号栏（使用 table 实现左右对齐，100% 兼容微信后台） -->
-    <section style="margin: 0 22px; padding: 11px 0 8px; border-bottom: 1px solid #1D1D1B;">
-      <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0;">
-        <tr>
-          <td style="padding: 0; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 9.5px; line-height: 1.4; letter-spacing: 0.08em; color: #524D46; text-align: left;">VOL. I · NO. 001</td>
-          <td style="padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 10.5px; font-weight: 600; line-height: 1.4; letter-spacing: 0.14em; color: #1D1D1B; text-align: center;">法律人的 AI 情报雷达</td>
-          <td style="padding: 0; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 9.5px; line-height: 1.4; letter-spacing: 0.04em; color: #524D46; text-align: right;">2026-11-24</td>
-        </tr>
-      </table>
+    <!-- 1. 顶部期号报眉（改用纯流体居中段落，彻底消除微信 <table> 溢出告警） -->
+    <section style="margin: 0; padding: 0 0 8px; border-bottom: 1px solid #1D1D1B; text-align: center;">
+      <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; font-size: 10.5px; line-height: 1.6; letter-spacing: 0.1em; color: #524D46;">法律人的 AI 情报雷达 · <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10px;">VOL. I NO.001</span> · <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10px;">2026-11-24</span></p>
     </section>
 
-    <!-- 2. 标志性满宽墨黑反白报头带 + NYT 厚薄双线收束 -->
-    <section style="margin: 12px 22px 0; padding: 15px 10px 13px; background-color: #1D1D1B; text-align: center;">
-      <p style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 33px; font-weight: 900; line-height: 1.06; letter-spacing: 0.1em; color: #EBE2D4;">LEXAI DAILY</p>
-      <p style="margin: 6px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; line-height: 1.4; letter-spacing: 0.24em; color: #D5C5AE;">THE LEGAL AI DAILY DISPATCH · 星期二</p>
+    <!-- 2. 满宽墨黑反白报头带 + NYT 厚薄双线收束 -->
+    <section style="margin: 12px 0 0; padding: 14px 10px 12px; background-color: #1D1D1B; text-align: center;">
+      <p style="margin: 0; font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 900; line-height: 1.08; letter-spacing: 0.08em; color: #EBE2D4;">LEXAI DAILY</p>
+      <p style="margin: 6px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; line-height: 1.4; letter-spacing: 0.18em; color: #D5C5AE;">THE LEGAL AI DAILY DISPATCH · 星期二</p>
     </section>
-    <section style="margin: 10px 22px 0; padding: 0; border-top: 2.5px solid #1D1D1B; border-bottom: 1px solid #1D1D1B; height: 3px; font-size: 0; line-height: 0;">&nbsp;</section>
+    <section style="margin: 10px 0 0; padding: 0; border-top: 2px solid #1D1D1B; border-bottom: 1px solid #1D1D1B; height: 3px; font-size: 0; line-height: 0;">&nbsp;</section>
 
-    <!-- 3. NYT The Morning 风格开篇导读：今日综述（全衬线居中微标 + 上下细线） -->
-    <section style="margin: 16px 22px 0; padding: 16px 16px 16px; background-color: #E4D8C6; border-top: 1px solid #1D1D1B; border-bottom: 1px solid #1D1D1B;">
-      <p style="margin: 0 0 9px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10.5px; font-weight: 700; line-height: 1.4; letter-spacing: 0.16em; color: #1D1D1B; text-align: center;">THE MORNING BRIEF · 今日综述<span style="display: inline-block; margin-left: 7px; padding: 0 4px; border: 1px solid #8F8372; font-size: 9.5px; font-weight: 400; letter-spacing: 0.04em; color: #524D46; vertical-align: 0;">AI 初稿</span></p>
+    <!-- 3. NYT The Morning 风格开篇导读：今日综述 -->
+    <section style="margin: 14px 0 0; padding: 15px 15px 15px; background-color: #E4D8C6; border-top: 1px solid #1D1D1B; border-bottom: 1px solid #1D1D1B;">
+      <p style="margin: 0 0 9px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10.5px; font-weight: 700; line-height: 1.4; letter-spacing: 0.14em; color: #1D1D1B; text-align: center;">THE MORNING BRIEF · 今日综述<span style="display: inline-block; margin-left: 7px; padding: 0 4px; border: 1px solid #8F8372; font-size: 9.5px; font-weight: 400; letter-spacing: 0.04em; color: #524D46;">AI 初稿</span></p>
       <p style="margin: 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 15px; line-height: 1.88; color: #1D1D1B; text-align: left;">本期聚焦英国 ICO 对消费级 Agentic AI 的隐私义务提醒，以及欧盟《人工智能法案》第 27 条 FRIA 问卷草案；多语种与时效性法律评测同步指出，跨语言、跨版本检索仍是法律 AI 的系统性偏差来源。</p>
     </section>
 
-    <!-- 4. 本期版面目录索引（NYT 极简无衬线目录条） -->
-    <section style="margin: 12px 22px 0; padding: 8px 0; border-bottom: 1px solid #C4B6A1; text-align: center;">
-      <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10.5px; line-height: 1.85; letter-spacing: 0.04em; color: #524D46;">
-        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">I</span> 监管与合规 3 &nbsp;·&nbsp;
-        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">II</span> 模型与技术 3 &nbsp;·&nbsp;
-        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">III</span> 实务与工具 3 &nbsp;·&nbsp;
-        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">IV</span> 判例与学术 3 &nbsp;·&nbsp;
+    <!-- 4. 本期版面目录索引 -->
+    <section style="margin: 12px 0 0; padding: 8px 0; border-bottom: 1px solid #C4B6A1; text-align: center;">
+      <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10.5px; line-height: 1.85; letter-spacing: 0.03em; color: #524D46;">
+        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">I</span> 监管与合规 3 ·
+        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">II</span> 模型与技术 3 ·
+        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">III</span> 实务与工具 3 ·
+        <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">IV</span> 判例与学术 3 ·
         <span style="font-family: ui-monospace, Menlo, Consolas, monospace; color: #C03F13; font-weight: 700;">V</span> 行业与资本 2
       </p>
     </section>
@@ -48,31 +42,25 @@
     <!-- ================================================================ -->
     <!-- SEC. 01 监管与合规 -->
     <!-- ================================================================ -->
-    <section style="margin: 28px 22px 0; padding: 0;">
+    <section style="margin: 26px 0 0; padding: 0;">
       <section style="margin: 0; padding: 9px 0 8px; border-top: 3px solid #1D1D1B; border-bottom: 1px solid #C4B6A1;">
-        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0;">
-          <tr>
-            <td style="padding: 0; text-align: left; vertical-align: baseline;">
-              <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #C03F13;">SEC. 01</span>
-              <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.08em; color: #1D1D1B;">监管与合规</span>
-            </td>
-            <td style="padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.16em; color: #665E54; text-align: right; vertical-align: baseline;">REGULATION</td>
-          </tr>
-        </table>
+        <p style="margin: 0; line-height: 1.45;">
+          <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #C03F13;">SEC. 01</span>
+          <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.06em; color: #1D1D1B;">监管与合规</span>
+          <span style="margin-left: 7px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #786F64;">· REGULATION</span>
+        </p>
       </section>
-      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0;">
-        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-regulation-v3.webp" alt="监管与合规 复古报刊插画" style="display: block; width: 100%; height: auto; border: 0;" />
+      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0; box-sizing: border-box;">
+        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-regulation-v3.webp" alt="监管与合规 复古报刊插画" style="display: block; max-width: 100%; height: auto; border: 0;" />
       </section>
       <p style="margin: 5px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10px; line-height: 1.5; letter-spacing: 0.03em; color: #786F64; text-align: right;">监管与合规主题版画 · 插画由 AI 生成</p>
 
-      <!-- 01（板块首条：采用 NYT 头条大号紧凑衬线标题 20.5px） -->
+      <!-- 01 -->
       <section style="margin: 0; padding: 18px 0 22px; border-bottom: 1px solid #C4B6A1;">
         <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10px; font-weight: 700; line-height: 1.5; letter-spacing: 0.12em; color: #C03F13;">NO.01 · 监管与合规</p>
-        <p style="margin: 6px 0 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 20.5px; font-weight: 700; line-height: 1.36; letter-spacing: -0.01em; color: #1D1D1B;">英国 ICO 联合 CMA 提醒消费级 Agentic AI 开发者落实“默认隐私保护”义务</p>
-        <!-- NYT 标志性署名与电头栏（位于标题下方、正文之前） -->
+        <p style="margin: 6px 0 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 20px; font-weight: 700; line-height: 1.36; letter-spacing: -0.01em; color: #1D1D1B;">英国 ICO 联合 CMA 提醒消费级 Agentic AI 开发者落实“默认隐私保护”义务</p>
         <p style="margin: 8px 0 0; padding-bottom: 10px; border-bottom: 1px solid #D5C8B5; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 11px; line-height: 1.55; color: #665E54;">信源 <strong style="color: #1D1D1B; font-weight: 600;">英国信息专员办公室（ICO）</strong> · 2026-11-24 · 官方数据 · <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10px;">ico.org.uk</span></p>
         <p style="margin: 12px 0 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 15px; line-height: 1.86; color: #24221F; text-align: left;">英国信息专员办公室（ICO）监管风险与创新执行主任 William Malcolm 发文指出，消费级 Agentic AI 可代表用户自主执行操作并访问个人或第三方信息，开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法；ICO 已联手竞争与市场管理局（CMA）发布消费者使用建议，并计划结合 11 月 20 日截止的征询意见，于 2027 年春季发布正式指引。</p>
-        <!-- NYT 编者按 / Why It Matters 风格 -->
         <section style="margin: 14px 0 0; padding: 10px 13px; background-color: #E4D8C6; border-left: 2px solid #1D1D1B;">
           <p style="margin: 0 0 4px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10.5px; font-weight: 700; line-height: 1.4; letter-spacing: 0.1em; color: #1D1D1B;">实务影响 <span style="margin-left: 4px; font-weight: 400; letter-spacing: 0.04em; color: #665E54;">· AI 初稿</span></p>
           <p style="margin: 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 13.5px; line-height: 1.78; color: #24221F; text-align: left;">面向英国市场的自主执行型 AI Agent 团队，可提前梳理最小权限授权、记忆开关与第三方数据访问提示机制。</p>
@@ -107,20 +95,16 @@
     <!-- ================================================================ -->
     <!-- SEC. 02 模型与技术 -->
     <!-- ================================================================ -->
-    <section style="margin: 28px 22px 0; padding: 0;">
+    <section style="margin: 26px 0 0; padding: 0;">
       <section style="margin: 0; padding: 9px 0 8px; border-top: 3px solid #1D1D1B; border-bottom: 1px solid #C4B6A1;">
-        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0;">
-          <tr>
-            <td style="padding: 0; text-align: left; vertical-align: baseline;">
-              <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #C03F13;">SEC. 02</span>
-              <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.08em; color: #1D1D1B;">模型与技术</span>
-            </td>
-            <td style="padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.16em; color: #665E54; text-align: right; vertical-align: baseline;">MODELS &amp; TECH</td>
-          </tr>
-        </table>
+        <p style="margin: 0; line-height: 1.45;">
+          <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #C03F13;">SEC. 02</span>
+          <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.06em; color: #1D1D1B;">模型与技术</span>
+          <span style="margin-left: 7px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #786F64;">· MODELS &amp; TECH</span>
+        </p>
       </section>
-      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0;">
-        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-models-v3.webp" alt="模型与技术 复古报刊插画" style="display: block; width: 100%; height: auto; border: 0;" />
+      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0; box-sizing: border-box;">
+        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-models-v3.webp" alt="模型与技术 复古报刊插画" style="display: block; max-width: 100%; height: auto; border: 0;" />
       </section>
       <p style="margin: 5px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10px; line-height: 1.5; letter-spacing: 0.03em; color: #786F64; text-align: right;">模型与技术主题版画 · 插画由 AI 生成</p>
 
@@ -164,20 +148,16 @@
     <!-- ================================================================ -->
     <!-- SEC. 03 实务与工具 -->
     <!-- ================================================================ -->
-    <section style="margin: 28px 22px 0; padding: 0;">
+    <section style="margin: 26px 0 0; padding: 0;">
       <section style="margin: 0; padding: 9px 0 8px; border-top: 3px solid #1D1D1B; border-bottom: 1px solid #C4B6A1;">
-        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0;">
-          <tr>
-            <td style="padding: 0; text-align: left; vertical-align: baseline;">
-              <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #C03F13;">SEC. 03</span>
-              <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.08em; color: #1D1D1B;">实务与工具</span>
-            </td>
-            <td style="padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.16em; color: #665E54; text-align: right; vertical-align: baseline;">PRACTICE &amp; TOOLS</td>
-          </tr>
-        </table>
+        <p style="margin: 0; line-height: 1.45;">
+          <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #C03F13;">SEC. 03</span>
+          <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.06em; color: #1D1D1B;">实务与工具</span>
+          <span style="margin-left: 7px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #786F64;">· PRACTICE &amp; TOOLS</span>
+        </p>
       </section>
-      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0;">
-        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-practice-v3.webp" alt="实务与工具 复古报刊插画" style="display: block; width: 100%; height: auto; border: 0;" />
+      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0; box-sizing: border-box;">
+        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-practice-v3.webp" alt="实务与工具 复古报刊插画" style="display: block; max-width: 100%; height: auto; border: 0;" />
       </section>
       <p style="margin: 5px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10px; line-height: 1.5; letter-spacing: 0.03em; color: #786F64; text-align: right;">实务与工具主题版画 · 插画由 AI 生成</p>
 
@@ -221,20 +201,16 @@
     <!-- ================================================================ -->
     <!-- SEC. 04 判例与学术 -->
     <!-- ================================================================ -->
-    <section style="margin: 28px 22px 0; padding: 0;">
+    <section style="margin: 26px 0 0; padding: 0;">
       <section style="margin: 0; padding: 9px 0 8px; border-top: 3px solid #1D1D1B; border-bottom: 1px solid #C4B6A1;">
-        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0;">
-          <tr>
-            <td style="padding: 0; text-align: left; vertical-align: baseline;">
-              <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #C03F13;">SEC. 04</span>
-              <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.08em; color: #1D1D1B;">判例与学术</span>
-            </td>
-            <td style="padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.16em; color: #665E54; text-align: right; vertical-align: baseline;">CASES &amp; ACADEMIA</td>
-          </tr>
-        </table>
+        <p style="margin: 0; line-height: 1.45;">
+          <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #C03F13;">SEC. 04</span>
+          <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.06em; color: #1D1D1B;">判例与学术</span>
+          <span style="margin-left: 7px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #786F64;">· CASES &amp; ACADEMIA</span>
+        </p>
       </section>
-      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0;">
-        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-cases-v3.webp" alt="判例与学术 复古报刊插画" style="display: block; width: 100%; height: auto; border: 0;" />
+      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0; box-sizing: border-box;">
+        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-cases-v3.webp" alt="判例与学术 复古报刊插画" style="display: block; max-width: 100%; height: auto; border: 0;" />
       </section>
       <p style="margin: 5px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10px; line-height: 1.5; letter-spacing: 0.03em; color: #786F64; text-align: right;">判例与学术主题版画 · 插画由 AI 生成</p>
 
@@ -278,20 +254,16 @@
     <!-- ================================================================ -->
     <!-- SEC. 05 行业与资本 -->
     <!-- ================================================================ -->
-    <section style="margin: 28px 22px 0; padding: 0;">
+    <section style="margin: 26px 0 0; padding: 0;">
       <section style="margin: 0; padding: 9px 0 8px; border-top: 3px solid #1D1D1B; border-bottom: 1px solid #C4B6A1;">
-        <table style="width: 100%; border-collapse: collapse; margin: 0; padding: 0;">
-          <tr>
-            <td style="padding: 0; text-align: left; vertical-align: baseline;">
-              <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; color: #C03F13;">SEC. 05</span>
-              <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.08em; color: #1D1D1B;">行业与资本</span>
-            </td>
-            <td style="padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.16em; color: #665E54; text-align: right; vertical-align: baseline;">INDUSTRY &amp; CAPITAL</td>
-          </tr>
-        </table>
+        <p style="margin: 0; line-height: 1.45;">
+          <span style="font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #C03F13;">SEC. 05</span>
+          <span style="margin-left: 7px; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 16.5px; font-weight: 700; letter-spacing: 0.06em; color: #1D1D1B;">行业与资本</span>
+          <span style="margin-left: 7px; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; color: #786F64;">· INDUSTRY &amp; CAPITAL</span>
+        </p>
       </section>
-      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0;">
-        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-industry-v3.webp" alt="行业与资本 复古报刊插画" style="display: block; width: 100%; height: auto; border: 0;" />
+      <section style="margin: 12px 0 0; padding: 0; border: 1px solid #1D1D1B; background-color: #D5C5AE; font-size: 0; line-height: 0; box-sizing: border-box;">
+        <img src="https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations/baseline-industry-v3.webp" alt="行业与资本 复古报刊插画" style="display: block; max-width: 100%; height: auto; border: 0;" />
       </section>
       <p style="margin: 5px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10px; line-height: 1.5; letter-spacing: 0.03em; color: #786F64; text-align: right;">行业与资本主题版画 · 插画由 AI 生成</p>
 
@@ -321,21 +293,21 @@
     </section>
 
     <!-- 报刊结尾菱形分隔符 -->
-    <p style="margin: 22px 22px 0; font-size: 11px; line-height: 1; letter-spacing: 0.4em; color: #8F8372; text-align: center;">— ◆ —</p>
+    <p style="margin: 22px 0 0; font-size: 11px; line-height: 1; letter-spacing: 0.4em; color: #8F8372; text-align: center;">— ◆ —</p>
 
     <!-- 5. 报刊尾声卡片：唯一「阅读原文」引导 -->
-    <section style="margin: 18px 22px 0; padding: 18px 18px 16px; background-color: #E4D8C6; border-top: 2px solid #1D1D1B; border-bottom: 2px solid #1D1D1B; border-left: 1px solid #1D1D1B; border-right: 1px solid #1D1D1B;">
-      <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 700; line-height: 1.5; letter-spacing: 0.18em; color: #665E54;">FULL EDITION &amp; PRIMARY SOURCES</p>
-      <p style="margin: 6px 0 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 17.5px; font-weight: 700; line-height: 1.4; color: #1D1D1B;">查看今日完整版与一手信源</p>
+    <section style="margin: 18px 0 0; padding: 16px 16px 15px; background-color: #E4D8C6; border-top: 2px solid #1D1D1B; border-bottom: 2px solid #1D1D1B; border-left: 1px solid #1D1D1B; border-right: 1px solid #1D1D1B;">
+      <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 9.5px; font-weight: 700; line-height: 1.5; letter-spacing: 0.16em; color: #665E54;">FULL EDITION &amp; PRIMARY SOURCES</p>
+      <p style="margin: 6px 0 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 17px; font-weight: 700; line-height: 1.4; color: #1D1D1B;">查看今日完整版与一手信源</p>
       <p style="margin: 7px 0 0; font-family: 'Songti SC', 'STSong', 'Noto Serif SC', Georgia, serif; font-size: 13.5px; line-height: 1.78; color: #24221F;">本期 14 条资讯的完整实务影响锚点，以及 ICO、欧盟委员会、arXiv、联邦法院官网等原始链接，均已汇总至当日 Web 详情页。</p>
       <p style="margin: 10px 0 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 11.5px; font-weight: 700; line-height: 1.5; letter-spacing: 0.08em; color: #C03F13;">↙ 点击左下角「阅读原文」直达</p>
     </section>
 
     <!-- 6. 低调版权底注与合规声明 -->
-    <section style="margin: 18px 22px 0; padding: 14px 0 22px; border-top: 1px solid #C4B6A1;">
+    <section style="margin: 18px 0 0; padding: 14px 0 6px; border-top: 1px solid #C4B6A1;">
       <p style="margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; font-size: 10.5px; line-height: 1.75; color: #786F64;">内部评审样稿 · 不对外发布。摘要与实务影响为 AI 初稿，仅供初步研判，不构成法律意见；日期、版本与效力状态以一手信源为准。</p>
       <p style="margin: 6px 0 0; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 10px; line-height: 1.6; color: #786F64; word-break: break-all;">Web 详情页占位：https://lexaidaily.example/d/2026-11-24（微信外链策略由 Gate 3 实现）</p>
-      <p style="margin: 8px 0 0; font-family: Georgia, 'Times New Roman', serif; font-size: 10.5px; letter-spacing: 0.14em; color: #524D46;">LEXAI DAILY © 2026 · VOL. I NO. 001</p>
+      <p style="margin: 8px 0 0; font-family: Georgia, 'Times New Roman', serif; font-size: 10.5px; letter-spacing: 0.14em; color: #524D46;">LEXAI DAILY © 2026 · VOL. I NO.001</p>
     </section>
 
   </section>
