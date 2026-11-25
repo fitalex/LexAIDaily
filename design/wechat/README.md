@@ -2,28 +2,31 @@
 
 > **状态：内部原型样稿，不对外发布。** 本目录的 HTML 仅用于 Gate 1 评审与公众号后台草稿预览。
 > 本任务**未登录微信公众号后台，也未做 iOS / Android 真机预览**；文末“微信后台限制”一节中凡未标注“已实测”的条目，一律为**未实测**，不得当作兼容性结论。
+> **2026-11-25 视觉改版说明**：经 Human Maintainer 审美复审确认，由 Gemini 接管并升级为《纽约时报》（*The New York Times*）风格报刊文字排版，并接入已合入 `main` 的 5 张 v3.0 复古网点拼贴插画；改版后的确定性 `sha256sum` 与结构自检待 `LD-G1-06`（Antigravity）交叉测试复核。
 
 ## 一、产出清单
 
 | 文件 | 作用 |
 |---|---|
-| `template.html` | 栏目模板源文件：样式集中写在 `<style>` 中，含 `ITEM_TEMPLATE_START/END` 单元标记，由构建脚本内联 |
-| `samples/ld-g1-04-2026-11-24.json` | 真实样本输入（14 条，源自已合入 `main` 的 `docs/samples/LD-G1-04-sample-set.md`） |
-| `samples/ld-g1-04-2026-11-24.html` | 用上述样本生成的成品 HTML（全部样式内联，零 `<style>` / `class=` / `<script>`） |
+| `template.html` | NYT 风格报刊栏目模板源文件：样式集中写在 `<style>` 中，含 `CHAPTER_TEMPLATE_START/END` 与 `ITEM_TEMPLATE_START/END` 单元标记，由构建脚本内联 |
+| `samples/ld-g1-04-2026-11-24.json` | 真实样本输入（14 条，源自已合入 `main` 的 `docs/samples/LD-G1-04-sample-set.md`，已清洗第 10 条原文残留的 `**` 符号） |
+| `samples/ld-g1-04-2026-11-24.html` | 对应成品 HTML（全部样式内联，零 `<style>` / `class=` / `<script>`，按五大官方分类章节编排并嵌入 5 张 v3.0 复古插画） |
 | `read-original-flow.md` | 「阅读原文」→ Web 详情页 → 一手信源的联动动线 |
 | `DEVICE_TEST.md` | 真机预览记录模板（由 Human 填写，AI 不得代填） |
-| `../../scripts/wechat-prototype/build.mjs` | 原型构建脚本（juice 内联 + 结构断言） |
+| `../../scripts/wechat-prototype/build.mjs` | 原型构建脚本（按五大分类章节编排 + 接入 v3.0 插画 + juice 内联 + 结构断言） |
 
-## 二、视觉与字段基线
+## 二、视觉与字段基线（NYT 报刊改版）
 
-- **视觉**：对齐 `design/prototype/index.html` 与 D-030——暖调新闻纸 `#D5C5AE`、印刷墨黑 `#1D1D1B`、朱红微标 `#C03F13`、1px 直角细线；**零毛玻璃、零投影、零圆角**。
-- **字体**：公众号不支持外部字体，模板全部使用系统回退栈（宋体 / 苹方 / 系统等宽），不加载 `@font-face` 或外链字体。
-- **纸纹**：原型中的颗粒纸纹依赖 data-URI 背景图，公众号后台是否保留未实测，故成品**只用 `background-color: #D5C5AE` 实色**，不内联纸纹。
-- **字段（D-030）**：栏目头（含日期）→ 五类官方标签索引 → 今日综述（AI 初稿）→ 每条资讯（编号 + 五类标签之一 + 事实层级 + 核心标题 + 精炼摘要 + 1–2 句极简「实务影响（AI 初稿）」+ 信源名称、日期与来源域名（纯文本） + 「→ 阅读原文」引导）→ 阅读原文引导区 → 合规注记。
-- **「AI 初稿」不可省略**：每条资讯的实务影响与今日综述均带该标识；构建脚本会断言数量不足时失败。
-- **「头条」由 Human 勾选**：依 D-019，AI 不得自行标「头条」。样稿 14 条全部为常规，未标头条；模板支持 `headline: true` 时渲染黑底「头条」标记。
-- **「未核实」状态位**：模板支持 `unverified: true` 时渲染朱红描边「未核实」标记；本期 14 条样本均已核验，不出现该标记。
-- **图片**：公众号端不内联插画（字段表允许「按 LD-G1-03 裁切或省略」）；本期样稿全部省略，避免未授权素材与后台裁剪问题。
+- **纸面与色彩**：延续 Web 原型暖调复古新闻纸基因，针对手机端无纸纹纯色环境将主阅读底面提亮为浅新闻纸 `#EBE2D4`，导读/实务影响/尾声卡片使用暖纸衬底 `#E4D8C6`，印刷墨黑 `#1D1D1B`，朱红 `#C03F13` 严格克制用于章节号（`SEC. 01`）、头条微标与文末唯一「阅读原文」提示；**零毛玻璃、零投影、零圆角**。
+- **NYT 报刊文字层次**：
+  - **阅读层（全衬线）**：标题（首条 `20.5px` / 常规 `18.5px`，紧行距 `1.36–1.38`）、正文摘要（`15px`，左对齐防中英混排河道）、实务影响（`13.5px`）统一采用系统宋体 / Georgia 衬线回退栈。
+  - **索引层（无衬线）**：三栏期号报眉、小眉题（Kicker）、标题正下方的 NYT 署名电头栏（信源 · 日期 · 事实层级 · 域名）、版画图注与合规底注采用极轻无衬线体。
+  - **报头与分栏**：满宽墨黑反白 `LEXAI DAILY` 报头带 + 厚薄双线收束；三栏报眉与章节头采用微信后台原生兼容的纯内联 `<table>` 实现左右齐平。
+- **插画策略（v3.0 + Gate 2 预留）**：
+  - Gate 1 按五大官方分类（`监管与合规`、`模型与技术`、`实务与工具`、`判例与学术`、`行业与资本`）在每章顶部嵌入 1 张 21:9 v3.0 复古网点拼贴插画（`design/assets/illustrations/baseline-*-v3.webp`，外加 `1px` 黑框与右对齐「插画由 AI 生成」图注）。
+  - 模板同时在单条资讯内保留可选 `image` 字段（JSON 传入 `image` 时自动渲染），供 Gate 2 接入“每日按标题生图”工作流。
+  - **公众号粘贴实操注意**：成品默认使用仓库相对路径 `../../assets/illustrations/baseline-*-v3.webp`（支持本地离线预览；亦可通过 `--image-base` 指定托管 URL）。微信后台可能剥离大体积 `base64` 或外链图片，人工粘贴进草稿时请在公众号后台上传对应插画图片。
+- **「AI 初稿」与「插画由 AI 生成」不可省略**：每条实务影响、今日综述均带「AI 初稿」标识，每章插画均带「插画由 AI 生成」图注；构建脚本会自动断言。
 
 ## 三、用法
 
@@ -38,110 +41,56 @@ node scripts/wechat-prototype/build.mjs \
   --in design/wechat/samples/ld-g1-04-2026-11-24.json \
   --out /tmp/sample.html
 
+# 可选：指定插画路径前缀（默认 ../../assets/illustrations）
+node scripts/wechat-prototype/build.mjs \
+  --in design/wechat/samples/ld-g1-04-2026-11-24.json \
+  --out /tmp/sample.html \
+  --image-base https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations
+
 # 或直接重建仓库内样稿
 npm run build:samples
 ```
 
-参数：
-
-- `--in`：样本 JSON（必填）。
-- `--out`：成品 HTML（必填）。
-- `--template`：模板路径（可选，默认 `design/wechat/template.html`）。
-- `--help`：打印说明。
-
-脚本在写盘前自动断言：成品不含 `<style>`、`<script>`、`class=`、`<link>`、`@font-face`、`backdrop-filter`、`box-shadow`、`border-radius`，且保留 `#D5C5AE` 底色与足够的「AI 初稿」标识；任一项不满足即退出，不产出半成品。
-
-## 四、样本 JSON 结构
-
-```json
-{
-  "meta": {
-    "site": "The Legal AI Daily",
-    "column": "每日固定栏目",
-    "issue": "第 001 期",
-    "date": "2026-11-24",
-    "dateLine": "2026-11-24 · 星期二 · 第 001 期",
-    "internal": true,
-    "internalNote": "内部样稿 · 不对外发布 · 仅供 Gate 1 评审",
-    "digest": "今日综述……",
-    "disclaimer": "合规注记……",
-    "webDetailUrl": "https://lexaidaily.example/d/2026-11-24",
-    "readOriginalNote": "……"
-  },
-  "items": [
-    {
-      "num": "01",
-      "category": "监管与合规",
-      "factLevel": "官方数据",
-      "headline": false,
-      "unverified": false,
-      "title": "核心标题",
-      "summary": "精炼摘要",
-      "impactBrief": "1–2 句极简实务影响（AI 初稿）",
-      "sourceName": "发布机构",
-      "sourceDate": "2026-11-24",
-      "sourceDomain": "ico.org.uk",
-      "sourceUrl": "https://…（仅留档，不渲染进公众号正文）"
-    }
-  ]
-}
-```
-
-- `category` 只接受五类官方标签：`监管与合规`、`模型与技术`、`实务与工具`、`判例与学术`、`行业与资本`；单条单标签（D-016）。
-- `factLevel` 固定三选一：`已证实事实`、`官方数据`、`市场观点`；样本中的括注另存 `factLevelNote`，仅留档不渲染。
-- `impactBrief` 由 LD-G1-04 的「实务影响锚点（AI 初稿）」压写为 1 句，仍属 AI 初稿，未经 Human 确认。
-- `sourceDomain` 以纯文本显示在信源行（字段表要求公众号显示来源域名），不是可点击链接。
-- `sourceUrl` 只作追溯留档，公众号正文不出现外链；跳转统一走「阅读原文」。
-
-## 五、样稿说明（内部样稿，不对外发布）
+## 四、样稿说明（内部样稿，不对外发布）
 
 - 来源：`docs/samples/LD-G1-04-sample-set.md`（14 条，2026-11-24 核验；五类覆盖 3/3/3/3/2）。
-- 标题与摘要原文照录；`impactBrief` 为样本「实务影响锚点」的 1 句压写，未改变事实判断，但仍标注「AI 初稿」。
+- 标题与摘要原文照录（已清洗第 10 条原文残留的 `**` Markdown 符号）；`impactBrief` 为样本「实务影响锚点」的 1 句压写，仍标注「AI 初稿」。
 - 所有条目 `headline: false`、`unverified: false`：头条待 Human 终审勾选；样本集声明全部链接已核验。
-- **长度差异（已发现，未擅改）**：14 条样本摘要均超过字段表 v0.3 的 160 字上限（实测 167–283 字）。为不改变已合入样本的事实表述，样稿按原文展示、未截断；正式发布前需 Human 精简至 160 字内。
-- 成品 HTML 顶部有黑底「内部样稿 · 不对外发布 · 仅供 Gate 1 评审」横幅，文末重复合规注记。
+- **长度差异（已发现，未擅改）**：14 条样本摘要均超过字段表 v0.3 的 160 字上限（实测 167–283 字），样稿按原文展示、未截断；正式发布前需 Human 精简至 160 字内。
 - `webDetailUrl` 使用保留域名占位 `https://lexaidaily.example/d/2026-11-24`，不对应任何真实站点。
 
-## 六、微信后台限制（实测状态）
+## 五、微信后台限制（实测状态）
 
 **已主动规避（成品 HTML 中不存在）：**
 
 - `<style>` 块、`class=` 选择器、`<script>`、外链 CSS / 字体（`<link>`、`@font-face`）。
-- data-URI 纸纹背景、伪元素、`position`、`flex`、`box-shadow`、`backdrop-filter`、`border-radius`。
+- data-URI 纸纹背景、伪元素、`position`、`flex`、`grid`、`box-shadow`、`backdrop-filter`、`border-radius`。
 
 **未实测（需 Human 在公众号后台草稿与真机确认，不得预先下结论）：**
 
-- 后台是否完整保留 `border`（含 `dashed` 与单边 `border-left`）、`letter-spacing`、`text-align: justify`、`word-break: break-all`。
-- `background-color` 施加在 `<section>` 上时，后台是否保留为整块纸面。
-- `ui-monospace` / `Songti SC` 等系统字体栈在 iOS、Android 微信 WebView 的实际字形与回退效果。
-- 复制粘贴后段落间距、首行缩进是否被后台二次清洗。
-- 后台是否保留 `rgba()` 边框色与 `vertical-align`。
+- 后台是否完整保留三栏 `<table>` 报眉与章节头左右对齐。
+- 后台是否完整保留 `#EBE2D4` 整块浅新闻纸底色与 `2px` 左侧竖线引文块。
+- `Songti SC` / `Georgia` 衬线栈在 iOS、Android 微信 WebView 的实际字形与回退效果。
+- 5 张 v3.0 复古插画在公众号后台上传后的压缩清晰度与 `1px` 黑框留存情况。
 
 真机预览与截图由 Human 按 `DEVICE_TEST.md` 填写；本任务不写“微信兼容”结论。
 
-## 七、第三方与许可
+## 六、第三方与许可
 
-- 直接依赖只有 **juice 12.2.6（MIT）**，用于把模板 CSS 内联到标签；版本固定，`package-lock.json` 入库，安装使用 `npm install --ignore-scripts`。
-- juice 的 38 个传递依赖经安装后逐一读取 `package.json` 核对，许可证均为 MIT / MIT-0 / ISC / BSD-2-Clause / BSD-3-Clause；完整版本与来源见 `package-lock.json`。
-- 登记见根目录 `THIRD_PARTY_NOTICES.md`（LD-G1-02 初始化，本任务追加 juice 条目与 MIT 全文）。
-- 未拷贝 `doocs/md` 的任何代码、Logo、图片或 CDN 链接；本模板为原创实现，仅借鉴“主题 CSS → 内联”的通用思路。
+- 直接依赖只有 **juice 12.2.6（MIT）**，版本固定，`package-lock.json` 入库，安装使用 `npm install --ignore-scripts`；完整登记见根目录 `THIRD_PARTY_NOTICES.md`。
+- 未拷贝 `doocs/md` 的任何代码、Logo、图片或 CDN 链接。
 
-## 八、复现与自检命令
+## 七、复现与自检命令
 
 ```bash
 npm install --ignore-scripts
 npm ls
-npm audit                       # 本地默认镜像不支持 audit 端点时会报 NOT_IMPLEMENTED，见 PR 记录
 npm audit --registry=https://registry.npmjs.org
 
 node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out /tmp/a.html
 node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out /tmp/b.html
 sha256sum /tmp/a.html /tmp/b.html
 
-grep -c -E "<style|class=|<script" design/wechat/samples/*.html   # 期望 0（grep 无匹配时退出码为 1，属正常）
+grep -c -E "<style|class=|<script" design/wechat/samples/*.html   # 期望 0
 git diff --name-only origin/main...HEAD                            # 应全部落在任务书「可改文件」内
 ```
-
-## 九、非范围
-
-本目录只是原型生成，不是 Gate 2 的“一键渲染导出脚本”：不采集、不发布、不定时、不登录后台、不接凭据、不实现外链跳转（Gate 3）；不选正式域名，不写正式栏目期号规则。

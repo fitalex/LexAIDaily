@@ -1,5 +1,5 @@
 {
-  "$comment": "LD-G1-03 公众号排版原型输入：基于 docs/samples/LD-G1-04-sample-set.md（14 条，2026-11-24 核验）。摘要与标题原文照录；impactBrief 由样本「实务影响锚点（AI 初稿）」首句压写为 1 句，仍属 AI 初稿，未经 Human 确认。headline 全部为 false：D-019 规定 AI 不得自行标「头条」，由 Human 终审勾选。sourceUrl 仅留档，不渲染进公众号正文。",
+  "$comment": "LD-G1-03 公众号排版原型输入：基于 docs/samples/LD-G1-04-sample-set.md（14 条，2026-11-24 核验）。摘要与标题原文照录（已清洗第 10 条原文残留的 Markdown 星号）；impactBrief 由样本「实务影响锚点（AI 初稿）」首句压写为 1 句，仍属 AI 初稿，未经 Human 确认。headline 全部为 false：D-019 规定 AI 不得自行标「头条」，由 Human 终审勾选。sourceUrl 仅留档，不渲染进公众号正文。",
   "meta": {
     "site": "The Legal AI Daily",
     "column": "每日固定栏目",
@@ -11,7 +11,7 @@
     "digest": "本期聚焦英国 ICO 对消费级 Agentic AI 的隐私义务提醒，以及欧盟《人工智能法案》第 27 条 FRIA 问卷草案；多语种与时效性法律评测同步指出，跨语言、跨版本检索仍是法律 AI 的系统性偏差来源。",
     "disclaimer": "本样稿为内部评审用途，不对外发布。摘要与实务影响为 AI 初稿，仅供初步研判，不构成法律意见；日期、版本与效力状态以一手信源为准。",
     "webDetailUrl": "https://lexaidaily.example/d/2026-11-24",
-    "readOriginalNote": "微信正文不支持直接外链；请在公众号后台将「阅读原文」指向上述 Web 详情页。外链限制由 Gate 3 解决，本原型不实现跳转。"
+    "readOriginalNote": "微信外链策略由 Gate 3 实现，本原型不实现跳转"
   },
   "items": [
     {
@@ -148,7 +148,7 @@
       "headline": false,
       "unverified": false,
       "title": "美国伊利诺伊州南区联邦法官更新案件管理规程：重申 AI 文书 Rule 11 责任并严禁庭审与口头辩论使用 AI",
-      "summary": "美国伊利诺伊州南区联邦地区法院 Nancy J. Rosenstengel 法官发布 2026 年 11 月版《案件管理规程》，专节规定“人工智能”使用规则：虽不禁止在书面提交材料中使用生成式 AI，但依据《联邦民事诉讼规则》第 11 条，签署提交文件的律师及自诉当事人须对含 AI 生成部分在内的全部内容真实性与有效性担责，向 AI 工具披露涉案保密信息可能违反保护令；规程同时明令**任何情况下均不得在出庭口头辩论或庭审过程中使用 AI**。",
+      "summary": "美国伊利诺伊州南区联邦地区法院 Nancy J. Rosenstengel 法官发布 2026 年 11 月版《案件管理规程》，专节规定“人工智能”使用规则：虽不禁止在书面提交材料中使用生成式 AI，但依据《联邦民事诉讼规则》第 11 条，签署提交文件的律师及自诉当事人须对含 AI 生成部分在内的全部内容真实性与有效性担责，向 AI 工具披露涉案保密信息可能违反保护令；规程同时明令任何情况下均不得在出庭口头辩论或庭审过程中使用 AI。",
       "impactBrief": "涉美联邦诉讼律师应逐案核对主审法官最新个案管理规程，区分书面起草复核义务与庭审现场禁用红线。",
       "sourceName": "美国伊利诺伊州南区联邦地区法院（District Judge Nancy J. Rosenstengel）",
       "sourceDate": "2026-11（公开文档版）",
