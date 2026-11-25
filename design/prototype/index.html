@@ -1046,9 +1046,20 @@
       "行业与资本": "industry"
     };
 
+    const REMOTE_ILLUSTRATION_BASE = "https://raw.githubusercontent.com/fitalex/LexAIDaily/main/design/assets/illustrations";
+
     function getBaselineWebpPath(category) {
       const slug = CATEGORY_SLUG_MAP[category] || "regulation";
       return `../assets/illustrations/baseline-${slug}-v3.webp`;
+    }
+
+    function handleArtImgError(img, slug) {
+      if (!img.dataset.remoteTried) {
+        img.dataset.remoteTried = "1";
+        img.src = `${REMOTE_ILLUSTRATION_BASE}/baseline-${slug}-v3.webp`;
+        return;
+      }
+      img.parentElement.classList.add("is-fallback");
     }
 
     function getFallbackIllustrationSVG(category) {
@@ -1064,11 +1075,12 @@
     }
 
     function renderArtFrameHTML(category, altText) {
+      const slug = CATEGORY_SLUG_MAP[category] || "regulation";
       const src = getBaselineWebpPath(category);
       const fallback = getFallbackIllustrationSVG(category);
       return `
         <img class="m-card-art-img" src="${src}" alt="${altText}" loading="lazy"
-          onerror="this.parentElement.classList.add('is-fallback')" />
+          onerror="handleArtImgError(this, '${slug}')" />
         <div class="m-card-art-fallback" aria-hidden="true">${fallback}</div>
       `;
     }
