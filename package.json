@@ -3,14 +3,18 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）：仅用于把模板样式内联为可粘贴进公众号后台的成品 HTML。",
+  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）及 Gate 2 数据契约与采集工作流。",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
-    "build:samples": "node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out design/wechat/samples/ld-g1-04-2026-11-24.html"
+    "build:samples": "node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out design/wechat/samples/ld-g1-04-2026-11-24.html",
+    "test:contracts": "node --test tests/contracts/*.test.mjs",
+    "validate:contracts": "node src/contracts/validate.mjs --check-cache"
   },
   "dependencies": {
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
     "juice": "12.2.6"
   }
 }

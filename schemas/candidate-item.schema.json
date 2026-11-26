@@ -1,0 +1,274 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lexaidaily.local/schemas/candidate-item.schema.json",
+  "title": "CandidateItem",
+  "description": "LexAIDaily Gate 2 候选条目（Candidate Item）正式数据契约 v1.0，支持双轨采集输出、Stage 1/2 两阶段事实锚定与预览/详情双层内容模型，严禁包含原文全文字段。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "region",
+    "source_id",
+    "source_name",
+    "source_url",
+    "published_at",
+    "collected_at",
+    "category",
+    "title",
+    "summary",
+    "practice_impact_brief",
+    "practice_impact_is_ai_draft",
+    "fact_tier",
+    "unverified",
+    "needs_human_check",
+    "high_risk_legal",
+    "headline",
+    "review_status"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-_]{3,80}$",
+      "description": "候选条目唯一标识"
+    },
+    "region": {
+      "type": "string",
+      "enum": ["cn", "global"],
+      "description": "双轨分域标识（ADR-0003）"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,63}$",
+      "description": "白名单信源唯一标识（须与 whitelist-cn.yaml / whitelist-global.yaml 对齐）"
+    },
+    "discovered_via": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{1,63}$",
+      "description": "可选辅助线索发现源标识（如 aihot-news-discovery），一手正文须回溯外域 source_url"
+    },
+    "source_name": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 120
+    },
+    "source_domain": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 120
+    },
+    "source_url": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://",
+      "description": "100% 合法一手原始 HTTPS 链接（严禁指向 discovery_only 聚合域名）"
+    },
+    "published_at": {
+      "description": "一手信源发布日期（严格日历日期 YYYY-MM-DD、ISO 8601 date-time 或有效年月 YYYY-MM）",
+      "anyOf": [
+        {
+          "type": "string",
+          "format": "date"
+        },
+        {
+          "type": "string",
+          "format": "date-time"
+        },
+        {
+          "type": "string",
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$"
+        }
+      ]
+    },
+    "collected_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "采集时间（ISO 8601）"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "监管与合规",
+        "模型与技术",
+        "实务与工具",
+        "判例与学术",
+        "行业与资本"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 6,
+      "maxLength": 120
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 160,
+      "description": "预览层精炼摘要，硬上限 ≤160 字（O2）"
+    },
+    "practice_impact_brief": {
+      "type": "string",
+      "minLength": 10,
+      "maxLength": 60,
+      "description": "预览层 1 句极简实务影响锚点（≤60 字）"
+    },
+    "practice_impact_is_ai_draft": {
+      "type": "boolean",
+      "description": "实务影响锚点是否为 AI 初稿（pending_review 状态下必须为 true）"
+    },
+    "fact_tier": {
+      "type": "string",
+      "enum": ["confirmed_fact", "official_data", "market_opinion"],
+      "description": "必填事实层级三选一枚举（O4）"
+    },
+    "fact_tier_note": {
+      "type": "string",
+      "maxLength": 80
+    },
+    "unverified": {
+      "type": "boolean",
+      "description": "未核实标记兜底位（O4）"
+    },
+    "unverified_reason": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "needs_human_check": {
+      "type": "boolean",
+      "description": "Stage 2 数字/日期忠实度校验告警标记"
+    },
+    "high_risk_legal": {
+      "type": "boolean",
+      "description": "法律高风险标记（为 true 时必须同时提供 effective_status）"
+    },
+    "effective_status": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "proposed",
+        "enacted",
+        "in_force",
+        "amended",
+        "superseded",
+        "repealed",
+        "guidance",
+        "not_applicable"
+      ],
+      "description": "法规效力状态（参考 delschlangen/ai-legislation-tracker MIT 概念；high_risk_legal=true 时必填）"
+    },
+    "superseded_by": {
+      "type": "string",
+      "minLength": 2,
+      "maxLength": 240,
+      "description": "若已被替代，指向替代文件标识或一手 URL"
+    },
+    "headline": {
+      "type": "boolean",
+      "description": "头条标记（D-019：pending_review 状态下必须为 false，仅人工终审可勾选）"
+    },
+    "review_status": {
+      "type": "string",
+      "enum": ["pending_review", "approved", "rejected"]
+    },
+    "detail_analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key_points",
+        "evidence_quotes",
+        "legal_commentary",
+        "ai_draft"
+      ],
+      "properties": {
+        "key_points": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 140
+          },
+          "description": "3–5 条结构化核心事实要点（每条 8–140 字）"
+        },
+        "evidence_quotes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["text"],
+            "properties": {
+              "text": {
+                "type": "string",
+                "minLength": 8,
+                "maxLength": 150,
+                "description": "逐字合规原文短引文，单段严格限长 ≤150 字"
+              },
+              "locator": {
+                "type": "string",
+                "maxLength": 80,
+                "description": "可选出处定位（如章节号、条文号或段落标识）"
+              }
+            }
+          },
+          "description": "1–3 条合规原文短引文（ADR-0002）"
+        },
+        "legal_commentary": {
+          "type": "string",
+          "minLength": 200,
+          "maxLength": 400,
+          "description": "200–400 字面向法律从业者的深度评述"
+        },
+        "ai_draft": {
+          "type": "boolean",
+          "description": "人工终审确认前（pending_review）必须为 true，全块标「AI 初稿」"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "review_status": { "const": "pending_review" }
+        },
+        "required": ["review_status"]
+      },
+      "then": {
+        "properties": {
+          "practice_impact_is_ai_draft": { "const": true },
+          "headline": { "const": false },
+          "detail_analysis": {
+            "type": "object",
+            "properties": {
+              "ai_draft": { "const": true }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "review_status": { "const": "approved" }
+        },
+        "required": ["review_status"]
+      },
+      "then": {
+        "required": ["detail_analysis"]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "high_risk_legal": { "const": true }
+        },
+        "required": ["high_risk_legal"]
+      },
+      "then": {
+        "required": ["effective_status"]
+      }
+    }
+  ]
+}
