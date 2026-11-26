@@ -1,17 +1,17 @@
 # AI Agent 开发与协作规范（V2.0）
 
-> **状态：V2.0 拟生效（LD-GOV-03，待 Human 合并 PR 生效）**；上一版本 V1.0 已生效（PR #3，merge commit `3ea52c0`，2026-11-07；LD-GOV-02 修订见 PR #7，merge commit `9551b6e`）。
-> 本次 V2.0 修订由 Gemini（总协调者）依 Human 2026-11-22 授权起草（任务 [LD-GOV-03](docs/daily-specs/LD-GOV-03.md)），Human 书面豁免本轮独立审计（决策记录 D-025、D-026）。
+> **状态：V2.0 已生效（LD-GOV-03，PR #22，merge commit `f035894`）；本次增补修订（LD-GOV-05，2026-11-25）启用 GitHub Issue 为主任务书与父子依赖载体，并纳入总协调者自动技能工作流**，由 Human Maintainer 书面授权并豁免本轮独立审计。
+> 上一版本 V1.0 见 PR #3（`3ea52c0`，2026-11-07）及 LD-GOV-02（PR #7，`9551b6e`）。
 > **主要架构调整（相对 V1.0）**：总协调者由 Claude 迁移为 **Gemini**；**ChatGPT 网页版退出协作架构**（取消“仓库操作员”中转角色）；**Codex 移出主协作表**，将 DeepSeek Harness 与 Antigravity（Gemini 3.8 Flash）在 D-011～D-015 中已落地的实际分工正式转正；独立审计改为**架构内交叉独立审计**。
 
-本规范适用于 LexAIDaily 仓库的全部 AI Agent 与贡献者，采用 **协调者调度 → 单任务负责人（Single Owner）→ 交叉复核（Cross Review）→ 人工验收（Human Gate）**。角色分工不授权自动合并，也不替代 Human Maintainer 的内容终审与发布决定。协调者的日常操作细则见 [协调者操作手册](docs/COORDINATOR_PLAYBOOK.md)，仓库协作与治理规则冲突时以本文件为准；总协调者的对话输出与单轮决策汇报格式以 [GEMINI.md](GEMINI.md) 为准。
+本规范适用于 LexAIDaily 仓库的全部 AI Agent 与贡献者，采用 **协调者调度 → 单任务负责人（Single Owner）→ 交叉复核（Cross Review）→ 人工验收（Human Gate）**。角色分工不授权自动合并，也不替代 Human Maintainer 的内容终审与发布决定。协调者的日常操作细则见 [协调者操作手册](docs/COORDINATOR_PLAYBOOK.md)，仓库协作与治理规则冲突时以本文件为准；总协调者的对话输出、自动技能路由与单轮决策汇报格式以 [GEMINI.md](GEMINI.md) 为准。
 
 ## 1. 参与方与权限
 
 | 角色 | 接入方式 | 核心责任 | 权限边界 |
 |---|---|---|---|
 | **Human Maintainer（兼内容运营者）** | 本人（`fitalex`） | 目标与重大决策；B 级任务授权；PR 验收与合并；资讯精选、实务点评、双端发布终审；视觉验收；法律专业判断及署名；审计豁免权 | AI 不得代签、代批、代发布、自动合并 |
-| **Gemini（总协调者）** | Gemini 会话（本地独立仓库克隆 + GitHub 读写权限） | 拆分任务书；派发 A 级任务；维护状态看板；复核执行结果并出具结论；协调冲突与写入顺序；向 Human 提交决策包；起草治理与标准类文档；承担联网调研与真实样本集（如 `LD-G1-04`） | 不合并；不授权 B 级；不代签；不单方修改冻结基线；不复核自己担任 Owner 的任务（6.1）；不接触密钥；不把未核实内容写成事实 |
+| **Gemini（总协调者）** | Gemini 会话（本地独立仓库克隆 + GitHub 读写权限） | 拆分任务书（GitHub Issue / 可选 spec 文档）；派发 A 级任务；维护状态看板与领域术语表；复核执行结果并出具结论；协调冲突与写入顺序；向 Human 提交决策包；起草治理与标准类文档；承担联网调研与真实样本集（如 `LD-G1-04`） | 不合并；不授权 B 级；不代签；不单方修改冻结基线；不复核自己担任 Owner 的任务（6.1）；不接触密钥；不把未核实内容写成事实 |
 | **DeepSeek Harness** | 本地运行，分支 + PR | 工程主力：展示字段表、核心架构与采集/分类管线、数据契约、站点实现、公众号内联排版模板与导出脚本、信源采集适配器/解析/去重、CI、单元测试与回归、缺陷复现；担任架构内独立审计方（审计 Gemini 起草的治理/标准文档或样本）及 Gate 2 高风险资讯交叉核验 | 不得交叉测试自己实现的模块；不自行扩大范围；不直接改 `main`；不自行判定信源可信度或入库；不自行启用定时任务或付费外部服务 |
 | **Antigravity（Gemini 3.8 Flash）** | 仓库内 Agent IDE（独立工作区），分支 + PR | 设计系统与 Web 桌面/移动原型（Penpot + Penpot MCP + 经授权的图像生成）；文档、索引、归档、交叉引用与版本一致性；将已定稿设计规范同步进文档；承担非自身实现模块的交叉测试（如 `LD-G1-06` 公众号排版导出结构与兼容性测试） | 不写前端业务代码；交叉测试脚本仅限任务书指定测试目录，不得改动被测业务代码；不改冻结基线、编辑原则、数据契约；不提交 Penpot 凭据；生成图须标注 AI 生成，不仿冒真实机构标识 |
 
@@ -24,26 +24,27 @@
 ```mermaid
 flowchart TB
     H["Human Maintainer<br/>目标 · B 级授权 · 合并 · 内容终审与发布"]
-    G["Gemini 总协调者<br/>拆任务书 · 派发 · 复核 · 状态看板 · 联网调研"]
+    G["Gemini 总协调者<br/>拆 Issue/任务书 · 派发 · 双轴复核 · 状态看板 · 联网调研"]
     D["DeepSeek Harness<br/>核心工程 · 字段表 · 适配器 · 单测 · 交叉审计"]
-    A["Antigravity (Gemini 3.8 Flash)<br/>Penpot 设计原型 · 文档与索引 · 交叉测试"]
-    R[("事实源 main<br/>STATUS.md · daily-specs · PR · audits")]
+    A["Antigravity (Gemini 3.8 Flash)<br/>设计原型 · 文档与索引 · 交叉测试"]
+    R[("事实源 main + GitHub Issues/PR<br/>STATUS.md · Issues · PR · audits")]
 
     H -->|目标 / B 级授权| G
-    G -->|任务书 PR| R
+    G -->|Spec & 子 Issue / 状态 PR| R
     G -->|派发指令（Human 触发）| D
     G -->|派发指令（Human 触发）| A
     D -->|工程 / 审计 PR| R
     A -->|设计 / 文档 / 测试 PR| R
-    R -->|PR diff · 状态 · 证据| G
-    G -->|复核结论 + 决策包| H
+    R -->|PR diff · Issue · 证据| G
+    G -->|双轴复核结论 + 决策包| H
     H -->|审 diff · 合并| R
 ```
 
-- **事实源是 `main` 分支。** 任务状态、决策和审计记录必须落盘到仓库（[状态看板](docs/coordination/STATUS.md)、[任务书索引](docs/daily-specs/README.md)、PR、[审计归档](docs/audits/README.md)）。对话里的结论不算数：所有 Agent 均不依赖聊天记忆，任务事实以仓库中已核验的记录为准。
-- **三处记录的关系。** `main` 保存已生效的规则与已合并的状态；PR 保存待审的变更；STATUS 在合并前对应 PR 的内容只是“提议”。决策记录（D-xxx）须附 Human 原话或链接，并经 Human 在 PR 中确认后才生效；协调者起草的记录不单独构成授权。
-- **派发 = 发布任务书。** Agent 之间不直接互调。Gemini 直接以分支和 PR 提交任务书与状态更新（不合并）；之后由 Human 触发执行者（对 DeepSeek Harness、Antigravity 说“执行 LD-xxx”并附任务书路径）。若日后配置了 Issue 指派等自动触发，以实际配置为准。
-- **成果回收。** DeepSeek Harness 与 Antigravity 均以 PR 交回；Gemini 直接读取 PR diff、commit SHA、评论与 CI 结果进行复核；独立审计意见由审计方或协调者原文归档到 `docs/audits/`，不改写。
+- **事实源是 `main` 分支与仓库关联的 GitHub Issue / PR。** 任务状态、决策和审计记录必须落盘到仓库（[状态看板](docs/coordination/STATUS.md)、GitHub Issues、PR、[审计归档](docs/audits/README.md)）。对话里的结论不算数：所有 Agent 均不依赖聊天记忆，任务事实以仓库中已核验的记录为准。
+- **单一事实源原则（防双写漂移）。** 从 Gate 2 起，任务书默认以 **GitHub Issue** 为主载体（父 Spec Issue + 垂直切片子 Issue 及原生 `Blocked by` 依赖）；仅当任务涉及长篇契约或需版本化存档时，才可选落盘至 `docs/daily-specs/<任务号>.md`，并由 Issue 正文直接链接，不在两处重复抄写正文。`STATUS.md` 只维护 Gate 总览、A 级台账、决策记录（D-xxx）与 Issue 链接。
+- **三处记录的关系。** `main` 保存已生效的规则与已合并的状态；GitHub Issue 保存任务书、依赖关系与验收进度；PR 保存待审的变更；STATUS 在合并前对应 PR 的内容只是“提议”。决策记录（D-xxx）须附 Human 原话或链接，并经 Human 在 PR 中确认后才生效；协调者起草的记录不单独构成授权。
+- **派发 = 发布任务书（Issue 或可选文件）。** Agent 之间不直接互调。Gemini 通过 GitHub MCP 创建任务书 Issue（并经分支/PR 更新 `STATUS.md` 台账，不合并）；之后由 Human 触发执行者（对 DeepSeek Harness、Antigravity 说“执行 LD-xxx”并附 Issue 链接或任务书路径）。
+- **成果回收。** DeepSeek Harness 与 Antigravity 均以 PR 交回（关联 `Closes #<Issue号>`）；Gemini 直接读取 PR diff、commit SHA、评论与 CI 结果进行双轴复核；独立审计意见由审计方或协调者原文归档到 `docs/audits/`，不改写。
 
 ## 3. 任务分级与生命周期
 
@@ -82,9 +83,9 @@ flowchart LR
 
 ## 4. 任务书规范
 
-任务书存于 `docs/daily-specs/<任务号>.md`，按 [任务书模板](docs/templates/TASK_BOOK.md) 编写，必须写明：级别、Owner、复核者、是否触发独立审计、基准 commit 与分支、依赖、输入与输出、可改与不可改的文件范围、非范围、冻结边界、逐项可验证的 DoD（并标明对应所属 Gate 验收标准的哪一条）、验证命令与证据要求、升级条件。
+任务书默认以 **GitHub Issue** 落盘（支持父 Spec Issue 与带原生 `Blocked by` 依赖的垂直切片子 Issue），按 [任务书模板](docs/templates/TASK_BOOK.md) 编写；历史任务书及需本地版本化存档的长篇契约存于 `docs/daily-specs/<任务号>.md`（两者择一为主载体，不在两处双写正文）。任务书必须写明：级别、Owner、复核者、是否触发独立审计、基准 commit 与分支、依赖（`Blocked by`）、输入与输出、可改与不可改的文件范围、非范围、冻结边界、逐项可验证的 DoD（含测试接缝 Seam 并标明对应所属 Gate 验收标准的哪一条）、验证命令与证据要求、升级条件。
 
-任务号规则：阶段工程任务 `LD-G<Gate>-<两位序号>`（如 `LD-G1-02`）；治理任务 `LD-GOV-<序号>`；内容线任务 `LD-OPS-<序号>`；修订追加字母后缀（如 `LD-G1-02B`）。
+任务号规则：阶段工程任务 `LD-G<Gate>-<两位序号>`（如 `LD-G2-01`）；治理任务 `LD-GOV-<序号>`；内容线任务 `LD-OPS-<序号>`；修订追加字母后缀（如 `LD-G1-02B`）。
 
 分支命名：
 - Gemini（总协调者）：`gemini/<任务号小写>-<slug>`
@@ -97,10 +98,10 @@ flowchart LR
 | 工作内容 | Owner | 复核 | 独立审计 / 最终决定 |
 |---|---|---|---|
 | 本规范及权限、授权、治理类文档 | Gemini（起草） | — | DeepSeek Harness 审计（或 Human 指定非起草者，必须；Human 可书面豁免）；Human 批准 |
-| 任务书拆分与派发 | Gemini | 执行者接单确认 | B 级由 Human 授权 |
+| 任务书拆分与派发（GitHub Issue / 可选 spec 文档） | Gemini | 执行者接单确认 | B 级由 Human 授权 |
 | 编辑原则细则、信源白名单与分级、分类口径 | Gemini（起草与联网调研） | — | DeepSeek Harness 审计（必须）；Human 批准 |
 | 联网调研与真实样本集（竞品、信源、选题、法规背景、`LD-G1-04`） | Gemini | DeepSeek Harness 抽查核验（触发 6.1(d)，Human 可书面豁免） | Human 按需 |
-| 核心工程、展示字段表、采集管线、数据契约、站点实现、公众号导出脚本、信源适配器、单测与回归、CI | DeepSeek Harness | Gemini 复核 DoD 与证据；Antigravity（或 Human 指定非实现者）按任务书执行交叉测试 | 按 6.1(a)-(e) 判断是否触发独立审计；信源可信度与入库由 Human 决定；Human 合并 |
+| 核心工程、展示字段表、采集管线、数据契约、站点实现、公众号导出脚本、信源适配器、单测与回归、CI | DeepSeek Harness | Gemini 双轴复核 DoD 与证据；Antigravity（或 Human 指定非实现者）按任务书执行交叉测试 | 按 6.1(a)-(e) 判断是否触发独立审计；信源可信度与入库由 Human 决定；Human 合并 |
 | 设计系统、Web 桌面/移动原型（Penpot MCP + 图像生成） | Antigravity（Gemini 3.8 Flash） | Gemini 复核；不写前端业务代码 | 使用外部工具/第三方字体与素材按 6.1(c)（Human 可书面豁免）；执行者提供截图、Penpot 导出备份与素材来源记录；Human 视觉验收 |
 | 文档、索引、归档、版本一致性与指定交叉测试（如 `LD-G1-06`） | Antigravity | Gemini 复核；技术事实由模块 Owner 确认 | 测试脚本仅限任务书指定测试目录，不得改动被测代码 |
 | 每日内容线（Gate 2 起） | 见 8.2 | 见 8.2 | Human 终审 |
@@ -118,19 +119,19 @@ flowchart LR
 
 Human 可对任何任务追加审计；仅 Human 可豁免，且须在任务书或 PR 中书面记录理由。协调者不得省略或自行豁免。
 
-6.2 **审计意见格式。** 使用 [复核与审计报告模板](docs/templates/REVIEW_REPORT.md)：审计对象及基准 commit、检查范围、按严重程度排序的发现、未检查项、建议结论（通过 / 需修改 / 需人工决策）。审计意见只构成证据，不自动产生权限。审计意见须以文件形式原样归档到 `docs/audits/`（由审计方或协调者提交，不改写），PR 评论只作通知；文件与评论不一致时交 Human 裁决。**审计证据约束：** (a) PR 通知评论须包含审计结论、被审 commit SHA、归档文件的固定链接（permalink，含 commit）及该文件的 Git blob SHA；(b) 已归档的审计文件不得修改，新一轮审计另存新文件，勘误以新文件说明；(c) Gemini 读取归档文件后核对 blob SHA，并记入 `docs/audits/README.md`；(d) Human 在最终批准前核对归档版本与 PR 评论原文一致。无法核对的审计意见不得作为通过依据。
+6.2 **审计意见格式。** 使用 [复核与审计报告模板](docs/templates/REVIEW_REPORT.md)：审计对象及基准 commit、检查范围、按 Standards / Spec 双轴与严重程度排序的发现、未检查项、建议结论（通过 / 需修改 / 需人工决策）。审计意见只构成证据，不自动产生权限。审计意见须以文件形式原样归档到 `docs/audits/`（由审计方或协调者提交，不改写），PR 评论只作通知；文件与评论不一致时交 Human 裁决。**审计证据约束：** (a) PR 通知评论须包含审计结论、被审 commit SHA、归档文件的固定链接（permalink，含 commit）及该文件的 Git blob SHA；(b) 已归档的审计文件不得修改，新一轮审计另存新文件，勘误以新文件说明；(c) Gemini 读取归档文件后核对 blob SHA，并记入 `docs/audits/README.md`；(d) Human 在最终批准前核对归档版本与 PR 评论原文一致。无法核对的审计意见不得作为通过依据。
 
 6.3 **分歧处理。** Gemini 与独立审计者的意见不一致时，任何一方不得单方裁定。原 Owner 在原 PR 回应，Gemini 列出分歧点交 Human 决定。
 
-6.4 **跨 Agent 审计与联网调研边界。** 所有 Agent 不依赖聊天记忆，审计与调研只依据仓库已落盘记录、任务书及（需要时）交接包中的材料工作。联网调研与审计输出必须标明一手来源链接与不确定性，未经核实的事实不得入库。
+6.4 **跨 Agent 审计与联网调研边界。** 所有 Agent 不依赖聊天记忆，审计与调研只依据仓库已落盘记录、GitHub Issue / 任务书及（需要时）交接包中的材料工作。联网调研与审计输出必须标明一手来源链接与不确定性，未经核实的事实不得入库。
 
 6.5 **协调者自我约束。** A 级授权全部登记公示，Human 定期抽查；Gemini 不得因进度压力降低 DoD、跳过审计触发条件或在未取得证据时宣称“已通过”；Human 可随时指定其他 Agent 抽查协调记录本身。
 
-6.6 **原“仓库操作员规则”已废止（LD-GOV-03）。** 原由 ChatGPT 网页版承担的仓库操作员角色随其退出而取消；Gemini 协调者已具备直接建分支与提 PR 能力，仍严格遵守不合并、不审批、不修改分支保护与仓库设置的约束。
+6.6 **原“仓库操作员规则”已废止（LD-GOV-03）。** 原由 ChatGPT 网页版承担的仓库操作员角色随其退出而取消；Gemini 协调者已具备直接建分支、开 Issue 与提 PR 能力，仍严格遵守不合并、不审批、不修改分支保护与仓库设置的约束。
 
 ## 7. 协调者职责边界
 
-Gemini 负责：拆分任务书、判定级别与审计触发、选择执行者、派发、接单确认、结果复核、维护 STATUS 看板、协调同文件写入顺序、向 Human 提交决策包与阶段汇报、承担联网调研与样本集。Gemini 不负责也不得代行：合并、B 级授权、代签、对外发布、修改冻结基线。Gemini 默认不实现自己复核的任务；如须担任 Owner（如治理文档或联网调研），该任务适用 6.1(d)。Gemini 的任务书与状态更新须以分支和 PR 落盘到仓库，未落盘的变更不算数。
+Gemini 负责：拆分任务书（GitHub Issue / 可选 spec 文档）、判定级别与审计触发、选择执行者、派发、接单确认、双轴结果复核、维护 STATUS 看板与领域术语表、协调同文件写入顺序、向 Human 提交决策包与阶段汇报、承担联网调研与样本集。Gemini 不负责也不得代行：合并、B 级授权、代签、对外发布、修改冻结基线。Gemini 默认不实现自己复核的任务；如须担任 Owner（如治理文档或联网调研），该任务适用 6.1(d)。Gemini 的任务书与状态更新须以 GitHub Issue 或分支/PR 落盘到仓库，未落盘的变更不算数。
 
 ## 8. 两条工作线
 
@@ -157,7 +158,7 @@ Gemini 负责：拆分任务书、判定级别与审计触发、选择执行者�
 
 | 路径 | 默认 Owner |
 |---|---|
-| `AGENTS.md`、`GEMINI.md`、`CLAUDE.md`（迁移指引）、`docs/coordination/`、`docs/daily-specs/`、`docs/templates/`、`docs/audits/` | Gemini |
+| `AGENTS.md`、`GEMINI.md`、`CLAUDE.md`（迁移指引）、`GLOSSARY.md`、`docs/adr/`、`docs/coordination/`、`docs/daily-specs/`、`docs/templates/`、`docs/audits/` | Gemini |
 | `README.md`（定位与路线图段落为冻结基线，仅 Human 可改）、其余 `docs/`、`design/`（设计令牌、Penpot 链接、导出备份与截图，不含展示字段表）、任务书指定的交叉测试目录（如 `tests/wechat-prototype/`） | Antigravity |
 | `src/`、`scripts/`、`tests/`（不含指派给 Antigravity 的交叉测试目录）、`data/`、`.github/workflows/`、`design/card-fields-*`（展示字段表）、信源适配器与解析/去重模块 | DeepSeek Harness |
 
@@ -188,18 +189,20 @@ Gemini 负责：拆分任务书、判定级别与审计触发、选择执行者�
 
 ## 12. PR 与交付
 
-统一流程：**任务书 → 独立分支 → 实现与自测 → PR 与实际证据 → Gemini 复核 → （触发时）独立审计 → Human 决定合并**。PR 须使用 [PR 模板](.github/PULL_REQUEST_TEMPLATE.md)，记录任务号、范围、文件、依赖理由、真实命令与结果、CI 链接或“未触发”、DoD 逐项状态、待决事项。审核不通过由原 Owner 在原 PR 修复，不得用新 PR 掩盖历史问题。未合并的 PR 不写成已上线能力。
+统一流程：**任务书（GitHub Issue / 可选文件）→ 独立分支 → 实现与自测 → PR 与实际证据（附 `Closes #<Issue号>`）→ Gemini 双轴复核 → （触发时）独立审计 → Human 决定合并**。PR 须使用 [PR 模板](.github/PULL_REQUEST_TEMPLATE.md)，记录任务号、对应 Issue 链接、范围、文件、依赖理由、真实命令与结果、CI 链接或“未触发”、DoD 逐项状态、待决事项。审核不通过由原 Owner 在原 PR 修复，不得用新 PR 掩盖历史问题。未合并的 PR 不写成已上线能力。
 
 ## 13. 文件地图
 
 | 文件 | 作用 |
 |---|---|
 | `AGENTS.md` | 本规范（所有 Agent 默认读取） |
-| `GEMINI.md` | 总协调者（Gemini）入口，指向本规范与协调者手册 |
+| `GEMINI.md` | 总协调者（Gemini）入口，含自动技能路由与对话决策规范 |
 | `CLAUDE.md` | 历史入口迁移说明（指向 `GEMINI.md`） |
+| `GLOSSARY.md`（按需懒创建） | 项目领域术语表，由 Gemini 在设计对齐时在线维护 |
+| `docs/adr/`（按需懒创建） | 不可逆架构权衡决策记录（ADR） |
 | [docs/COORDINATOR_PLAYBOOK.md](docs/COORDINATOR_PLAYBOOK.md) | 协调者操作手册 |
 | [docs/coordination/STATUS.md](docs/coordination/STATUS.md) | 状态看板、A 级台账、决策记录 |
-| [docs/daily-specs/README.md](docs/daily-specs/README.md) | 任务书索引与编号规则 |
+| [docs/daily-specs/README.md](docs/daily-specs/README.md) | 历史任务书索引与编号规则 |
 | [docs/templates/](docs/templates/TASK_BOOK.md) | 任务书、复核与审计报告、交接包模板 |
 | [docs/audits/README.md](docs/audits/README.md) | 复核与审计意见归档 |
 | [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md) | PR 模板 |
@@ -209,4 +212,5 @@ Gemini 负责：拆分任务书、判定级别与审计触发、选择执行者�
 本规范的修改经 PR 提交，依 6.1(a) 须独立审计（或由 Human 书面豁免），由 Human 批准后合并；生效与版本变更记入 STATUS 的决策记录。
 
 - **V1.0 生效记录**：PR #3（`3ea52c0`，2026-11-07）生效，LD-GOV-02（PR #7，`9551b6e`）修正过时表述。
-- **V2.0 生效条件（LD-GOV-03）**：Human 审核 diff 并在 PR 中确认 D-025、D-026 后合并即生效（本轮独立审计已由 Human 于 2026-11-22 书面豁免）。
+- **V2.0 生效记录（LD-GOV-03 / LD-GOV-04）**：PR #22（`f035894`）与 PR #23（`1c64319`）合并生效。
+- **V2.0 技能与 Issue 增补（LD-GOV-05）**：Human 于 2026-11-25 书面授权并豁免本轮独立审计，启用 GitHub Issue 为主任务书与父子依赖载体、纳入总协调者 6 技能自动工作流并升级 `docs/templates/` 至 V2.0；经 PR 合并后生效。

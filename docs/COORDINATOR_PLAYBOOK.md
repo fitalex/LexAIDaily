@@ -1,36 +1,34 @@
 # 协调者操作手册（Gemini）
 
-本手册规定 Gemini 作为 LexAIDaily 总协调者的日常做法。规则以 [AGENTS.md](../AGENTS.md) 为准，冲突时 AGENTS.md 优先。
+本手册规定 Gemini 作为 LexAIDaily 总协调者的日常做法。规则以 [AGENTS.md](../AGENTS.md) 为准，冲突时 AGENTS.md 优先；技能自动触发路由见 [GEMINI.md](../GEMINI.md)。
 
-## 1. 每次会话开始（必做）
+## 1. 每次会话开始与收尾（必做）
 
-Gemini 不依赖聊天记忆，任务事实以仓库中已核验的记录为准；下面的步骤替代“记得上次做到哪”。
+Gemini 不依赖聊天记忆，任务事实以仓库中已核验的记录与 GitHub Issue / PR 为准；下面的步骤替代“记得上次做到哪”。
 
 1. 读 [STATUS.md](coordination/STATUS.md)：当前 Gate、各任务状态、Human 待办、A 级台账。
-2. 核对开放的 PR 与 Issue、diff、评论及 CI 状态；与 STATUS 对照，先修正不一致处。
+2. 核对开放的 GitHub Issue 与 PR、diff、评论及 CI 状态；与 STATUS 对照，先修正不一致处。
 3. 确认 `main` 最新 commit SHA，检查在途任务书的基准是否过期。
 4. 按优先级处理：待复核的 PR → 待 Human 决策的事项 → 新任务。
-5. 会话结束前把状态变更经独立分支与 PR 写回 STATUS，否则下次会话会丢失。
+5. 会话结束前把状态变更经独立分支与 PR 写回 STATUS；如需跨会话或跨 Agent 接力，自动调用 `handoff` 压缩上下文（引用分支、commit SHA、Issue/PR 链接，不复制粘贴大段正文），**不替代 STATUS 落盘**。
 
-## 2. 拆分任务书
+## 2. 拆分任务书（设计对齐 → Spec → 垂直切片 Issue）
 
 原则：
 
-- 一个任务 = 一个 Owner = 一个 PR，可独立验收。
-- DoD 必须可验证（命令、文件、截图或链接），不写“做得好”。
+- 一个任务 = 一个 Owner = 一个独立可验收的垂直切片（Tracer Bullet）= 一个 PR。
+- 单一事实源：从 Gate 2 起，任务书默认以 **GitHub Issue** 落盘；长篇契约可选落盘 `docs/specs/` 或 `docs/daily-specs/` 并由 Issue 链接指向，不在两处双写正文。
+- DoD 必须可验证（测试接缝 Seam、命令、文件、截图或链接），不写“做得好”。
 - 文件范围明确，尽量让不同任务不改同一文件；必须同改时先排写入顺序。
-- 先契约后实现：数据契约、接口先行，消费方任务依赖它。
+- 先契约后实现：数据契约、接口先行，消费方任务以 `Blocked by` 依赖它。
 - 研究、实现、审计分开，同一 Agent 不同时担任实现与审计。
-- 体量以一次能审完为限，超出就拆。
 
-步骤：
+步骤（自动衔接 3 个核心技能）：
 
-1. 从 [ROADMAP.md](../ROADMAP.md) 当前 Gate 的核心任务与验收标准列出交付物。
-2. 按执行者能力拆分，画出依赖。
-3. 判定 A/B 级（AGENTS.md 3.1）：按整体目标和累计变更判级，拿不准按 B 级，并在台账写明所属整体目标。
-4. 判定是否触发独立审计（AGENTS.md 6.1）。
-5. 用 [任务书模板](templates/TASK_BOOK.md) 写任务书。
-6. 登记到 STATUS 看板与 [任务书索引](daily-specs/README.md)。
+1. **需求与边界对齐（自动调用 `grill-with-docs`）**：面对新 Gate 或未决设计分支（如数据契约字段、Prompt 约束）时，按设计树轮次追问直至前沿清空；同步懒更新根目录 `GLOSSARY.md`（领域术语），仅对不可逆架构权衡记录 `docs/adr/`，治理/授权决策仍记 `STATUS.md`（`D-NNN`）。
+2. **规格定稿（自动调用 `to-spec`）**：讨论收敛后，不再重复访谈，梳理测试接缝（Seam）并发布为 GitHub 父 Spec Issue（打 `spec` 标签）。
+3. **垂直切片拆单（自动调用 `to-tickets`）**：将 Spec 拆解为带原生 `Blocked by` 阻塞依赖的 `LD-G<Gate>-<NN>` 子任务清单，先向 Human 确认颗粒度与依赖边界，再按依赖顺序通过 GitHub MCP 创建子 Issue（按 [任务书模板](templates/TASK_BOOK.md) 写明 A/B 级、Owner、审计触发、文件范围与 DoD）。
+4. **登记台账**：将 A 级授权与对应 Issue 链接登记到 `STATUS.md`。
 
 ## 3. 选择执行者
 
@@ -45,42 +43,39 @@ Gemini 不依赖聊天记忆，任务事实以仓库中已核验的记录为准�
 
 ## 4. 派发
 
-- **A 级**（依经 Human 确认的 D-001 及 D-025 承接）：Gemini 在 STATUS 的 A 级台账登记授权，直接以分支与 PR 提交任务书与台账更新，再通知 Human 触发执行者。
+- **A 级**（依经 Human 确认的 D-001 及 D-025 承接）：Gemini 在 STATUS 的 A 级台账登记授权，创建任务书 Issue 并经 PR 更新台账，再通知 Human 触发执行者。
 - **B 级**：写决策包（第 7 节）交 Human，授权后才派发。
 
-给 Human 复制的派发话术：
+给 Human 复制的派发话术（复杂跨任务移交可自动调用 `handoff` 按 [交接包模板](templates/HANDOFF_PACKET.md) 生成）：
 
 **DeepSeek Harness / Antigravity**
 
 ```
-请先阅读仓库根目录 AGENTS.md，再阅读任务书 docs/daily-specs/<任务号>.md。
+请先阅读仓库根目录 AGENTS.md，再阅读任务书 GitHub Issue #<Issue号>（或 docs/daily-specs/<任务号>.md）。
 从最新 main 建分支 <ds 或 ag>/<任务号小写>-<slug>，只在任务书「文件范围」内修改。
 先完成「接单确认」；如任务书有问题请停止并说明，不要自行改范围。
-完成后按 PR 模板提交 PR，如实填写命令、结果和 DoD 状态。不要合并。
+完成后按 PR 模板提交 PR（正文写明 Closes #<Issue号>），如实填写命令、结果和 DoD 状态。不要合并。
 ```
 
 **触发架构内独立审计（交非起草/非实现方）**
 
 ```
-请作为独立审计方，阅读 AGENTS.md 第 6 节、任务书 docs/daily-specs/<任务号>.md 及目标 PR 的 diff（基准 commit：<SHA>）。
-按 docs/templates/REVIEW_REPORT.md 出具审计意见并归档至 docs/audits/<任务号>-<agent>-audit.md，在 PR 评论回传结论、被审 commit SHA、归档文件 permalink 与 blob SHA。不要直接修改被审文件，不要合并。
+请作为独立审计方，阅读 AGENTS.md 第 6 节、任务书 GitHub Issue #<Issue号>（或 docs/daily-specs/<任务号>.md）及目标 PR 的 diff（基准 commit：<SHA>）。
+按 docs/templates/REVIEW_REPORT.md 出具双轴审计意见并归档至 docs/audits/<任务号>-<agent>-audit.md，在 PR 评论回传结论、被审 commit SHA、归档文件 permalink 与 blob SHA。不要直接修改被审文件，不要合并。
 ```
 
 ## 5. 接单确认
 
-执行者在 PR 草稿或评论中逐项确认：范围清晰、输入齐全、DoD 可验证、文件范围与其他在途任务无冲突、预计需要的授权已具备。任一项不成立即拒单，Gemini 修订任务书后重新派发。
+执行者在 PR 草稿或 Issue 评论中逐项确认：范围清晰、输入齐全、DoD 可验证、文件范围与其他在途任务无冲突、预计需要的授权已具备。任一项不成立即拒单，Gemini 修订任务书后重新派发。
 
-## 6. 结果复核
+## 6. 结果复核（双轴审查）
 
-对每个 `READY_FOR_REVIEW` 的任务，按 [复核报告模板](templates/REVIEW_REPORT.md) 检查：
+对每个 `READY_FOR_REVIEW` 的 PR，自动调用 `code-review` 并按 [复核报告模板](templates/REVIEW_REPORT.md) 输出双轴复核结论（不合并、不跨轴重排）：
 
-1. **范围**：diff 是否全部落在“可改文件”内；有无未授权依赖或配置。
-2. **DoD**：逐项对照，每项必须有证据。
-3. **证据真实性**：命令输出、CI 链接是否对应本次 commit；“未触发”“未执行”是否如实。
-4. **红线**：密钥、冻结基线、编辑原则、许可证、AI 初稿标注。
-5. **一致性**：文档、索引、STATUS 是否同步；链接是否可达。
-6. **事实**：抽查来源链接，高风险条目全查。
-7. **审计触发**：对照 AGENTS.md 6.1，需要则转 `IN_AUDIT` 并安排架构内非起草/非实现方审计（或报 Human 决定是否书面豁免）。
+1. **Standards 轴（规范与质量）**：核对 diff 是否落在“可改文件”内、有无未授权依赖/密钥/红线违规，对照 `AGENTS.md`、仓库规范与 Fowler 代码坏味道基线检查结构问题（仓库明文规范优先于基线启发式判断）。
+2. **Spec 轴（需求与 DoD 忠实度）**：逐项对照原 Issue / 任务书 DoD 与冻结基线，标出遗漏项、范围蔓延（未要求的行为）以及实现偏差。
+3. **证据与一致性核验**：核对命令输出与 CI 链接是否对应本次 commit（“未触发”“未执行”须如实）；抽查一手来源链接（高风险条目全查）；核对文档与 STATUS 同步状态。
+4. **审计触发判定**：对照 `AGENTS.md` 6.1，需独立审计时转 `IN_AUDIT` 并交架构内非起草/非实现方审计（或报 Human 决定是否书面豁免）。**Gemini 的双轴复核不得替代 6.1 独立审计。**
 
 结论三选一：`ACCEPT`（进入审计或 `HUMAN_DECISION`）、`CHANGES_REQUESTED`（列出 S1 阻断 / S2 重要 / S3 建议）、`ESCALATE`（交 Human）。复核意见发在 PR 评论，重要的另存 `docs/audits/<任务号>-gemini-review.md`。
 
@@ -88,7 +83,7 @@ Gemini 不依赖聊天记忆，任务事实以仓库中已核验的记录为准�
 
 B 级任务；执行者与复核者争议；Gemini 与独立审计者分歧；已合并内容被发现有事实或合规问题；需要授权、付费或外部账号；DoD 无法达成而需改范围；优先级取舍；任何涉及法律专业判断或对外发布的事项。
 
-- **对话内升级汇报（优先遵循 [GEMINI.md](../GEMINI.md)）**：单轮正文仅展开 **1 个** 最高优决策项（附选项、核心影响与 1–2 个致命陷阱），先推进不受阻部分；其余待办仅用一行备查，末行标注状态（`🔴需人工决策/阻塞` 等）。
+- **对话内升级汇报（优先遵循 [GEMINI.md](../GEMINI.md)）**：日常推进单轮正文仅展开 **1 个** 最高优决策项（附选项、核心影响与 1–2 个致命陷阱），先推进不受阻部分；其余待办仅用一行备查，末行标注状态（`🔴需人工决策/阻塞` 等）。
 - **落盘仓库的决策包（PR / Issue / 任务书，按 AGENTS.md 第 11 节写）**：
 
 ```
@@ -117,6 +112,7 @@ B 级任务；执行者与复核者争议；Gemini 与独立审计者分歧；�
 ## 9. 反模式
 
 - 自己写、自己审、自己宣布通过。
+- 在 GitHub Issue 与 `docs/daily-specs/` 两处双写同一份任务书正文导致漂移。
 - 没有证据就写“CI 通过”“测试通过”。
 - 为赶进度悄悄降低 DoD，或不声明地扩大范围。
 - 把未核实结论当作事实转述。
@@ -131,7 +127,7 @@ B 级任务；执行者与复核者争议；Gemini 与独立审计者分歧；�
 | Gate | 主要任务 | 建议 Owner | 复核 / 审计要点 |
 |---|---|---|---|
 | 0 | ROADMAP 入库、README 与 ROADMAP 一致性核对、验收清单 | 已完成（历史记录见 STATUS） | Human 已于 2026-11-07 签署通过 |
-| 1 | 展示字段与五类标签、设计系统与 Web 核心视图、公众号内联排版与交叉测试、真实样本集 | 字段表与公众号原型：DeepSeek Harness；设计系统与交叉测试：Antigravity；样本集与验收清单：Gemini | 真机预览与 3 分钟扫读评审由 Human；设计/生图与第三方依赖属 B 级 |
+| 1 | 展示字段与五类标签、设计系统与 Web 核心视图、公众号内联排版与交叉测试、真实样本集 | 已完成（PR #35 `a6ee3d0` 合并，2026-11-26 验收解锁 Gate 2） | 详见 `docs/coordination/GATE1_ACCEPTANCE.md` |
 | 2 | 信源白名单、采集与分类管线、选题池、摘要与实务影响提示词、人工审校 SOP、导出脚本 | 白名单调研与 SOP：Gemini；管线、适配器与测试：DeepSeek Harness；文档同步：Antigravity | 白名单、提示词、SOP 触发 6.1(b)(e)(d) 独立审计；外部 API、凭据、调度按 B 级 |
 | 3 | Web 前端与数据层、“阅读原文”跳转、构建部署、域名与生产环境 | 工程实现：DeepSeek Harness；文档与指定交叉测试：Antigravity | 域名、生产部署、对外发布属 B 级，由 Human 授权；公众号后台凭据不交 Agent |
 | 4 | 增长漏斗、私域、深度内容、商业化 | Human 为主；Agent 仅协助内容与分析 | 读者数据与账号属 B 级，Agent 不接触 |
