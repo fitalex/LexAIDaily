@@ -2,3 +2,10 @@
 .DS_Store
 **/.DS_Store
 ._*
+
+# Node.js dependencies
+node_modules/
+
+# ADR-0002: Local private raw cache (7-day TTL, strictly never committed)
+.cache/
+.cache/raw/

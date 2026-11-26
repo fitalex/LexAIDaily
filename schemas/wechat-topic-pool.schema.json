@@ -1,0 +1,107 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://lexaidaily.local/schemas/wechat-topic-pool.schema.json",
+  "title": "WechatTopicPool",
+  "description": "LexAIDaily Gate 2 公众号深度选题池（WeChat Deep-Topic Pool）正式数据契约 v1.0。",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "updated_at", "topics"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "topic_id",
+          "title",
+          "category",
+          "trigger_reasons",
+          "candidate_ids",
+          "primary_source_urls",
+          "high_risk_legal",
+          "status",
+          "created_at"
+        ],
+        "properties": {
+          "topic_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-_]{3,80}$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 6,
+            "maxLength": 120
+          },
+          "category": {
+            "type": "string",
+            "enum": [
+              "监管与合规",
+              "模型与技术",
+              "实务与工具",
+              "判例与学术",
+              "行业与资本"
+            ]
+          },
+          "trigger_reasons": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "enum": [
+                "multi_source_cross_report",
+                "high_risk_legal_tag",
+                "heat_or_controversy_threshold",
+                "long_regulation_split"
+              ]
+            }
+          },
+          "cross_source_count": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "candidate_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9][a-z0-9-_]{3,80}$"
+            }
+          },
+          "primary_source_urls": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "format": "uri",
+              "pattern": "^https?://"
+            }
+          },
+          "angle_brief": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "high_risk_legal": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["queued", "selected", "published", "archived"]
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
