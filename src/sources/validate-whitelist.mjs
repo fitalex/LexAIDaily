@@ -2,11 +2,13 @@ import { readFileSync } from "node:fs";
 import { load as loadYaml } from "js-yaml";
 
 export const VALID_SOURCE_TYPES = Object.freeze([
+  "legal_ai_vendor",
+  "law_firm_practice",
+  "authoritative_media",
+  "official_tech_blog",
   "legislation_regulator",
   "court_judiciary",
   "academic_paper",
-  "official_tech_blog",
-  "authoritative_media",
 ]);
 
 export const VALID_CATEGORIES = Object.freeze([
@@ -27,6 +29,11 @@ export const VALID_FETCH_MODES = Object.freeze([
 
 export const VALID_TIERS = Object.freeze(["T1", "T2", "T3"]);
 export const VALID_STATUSES = Object.freeze(["active", "degraded", "paused"]);
+
+const COMPLIANCE_SENTINEL_TYPES = new Set([
+  "legislation_regulator",
+  "court_judiciary",
+]);
 
 const ALLOWED_ROOT_KEYS = new Set([
   "schema_version",
@@ -123,6 +130,15 @@ export function validateWhitelistConfig(config, expectedRegion) {
     }
     if (src.authority_tier === "T1" && src.high_risk_default !== true) {
       errors.push(`${label}: T1 source must set high_risk_default: true`);
+    }
+    if (
+      src.authority_tier === "T2" &&
+      COMPLIANCE_SENTINEL_TYPES.has(src.source_type) &&
+      src.high_risk_default !== true
+    ) {
+      errors.push(
+        `${label}: T2 court/legislation source must set high_risk_default: true`,
+      );
     }
     if (typeof src.discovery_only !== "boolean") {
       errors.push(`${label}: discovery_only must be boolean`);

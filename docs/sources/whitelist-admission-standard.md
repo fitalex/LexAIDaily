@@ -1,39 +1,53 @@
-# LexAIDaily 权威信源白名单准入与分级标准（v1.0）
+# LexAIDaily 权威信源白名单准入与分级标准（v1.1｜法律人 AI 实务效率雷达重构版）
 
 - **任务编号**：`LD-G2-02`（父级 Spec #38 / 子 Issue #40）
+- **核心定位**：**构建法律人的 AI 实务信息雷达，重点提供「如何使用 AI 提升法律工作效率」的一手实务信息源**。
 - **架构依据**：`ADR-0003`（中国大陆与大陆以外双轨分域采集）、`GLOSSARY.md`（**白名单信源**定义）
-- **配置文件**：`data/sources/whitelist-cn.yaml`（`region: cn`）与 `data/sources/whitelist-global.yaml`（`region: global`），均由 `js-yaml` 读取并经 `src/sources/validate-whitelist.mjs` 执行严格键与红线校验。
+- **配置文件**：`data/sources/whitelist-cn.yaml`（`region: cn`，12 源）与 `data/sources/whitelist-global.yaml`（`region: global`，14 源），均由 `js-yaml` 读取并经 `src/sources/validate-whitelist.mjs` 执行严格键与红线校验。
 
-## 1. 五类权威信源主体与准入标准
+## 1. 选源配比原则（实务效率优先，合规哨兵克制）
 
-本白名单仅收录具备一手发布资质的权威机构与官方入口，按 `source_type` 分为五类：
+为避免白名单滑向“纯政务/司法公报库”或“纯底层模型参数榜”，双轨均执行以下配比红线：
+1. **合规哨兵克制占比（每轨 15%–25%）**：立法、监管与法院官网仅保留 2–3 个高信噪比合规哨兵，专门监测 AI 监管新规与司法红线（如生成式 AI 合规、数据出境、AI 幻觉惩戒判例），不堆砌无 AI 实务价值的常规政务发布页。
+2. **实务提效核心占比（每轨 ≥75%）**：重心集中在四类真正教法律人用 AI 提效的一手源：
+   - **法律 AI 产品与工具官方发布页/博客**（`legal_ai_vendor`）：Harvey、Legora、Thomson Reuters Legal (CoCounsel)、Clio Legal AI、北大法宝 MCP、阿里云通义法睿等；
+   - **头部律所公开 AI 实务与合规专栏**（`law_firm_practice`）：金杜 China Law Insight、君合法评、汉坤观点等免登录官网实务评述；
+   - **权威法律科技实务媒体与效率实战媒体**（`authoritative_media`）：Artificial Lawyer、LawSites、Legal IT Insider、Thomson Reuters Institute、少数派、阮一峰周刊等；
+   - **办公/Agent 工作流一手技术博客与前沿研究**（`official_tech_blog` / `academic_paper`）：Microsoft Copilot Blog（含 Copilot for Legal）、Anthropic Newsroom（含 Claude for Legal 插件）、智谱/DeepSeek 工作流与长文档更新日志、arXiv `cs.AI`。
+
+## 2. 七类权威信源主体与准入标准
+
+本白名单仅收录具备一手发布资质的权威机构与官方入口，按 `source_type` 分为七类：
 
 | `source_type` | 中文名称 | 典型代表 | 一手判定标准 |
 |---|---|---|---|
-| `legislation_regulator` | 立法与监管机构 | 全国人大国家法律法规数据库、中央网信办、司法部、国家数据局、欧盟 AI 办公室、EUR-Lex、英国 ICO、美国 Federal Register、美国 NCSL 50 州 AI 立法数据库 | 法规、规章、监管指引、州立法追踪与征求意见稿的官方/权威发布入口 |
-| `court_judiciary` | 法院公开文书 | 最高人民法院、英国最高法院、CourtListener（公开 Atom 裁判检索订阅源） | 司法解释、典型案例、法院规程与公开裁判文书官方入口或经验证的公开裁判归档 |
-| `academic_paper` | 预印本、高校研究机构与顶会/核心期刊 | arXiv（`cs.AI` 官方 RSS）、Stanford HAI（顶会与法学核心期刊入口按 Human 审定持续增补） | 论文预印本原始提交页、高校研究所官方发布页或期刊/顶会官方入口 |
-| `official_tech_blog` | 官方技术博客 | DeepSeek、Qwen、OpenAI、Anthropic | 模型与产品研发机构官方新闻室、技术博客或 API 变更日志 |
-| `authoritative_media` | 权威科技与法律科技媒体 | Thomson Reuters Institute、Artificial Lawyer、LawSites（及带 `discovery_only` 隔离标记的辅助线索源） | 具独立采编与原始调研报告能力的行业权威媒体/研究机构 |
+| `legal_ai_vendor` | 法律 AI / 律所工具产品官方源 | Harvey AI、Legora、Thomson Reuters Legal (CoCounsel)、Clio Legal AI、北大法宝 MCP、阿里云通义法睿 | 法律科技厂商官方博客、产品更新日志、MCP/工作流文档与客户落地实务案例 |
+| `law_firm_practice` | 头部律所公开实务专栏 | 金杜 China Law Insight、君合法评、汉坤观点 | 头部律所官网公开免登录的 AI 实务、数据合规与新规实操评述 |
+| `authoritative_media` | 法律科技与效率实战媒体 | Artificial Lawyer、LawSites、Legal IT Insider、Thomson Reuters Institute、少数派、阮一峰科技周刊（及带 `discovery_only` 隔离标记的辅助线索源） | 具独立采编、实测评测或原始调研能力的法律科技/AI 效率媒体与研究机构 |
+| `official_tech_blog` | 办公 AI 与 Agent 工作流官方博客 | Microsoft Copilot Blog、Anthropic Newsroom、智谱 AI 开放文档、DeepSeek 更新日志 | 直接影响法律人文档审阅、检索、Office 集成与 Agent 工作流的官方发布页 |
+| `legislation_regulator` | 立法与监管合规哨兵 | 中央网信办、欧盟 AI 办公室、英国 ICO | 聚焦 AI 治理与数据合规红线的官方监管发布入口（每轨严格控制数量） |
+| `court_judiciary` | 司法判例合规哨兵 | 最高人民法院、CourtListener（公开 Atom AI 判例订阅源） | 涉 AI 司法解释、典型案例与公开判例归档入口 |
+| `academic_paper` | 前沿学术预印本 | arXiv（`cs.AI` 官方 RSS） | 论文预印本原始提交页（聚焦 AI 推理、检索与幻觉评测前沿） |
 
 ### 严禁收录红线（一票否决）
 1. **严禁二手搬运号与内容农场**：不收录无独立信源的自媒体转载站、营销号或洗稿聚合页。
-2. **严禁需登录态、API 鉴权凭据或强验证码封闭站点**：中国大陆与海外轨均只收录免登录、无强交互验证码的公开页面、RSS/Atom 或公开匿名只读 API（若某源仅开放需认证 API，必须降级改用其公开 Atom/HTML 入口，或经 Human 按 B 级另行授权凭据管理，严禁以“免登录”掩盖）。
+2. **严禁需登录态、API 鉴权凭据或强验证码封闭站点**：中国大陆与海外轨均只收录免登录、无强交互验证码的公开页面、RSS/Atom 或公开匿名只读 API。
+3. **严禁纯前端 SPA 空壳充当 `static_html`**：任何标记为 `static_html` 的入口，必须实测返回可静态解析的正文或文章列表 HTML，不得收录需无头浏览器渲染的空壳页或交互检索表单。
 
-## 2. 权威分级（`authority_tier`）与高风险触发规则
+## 3. 权威分级（`authority_tier`）与高风险触发规则
 
 | 等级 | 适用范围 | `high_risk_default` 默认值 | 人工终审要求 |
 |---|---|---|---|
-| `T1` | 立法机构、监管部门、法院及官方公报 | **强制 `true`** | 必核发布机构、日期、版本号与 `effective_status`（效力状态，契约侧已机器化校验） |
-| `T2` | 预印本/高校智库、模型厂商官方博客、非营利公开法院文书/州法聚合平台（如 CourtListener、NCSL） | 默认 `false`；**涉法院文书/立法聚合的 `T2` 源（`court_judiciary` / `legislation_regulator`）置为 `true`** | 核对核心数据指标、原始裁判/法案链接与效力状态 |
-| `T3` | 权威法律科技媒体、行业研究机构、辅助线索发现源 | `false` | 严格回溯一手原链；辅助线索源不得直接作为引用依据 |
+| `T1` | 立法机构、监管部门、法院及官方公报（合规哨兵） | **强制 `true`**（校验器机器化拦截） | 必核发布机构、日期、版本号与 `effective_status`（效力状态，契约侧已机器化校验） |
+| `T2` | 法律 AI 厂商官方源、头部律所实务专栏、办公 AI 官方博客、学术预印本、非营利公开法院文书平台（如 CourtListener） | 默认 `false`；**涉法院文书/立法监管的 `T2` 源（`court_judiciary` / `legislation_regulator`）强制 `true`**（校验器机器化拦截） | 核对产品功能事实、实务操作前提、核心数据指标或原始裁判链接 |
+| `T3` | 权威法律科技媒体、AI 效率实战媒体、行业研究机构、辅助线索发现源 | `false` | 严格回溯一手原链；辅助线索源不得直接作为引用依据 |
 
-## 3. 五维内容分类映射
+## 4. 五维内容分类映射
 
 每条信源通过 `default_categories` 标注其主要覆盖的官方五维分类（对齐 `ROADMAP.md`）：
-- `监管与合规` / `模型与技术` / `实务与工具` / `判例与学术` / `行业与资本`
+- `实务与工具`（核心主轴）/ `模型与技术` / `监管与合规` / `判例与学术` / `行业与资本`
 
-## 4. 辅助线索发现源合规红线与 Gate 3/4 商业化前置条件（`aihot.news/api/v1`）
+## 5. 辅助线索发现源合规红线与 Gate 3/4 商业化前置条件（`aihot.news/api/v1`）
 
 `whitelist-cn.yaml` 收录 `aihot-news-discovery`（入口 `https://aihot.news/api/v1/items`，接口文档见 `https://aihot.news/en/agent?tab=api`）作为 **辅助线索发现源**（置于 CN 轨便于国内中文热点与大陆网络出口调度），强制遵守以下红线：
 1. 配置必须显式标记 `discovery_only: true`、`fetch_mode: discovery_api` 与非空 `compliance_redline`。
@@ -41,7 +55,7 @@
 3. **严禁直接搬运、改写或对外再分发 AIHOT 的摘要文本**。
 4. **Gate 3/4 公开与商业化前置条件（强制门禁）**：AIHOT 官方条款明确“个人、非营利及组织内部使用免费；**面向公众的商业产品、付费服务、代理 API 与批量再分发须事先取得书面许可**”，且单 IP 速率限制约 60 req/min。在取得 AIHOT 书面许可前，本源**仅限内部试运行与研发验证**，Gate 3/4 对外公开或商业化上线前必须由 Human 决定取得书面授权或停用该源。
 
-## 5. 失效源降级与维护规则
+## 6. 失效源降级与维护规则
 
 - `status: active`：正常调度采集。
 - `status: degraded`：连续 3 次采集返回 HTTP 4xx/5xx、超时或解析为空时自动降级为 `degraded`，记录至 `*-meta.json` 并提示人工复核，不阻断同轨其他信源运行。

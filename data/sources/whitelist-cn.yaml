@@ -1,230 +1,231 @@
 schema_version: "1.0"
-region: "cn"
+region: cn
 updated_at: "2026-11-26"
-description: "LexAIDaily 中国大陆轨（region: cn）免登录公开权威白名单信源与辅助线索发现源配置（ADR-0003）。"
+description: "LexAIDaily 中国大陆轨白名单（v1.1 法律人 AI 实务效率雷达重构版：2 合规哨兵 + 3 红圈所实务专栏 + 3 法律 AI/文档工具官方源 + 3 效率工作流与底座源 + 1 线索发现源）"
 sources:
-  - source_id: "cn-npc-flk"
-    region: "cn"
-    name: "全国人大国家法律法规数据库"
-    source_type: "legislation_regulator"
-    language: "zh-CN"
-    jurisdiction: "CN"
+  - source_id: cn-spc-fabu
+    region: cn
+    name: 最高人民法院权威发布（合规哨兵）
+    source_type: court_judiciary
+    language: zh
+    jurisdiction: CN
     default_categories:
-      - "监管与合规"
-    fetch_mode: "json_api"
-    entry_url: "https://flk.npc.gov.cn/law-search/index/aggregateData"
-    expected_domain: "flk.npc.gov.cn"
-    authority_tier: "T1"
+      - 判例与学术
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://www.court.gov.cn/fabu.html
+    expected_domain: www.court.gov.cn
+    authority_tier: T1
     high_risk_default: true
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测公开只读 JSON 接口 /law-search/index/aggregateData 返回 HTTP 200（已弃用 552B 的 SPA 首页壳，免登录直接获取结构化数据）。"
+    verification_note: "合规哨兵；实测 HTTP 200 静态 HTML 列表页，仅追踪涉 AI 司法解释与典型案例红线"
 
-  - source_id: "cn-spc-fabu"
-    region: "cn"
-    name: "最高人民法院权威发布"
-    source_type: "court_judiciary"
-    language: "zh-CN"
-    jurisdiction: "CN"
+  - source_id: cn-cac-wxzw
+    region: cn
+    name: 中央网信办网信政务（合规哨兵）
+    source_type: legislation_regulator
+    language: zh
+    jurisdiction: CN
     default_categories:
-      - "判例与学术"
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://www.court.gov.cn/fabu.html"
-    expected_domain: "www.court.gov.cn"
-    authority_tier: "T1"
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://www.cac.gov.cn/wxzw/A0937index_1.htm
+    expected_domain: www.cac.gov.cn
+    authority_tier: T1
     high_risk_default: true
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；司法文件与权威发布栏目持续更新（见 2026-11-20 更新记录）。"
+    verification_note: "合规哨兵；实测 HTTP 200 静态 HTML 列表页，专盯生成式 AI 监管、算法备案与数据安全红线"
 
-  - source_id: "cn-spc-sifa-jieshi"
-    region: "cn"
-    name: "最高人民法院司法解释"
-    source_type: "court_judiciary"
-    language: "zh-CN"
-    jurisdiction: "CN"
+  - source_id: cn-kwm-cli
+    region: cn
+    name: 金杜律师事务所 China Law Insight
+    source_type: law_firm_practice
+    language: zh
+    jurisdiction: CN
     default_categories:
-      - "判例与学术"
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://www.court.gov.cn/fabu/gengduo/16.html"
-    expected_domain: "www.court.gov.cn"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；司法解释目录索引页清晰（含 400+ 条司法解释记录）。"
-
-  - source_id: "cn-cac-wxzw"
-    region: "cn"
-    name: "中央网络安全和信息化委员会办公室（网信政务）"
-    source_type: "legislation_regulator"
-    language: "zh-CN"
-    jurisdiction: "CN"
-    default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://www.cac.gov.cn/wxzw/A0937index_1.htm"
-    expected_domain: "www.cac.gov.cn"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测本机可达（HTTP 200），覆盖生成式人工智能服务备案公告与数据出境政策问答；海外云端节点可能限流，由大陆轨本机出口抓取。"
-
-  - source_id: "cn-moj-bmgz"
-    region: "cn"
-    name: "中华人民共和国司法部（部门规章）"
-    source_type: "legislation_regulator"
-    language: "zh-CN"
-    jurisdiction: "CN"
-    default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://www.moj.gov.cn/pub/sfbgw/flfggz/flfggzbmgz/"
-    expected_domain: "www.moj.gov.cn"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测免登录可达；首跳返回 302 + Cookie 挑战（设置 CT6T/CT6TS Cookie），采集器须启用 cookie jar 跟随重定向获取 200 正文。"
-
-  - source_id: "cn-moj-xzfg"
-    region: "cn"
-    name: "司法部国家行政法规库"
-    source_type: "legislation_regulator"
-    language: "zh-CN"
-    jurisdiction: "CN"
-    default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://xzfg.moj.gov.cn/"
-    expected_domain: "xzfg.moj.gov.cn"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；司法部国家行政法规库现行有效行政法规同步公布。"
-
-  - source_id: "cn-nda-home"
-    region: "cn"
-    name: "国家数据局"
-    source_type: "legislation_regulator"
-    language: "zh-CN"
-    jurisdiction: "CN"
-    default_categories:
-      - "监管与合规"
-      - "行业与资本"
-    fetch_mode: "static_html"
-    entry_url: "https://www.nda.gov.cn/"
-    expected_domain: "www.nda.gov.cn"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；涵盖“人工智能+”与数据要素治理文件。"
-
-  - source_id: "cn-nfra-home"
-    region: "cn"
-    name: "国家金融监督管理总局"
-    source_type: "legislation_regulator"
-    language: "zh-CN"
-    jurisdiction: "CN"
-    default_categories:
-      - "监管与合规"
-      - "行业与资本"
-    fetch_mode: "static_html"
-    entry_url: "https://www.nfra.gov.cn/"
-    expected_domain: "www.nfra.gov.cn"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；涵盖金融领域 AI 安全开发应用指导意见。"
-
-  - source_id: "cn-deepseek-news"
-    region: "cn"
-    name: "DeepSeek 官方研究与发布公告"
-    source_type: "official_tech_blog"
-    language: "en"
-    jurisdiction: "CN"
-    default_categories:
-      - "模型与技术"
-      - "实务与工具"
-    fetch_mode: "static_html"
-    entry_url: "https://www.deepseek.com/en/news/"
-    expected_domain: "www.deepseek.com"
-    authority_tier: "T2"
+      - 实务与工具
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://www.chinalawinsight.com/
+    expected_domain: www.chinalawinsight.com
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；官方模型发布与研究公告索引页。"
+    verification_note: "实测免登录静态 HTML 列表可读（2026-11 更新），覆盖 AI/数据合规与跨境实务评述"
 
-  - source_id: "cn-deepseek-api-updates"
-    region: "cn"
-    name: "DeepSeek API 官方变更日志"
-    source_type: "official_tech_blog"
-    language: "en"
-    jurisdiction: "CN"
+  - source_id: cn-junhe-reviews
+    region: cn
+    name: 君合律师事务所·君合法评
+    source_type: law_firm_practice
+    language: zh
+    jurisdiction: CN
     default_categories:
-      - "模型与技术"
-      - "实务与工具"
-    fetch_mode: "static_html"
-    entry_url: "https://api-docs.deepseek.com/updates/"
-    expected_domain: "api-docs.deepseek.com"
-    authority_tier: "T2"
+      - 实务与工具
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://www.junhe.com/law-reviews
+    expected_domain: www.junhe.com
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；官方 API 版本与定价变更日志（2026-11-13 更新）。"
+    verification_note: "实测免登录静态 HTML 列表可读（2026-11-23 更新），含数据运营、算力与 AI 实务评述"
 
-  - source_id: "cn-qwen-blog"
-    region: "cn"
-    name: "Qwen（通义千问）官方技术博客"
-    source_type: "official_tech_blog"
-    language: "zh-CN"
-    jurisdiction: "CN"
+  - source_id: cn-hankun-insights
+    region: cn
+    name: 汉坤律师事务所·汉坤观点
+    source_type: law_firm_practice
+    language: zh
+    jurisdiction: CN
     default_categories:
-      - "模型与技术"
-      - "实务与工具"
-    fetch_mode: "static_html"
-    entry_url: "https://qwenlm.github.io/zh/blog/"
-    expected_domain: "qwenlm.github.io"
-    authority_tier: "T2"
+      - 实务与工具
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://www.hankunlaw.com/portal/list/index/id/8.html
+    expected_domain: www.hankunlaw.com
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；官方技术博客索引页（注：部分新文章可能跳转至 qwen.ai）。"
+    verification_note: "实测免登录静态 HTML 列表可读（2026-11 更新），含 AI 大模型实务落地与系统提示词案例评述"
 
-  - source_id: "aihot-news-discovery"
-    region: "cn"
-    name: "AIHOT 辅助线索发现 API"
-    source_type: "authoritative_media"
-    language: "zh-CN"
-    jurisdiction: "GLOBAL"
+  - source_id: cn-pkulaw-mcp
+    region: cn
+    name: 北大法宝 MCP 智能法律服务平台
+    source_type: legal_ai_vendor
+    language: zh
+    jurisdiction: CN
     default_categories:
-      - "模型与技术"
-      - "行业与资本"
-      - "实务与工具"
-    fetch_mode: "discovery_api"
-    entry_url: "https://aihot.news/api/v1/items"
-    expected_domain: "aihot.news"
-    authority_tier: "T3"
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://mcp.pkulaw.com/
+    expected_domain: mcp.pkulaw.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测公开静态页面可读，完整展示法宝 MCP/CLI 法律检索、法条核验与引用溯源工具能力"
+
+  - source_id: cn-tongyi-farui
+    region: cn
+    name: 阿里云通义法睿官方文档
+    source_type: legal_ai_vendor
+    language: zh
+    jurisdiction: CN
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://help.aliyun.com/zh/model-studio/tongyi-farui/
+    expected_domain: help.aliyun.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测公开静态文档可读（2026-10 更新），涵盖法律 RAG、合同审查、文书生成与类案检索能力"
+
+  - source_id: cn-zhipu-releases
+    region: cn
+    name: 智谱 AI 开放文档·产品与工作流更新
+    source_type: official_tech_blog
+    language: zh
+    jurisdiction: CN
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://docs.bigmodel.cn/cn/update/new-releases
+    expected_domain: docs.bigmodel.cn
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测公开静态更新页可读，含 Office 文档工作流、GLM-OCR 印章表格识别与 Agent/Skills 更新"
+
+  - source_id: cn-sspai-home
+    region: cn
+    name: 少数派（效率工具与 AI 工作流实战）
+    source_type: authoritative_media
+    language: zh
+    jurisdiction: CN
+    default_categories:
+      - 实务与工具
+    fetch_mode: static_html
+    entry_url: https://sspai.com/
+    expected_domain: sspai.com
+    authority_tier: T3
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测公开静态列表可读（2026-11 更新），覆盖 AI 长文写作、OCR/PDF 处理与 Agent 效率工作流"
+
+  - source_id: cn-ruanyifeng-blog
+    region: cn
+    name: 阮一峰科技爱好者周刊（AI 效率工具）
+    source_type: authoritative_media
+    language: zh
+    jurisdiction: CN
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.ruanyifeng.com/blog/
+    expected_domain: www.ruanyifeng.com
+    authority_tier: T3
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测公开静态列表可读（2026-11-20 第 420 期），每周五稳定更新开源与 AI 效率工具实务资源"
+
+  - source_id: cn-deepseek-updates
+    region: cn
+    name: DeepSeek 官方更新日志（长文档与 Agent 底座）
+    source_type: official_tech_blog
+    language: zh
+    jurisdiction: CN
+    default_categories:
+      - 模型与技术
+      - 实务与工具
+    fetch_mode: static_html
+    entry_url: https://api-docs.deepseek.com/updates
+    expected_domain: api-docs.deepseek.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测 HTTP 200 静态更新页；保留主力国产推理底座，专注长文档上下文、工具调用与 Agent 能力变更"
+
+  - source_id: aihot-news-discovery
+    region: cn
+    name: AIHOT 热点聚合 API（仅线索发现）
+    source_type: authoritative_media
+    language: zh
+    jurisdiction: CN
+    default_categories:
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: discovery_api
+    entry_url: https://aihot.news/api/v1/items
+    expected_domain: aihot.news
+    authority_tier: T3
     high_risk_default: false
     discovery_only: true
-    compliance_redline: "仅作 discovery_only 辅助线索发现源读取 links.original 与事件热度，严格回溯一手原链独立采编，绝不搬运或再分发 AIHOT 摘要；Gate 3/4 面向公众商业化或对外发布前须事先取得 AIHOT 书面许可，取得前仅限内部试运行。"
-    status: "active"
+    compliance_redline: "仅限读取 links.original 线索并回溯一手官方原链独立抓取，严禁搬运或再分发 AIHOT 摘要；单 IP 约 60 req/min；对外公开或商业化（Gate 3/4）前须取得 AIHOT 书面许可或停用本源"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测 /api/v1/items 返回 HTTP 200 JSON 并含 links.original；官方文档 https://aihot.news/en/agent?tab=api 注明约 60 req/min 限流，个人/非营利/内部使用免费，面向公众的商业产品、付费服务、代理 API 与批量再分发须事先取得书面许可（Gate 3/4 前置门禁）。"
+    verification_note: "实测 HTTP 200 JSON 含 links.original；已纳入 Gate 3/4 书面许可前置门禁"

@@ -1,264 +1,267 @@
 schema_version: "1.0"
-region: "global"
+region: global
 updated_at: "2026-11-26"
-description: "LexAIDaily 大陆以外轨（region: global）权威一手白名单信源配置，优先采用 RSS/Atom 与公开只读 JSON API（ADR-0003）。"
+description: "LexAIDaily 海外轨白名单（v1.1 法律人 AI 实务效率雷达重构版：3 合规哨兵 + 4 一线法律 AI 厂商博客 + 4 法律科技实务媒体/研究 + 3 办公 AI 工作流与前沿研究）"
 sources:
-  - source_id: "us-federal-register-api"
-    region: "global"
-    name: "US Federal Register API v1"
-    source_type: "legislation_regulator"
-    language: "en"
-    jurisdiction: "US"
+  - source_id: eu-ai-office
+    region: global
+    name: 欧盟 AI 办公室 (EU AI Office｜合规哨兵)
+    source_type: legislation_regulator
+    language: en
+    jurisdiction: EU
     default_categories:
-      - "监管与合规"
-    fetch_mode: "json_api"
-    entry_url: "https://www.federalregister.gov/api/v1/documents.json"
-    expected_domain: "www.federalregister.gov"
-    authority_tier: "T1"
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://digital-strategy.ec.europa.eu/en/policies/ai-office
+    expected_domain: digital-strategy.ec.europa.eu
+    authority_tier: T1
     high_risk_default: true
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测免凭据公开 REST JSON 接口返回 HTTP 200。"
+    verification_note: "合规哨兵；实测 HTTP 200 静态 HTML，追踪 EU AI Act 实施指南与 GPAI 行为准则"
 
-  - source_id: "us-ncsl-ai-legislation"
-    region: "global"
-    name: "NCSL US State Artificial Intelligence Legislation Summary"
-    source_type: "legislation_regulator"
-    language: "en"
-    jurisdiction: "US-STATES"
+  - source_id: uk-ico-news
+    region: global
+    name: 英国信息专员办公室 (UK ICO｜合规哨兵)
+    source_type: legislation_regulator
+    language: en
+    jurisdiction: UK
     default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://www.ncsl.org/technology-and-communication/artificial-intelligence-2025-legislation"
-    expected_domain: "www.ncsl.org"
-    authority_tier: "T2"
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/
+    expected_domain: ico.org.uk
+    authority_tier: T1
     high_risk_default: true
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测 HTTP 200 静态 HTML 汇总页（含美国各州 AI 立法静态条文摘要，免登录无需 JS 表单；已弃用需表单交互的 database 检索页；2026 年度汇总页暂 404，上线后同步切换；属州立法聚合定级 T2，高风险默认 true）。"
+    verification_note: "合规哨兵；实测 HTTP 200 静态 HTML，追踪 AI 数据合规与执法动态（对齐 PR #47 夹具）"
 
-  - source_id: "us-courtlistener"
-    region: "global"
-    name: "CourtListener Public Atom Search Feed (Free Law Project)"
-    source_type: "court_judiciary"
-    language: "en"
-    jurisdiction: "US"
+  - source_id: us-courtlistener
+    region: global
+    name: CourtListener AI 判例订阅源（合规哨兵）
+    source_type: court_judiciary
+    language: en
+    jurisdiction: US
     default_categories:
-      - "判例与学术"
-    fetch_mode: "atom"
-    entry_url: "https://www.courtlistener.com/feed/search/?q=AI"
-    expected_domain: "www.courtlistener.com"
-    authority_tier: "T2"
+      - 判例与学术
+      - 监管与合规
+    fetch_mode: atom
+    entry_url: https://www.courtlistener.com/feed/search/?q=AI
+    expected_domain: www.courtlistener.com
+    authority_tier: T2
     high_risk_default: true
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测公开 Atom 检索订阅源返回 HTTP 200 application/atom+xml，免登录且匿名只读（已弃用需鉴权的 REST v3/v4 检索接口；因属非营利公开判例归档平台定级 T2，高风险默认 true）。"
+    verification_note: "合规哨兵；实测 HTTP 200 匿名公开 Atom XML，专盯美国法院涉 AI 幻觉与诉讼判例"
 
-  - source_id: "eu-ai-office"
-    region: "global"
-    name: "European Commission AI Office"
-    source_type: "legislation_regulator"
-    language: "en"
-    jurisdiction: "EU"
+  - source_id: global-harvey-blog
+    region: global
+    name: Harvey AI 官方博客
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
     default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://digital-strategy.ec.europa.eu/en/policies/ai-office"
-    expected_domain: "digital-strategy.ec.europa.eu"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；欧盟《人工智能法案》治理中枢与新闻公告页（2026-11-25 更新）。"
-
-  - source_id: "eu-eur-lex-ai-act"
-    region: "global"
-    name: "EUR-Lex (EU AI Act Official Portal)"
-    source_type: "legislation_regulator"
-    language: "en"
-    jurisdiction: "EU"
-    default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng"
-    expected_domain: "eur-lex.europa.eu"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "实测免登录可达（202/200）；欧盟官方公报 EU AI Act 合并文本与修订状态追踪入口（用于核验法规版本与生效日期）。"
-
-  - source_id: "uk-ico-news"
-    region: "global"
-    name: "UK Information Commissioner's Office (ICO) News & Blogs"
-    source_type: "legislation_regulator"
-    language: "en"
-    jurisdiction: "UK"
-    default_categories:
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/"
-    expected_domain: "ico.org.uk"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；2026-11-24 已发布 Agentic AI 隐私义务提醒与监管声明。"
-
-  - source_id: "uk-supreme-court-news"
-    region: "global"
-    name: "UK Supreme Court News"
-    source_type: "court_judiciary"
-    language: "en"
-    jurisdiction: "UK"
-    default_categories:
-      - "判例与学术"
-    fetch_mode: "static_html"
-    entry_url: "https://supremecourt.uk/news"
-    expected_domain: "supremecourt.uk"
-    authority_tier: "T1"
-    high_risk_default: true
-    discovery_only: false
-    status: "active"
-    verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；英国最高法院官方裁判与公告新闻流（2026-11-19 更新）。"
-
-  - source_id: "arxiv-cs-ai-rss"
-    region: "global"
-    name: "arXiv cs.AI Official RSS Feed"
-    source_type: "academic_paper"
-    language: "en"
-    jurisdiction: "GLOBAL"
-    default_categories:
-      - "模型与技术"
-      - "判例与学术"
-    fetch_mode: "rss"
-    entry_url: "https://rss.arxiv.org/rss/cs.AI"
-    expected_domain: "rss.arxiv.org"
-    authority_tier: "T2"
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.harvey.ai/blog
+    expected_domain: www.harvey.ai
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 官方每日 RSS 推送源（官方文档 https://info.arxiv.org/help/rss.html）。"
+    verification_note: "实测公开静态列表可读（2026-11 更新），涵盖 Legal Agents、Review Tables、MCP 与律所落地工作流"
 
-  - source_id: "stanford-hai-news"
-    region: "global"
-    name: "Stanford HAI News"
-    source_type: "academic_paper"
-    language: "en"
-    jurisdiction: "US"
+  - source_id: global-legora-blog
+    region: global
+    name: Legora 官方博客
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
     default_categories:
-      - "判例与学术"
-      - "监管与合规"
-      - "模型与技术"
-    fetch_mode: "static_html"
-    entry_url: "https://hai.stanford.edu/news"
-    expected_domain: "hai.stanford.edu"
-    authority_tier: "T2"
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://legora.com/blog
+    expected_domain: legora.com
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；AI 政策、法律与治理研究新闻（2026-11-20 更新）。"
+    verification_note: "实测公开静态列表可读（2026-11 更新），涵盖法律 AI Skills/Subagents、M365/Workspace 集成与实务 ROI"
 
-  - source_id: "openai-news-rss"
-    region: "global"
-    name: "OpenAI Official News"
-    source_type: "official_tech_blog"
-    language: "en"
-    jurisdiction: "US"
+  - source_id: global-tr-legal-blog
+    region: global
+    name: Thomson Reuters Law Blog (CoCounsel)
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
     default_categories:
-      - "模型与技术"
-      - "行业与资本"
-    fetch_mode: "rss"
-    entry_url: "https://openai.com/news/rss.xml"
-    expected_domain: "openai.com"
-    authority_tier: "T2"
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: static_html
+    entry_url: https://legal.thomsonreuters.com/blog/
+    expected_domain: legal.thomsonreuters.com
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 官方 RSS 入口 https://openai.com/news/rss.xml （2026-11-24 更新）。"
+    verification_note: "实测公开静态列表可读（2026-11 更新），涵盖 CoCounsel Legal、HighQ MCP 与合同红线对比实战"
 
-  - source_id: "anthropic-newsroom"
-    region: "global"
-    name: "Anthropic Newsroom"
-    source_type: "official_tech_blog"
-    language: "en"
-    jurisdiction: "US"
+  - source_id: global-clio-ai-blog
+    region: global
+    name: Clio Legal AI Blog (Vincent AI)
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
     default_categories:
-      - "模型与技术"
-      - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://www.anthropic.com/news"
-    expected_domain: "www.anthropic.com"
-    authority_tier: "T2"
+      - 实务与工具
+    fetch_mode: static_html
+    entry_url: https://www.clio.com/blog/topic/ai/
+    expected_domain: www.clio.com
+    authority_tier: T2
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；官方模型与政策公告页（2026-11-26 更新，无官方 RSS）。"
+    verification_note: "实测公开静态列表可读（2026-10/11 更新），涵盖 Vincent AI、Codex 插件与律所案件协作效率"
 
-  - source_id: "artificial-lawyer-rss"
-    region: "global"
-    name: "Artificial Lawyer"
-    source_type: "authoritative_media"
-    language: "en"
-    jurisdiction: "UK"
+  - source_id: artificial-lawyer
+    region: global
+    name: Artificial Lawyer
+    source_type: authoritative_media
+    language: en
+    jurisdiction: GLOBAL
     default_categories:
-      - "实务与工具"
-      - "行业与资本"
-    fetch_mode: "rss"
-    entry_url: "https://www.artificiallawyer.com/feed/"
-    expected_domain: "www.artificiallawyer.com"
-    authority_tier: "T3"
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: rss
+    entry_url: https://www.artificiallawyer.com/feed/
+    expected_domain: www.artificiallawyer.com
+    authority_tier: T3
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 WordPress 标准 /feed/ RSS 入口（2026-11-25 更新）。"
+    verification_note: "实测 HTTP 200 RSS XML，全球法律 AI 产品发布、律所采纳与实务评测一线媒体"
 
-  - source_id: "lawsites-rss"
-    region: "global"
-    name: "LawSites (Robert Ambrogi)"
-    source_type: "authoritative_media"
-    language: "en"
-    jurisdiction: "US"
+  - source_id: lawsites-blog
+    region: global
+    name: LawSites (Bob Ambrogi)
+    source_type: authoritative_media
+    language: en
+    jurisdiction: US
     default_categories:
-      - "实务与工具"
-      - "行业与资本"
-    fetch_mode: "rss"
-    entry_url: "https://www.lawnext.com/feed"
-    expected_domain: "www.lawnext.com"
-    authority_tier: "T3"
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: rss
+    entry_url: https://www.lawnext.com/feed
+    expected_domain: www.lawnext.com
+    authority_tier: T3
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 标准 RSS 入口（2026-11-24 更新）。"
+    verification_note: "实测 HTTP 200 RSS XML，深度追踪法律科技新产品、Claude/Copilot 法律插件与律师工作流评测"
 
-  - source_id: "thomson-reuters-institute"
-    region: "global"
-    name: "Thomson Reuters Institute"
-    source_type: "authoritative_media"
-    language: "en"
-    jurisdiction: "GLOBAL"
+  - source_id: legal-it-insider
+    region: global
+    name: Legal IT Insider
+    source_type: authoritative_media
+    language: en
+    jurisdiction: GLOBAL
     default_categories:
-      - "实务与工具"
-      - "行业与资本"
-    fetch_mode: "static_html"
-    entry_url: "https://www.thomsonreuters.com/en/institute"
-    expected_domain: "www.thomsonreuters.com"
-    authority_tier: "T3"
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: static_html
+    entry_url: https://legaltechnology.com/
+    expected_domain: legaltechnology.com
+    authority_tier: T3
     high_risk_default: false
     discovery_only: false
-    status: "active"
+    status: active
     verified_at: "2026-11-26"
-    verification_note: "实测 HTTP 200 免登录可访问；法律行业与 AI 实务年度调研报告与文章入口。"
+    verification_note: "实测公开静态列表可读（2026-11-25 更新），追踪美英头部律所 AI 工具采购、计费自动化与知识管理"
+
+  - source_id: thomson-reuters-institute
+    region: global
+    name: Thomson Reuters Institute
+    source_type: authoritative_media
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 行业与资本
+      - 实务与工具
+    fetch_mode: static_html
+    entry_url: https://www.thomsonreuters.com/en/institute
+    expected_domain: www.thomsonreuters.com
+    authority_tier: T3
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测 HTTP 200 静态 HTML，发布法律行业生成式 AI 采用率与提效基准调研（对齐 PR #47 夹具）"
+
+  - source_id: ms-copilot-blog
+    region: global
+    name: Microsoft Copilot Blog（含 Copilot for Legal）
+    source_type: official_tech_blog
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.microsoft.com/en-us/microsoft-365/blog/
+    expected_domain: www.microsoft.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测公开静态列表可读（2026-11 更新），覆盖 Copilot for Legal、Word/Excel/Outlook 律师办公 Agent"
+
+  - source_id: anthropic-news
+    region: global
+    name: Anthropic Newsroom（含 Claude for Legal）
+    source_type: official_tech_blog
+    language: en
+    jurisdiction: US
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.anthropic.com/news
+    expected_domain: www.anthropic.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测 HTTP 200 静态 HTML，追踪 Claude 法律实务插件、长文档分析与企业级安全工作流更新"
+
+  - source_id: arxiv-cs-ai-rss
+    region: global
+    name: arXiv cs.AI 官方 RSS（推理与评测前沿）
+    source_type: academic_paper
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 判例与学术
+      - 模型与技术
+    fetch_mode: rss
+    entry_url: https://rss.arxiv.org/rss/cs.AI
+    expected_domain: rss.arxiv.org
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "实测 HTTP 200 RSS XML，追踪法律推理、检索增强与幻觉评测前沿论文（对齐 PR #47 夹具）"
