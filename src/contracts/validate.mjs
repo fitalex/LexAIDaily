@@ -20,6 +20,12 @@ export const FORBIDDEN_FULLTEXT_KEYS = Object.freeze([
   "article_body",
 ]);
 
+const NORMALIZED_FORBIDDEN_KEYS = new Set(
+  FORBIDDEN_FULLTEXT_KEYS.map((k) => k.toLowerCase().replace(/[_-]/g, "")),
+);
+
+export const DISCOVERY_ONLY_DOMAINS = Object.freeze(["aihot.news"]);
+
 const SCHEMA_FILES = Object.freeze({
   "candidate-item": "candidate-item.schema.json",
   "collect-meta": "collect-meta.schema.json",
@@ -31,6 +37,7 @@ function createAjv() {
   const ajv = new Ajv({
     allErrors: true,
     strict: true,
+    strictRequired: false,
     allowUnionTypes: false,
   });
   addFormats(ajv);
@@ -60,13 +67,13 @@ const validators = Object.freeze({
   ),
 });
 
-/**
- * Recursively scan any payload to guarantee no forbidden fulltext keys appear
- * anywhere in public data outputs (ADR-0002 copyright redline).
- * @param {unknown} value
- * @param {string} currentPath
- * @param {Array<{path: string, key: string}>} hits
- */
+function isDiscoveryOnlyHost(hostname) {
+  const lower = hostname.toLowerCase();
+  return DISCOVERY_ONLY_DOMAINS.some(
+    (domain) => lower === domain || lower.endsWith(`.${domain}`),
+  );
+}
+
 export function scanForbiddenFulltextKeys(value, currentPath = "$", hits = []) {
   if (Array.isArray(value)) {
     value.forEach((item, idx) => {
@@ -77,7 +84,8 @@ export function scanForbiddenFulltextKeys(value, currentPath = "$", hits = []) {
   if (value !== null && typeof value === "object") {
     for (const [key, val] of Object.entries(value)) {
       const nextPath = `${currentPath}.${key}`;
-      if (FORBIDDEN_FULLTEXT_KEYS.includes(key)) {
+      const normalized = key.toLowerCase().replace(/[_-]/g, "");
+      if (NORMALIZED_FORBIDDEN_KEYS.has(normalized)) {
         hits.push({ path: nextPath, key });
       }
       scanForbiddenFulltextKeys(val, nextPath, hits);
@@ -86,11 +94,81 @@ export function scanForbiddenFulltextKeys(value, currentPath = "$", hits = []) {
   return hits;
 }
 
-/**
- * Validate a payload against one of the 4 registered Gate 2 schemas.
- * @param {"candidate-item" | "collect-meta" | "wechat-topic-pool" | "daily-bundle"} schemaName
- * @param {unknown} data
- */
+function checkDiscoverySourceUrls(value, currentPath = "$", errors = []) {
+  if (Array.isArray(value)) {
+    value.forEach((item, idx) => {
+      checkDiscoverySourceUrls(item, `${currentPath}[${idx}]`, errors);
+    });
+    return errors;
+  }
+  if (value !== null && typeof value === "object") {
+    if (typeof value.source_url === "string") {
+      try {
+        const parsed = new URL(value.source_url);
+        if (isDiscoveryOnlyHost(parsed.hostname)) {
+          errors.push({
+            instancePath: `${currentPath}.source_url`,
+            keyword: "discoverySourceUrlForbidden",
+            message: `source_url host "${parsed.hostname}" is a discovery_only source and cannot be used as primary source_url (ADR-0003)`,
+          });
+        }
+      } catch {
+        // Invalid URI syntax is handled by ajv-formats
+      }
+    }
+    if (Array.isArray(value.primary_source_urls)) {
+      value.primary_source_urls.forEach((url, idx) => {
+        if (typeof url !== "string") return;
+        try {
+          const parsed = new URL(url);
+          if (isDiscoveryOnlyHost(parsed.hostname)) {
+            errors.push({
+              instancePath: `${currentPath}.primary_source_urls[${idx}]`,
+              keyword: "discoverySourceUrlForbidden",
+              message: `primary_source_urls host "${parsed.hostname}" is a discovery_only source (ADR-0003)`,
+            });
+          }
+        } catch {
+          // Invalid URI syntax is handled by ajv-formats
+        }
+      });
+    }
+    for (const [key, val] of Object.entries(value)) {
+      if (val && typeof val === "object") {
+        checkDiscoverySourceUrls(val, `${currentPath}.${key}`, errors);
+      }
+    }
+  }
+  return errors;
+}
+
+export function validateSourceIdAgainstWhitelist(data, allowedSourceIds) {
+  const allowed = new Set(allowedSourceIds);
+  const errors = [];
+  const items = Array.isArray(data?.items)
+    ? data.items
+    : data && typeof data === "object" && "source_id" in data
+      ? [data]
+      : [];
+
+  items.forEach((item, idx) => {
+    if (typeof item?.source_id === "string" && !allowed.has(item.source_id)) {
+      errors.push({
+        instancePath: Array.isArray(data?.items)
+          ? `/items/${idx}/source_id`
+          : "/source_id",
+        keyword: "unknownWhitelistSourceId",
+        message: `source_id "${item.source_id}" is not registered in whitelist`,
+      });
+    }
+  });
+
+  return {
+    valid: errors.length === 0,
+    errors,
+  };
+}
+
 export function validateBySchemaName(schemaName, data) {
   const validateFn = validators[schemaName];
   if (!validateFn) {
@@ -100,6 +178,7 @@ export function validateBySchemaName(schemaName, data) {
   }
 
   const forbiddenHits = scanForbiddenFulltextKeys(data);
+  const discoveryErrors = checkDiscoverySourceUrls(data);
   const schemaOk = Boolean(validateFn(data));
   const errors = [];
 
@@ -110,6 +189,8 @@ export function validateBySchemaName(schemaName, data) {
       message: `forbidden fulltext field "${hit.key}" is prohibited in public data (ADR-0002)`,
     });
   }
+
+  errors.push(...discoveryErrors);
 
   if (!schemaOk && Array.isArray(validateFn.errors)) {
     for (const err of validateFn.errors) {
@@ -140,12 +221,6 @@ export const validateWechatTopicPool = (data) =>
 export const validateDailyBundle = (data) =>
   validateBySchemaName("daily-bundle", data);
 
-/**
- * Verify ADR-0002 raw cache isolation:
- * 1) `.gitignore` explicitly ignores `.cache/raw/` (or `.cache/`)
- * 2) `git ls-files .cache/raw` returns zero tracked files
- * @param {string} repoRoot
- */
 export function checkNoTrackedRawCache(repoRoot = DEFAULT_REPO_ROOT) {
   const errors = [];
   const gitignorePath = path.join(repoRoot, ".gitignore");
@@ -168,7 +243,7 @@ export function checkNoTrackedRawCache(repoRoot = DEFAULT_REPO_ROOT) {
 
   let trackedFiles = [];
   try {
-    const stdout = execFileSync("git", ["ls-files", ".cache/raw"], {
+    const stdout = execFileSync("git", ["ls-files", ".cache"], {
       cwd: repoRoot,
       encoding: "utf8",
       stdio: ["ignore", "pipe", "pipe"],
@@ -179,7 +254,7 @@ export function checkNoTrackedRawCache(repoRoot = DEFAULT_REPO_ROOT) {
       .filter(Boolean);
     if (trackedFiles.length > 0) {
       errors.push(
-        `Tracked files found under .cache/raw/: ${trackedFiles.join(", ")}`,
+        `Tracked files found under .cache/: ${trackedFiles.join(", ")}`,
       );
     }
   } catch (err) {

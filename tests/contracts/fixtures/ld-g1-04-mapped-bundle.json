@@ -7,8 +7,8 @@
     "date": "2026-11-24",
     "date_line": "2026-11-24 · 星期二 · 第 001 期",
     "internal": true,
-    "internal_note": "LD-G2-01 契约校验映射样例（源自 docs/samples/LD-G1-04-sample-set.md）",
-    "digest": "本期聚焦英国 ICO 对消费级 Agentic AI 的隐私义务提醒、GlobalHRBench 多语种法律评测、汤森路透 CoCounsel Legal 升级、美联邦法官 AI 庭审红线及 Clio 年度法律趋势报告。",
+    "internal_note": "LD-G2-01 契约校验映射样例（源自 docs/samples/LD-G1-04-sample-set.md；全量保持 pending_review AI 初稿态）",
+    "digest": "本期聚焦英国 ICO 对消费级 Agentic AI 的隐私义务提醒、GlobalHRBench 多语种法律评测、汤森路透 CoCounsel Legal 升级、AI Agent 越权归责研究及中小律所受托级 AI 选型清单。",
     "disclaimer": "本数据包为 Gate 2 契约校验内部样例，不对外发布。摘要、实务影响锚点与详情页深度评述均为 AI 初稿，不构成正式法律意见；日期、版本与效力状态以一手信源为准。",
     "web_detail_url": "https://lexaidaily.example/d/2026-11-24",
     "generated_at": "2026-11-26T09:00:00Z"
@@ -34,7 +34,7 @@
       "high_risk_legal": true,
       "effective_status": "guidance",
       "headline": false,
-      "review_status": "approved",
+      "review_status": "pending_review",
       "detail_analysis": {
         "key_points": [
           "发文主体为英国信息专员办公室（ICO）监管风险与创新执行主任 William Malcolm。",
@@ -44,7 +44,7 @@
         "evidence_quotes": [
           {
             "text": "消费级 Agentic AI 可代表用户自主执行操作并访问个人或第三方信息，开发与部署方须从设计之初嵌入隐私保护。",
-            "locator": "LD-G1-04 样本 #01 核验摘要"
+            "locator": "LD-G1-04 样本 #01 核验摘录（合成测试样例，非原始正文逐字稿）"
           }
         ],
         "legal_commentary": "【AI 初稿】英国 ICO 此次联合 CMA 针对消费级 Agentic AI 发声，释放出数据保护与消费者权益协同监管的清晰信号。与传统被动问答式生成式 AI 不同，具备自主执行能力的智能体会在跨应用调用中高频触碰个人及第三方敏感数据，因此“默认隐私保护（Privacy by Design）”不再停留在隐私政策披露层面，而直接下沉到权限颗粒度、长期记忆开关与第三方接口授权设计。尽管本次博客声明本身尚无独立法律约束力，但其已明确锚定 2027 年春季正式指引的监管预期。面向英国及欧洲市场出海的 LegalTech 与消费级 Agent 产品团队，可利用当前过渡窗口提前开展数据保护影响评估（DPIA），留存可审计的最小权限控制记录。",
@@ -54,7 +54,7 @@
     {
       "id": "g1-04-item-04",
       "region": "global",
-      "source_id": "arxiv-cs-ai",
+      "source_id": "arxiv-cs-ai-rss",
       "source_name": "Farlinko / 卡内基梅隆大学（arXiv 预印本）",
       "source_domain": "arxiv.org",
       "source_url": "https://arxiv.org/html/2611.29852v1",
@@ -71,7 +71,7 @@
       "high_risk_legal": false,
       "effective_status": "not_applicable",
       "headline": false,
-      "review_status": "approved",
+      "review_status": "pending_review",
       "detail_analysis": {
         "key_points": [
           "GlobalHRBench 覆盖含中国内地在内的 8 个法域、240 组劳动法决策题及 8 种语言对齐提示（共 1,920 条）。",
@@ -81,7 +81,7 @@
         "evidence_quotes": [
           {
             "text": "部分模型跨语言相对降幅达 42.2%，且不同模型在中英文间出现排名反转。",
-            "locator": "LD-G1-04 样本 #04 核验摘要"
+            "locator": "LD-G1-04 样本 #04 核验摘录（合成测试样例，非原始正文逐字稿）"
           }
         ],
         "legal_commentary": "【AI 初稿】GlobalHRBench 的评测数据为跨国律所与出海企业法务敲响了选型警钟：同一底层大模型在英文通用法律榜单中的领先优势，并不能线性迁移到中文或其他非英语法域的实务问答中。当提问语言切换引发模型排名反转时，仅依据英文基准采购法律 AI 工具极易在跨境用工合规、解雇期限计算等刚性场景埋下隐蔽失误。同时，研究揭示“附带法条证据”虽能显著纠错，但模型在知识库缺失单一条款时仍倾向于套用兜底条款而非主动拒答。实务团队在搭建多语种法规 RAG 系统时，建议将真实工作语言的端到端测试与“缺口拒答能力”纳入必选验收指标，并对法定天数与赔偿基数保留人工复核节点。",
@@ -108,7 +108,7 @@
       "high_risk_legal": false,
       "effective_status": "not_applicable",
       "headline": false,
-      "review_status": "approved",
+      "review_status": "pending_review",
       "detail_analysis": {
         "key_points": [
           "重构后的 CoCounsel Legal 已在英国、加拿大（支持魁北克法语）与澳大利亚正式上线。",
@@ -118,7 +118,7 @@
         "evidence_quotes": [
           {
             "text": "新增 HighQ、NetDocuments、Dropbox、Box 与 Google Drive 直连器，并将基于 Westlaw 的结构化深度检索报告能力直接嵌入 Supio 与 Smokeball。",
-            "locator": "LD-G1-04 样本 #07 核验摘要"
+            "locator": "LD-G1-04 样本 #07 核验摘录（合成测试样例，非原始正文逐字稿）"
           }
         ],
         "legal_commentary": "【AI 初稿】汤森路透此次版本迭代清晰展示了头部法律 AI 产品的演进方向：从早期独立网页对话形态，加速转向“权威法源底座 + 主流 DMS 文档库直连 + 第三方案管平台内嵌”的工作流融合模式。对于跨法域律所和大型企业法务部而言，减少律师在案卷库、检索库与 AI 对话框之间反复复制粘贴，确实能显著提升日常研究与审阅效率。但在采购与集成评估阶段，IT 与合规团队需要重点核查三类实务问题：一是直连 DMS 后既有客户利益冲突墙（Ethical Wall）权限能否无损继承；二是嵌套调用第三方平台时的客户端编号（Client ID）计费归集方式；三是跨区数据驻留与客户保密协议的兼容边界。",
@@ -126,77 +126,78 @@
       }
     },
     {
-      "id": "g1-04-item-10",
+      "id": "g1-04-item-12",
       "region": "global",
-      "source_id": "us-ilsd-court",
-      "source_name": "美国伊利诺伊州南区联邦地区法院（District Judge Nancy J. Rosenstengel）",
-      "source_domain": "www.ilsd.uscourts.gov",
-      "source_url": "https://www.ilsd.uscourts.gov/sites/ilsd/files/Rosenstengel.pdf",
-      "published_at": "2026-11",
+      "source_id": "arxiv-cs-ai-rss",
+      "source_name": "Nicola Fabiano（Studio Legale Fabiano / arXiv 预印本）",
+      "source_domain": "arxiv.org",
+      "source_url": "https://arxiv.org/html/2611.20670v1",
+      "published_at": "2026-11-16",
       "collected_at": "2026-11-26T08:15:00Z",
       "category": "判例与学术",
-      "title": "美国伊利诺伊州南区联邦法官更新案件管理规程：重申 AI 文书 Rule 11 责任并严禁庭审与口头辩论使用 AI",
-      "summary": "美伊利诺伊州南区联邦地区法院 Nancy J. Rosenstengel 法官发布 2026 年 11 月版《案件管理规程》，明确书面提交不禁用生成式 AI，但律师须依 Rule 11 对全文真实性担责且不得向 AI 披露涉密信息；规程同时明令任何情况下均不得在口头辩论或庭审中使用 AI。",
-      "practice_impact_brief": "【AI 初稿】涉美联邦诉讼律师应逐案核对主审法官个案规程，区分书面复核义务与庭审现场禁用红线。",
+      "title": "法律学者提出 AI Agent 越权民事归责框架：以“越界模式”与《授权记录》界定部署方举证责任",
+      "summary": "意大利法律学者、EDPB 专家池成员 Nicola Fabiano 在 arXiv 发布论文，针对 AI Agent 越权致损责任空白提出民事归责规则：区分声明、配置与实际有效边界，按四类越界模式分配举证责任，并设计结构化《智能体授权记录》作为事前控制边界的证据载体。",
+      "practice_impact_brief": "【AI 初稿】筹备自主型 Agent 的合规团队可建立可审计的权限与人工熔断记录，并定期核对配置漂移。",
       "practice_impact_is_ai_draft": true,
-      "fact_tier": "official_data",
-      "unverified": false,
-      "needs_human_check": false,
-      "high_risk_legal": true,
-      "effective_status": "in_force",
-      "headline": false,
-      "review_status": "approved",
-      "detail_analysis": {
-        "key_points": [
-          "该规程为 2026 年 11 月公开版，在 Rosenstengel 法官主审案件中现行有效。",
-          "书面材料允许辅助使用生成式 AI，但签署人须依据《联邦民事诉讼规则》第 11 条承担全部真实性与有效性责任。",
-          "明令禁止向外部 AI 工具披露受保护令约束的涉案保密信息，并严禁在出庭口头辩论或庭审现场使用 AI。"
-        ],
-        "evidence_quotes": [
-          {
-            "text": "依据《联邦民事诉讼规则》第 11 条，签署提交文件的律师及自诉当事人须对含 AI 生成部分在内的全部内容真实性与有效性担责。",
-            "locator": "LD-G1-04 样本 #10 核验摘要"
-          }
-        ],
-        "legal_commentary": "【AI 初稿】美国联邦地区法院针对生成式 AI 的规制正呈现高度精细化趋势：法官不再“一刀切”禁止律师在书面起草阶段使用 AI，而是通过重申 Rule 11 签署责任、保护令保密红线与“庭审现场绝对禁用”三条清晰边界，将技术风险收口到律师执业责任体系之中。对处理涉美联邦诉讼的中国企业法务与出庭律师而言，最易忽视的实务陷阱在于各主审法官的个案管理规程（Standing Orders）更新频率极高且彼此差异显著。建议诉讼团队在立案与开庭前建立主审法官规程强制核对清单，严禁将受保护令约束的证据材料上传消费级 AI，并对所有 AI 辅助检索的判例引注执行二次一手核验。",
-        "ai_draft": true
-      }
-    },
-    {
-      "id": "g1-04-item-14",
-      "region": "global",
-      "source_id": "clio-press",
-      "source_name": "Clio（Themis Solutions Inc.）",
-      "source_domain": "www.clio.com",
-      "source_url": "https://www.clio.com/about/press/2026-legal-trends-report/",
-      "published_at": "2026-10-26",
-      "collected_at": "2026-11-26T08:20:00Z",
-      "category": "行业与资本",
-      "title": "Clio 发布《2026 法律趋势报告》：85% 从业者所在律所已采用 AI，70% 消费者称律所披露 AI 使用更增信任",
-      "summary": "Clio 发布第 11 期年度《法律趋势报告》：85% 法律从业者所在律所已不同程度采用 AI（高于 2025 年的 79%），计费时间占比预计由 39% 升至 42%；82% 受访消费者希望知晓律师是否使用 AI，70% 表示律所主动披露 AI 使用会提升信任度，仅 6% 接受重大个人事务由 AI 决策。",
-      "practice_impact_brief": "【AI 初稿】律所管委会可关注“透明披露反增客户信任”趋势，在委托协议中建立清晰的 AI 使用告知机制。",
-      "practice_impact_is_ai_draft": true,
-      "fact_tier": "confirmed_fact",
-      "fact_tier_note": "厂商年度行业调研",
+      "fact_tier": "market_opinion",
+      "fact_tier_note": "法学学术观点",
       "unverified": false,
       "needs_human_check": false,
       "high_risk_legal": false,
       "effective_status": "not_applicable",
       "headline": false,
-      "review_status": "approved",
+      "review_status": "pending_review",
       "detail_analysis": {
         "key_points": [
-          "85% 的受访法律从业者报告所在律所已采用 AI，较 2025 年的 79% 继续提升。",
-          "律所尚未出现因 AI 引发的广泛裁员，工作日计费时间占比预计从 39% 升至 42%。",
-          "82% 消费者希望知晓律师是否使用 AI，70% 认为主动披露会增强信任，但仅 6% 接受重大个人事务由 AI 决策。"
+          "作者为意大利法律学者、EDPB 专家池成员 Nicola Fabiano，论文于 2026-11-16 发布于 arXiv。",
+          "提出区分声明边界、配置边界与实际有效边界，将 Agent 越权拆分为配置失误、有意放开、主动规避与第三方入侵四类模式。",
+          "设计结构化《智能体授权记录》作为事前控制边界的证据载体，并警示记录与实际配置不符可能反成不利证据。"
         ],
         "evidence_quotes": [
           {
-            "text": "82% 的受访消费者希望知晓律师是否使用 AI，70% 表示律所主动披露 AI 使用会提升其信任度。",
-            "locator": "LD-G1-04 样本 #14 核验摘要"
+            "text": "论文同时设计结构化的《智能体授权记录》作为证明事前控制边界的证据载体，并指出记录若与实际配置不符反而可能成为对部署方不利的证据。",
+            "locator": "LD-G1-04 样本 #12 核验摘录（合成测试样例，非原始正文逐字稿）"
           }
         ],
-        "legal_commentary": "【AI 初稿】Clio 第 11 期年度报告的数据打破了律所管理层长期存在的两项顾虑：一方面，AI 的规模化采用并未表现为简单的人员替代，而是优先转化为计费时间占比提升；另一方面，客户对律所使用 AI 并非天然排斥，反而是“隐瞒使用”比“透明告知”更容易触发信任危机。70% 的消费者表示主动披露会提升信任度，但同时仅有 6% 接受由 AI 直接作出重大个人法律决策，这精准勾勒出法律服务的价值边界——客户欢迎 AI 带来效率与成本优化，但付费购买的核心仍是人类律师的专业判断与责任承担。律所管委会可在委托代理协议中增设标准化的 AI 使用告知与人工复核条款，同时评估向固定或价值收费模式演进的空间。",
+        "legal_commentary": "【AI 初稿】自主执行型 AI Agent 在律所和企业内部加速落地后，如何解决“机器无民事主体资格但越权行为造成实际损害”的举证难题，已成为实务界高度关注的前沿议题。该论文提出的“三层边界 + 四类越界模式”框架，把抽象的算法归责转化为可审查的组织内控事实：一旦发生越权损失，裁判者可直接比对部署方的书面授权声明与系统实际运行配置。值得注意的是，作者提醒《智能体授权记录》是一把双刃剑——若企业流于形式只写制度不落配置，反而会在诉讼中构成重大过失证据。合规团队上线 Agent 前，应把权限基线、熔断阈值与定期配置漂移审计纳入标准留痕流程。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "g1-04-item-08",
+      "region": "global",
+      "source_id": "thomson-reuters-institute",
+      "source_name": "Thomson Reuters Legal",
+      "source_domain": "legal.thomsonreuters.com",
+      "source_url": "https://legal.thomsonreuters.com/blog/what-fiduciary-grade-ai-means-for-canadian-firms/",
+      "published_at": "2026-11-20",
+      "collected_at": "2026-11-26T08:20:00Z",
+      "category": "行业与资本",
+      "title": "汤森路透发布中小律所“受托级 AI”选型四问清单，警示 34% 专业人员存在未授权影子 AI 使用",
+      "summary": "汤森路透围绕“Fiduciary-Grade AI”原则，向中小律所提出采购法律 AI 前应书面核查的四项问题（权威法源、客户数据不用于训练、法律专家参与及可追溯审计），并援引其《2026 专业人士未来报告》（62 国 1,816 人调研）指出 34% 受访者正使用未授权 AI 工具。",
+      "practice_impact_brief": "【AI 初稿】中小律所合伙人可参考该四问框架编制供应商尽调表，优先排查影子 AI 保密风险。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "fact_tier_note": "含机构自有调研数据",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "effective_status": "not_applicable",
+      "headline": false,
+      "review_status": "pending_review",
+      "detail_analysis": {
+        "key_points": [
+          "围绕“Fiduciary-Grade AI”提出四项采购核查问题：权威法源、客户数据训练与留存边界、法律专家参与与人类终审、推理与引用可审计。",
+          "援引《2026 专业人士未来报告》，样本覆盖 62 个国家 1,816 名受访专业人士。",
+          "报告显示 34% 的受访者正在使用未经所在机构批准的“影子 AI”工具。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "援引其《2026 专业人士未来报告》（覆盖 62 国 1,816 名受访者）指出，34% 的受访者正在使用未经所在机构批准的 AI 工具。",
+            "locator": "LD-G1-04 样本 #08 核验摘录（合成测试样例，非原始正文逐字稿）"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】汤森路透提出的“受托级 AI”四问框架，本质上是把律师执业中的忠实与保密义务转译为可落地的软件采购尽调条款。相比大型跨国律所拥有专职信息安全团队，中小律所在法律 AI 采购与治理中往往面临更大信息不对称；而 34% 的“影子 AI”使用比例说明，单纯口头禁止员工使用消费级聊天工具已难以奏效。一旦律师私下将客户案卷粘贴进未签署零留存协议的外部模型，极易触发客户保密协议违约及律协执业纪律风险。建议中小律所管委会及企业法务负责人对照四问清单建立分级白名单工具库，以合规可控的官方供给替代暗地里的影子工具。",
         "ai_draft": true
       }
     }

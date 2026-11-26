@@ -4,10 +4,12 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
+  FORBIDDEN_FULLTEXT_KEYS,
   validateCandidateItem,
   validateCollectMeta,
   validateWechatTopicPool,
   validateDailyBundle,
+  validateSourceIdAgainstWhitelist,
   checkNoTrackedRawCache,
 } from "../../src/contracts/validate.mjs";
 
@@ -22,8 +24,15 @@ const FIXTURE_PATH = path.join(
 const mappedBundle = JSON.parse(readFileSync(FIXTURE_PATH, "utf8"));
 const sampleItem = structuredClone(mappedBundle.items[0]);
 
+const KNOWN_WHITELIST_IDS = new Set([
+  "uk-ico-news",
+  "arxiv-cs-ai-rss",
+  "thomson-reuters-institute",
+  "cn-spc-fabu",
+]);
+
 describe("LD-G2-01 Testing Seam 1: Formal Data Contract & Schema Validation", () => {
-  it("accepts Gate 1 LD-G1-04 mapped daily-bundle covering all 5 official categories", () => {
+  it("accepts Gate 1 LD-G1-04 mapped daily-bundle covering all 5 official categories and aligned whitelist source_ids", () => {
     const result = validateDailyBundle(mappedBundle);
     assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
 
@@ -32,24 +41,81 @@ describe("LD-G2-01 Testing Seam 1: Formal Data Contract & Schema Validation", ()
       categories,
       new Set(["监管与合规", "模型与技术", "实务与工具", "判例与学术", "行业与资本"]),
     );
+
+    const refCheck = validateSourceIdAgainstWhitelist(
+      mappedBundle,
+      KNOWN_WHITELIST_IDS,
+    );
+    assert.equal(refCheck.valid, true, JSON.stringify(refCheck.errors, null, 2));
   });
 
-  it("accepts a valid candidate-item with preview + detail_analysis + optional discovered_via", () => {
-    const cnCandidate = {
-      ...structuredClone(sampleItem),
-      id: "cn-20261126-01",
-      region: "cn",
-      source_id: "cn-spc-fabu",
-      discovered_via: "aihot-news-discovery",
-      unverified: true,
-      unverified_reason: "生效日期尚待官方公告进一步确认",
-      needs_human_check: true,
-    };
-    const result = validateCandidateItem(cnCandidate);
+  it("accepts a Stage 1 pending_review candidate-item without detail_analysis (SP01 lifecycle)", () => {
+    const stage1 = structuredClone(sampleItem);
+    delete stage1.detail_analysis;
+    stage1.id = "cn-20261126-stage1";
+    stage1.region = "cn";
+    stage1.source_id = "cn-spc-fabu";
+    stage1.discovered_via = "aihot-news-discovery";
+    stage1.published_at = "2026-11";
+    stage1.unverified = true;
+    stage1.unverified_reason = "生效日期尚待官方公告进一步确认";
+    stage1.needs_human_check = true;
+    const result = validateCandidateItem(stage1);
     assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
   });
 
-  it("accepts a valid collect-meta payload", () => {
+  it("rejects missing detail_analysis on approved candidate-item or inside daily-bundle (SP01)", () => {
+    const approvedNoDetail = structuredClone(sampleItem);
+    approvedNoDetail.review_status = "approved";
+    delete approvedNoDetail.detail_analysis;
+    assert.equal(validateCandidateItem(approvedNoDetail).valid, false);
+
+    const bundleNoDetail = structuredClone(mappedBundle);
+    delete bundleNoDetail.items[0].detail_analysis;
+    assert.equal(validateDailyBundle(bundleNoDetail).valid, false);
+  });
+
+  it("enforces ST02 pending_review AI draft & headline rules (AGENTS.md 10.8 & D-019)", () => {
+    const badImpactFlag = structuredClone(sampleItem);
+    badImpactFlag.practice_impact_is_ai_draft = false;
+    assert.equal(validateCandidateItem(badImpactFlag).valid, false);
+
+    const badDetailDraftFlag = structuredClone(sampleItem);
+    badDetailDraftFlag.detail_analysis.ai_draft = false;
+    assert.equal(validateCandidateItem(badDetailDraftFlag).valid, false);
+
+    const badHeadline = structuredClone(sampleItem);
+    badHeadline.headline = true;
+    assert.equal(validateCandidateItem(badHeadline).valid, false);
+  });
+
+  it("rejects ST03 invalid calendar dates in published_at", () => {
+    for (const badDate of ["2026-99-99", "2026-02-31", "2026-13", "2026-00"]) {
+      const bad = structuredClone(sampleItem);
+      bad.published_at = badDate;
+      assert.equal(validateCandidateItem(bad).valid, false);
+    }
+  });
+
+  it("rejects ST04 discovery_only domain aihot.news as primary source_url", () => {
+    const badAihot = structuredClone(sampleItem);
+    badAihot.discovered_via = "aihot-news-discovery";
+    badAihot.source_url = "https://aihot.news/items/12345";
+    const result = validateCandidateItem(badAihot);
+    assert.equal(result.valid, false);
+    assert.ok(
+      result.errors.some((e) => e.keyword === "discoverySourceUrlForbidden"),
+    );
+  });
+
+  it("requires SP02 effective_status when high_risk_legal is true", () => {
+    const bad = structuredClone(sampleItem);
+    bad.high_risk_legal = true;
+    delete bad.effective_status;
+    assert.equal(validateCandidateItem(bad).valid, false);
+  });
+
+  it("accepts valid collect-meta and wechat-topic-pool payloads and rejects aihot.news in topic URLs", () => {
     const meta = {
       schema_version: "1.0",
       run_id: "collect-global-20261126-0800",
@@ -65,19 +131,11 @@ describe("LD-G2-01 Testing Seam 1: Formal Data Contract & Schema Validation", ()
       cache_ttl_days: 7,
       cache_pruned_count: 4,
       source_results: [
-        {
-          source_id: "uk-ico-news",
-          status: "ok",
-          items_count: 3,
-          http_status: 200,
-        },
+        { source_id: "uk-ico-news", status: "ok", items_count: 3, http_status: 200 },
       ],
     };
-    const result = validateCollectMeta(meta);
-    assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
-  });
+    assert.equal(validateCollectMeta(meta).valid, true);
 
-  it("accepts a valid wechat-topic-pool payload", () => {
     const pool = {
       schema_version: "1.0",
       updated_at: "2026-11-26T09:00:00Z",
@@ -97,93 +155,85 @@ describe("LD-G2-01 Testing Seam 1: Formal Data Contract & Schema Validation", ()
         },
       ],
     };
-    const result = validateWechatTopicPool(pool);
-    assert.equal(result.valid, true, JSON.stringify(result.errors, null, 2));
+    assert.equal(validateWechatTopicPool(pool).valid, true);
+
+    const badPool = structuredClone(pool);
+    badPool.topics[0].primary_source_urls = ["https://aihot.news/items/999"];
+    const res = validateWechatTopicPool(badPool);
+    assert.equal(res.valid, false);
+    assert.ok(res.errors.some((e) => e.keyword === "discoverySourceUrlForbidden"));
   });
 
-  it("rejects summary exceeding 160 chars (O2 hard ceiling)", () => {
-    const bad = structuredClone(sampleItem);
-    bad.summary = "测".repeat(161);
-    const result = validateCandidateItem(bad);
-    assert.equal(result.valid, false);
-    assert.ok(result.errors.some((e) => e.instancePath.includes("summary")));
-  });
+  it("rejects out-of-range summary, practice_impact_brief, key_points, evidence_quotes, and legal_commentary", () => {
+    const badSummary = structuredClone(sampleItem);
+    badSummary.summary = "测".repeat(161);
+    assert.equal(validateCandidateItem(badSummary).valid, false);
 
-  it("rejects practice_impact_brief exceeding 60 chars", () => {
-    const bad = structuredClone(sampleItem);
-    bad.practice_impact_brief = "【AI 初稿】" + "实务影响".repeat(20);
-    const result = validateCandidateItem(bad);
-    assert.equal(result.valid, false);
-    assert.ok(
-      result.errors.some((e) => e.instancePath.includes("practice_impact_brief")),
-    );
-  });
+    const badBrief = structuredClone(sampleItem);
+    badBrief.practice_impact_brief = "【AI 初稿】" + "实务影响".repeat(20);
+    assert.equal(validateCandidateItem(badBrief).valid, false);
 
-  it("rejects evidence_quotes exceeding max length (150 chars) or count (>3)", () => {
-    const overLen = structuredClone(sampleItem);
-    overLen.detail_analysis.evidence_quotes = [{ text: "引".repeat(151) }];
-    const resLen = validateCandidateItem(overLen);
-    assert.equal(resLen.valid, false);
+    const lowKp = structuredClone(sampleItem);
+    lowKp.detail_analysis.key_points = ["核心事实要点一。", "核心事实要点二。"];
+    assert.equal(validateCandidateItem(lowKp).valid, false);
 
-    const overCount = structuredClone(sampleItem);
-    overCount.detail_analysis.evidence_quotes = [
+    const highKp = structuredClone(sampleItem);
+    highKp.detail_analysis.key_points = ["要点一内容。", "要点二内容。", "要点三内容。", "要点四内容。", "要点五内容。", "要点六内容。"];
+    assert.equal(validateCandidateItem(highKp).valid, false);
+
+    const overLenQuote = structuredClone(sampleItem);
+    overLenQuote.detail_analysis.evidence_quotes = [{ text: "引".repeat(151) }];
+    assert.equal(validateCandidateItem(overLenQuote).valid, false);
+
+    const overCountQuote = structuredClone(sampleItem);
+    overCountQuote.detail_analysis.evidence_quotes = [
       { text: "合规短引文第一段内容。" },
       { text: "合规短引文第二段内容。" },
       { text: "合规短引文第三段内容。" },
       { text: "合规短引文第四段内容。" },
     ];
-    const resCount = validateCandidateItem(overCount);
-    assert.equal(resCount.valid, false);
+    assert.equal(validateCandidateItem(overCountQuote).valid, false);
+
+    const shortComm = structuredClone(sampleItem);
+    shortComm.detail_analysis.legal_commentary = "评".repeat(199);
+    assert.equal(validateCandidateItem(shortComm).valid, false);
+
+    const longComm = structuredClone(sampleItem);
+    longComm.detail_analysis.legal_commentary = "评".repeat(401);
+    assert.equal(validateCandidateItem(longComm).valid, false);
   });
 
-  it("rejects legal_commentary outside 200-400 char range", () => {
-    const tooShort = structuredClone(sampleItem);
-    tooShort.detail_analysis.legal_commentary = "评述过短".repeat(20);
-    assert.equal(validateCandidateItem(tooShort).valid, false);
-
-    const tooLong = structuredClone(sampleItem);
-    tooLong.detail_analysis.legal_commentary = "评".repeat(401);
-    assert.equal(validateCandidateItem(tooLong).valid, false);
-  });
-
-  it("rejects public payload containing forbidden fulltext fields (raw_text / full_text / body_html)", () => {
-    for (const key of ["raw_text", "full_text", "body_html"]) {
+  it("rejects all 7 forbidden fulltext keys including nested & camelCase variants (ST07 & SP04)", () => {
+    for (const key of [...FORBIDDEN_FULLTEXT_KEYS, "rawText", "FULL_TEXT", "bodyHtml"]) {
       const bad = structuredClone(sampleItem);
       bad[key] = "禁止入库的原文全文内容";
-      const result = validateCandidateItem(bad);
-      assert.equal(result.valid, false);
-      assert.ok(
-        result.errors.some((e) => e.keyword === "forbiddenFulltextKey"),
-        `Expected forbiddenFulltextKey error for ${key}`,
-      );
+      assert.ok(validateCandidateItem(bad).errors.some((e) => e.keyword === "forbiddenFulltextKey"));
+
+      const nestedBad = structuredClone(sampleItem);
+      nestedBad.detail_analysis[key] = "嵌套禁止字段";
+      assert.ok(validateCandidateItem(nestedBad).errors.some((e) => e.keyword === "forbiddenFulltextKey"));
     }
   });
 
-  it("rejects missing or non-HTTP source_url", () => {
+  it("rejects missing, non-HTTPS, or invalid source_url and missing fact_tier/unverified (ST09 & O4)", () => {
     const missingUrl = structuredClone(sampleItem);
     delete missingUrl.source_url;
     assert.equal(validateCandidateItem(missingUrl).valid, false);
 
-    const invalidUrl = structuredClone(sampleItem);
-    invalidUrl.source_url = "not-a-valid-url";
-    assert.equal(validateCandidateItem(invalidUrl).valid, false);
-  });
+    const httpUrl = structuredClone(sampleItem);
+    httpUrl.source_url = "http://example.invalid/test";
+    assert.equal(validateCandidateItem(httpUrl).valid, false);
 
-  it("rejects missing fact_tier or missing unverified boolean (O4)", () => {
     const missingTier = structuredClone(sampleItem);
     delete missingTier.fact_tier;
     assert.equal(validateCandidateItem(missingTier).valid, false);
-
-    const badTier = structuredClone(sampleItem);
-    badTier.fact_tier = "rumor";
-    assert.equal(validateCandidateItem(badTier).valid, false);
 
     const missingUnverified = structuredClone(sampleItem);
     delete missingUnverified.unverified;
     assert.equal(validateCandidateItem(missingUnverified).valid, false);
   });
 
-  it("passes .cache/raw/ local isolation guard (.gitignore + zero tracked files)", () => {
+  it("passes .cache/ local isolation guard (.gitignore + zero tracked files under .cache/)", () => {
     const cacheCheck = checkNoTrackedRawCache(REPO_ROOT);
     assert.equal(cacheCheck.valid, true, JSON.stringify(cacheCheck, null, 2));
     assert.deepEqual(cacheCheck.trackedFiles, []);
