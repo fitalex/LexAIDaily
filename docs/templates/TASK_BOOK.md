@@ -1,23 +1,25 @@
 # <任务号>｜<标题>
 
+> 用法：默认直接作为 **GitHub Issue** 正文发布；仅当涉及长篇契约或需本地版本化存档时，才可选保存为 `docs/daily-specs/<任务号>.md` 并由 Issue 正文贴链接（不双写正文）。
+
 - 任务类型：<Engineering / Documentation / Design / Research / Governance>
 - 级别：<A / B>（理由：<一句话>）
-- 授权来源：<A 级：Claude，见 STATUS 台账｜B 级：Human Maintainer，注明日期与位置>
-- 任务 Owner：<Codex / DeepSeek Harness / Antigravity / GPT 网页版 / Claude>
-- 复核者：Claude（若 Owner 为 Claude，则为 <其他复核者>）
-- 独立审计：<否｜是：GPT 网页版，依据 AGENTS.md 6.1(<a-e>)>
+- 授权来源：<A 级：Gemini，见 STATUS 台账｜B 级：Human Maintainer，注明日期与位置>
+- 任务 Owner：<DeepSeek Harness / Antigravity / Gemini>
+- 复核者：Gemini（若 Owner 为 Gemini，则由 DeepSeek Harness 审计或 Human 指定复核者）
+- 独立审计：<否｜是：DeepSeek Harness / Antigravity，依据 AGENTS.md 6.1(<a-e>)>
 - Final Approver：Human Maintainer
-- 基准：`main`（Commit SHA：`<sha>`）｜分支：`<agent>/<任务号小写>-<slug>`｜PR：<链接>
-- 所属 Gate：<Gate N>｜对应验收标准：<ROADMAP 中的条目>
-- 依赖：<任务号 / 无>｜被依赖：<任务号 / 无>
+- 基准：`main`（Commit SHA：`<sha>`）｜分支：`<ds / ag / gemini>/<任务号小写>-<slug>`
+- 父 Spec Issue：<#<父 Issue 号> / 无>｜所属 Gate：<Gate N>｜对应验收标准：<ROADMAP 中的条目>
+- Blocked by：<#<前置 Issue 号> / 无（可立即开始）>｜Blocks：<#<下游 Issue 号> / 无>
 
-## 一、背景与目标
+## 一、背景与端到端交付目标
 
-<一两句话：要解决什么问题，做完之后什么变了。>
+<一两句话：从用户或管线视角说明要解决什么问题，完成后哪条端到端行为跑通。>
 
 ## 二、范围
 
-- **输入**：<已有文件、链接、数据>
+- **输入**：<已有文件、Issue/PR 链接、数据契约>
 - **输出**：<交付物清单与文件路径>
 - **可改文件**：<路径列表>
 - **不可改文件**：<路径列表，至少包含冻结基线>
@@ -27,7 +29,9 @@
 
 <不得触碰的内容：README 定位与路线图、编辑原则、AGENTS.md、许可证等。>
 
-## 四、DoD
+## 四、DoD 与测试接缝（Seam）
+
+- **测试接缝（Seam）**：<优先复用已有接缝；写明在哪个边界验证外部行为，不测内部实现细节>
 
 | 序号 | 验收标准 | 对应 Gate 验收条目 | 证明方式 |
 |---|---|---|---|
@@ -41,12 +45,12 @@
 
 ## 六、交接与回传
 
-- 完成后：<开 PR / 回传格式>
-- PR 必须使用 `.github/PULL_REQUEST_TEMPLATE.md`。
+- 完成后开 PR，正文写明 `Closes #<本 Issue 号>` 并使用 `.github/PULL_REQUEST_TEMPLATE.md`。
+- 不得自行合并；复核意见按 `docs/templates/REVIEW_REPORT.md` 回传。
 
 ## 七、升级条件
 
-遇到以下情况停止并交 Claude：<范围需变更 / 需要新依赖或凭据 / 与在途任务文件冲突 / 发现事实或合规问题>。
+遇到以下情况停止并交 Gemini 协调者：<范围需变更 / 需要新依赖或凭据 / 与在途任务文件冲突 / 发现事实或合规问题>。
 
 ## 八、Human 工作清单（仅需要人类动作时填写）
 
