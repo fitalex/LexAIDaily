@@ -1,6 +1,6 @@
 # 状态看板
 
-最后更新：2026-11-25（Gemini）｜当前阶段：Gate 1 收口验收（PR #25/#26/`LD-G1-02C`、PR #27/`LD-G1-04`、PR #30 Web 详情页、PR #29/`LD-G1-03` 与 PR #32/`LD-G1-06` 均已合并入 `main`；正式派发 `LD-G1-07` 文档同步与交叉引用核对，完成后即出 `LD-G1-05` Gate 1 验收清单）｜基准：`main`（`93d3c71`）
+最后更新：2026-11-26（Gemini）｜当前阶段：Gate 1 终审签署（`LD-G1-01` 至 `04`、`06`、`07` 已全部合并入 `main`；`LD-G1-05` Gate 1 验收清单已提交待 Human 签署，签收后正式解锁 Gate 2）｜基准：`main`（`5ff8d74`）
 
 状态与分级的含义见 [AGENTS.md](../../AGENTS.md) 第 3 节。本文件是任务状态的唯一记录处，会话中的口头结论不算数。
 
@@ -28,11 +28,11 @@
 | LD-G1-02C | 复古报刊风 Design-in-Code HTML 原型与 v3.0 AI 配图规范落地（放弃 Penpot，替代 D-013；D-027） | B（跨 Gate） | Gemini（代码线，D-028）｜Antigravity（视觉资产线） | 代码线：Human 书面豁免 6.1(d) 审计并视觉验收；视觉资产线：Gemini 复核 + Human 视觉验收 | ✅ DONE（代码线 [PR #25](https://github.com/fitalex/LexAIDaily/pull/25)、视觉资产线 [PR #26](https://github.com/fitalex/LexAIDaily/pull/26) 与详情页 NYT 排版同步 [PR #30](https://github.com/fitalex/LexAIDaily/pull/30) 均已合并入 `main`，最新 `db902d7`） | [任务书](../daily-specs/LD-G1-02C.md)；代码原型：[index.html](../../design/prototype/index.html)；配图规范：[illustration-spec.md](../../design/illustration-spec.md)（v3.0） |
 | LD-G1-03 | 公众号每日栏目内联排版模板原型 | B（跨 Gate） | DeepSeek Harness（初版）｜Gemini（2026-11-25 经 Human 授权接管 NYT 报刊改版与微信实测修复） | LD-G1-06 交叉测试（Antigravity，D-015）；Human 公众号后台 0 告警与手机端实机预览验收通过 | ✅ DONE（[PR #29](https://github.com/fitalex/LexAIDaily/pull/29) 已合并 `e87d480`；样稿 `c3dddfa` 确定性 `sha256` 校验通过） | [任务书](../daily-specs/LD-G1-03.md)；juice 依赖已授权（D-009）；字段规则见 D-030；2026-11-25 Human 实机预览验收记录见 [PR #29 评论](https://github.com/fitalex/LexAIDaily/pull/29#issuecomment-7164363493) |
 | LD-G1-04 | 真实资讯样本集（原型填充与扫读评审用，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | Human 审阅质量达标并合并 | ✅ DONE（[PR #27](https://github.com/fitalex/LexAIDaily/pull/27) 已合并；Gate 2 阶段继续打磨采集与筛选策略） | [任务书](../daily-specs/LD-G1-04.md)；交付文件：`docs/samples/LD-G1-04-sample-set.md` |
-| LD-G1-05 | Gate 1 验收清单（只转写 ROADMAP 既有验收标准） | A | Gemini（接替 Claude） | 独立审计已豁免（D-010）；Human 签署 | 📝 PROPOSED | [任务书](../daily-specs/LD-G1-05.md)；前置 `LD-G1-01` 至 `04`、`06` 已全部完成，待 `LD-G1-07` 文档索引合并后出具 |
+| LD-G1-05 | Gate 1 验收清单（只转写 ROADMAP 既有验收标准） | A | Gemini（接替 Claude） | 独立审计已豁免（D-010）；Human 签署 | ⚖️ HUMAN_DECISION（`docs/coordination/GATE1_ACCEPTANCE.md` 已提交待 Human 审阅与签署，签收后解锁 Gate 2） | [任务书](../daily-specs/LD-G1-05.md)；前置 `LD-G1-01` 至 `04`、`06`、`07` 已全部合入 `main`（`5ff8d74`） |
 | LD-G1-06 | 公众号排版导出结构与兼容性交叉测试（不做视觉判断） | A | Antigravity（D-015） | Gemini（复核 ACCEPT） | ✅ DONE（[PR #32](https://github.com/fitalex/LexAIDaily/pull/32) 已合并 `93d3c71`；`node --test tests/wechat-prototype/` 4/4 通过） | [任务书](../daily-specs/LD-G1-06.md)；报告：`tests/wechat-prototype/REPORT.md`；原堆叠 PR #31 因删 base 自动关闭，已按同分支 `2d0662e` 经 PR #32 合入 |
-| LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Gemini（接替 Claude） | 🟢 AUTHORIZED_TO_EXECUTE（A 级，2026-11-25 派发；生成 `docs/gate1-design-index.md`、补齐 PR 链接并同步刷新 `design/wechat/` 滞后文案） | [任务书](../daily-specs/LD-G1-07.md)；依赖 `LD-G1-01`、`02C`、`03`、`06` 已全部合入 `main`（`93d3c71`） |
+| LD-G1-07 | Gate 1 文档同步与交叉引用核对（不改设计内容） | A | Antigravity | Gemini（复核 ACCEPT） | ✅ DONE（[PR #33](https://github.com/fitalex/LexAIDaily/pull/33) 已合并 `5ff8d74`；31 项文件与 80 条相对链接全通过） | [任务书](../daily-specs/LD-G1-07.md)；交付索引：[docs/gate1-design-index.md](../gate1-design-index.md) |
 
-Gate 严格串行（ROADMAP）：Gate 0 已验收；Gate 1 设计、样本与交叉测试（`LD-G1-01` 至 `04`、`06`）已全部合入 `main`；当前仅余 `LD-G1-07` 文档索引核对与 `LD-G1-05` Gate 1 验收清单签署，签收后解锁 Gate 2。
+Gate 严格串行（ROADMAP）：Gate 0 已验收；Gate 1 全部前置交付（`LD-G1-01` 至 `04`、`06`、`07`）已合入 `main`；当前进入 `LD-G1-05` Gate 1 正式验收签署，签收后立即解锁 Gate 2。
 
 ## Human 待办
 
@@ -42,8 +42,8 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收；Gate 1 设计、样本与交
 - [x] （已完成，PR #22 已合并 `f035894`）审阅并合并 `LD-GOV-03` PR（分支 `gemini/ld-gov-03-collab-reorg`），确认 D-025、D-026
 - [x] （已完成，PR #24 已合并 `aa01a5d`）审阅并合并 `gemini/ld-g1-02c-spec-sync` PR（入库 `LD-G1-02C` 任务书、`illustration-spec.md` 与 V3.2 参考原型，刷新 `STATUS.md`），确认 D-027
 - [x] （已完成，2026-11-24 已合并 [PR #25](https://github.com/fitalex/LexAIDaily/pull/25) 与 [PR #27](https://github.com/fitalex/LexAIDaily/pull/27)）审阅合并 `LD-G1-02C` 代码线（含暖调加颗粒新闻纸背景 `#D5C5AE` 与 D-028/D-029/D-030）及 `LD-G1-04` 真实样本集
-- [x] （已完成，2026-11-25 已合并 [PR #26](https://github.com/fitalex/LexAIDaily/pull/26)、[PR #30](https://github.com/fitalex/LexAIDaily/pull/30)、[PR #29](https://github.com/fitalex/LexAIDaily/pull/29) 与 [PR #32](https://github.com/fitalex/LexAIDaily/pull/32)）完成 v3.0 基准插画、Web 详情页 NYT 排版、`LD-G1-03` 公众号手机端实机预览验收与 `LD-G1-06` 交叉测试合并
-- [ ] 审阅合并本 `STATUS.md` 同步 PR 与 `LD-G1-07` 文档同步 PR，随后签署 `LD-G1-05`（Gate 1 验收清单）解锁 Gate 2
+- [x] （已完成，2026-11-25 已合并 [PR #26](https://github.com/fitalex/LexAIDaily/pull/26)、[PR #30](https://github.com/fitalex/LexAIDaily/pull/30)、[PR #29](https://github.com/fitalex/LexAIDaily/pull/29)、[PR #32](https://github.com/fitalex/LexAIDaily/pull/32)、[PR #34](https://github.com/fitalex/LexAIDaily/pull/34) 与 [PR #33](https://github.com/fitalex/LexAIDaily/pull/33)）完成 Gate 1 全部设计原型、样本、交叉测试与文档索引合并
+- [ ] **审阅并签署 `LD-G1-05`（`docs/coordination/GATE1_ACCEPTANCE.md`）**，明确对 A1–A3 与 O1（Android 端补测或豁免转 Gate 3）的决定，签收后正式解锁 Gate 2
 - [x] （已完成）合并 LD-G1-02A 任务书 PR #17，确认 D-017，D-018 同意；阶段 1 已交付并被否决（D-019）
 - [x] （已完成，PR #18 已合并，Human 已确认 D-019 并豁免 01B 审计）确认 LD-G1-01B、LD-G1-02B 任务书 PR
 - [x] （已按 D-030 确认选方案 1，2026-11-24）另定：公众号栏目的资讯单元保留 1 句极简「实务影响」+ 引导「阅读原文」跳 Web 详情页查看完整实务锚点与一手信源；README/ROADMAP 文字暂不改
@@ -78,7 +78,8 @@ Gate 严格串行（ROADMAP）：Gate 0 已验收；Gate 1 设计、样本与交
 | 2026-11-11 | LD-G1-01B | 整体目标：Gate 1 原型。只改字段表展示层级、重要度与占位标记（D-019），无新增依赖、外部服务与对外发布；Claude 依 D-001 授权派发，Owner 依 D-011 为 DeepSeek Harness；独立审计待 Human 决定 | 是（内容即 Human 2026-11-11 的反馈；派发待其触发） |
 | 2026-11-11 | LD-G1-04 | 整体目标：Gate 1 原型。真实资讯样本集，内部评审用，不对外发布，无依赖与费用；依 D-001 授权派发，Owner 原为 GPT 网页版，随 D-025 转由 Gemini 执行 | 是 |
 | 2026-11-25 | LD-G1-06 | 整体目标：Gate 1 公众号导出结构与兼容性交叉测试（D-015 指定 Antigravity，仅新增 `tests/wechat-prototype/`，零新增依赖）；已完成并经 PR #32 合并 | 是 |
-| 2026-11-25 | LD-G1-07 | 整体目标：Gate 1 文档同步与交叉引用核对（输出 `docs/gate1-design-index.md`、补齐任务书 PR 链接并刷新 `design/wechat/` 滞后文案，不改设计与冻结基线）；Gemini 依 D-001 授权派发，Owner 为 Antigravity | 是 |
+| 2026-11-25 | LD-G1-07 | 整体目标：Gate 1 文档同步与交叉引用核对（输出 `docs/gate1-design-index.md`、补齐任务书 PR 链接并刷新 `design/wechat/` 滞后文案，不改设计与冻结基线）；已完成并经 PR #33 合并 | 是 |
+| 2026-11-26 | LD-G1-05 | 整体目标：Gate 1 验收清单（只逐字转写 `ROADMAP.md` Gate 1 既有验收标准并附证据，D-010 已豁免独立审计，签署栏留空待 Human 亲自签收） | 是 |
 
 ## 决策记录
 
