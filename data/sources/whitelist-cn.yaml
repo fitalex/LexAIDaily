@@ -3,6 +3,24 @@ region: "cn"
 updated_at: "2026-11-26"
 description: "LexAIDaily 中国大陆轨（region: cn）免登录公开权威白名单信源与辅助线索发现源配置（ADR-0003）。"
 sources:
+  - source_id: "cn-npc-flk"
+    region: "cn"
+    name: "全国人大国家法律法规数据库"
+    source_type: "legislation_regulator"
+    language: "zh-CN"
+    jurisdiction: "CN"
+    default_categories:
+      - "监管与合规"
+    fetch_mode: "static_html"
+    entry_url: "https://flk.npc.gov.cn/"
+    expected_domain: "flk.npc.gov.cn"
+    authority_tier: "T1"
+    high_risk_default: true
+    discovery_only: false
+    status: "active"
+    verified_at: "2026-11-26"
+    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；全国人大常委会官方国家法律法规数据库入口。"
+
   - source_id: "cn-spc-fabu"
     region: "cn"
     name: "最高人民法院权威发布"
@@ -20,7 +38,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；司法文件与权威发布栏目持续更新（见 2026-11-20 更新记录）。"
+    verification_note: "实测 HTTP 200 免登录可访问；司法文件与权威发布栏目持续更新（见 2026-11-20 更新记录）。"
 
   - source_id: "cn-spc-sifa-jieshi"
     region: "cn"
@@ -39,7 +57,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；司法解释目录索引页清晰（含 400+ 条司法解释记录）。"
+    verification_note: "实测 HTTP 200 免登录可访问；司法解释目录索引页清晰（含 400+ 条司法解释记录）。"
 
   - source_id: "cn-cac-wxzw"
     region: "cn"
@@ -57,7 +75,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验公开政务公告入口（覆盖生成式人工智能服务备案公告与数据出境政策问答，海外云端节点可能限流，由大陆轨本机出口抓取）。"
+    verification_note: "2026-11-26 实测本机可达（HTTP 200），覆盖生成式人工智能服务备案公告与数据出境政策问答；海外云端节点可能限流，由大陆轨本机出口抓取。"
 
   - source_id: "cn-moj-bmgz"
     region: "cn"
@@ -75,7 +93,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验司法部公开部门规章栏目入口（由大陆轨本机出口免登录抓取）。"
+    verification_note: "2026-11-26 实测免登录可达；首跳返回 302 + Cookie 挑战（设置 CT6T/CT6TS Cookie），采集器须启用 cookie jar 跟随重定向获取 200 正文。"
 
   - source_id: "cn-moj-xzfg"
     region: "cn"
@@ -93,7 +111,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验司法部国家行政法规库公开入口（现行有效行政法规同步公布）。"
+    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；司法部国家行政法规库现行有效行政法规同步公布。"
 
   - source_id: "cn-nda-home"
     region: "cn"
@@ -112,7 +130,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验国家数据局公开政策发布入口（涵盖“人工智能+”与数据要素治理文件）。"
+    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；涵盖“人工智能+”与数据要素治理文件。"
 
   - source_id: "cn-nfra-home"
     region: "cn"
@@ -131,7 +149,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验国家金融监管总局公开政策法规入口（涵盖金融领域 AI 安全开发应用指导意见）。"
+    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；涵盖金融领域 AI 安全开发应用指导意见。"
 
   - source_id: "cn-deepseek-news"
     region: "cn"
@@ -150,7 +168,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；官方模型发布与研究公告索引页。"
+    verification_note: "实测 HTTP 200 免登录可访问；官方模型发布与研究公告索引页。"
 
   - source_id: "cn-deepseek-api-updates"
     region: "cn"
@@ -169,7 +187,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；官方 API 版本与定价变更日志（2026-11-13 更新）。"
+    verification_note: "实测 HTTP 200 免登录可访问；官方 API 版本与定价变更日志（2026-11-13 更新）。"
 
   - source_id: "cn-qwen-blog"
     region: "cn"
@@ -188,7 +206,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；官方技术博客索引页（注：部分新文章可能跳转至 qwen.ai）。"
+    verification_note: "实测 HTTP 200 免登录可访问；官方技术博客索引页（注：部分新文章可能跳转至 qwen.ai）。"
 
   - source_id: "aihot-news-discovery"
     region: "cn"
@@ -206,7 +224,7 @@ sources:
     authority_tier: "T3"
     high_risk_default: false
     discovery_only: true
-    compliance_redline: "仅作 discovery_only 辅助线索发现源读取 links.original 与事件热度，严格回溯一手原链独立采编，绝不搬运或再分发 AIHOT 摘要。"
+    compliance_redline: "仅作 discovery_only 辅助线索发现源读取 links.original 与事件热度，严格回溯一手原链独立采编，绝不搬运或再分发 AIHOT 摘要；Gate 3/4 面向公众商业化或对外发布前须事先取得 AIHOT 书面许可，取得前仅限内部试运行。"
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验官方文档 https://aihot.news/en/agent?tab=api ：匿名只读 REST API v2.0.0（含 /api/v1/items、/api/v1/hot-topics、/api/v1/dailies/latest），速率限制约 60 req/min，个人/非营利/内部使用免费。"
+    verification_note: "2026-11-26 实测 /api/v1/items 返回 HTTP 200 JSON 并含 links.original；官方文档 https://aihot.news/en/agent?tab=api 注明约 60 req/min 限流，个人/非营利/内部使用免费，面向公众的商业产品、付费服务、代理 API 与批量再分发须事先取得书面许可（Gate 3/4 前置门禁）。"

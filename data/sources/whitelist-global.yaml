@@ -19,25 +19,43 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验官方文档 https://www.federalregister.gov/developers/documentation/api/v1 ：免 API Key 公开 REST JSON 接口。"
+    verification_note: "2026-11-26 实测免凭据公开 REST JSON 接口返回 HTTP 200。"
+
+  - source_id: "us-ncsl-ai-legislation"
+    region: "global"
+    name: "NCSL US State Artificial Intelligence Legislation Database"
+    source_type: "legislation_regulator"
+    language: "en"
+    jurisdiction: "US-STATES"
+    default_categories:
+      - "监管与合规"
+    fetch_mode: "static_html"
+    entry_url: "https://www.ncsl.org/financial-services/artificial-intelligence-legislation-database"
+    expected_domain: "www.ncsl.org"
+    authority_tier: "T2"
+    high_risk_default: true
+    discovery_only: false
+    status: "active"
+    verified_at: "2026-11-26"
+    verification_note: "2026-11-26 实测免登录可访问；追踪美国 50 州及哥伦比亚特区 AI 立法草案与生效法案（2026-11 更新；属州立法权威聚合库定级 T2，高风险默认 true）。"
 
   - source_id: "us-courtlistener"
     region: "global"
-    name: "CourtListener (Free Law Project)"
+    name: "CourtListener Public Atom Search Feed (Free Law Project)"
     source_type: "court_judiciary"
     language: "en"
     jurisdiction: "US"
     default_categories:
       - "判例与学术"
-    fetch_mode: "json_api"
-    entry_url: "https://www.courtlistener.com/help/"
+    fetch_mode: "atom"
+    entry_url: "https://www.courtlistener.com/feed/search/?q=AI"
     expected_domain: "www.courtlistener.com"
-    authority_tier: "T1"
+    authority_tier: "T2"
     high_risk_default: true
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；提供美国判例法、RECAP 归档、订阅源与公开 REST API 文档。"
+    verification_note: "2026-11-26 实测公开 Atom 检索订阅源返回 HTTP 200 application/atom+xml，免登录且匿名只读（已弃用需鉴权的 REST v3/v4 检索接口；因属非营利公开判例归档平台定级 T2，高风险默认 true）。"
 
   - source_id: "eu-ai-office"
     region: "global"
@@ -55,7 +73,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；欧盟《人工智能法案》治理中枢与新闻页（2026-11-25 更新）。"
+    verification_note: "实测 HTTP 200 免登录可访问；欧盟《人工智能法案》治理中枢与新闻公告页（2026-11-25 更新）。"
 
   - source_id: "eu-eur-lex-ai-act"
     region: "global"
@@ -73,7 +91,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；欧盟官方公报法规入口，含合并文本与官方 RSS 提醒支持。"
+    verification_note: "实测免登录可达（202/200）；欧盟官方公报 EU AI Act 合并文本与修订状态追踪入口（用于核验法规版本与生效日期）。"
 
   - source_id: "uk-ico-news"
     region: "global"
@@ -91,7 +109,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；2026-11-24 已发布 Agentic AI 隐私义务提醒与监管声明。"
+    verification_note: "实测 HTTP 200 免登录可访问；2026-11-24 已发布 Agentic AI 隐私义务提醒与监管声明。"
 
   - source_id: "uk-supreme-court-news"
     region: "global"
@@ -109,7 +127,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；英国最高法院官方裁判与公告新闻流（2026-11-19 更新）。"
+    verification_note: "实测 HTTP 200 免登录可访问；英国最高法院官方裁判与公告新闻流（2026-11-19 更新）。"
 
   - source_id: "arxiv-cs-ai-rss"
     region: "global"
@@ -128,7 +146,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "已核验官方文档 https://info.arxiv.org/help/rss.html ：官方每日 RSS/Atom 推送源。"
+    verification_note: "实测 HTTP 200 官方每日 RSS 推送源（官方文档 https://info.arxiv.org/help/rss.html）。"
 
   - source_id: "stanford-hai-news"
     region: "global"
@@ -148,7 +166,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；AI 政策、法律与治理研究新闻（2026-11-20 更新）。"
+    verification_note: "实测 HTTP 200 免登录可访问；AI 政策、法律与治理研究新闻（2026-11-20 更新）。"
 
   - source_id: "openai-news-rss"
     region: "global"
@@ -167,7 +185,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测 https://openai.com/news/ 页脚确认官方 RSS 入口 https://openai.com/news/rss.xml （2026-11-24 更新）。"
+    verification_note: "实测 HTTP 200 官方 RSS 入口 https://openai.com/news/rss.xml （2026-11-24 更新）。"
 
   - source_id: "anthropic-newsroom"
     region: "global"
@@ -186,7 +204,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；官方模型与政策公告页（2026-11-26 更新，无官方 RSS）。"
+    verification_note: "实测 HTTP 200 免登录可访问；官方模型与政策公告页（2026-11-26 更新，无官方 RSS）。"
 
   - source_id: "artificial-lawyer-rss"
     region: "global"
@@ -205,7 +223,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测 https://www.artificiallawyer.com/ 免登录可访问（2026-11-25 更新，WordPress 标准 /feed/ RSS）。"
+    verification_note: "实测 HTTP 200 WordPress 标准 /feed/ RSS 入口（2026-11-25 更新）。"
 
   - source_id: "lawsites-rss"
     region: "global"
@@ -224,7 +242,7 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测 https://www.lawnext.com/ 免登录可访问（2026-11-24 更新，支持标准 RSS）。"
+    verification_note: "实测 HTTP 200 标准 RSS 入口（2026-11-24 更新）。"
 
   - source_id: "thomson-reuters-institute"
     region: "global"
@@ -243,4 +261,4 @@ sources:
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "实测免登录可访问；法律行业与 AI 实务年度调研报告与文章入口。"
+    verification_note: "实测 HTTP 200 免登录可访问；法律行业与 AI 实务年度调研报告与文章入口。"
