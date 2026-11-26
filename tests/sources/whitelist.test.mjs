@@ -46,16 +46,20 @@ describe("LD-G2-02 Dual-Track Whitelist YAML Validation", () => {
     assert.deepEqual(coveredTypes, new Set(VALID_SOURCE_TYPES));
   });
 
-  it("includes NPC legal database (CN), US state legislation (NCSL), and anonymous CourtListener Atom feed (T2)", () => {
+  it("includes NPC JSON API (CN), NCSL static summary (US-STATES), and anonymous CourtListener Atom feed (T2)", () => {
     const npc = cnRes.config.sources.find((s) => s.source_id === "cn-npc-flk");
     assert.ok(npc);
     assert.equal(npc.expected_domain, "flk.npc.gov.cn");
+    assert.equal(npc.fetch_mode, "json_api");
+    assert.ok(npc.entry_url.includes("/law-search/index/aggregateData"));
 
     const ncsl = globalRes.config.sources.find(
       (s) => s.source_id === "us-ncsl-ai-legislation",
     );
     assert.ok(ncsl);
     assert.equal(ncsl.jurisdiction, "US-STATES");
+    assert.equal(ncsl.fetch_mode, "static_html");
+    assert.ok(ncsl.entry_url.includes("artificial-intelligence-2025-legislation"));
 
     const cl = globalRes.config.sources.find(
       (s) => s.source_id === "us-courtlistener",

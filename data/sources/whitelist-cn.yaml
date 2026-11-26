@@ -11,15 +11,15 @@ sources:
     jurisdiction: "CN"
     default_categories:
       - "监管与合规"
-    fetch_mode: "static_html"
-    entry_url: "https://flk.npc.gov.cn/"
+    fetch_mode: "json_api"
+    entry_url: "https://flk.npc.gov.cn/law-search/index/aggregateData"
     expected_domain: "flk.npc.gov.cn"
     authority_tier: "T1"
     high_risk_default: true
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测 HTTP 200 免登录可达；全国人大常委会官方国家法律法规数据库入口。"
+    verification_note: "2026-11-26 实测公开只读 JSON 接口 /law-search/index/aggregateData 返回 HTTP 200（已弃用 552B 的 SPA 首页壳，免登录直接获取结构化数据）。"
 
   - source_id: "cn-spc-fabu"
     region: "cn"

@@ -23,21 +23,21 @@ sources:
 
   - source_id: "us-ncsl-ai-legislation"
     region: "global"
-    name: "NCSL US State Artificial Intelligence Legislation Database"
+    name: "NCSL US State Artificial Intelligence Legislation Summary"
     source_type: "legislation_regulator"
     language: "en"
     jurisdiction: "US-STATES"
     default_categories:
       - "监管与合规"
     fetch_mode: "static_html"
-    entry_url: "https://www.ncsl.org/financial-services/artificial-intelligence-legislation-database"
+    entry_url: "https://www.ncsl.org/technology-and-communication/artificial-intelligence-2025-legislation"
     expected_domain: "www.ncsl.org"
     authority_tier: "T2"
     high_risk_default: true
     discovery_only: false
     status: "active"
     verified_at: "2026-11-26"
-    verification_note: "2026-11-26 实测免登录可访问；追踪美国 50 州及哥伦比亚特区 AI 立法草案与生效法案（2026-11 更新；属州立法权威聚合库定级 T2，高风险默认 true）。"
+    verification_note: "2026-11-26 实测 HTTP 200 静态 HTML 汇总页（含美国各州 AI 立法静态条文摘要，免登录无需 JS 表单；已弃用需表单交互的 database 检索页；2026 年度汇总页暂 404，上线后同步切换；属州立法聚合定级 T2，高风险默认 true）。"
 
   - source_id: "us-courtlistener"
     region: "global"
