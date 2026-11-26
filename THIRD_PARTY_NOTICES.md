@@ -14,6 +14,7 @@
 | 03 | 摘要与标识无衬线：思源黑体 (Noto Sans SC) | [notofonts/noto-cjk](https://github.com/notofonts/noto-cjk) | `v2.004`；上游 commit `523d033d6cb47f4a80c58a35753646f5c3608a78`（对照 Google Fonts METADATA.pb 核实） | Penpot 内置 (Google Fonts `Noto Sans SC`)；许可证据：[Google Fonts OFL.txt](https://github.com/google/fonts/blob/main/ofl/notosanssc/OFL.txt)、[METADATA.pb](https://github.com/google/fonts/blob/main/ofl/notosanssc/METADATA.pb) | SIL OFL-1.1 | 摘要、来源行、日期、导航与状态标识专用无衬线字体；通过 Penpot 内置 Google 字体库直接选用，未在仓库入库字体文件。声明 Reserved Font Name `Source`（仅约束修改后字体软件的命名，不影响原版字体的正常嵌入、展示与使用）。Penpot 实际加载的字体文件版本与哈希未核实。 |
 | 04 | 设计协作工具平台：Penpot | [penpot/penpot](https://github.com/penpot/penpot) | `v2.19.0` (SaaS / Open Source) | Penpot Design App & MCP Plugin | MPL-2.0 | 仅使用 Penpot 云端平台及 MCP 插件作为原型产出载体（D-013），未拷贝其服务端或前端源代码。 |
 | 11 | 样式内联库：juice | [Automattic/juice](https://github.com/Automattic/juice) | `v12.2.6`；上游 commit `4400c58906440f1041ba444404e5f4d7a2ab09b4`（npm registry `gitHead`，2026-11-25 读取） | npm 包 `juice@12.2.6`（安装路径 `node_modules/juice`，不入库）；许可证据：[LICENSE.md](https://github.com/Automattic/juice/blob/4400c58906440f1041ba444404e5f4d7a2ab09b4/LICENSE.md) | MIT | LD-G1-03 唯一直接依赖（D-009 授权），仅用于把 `design/wechat/template.html` 的 CSS 内联到标签；以 npm 依赖方式安装使用，未拷贝、未改动其源码。安装方式 `npm install --ignore-scripts`，版本固定于 `package.json` 与 `package-lock.json`（`package-lock.json` 的 resolved 均为 `registry.npmjs.org`）。安装 43 个包，其中 38 个可见包经逐一读取 `package.json` 核对许可证：MIT（24）、BSD-2-Clause（8）、MIT-0（3）、ISC（2）、BSD-3-Clause（1），均为宽松许可；完整版本与完整性哈希见 `package-lock.json`。`npm audit --registry=https://registry.npmjs.org` 结果：0 vulnerabilities。 |
+| 12 | YAML 解析库：js-yaml | [nodeca/js-yaml](https://github.com/nodeca/js-yaml) | `v5.5.0`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `js-yaml@5.5.0`（`registry.npmjs.org/js-yaml/-/js-yaml-5.5.0.tgz`，不入库）；许可证据：[LICENSE](https://github.com/nodeca/js-yaml/blob/master/LICENSE) | MIT | LD-G2-02（#40）双轨白名单配置文件（`whitelist-cn.yaml` / `whitelist-global.yaml`）解析与结构校验依赖；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。直接传递依赖 `argparse` 为 PSF-2.0 宽松许可；当前锁文件 45 个包全部为宽松许可（MIT 26、BSD-2-Clause 12、MIT-0 3、ISC 2、BSD-3-Clause 1、PSF-2.0 1），`npm audit` 0 vulnerabilities。 |
 
 ---
 
@@ -203,9 +204,8 @@ Copyright (c) 2023 shadcn
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+to use, copy, modify, merge, publish, and distribute the Software as part of
+an application, website, or product, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
@@ -247,4 +247,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+```
+
+---
+
+### 5. MIT License (js-yaml 5.5.0 - 实际采用依赖)
+
+> 仅作为 npm 依赖安装使用（LD-G2-02 / #40），未拷贝源码进仓库；许可证全文随 npm 包分发，此处留档。来源：[nodeca/js-yaml LICENSE](https://github.com/nodeca/js-yaml/blob/master/LICENSE)。
+
+```text
+(The MIT License)
+
+Copyright (C) 2011-2015 by Vitaly Puzrin
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 ```
