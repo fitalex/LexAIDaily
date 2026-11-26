@@ -2,26 +2,26 @@
 
 > **状态：内部原型样稿，不对外发布。** 本目录的 HTML 仅用于 Gate 1 评审与公众号后台草稿预览。
 > 本任务**未登录微信公众号后台，也未做 iOS / Android 真机预览**；文末“微信后台限制”一节中凡未标注“已实测”的条目，一律为**未实测**，不得当作兼容性结论。
-> **2026-11-25 视觉改版说明**：经 Human Maintainer 审美复审确认，由 Gemini 接管并升级为《纽约时报》（*The New York Times*）风格报刊文字排版，并接入已合入 `main` 的 5 张 v3.0 复古网点拼贴插画；改版后的确定性 `sha256sum` 与结构自检待 `LD-G1-06`（Antigravity）交叉测试复核。
+> **2026-11-25 视觉改版说明**：经 Human Maintainer 审美复审确认，由 Gemini 接管并升级为《纽约时报》（*The New York Times*）风格报刊文字排版，并接入已合入 `main` 的 5 张 v3.0 复古网点拼贴插画（`b672ec43` 同步暖调纸底 `#D5C5AE`、零 `<table>` 与综述 14 条目录）；改版样稿已由 `LD-G1-06`（Antigravity）完成确定性 `sha256`（`799ebf6d92a3f967bb2694d0327d2f7667655502b31790abb797f03e9f7a8243`）与 4/4 结构交叉测试（[REPORT.md](../../tests/wechat-prototype/REPORT.md)）。
 
 ## 一、产出清单
 
 | 文件 | 作用 |
 |---|---|
-| `template.html` | NYT 风格报刊栏目模板源文件：样式集中写在 `<style>` 中，含 `CHAPTER_TEMPLATE_START/END` 与 `ITEM_TEMPLATE_START/END` 单元标记，由构建脚本内联 |
+| `template.html` | NYT 风格报刊栏目模板源文件：样式集中写在 `<style>` 中，逐块声明 `#D5C5AE` 纸底且零 `<table>`，含 `CHAPTER_TEMPLATE_START/END` 与 `ITEM_TEMPLATE_START/END` 单元标记，由构建脚本内联 |
 | `samples/ld-g1-04-2026-11-24.json` | 真实样本输入（14 条，源自已合入 `main` 的 `docs/samples/LD-G1-04-sample-set.md`，已清洗第 10 条原文残留的 `**` 符号） |
-| `samples/ld-g1-04-2026-11-24.html` | 对应成品 HTML（全部样式内联，零 `<style>` / `class=` / `<script>`，按五大官方分类章节编排并嵌入 5 张 v3.0 复古插画） |
+| `samples/ld-g1-04-2026-11-24.html` | 对应成品 HTML（全部样式内联，零 `<style>` / `class=` / `<script>` / `<table>`，综述内嵌 14 条目录并按五大官方分类章节嵌入 5 张 v3.0 复古插画） |
 | `read-original-flow.md` | 「阅读原文」→ Web 详情页 → 一手信源的联动动线 |
 | `DEVICE_TEST.md` | 真机预览记录模板（由 Human 填写，AI 不得代填） |
-| `../../scripts/wechat-prototype/build.mjs` | 原型构建脚本（按五大分类章节编排 + 接入 v3.0 插画 + juice 内联 + 结构断言） |
+| `../../scripts/wechat-prototype/build.mjs` | 原型构建脚本（按五大分类章节编排 + 综述 14 条目录 + 接入 v3.0 插画 + juice 内联 + 结构断言） |
 
 ## 二、视觉与字段基线（NYT 报刊改版）
 
-- **纸面与色彩**：延续 Web 原型暖调复古新闻纸基因，针对手机端无纸纹纯色环境将主阅读底面提亮为浅新闻纸 `#EBE2D4`，导读/实务影响/尾声卡片使用暖纸衬底 `#E4D8C6`，印刷墨黑 `#1D1D1B`，朱红 `#C03F13` 严格克制用于章节号（`SEC. 01`）、头条微标与文末唯一「阅读原文」提示；**零毛玻璃、零投影、零圆角**。
+- **纸面与色彩**：完全对齐 Web 原型暖调复古新闻纸基色 `#D5C5AE`，且 `<html>`、`<body>`、根 `<section>`、全部 13 个顶层主区块与 14 条资讯卡片 `<section>` 均独立声明 `background-color: #D5C5AE` 与 `margin: 0`（零间距缝隙），确保微信粘贴剥离外层容器后仍保留整张暖报纸底面；导读/实务影响/尾声卡片使用暖纸衬底 `#E2D5C2`，印刷墨黑 `#1D1D1B`，朱红 `#C03F13` 严格克制用于章节号（`SEC. 01`）、头条微标与文末唯一「阅读原文」提示；**零毛玻璃、零投影、零圆角**。
 - **NYT 报刊文字层次**：
-  - **阅读层（全衬线）**：标题（首条 `20.5px` / 常规 `18.5px`，紧行距 `1.36–1.38`）、正文摘要（`15px`，左对齐防中英混排河道）、实务影响（`13.5px`）统一采用系统宋体 / Georgia 衬线回退栈。
-  - **索引层（无衬线）**：三栏期号报眉、小眉题（Kicker）、标题正下方的 NYT 署名电头栏（信源 · 日期 · 事实层级 · 域名）、版画图注与合规底注采用极轻无衬线体。
-  - **报头与分栏**：满宽墨黑反白 `LEXAI DAILY` 报头带 + 厚薄双线收束；三栏报眉与章节头采用微信后台原生兼容的纯内联 `<table>` 实现左右齐平。
+  - **阅读层（全衬线）**：标题（首条 `15.5px` / 常规 `14.5px`，紧行距 `1.4–1.42`）、正文摘要（`12px` / 行高 `1.8`，左对齐防中英混排河道）、今日综述（`12px` / 行高 `1.8`）、实务影响（`11px` / 行高 `1.72`）统一采用系统宋体 / Georgia 衬线回退栈。
+  - **索引层（无衬线 / 等宽）**：单行居中报眉（`法律人的 AI 情报雷达 · VOL.I NO.001 · 日期`）、小眉题（Kicker）、标题正下方的 NYT 署名电头栏（信源 · 日期 · 事实层级 · 域名）、版画图注与合规底注采用极轻无衬线与等宽字栈。
+  - **报头、综述目录与零 `<table>` 流式分栏**：单行报眉 + 满宽墨黑反白 `LEXAI DAILY` 报头带 + 厚薄双线收束；开篇「今日综述 · AI 初稿」内嵌「本期目录 · CONTENTS」全部 14 条编号标题（`01`–`14`）；全篇**零 `<table>`（不含 `<tr>`/`<td>`）与零固定像素宽度**，统一以流式块级 `<section>` / `<p>` 实现微信移动端自适应不裁切。
 - **插画策略（v3.0 + Gate 2 预留）**：
   - Gate 1 按五大官方分类（`监管与合规`、`模型与技术`、`实务与工具`、`判例与学术`、`行业与资本`）在每章顶部嵌入 1 张 21:9 v3.0 复古网点拼贴插画（`design/assets/illustrations/baseline-*-v3.webp`，外加 `1px` 黑框与右对齐「插画由 AI 生成」图注）。
   - 模板同时在单条资讯内保留可选 `image` 字段（JSON 传入 `image` 时自动渲染），供 Gate 2 接入“每日按标题生图”工作流。
@@ -63,17 +63,17 @@ npm run build:samples
 
 **已主动规避（成品 HTML 中不存在）：**
 
-- `<style>` 块、`class=` 选择器、`<script>`、外链 CSS / 字体（`<link>`、`@font-face`）。
-- data-URI 纸纹背景、伪元素、`position`、`flex`、`grid`、`box-shadow`、`backdrop-filter`、`border-radius`。
+- `<style>` 块、`class=` 选择器、`<script>`、外链 CSS / 字体（`<link>`、`@font-face`）、`<table>`（含 `<tr>`/`<td>`）与固定像素容器宽度。
+- data-URI 纸纹背景、伪元素、`position`、`flex`、`grid`、`box-shadow`、`backdrop-filter`、`border-radius` 与旧浅色纸底 `#EBE2D4`。
 
 **未实测（需 Human 在公众号后台草稿与真机确认，不得预先下结论）：**
 
-- 后台是否完整保留三栏 `<table>` 报眉与章节头左右对齐。
-- 后台是否完整保留 `#EBE2D4` 整块浅新闻纸底色与 `2px` 左侧竖线引文块。
+- 后台是否完整保留单行流式报眉与章节头（零 `<table>`）排版。
+- 后台是否完整保留 `#D5C5AE` 逐块暖报纸底色（含 `margin: 0` 零间距）、`#E2D5C2` 卡片衬底与 `2px` 左侧竖线引文块。
 - `Songti SC` / `Georgia` 衬线栈在 iOS、Android 微信 WebView 的实际字形与回退效果。
 - 5 张 v3.0 复古插画在公众号后台上传后的压缩清晰度与 `1px` 黑框留存情况。
 
-真机预览与截图由 Human 按 `DEVICE_TEST.md` 填写；本任务不写“微信兼容”结论。
+> 历史实测备注：据 [PR #29 协调者同步记录（#issuecomment-7164363493）](https://github.com/fitalex/LexAIDaily/pull/29#issuecomment-7164363493)，Human Maintainer 已于 2026-11-25 基于样式与结构已同步至 `b672ec43` 的 `preview-redesign.html`（`9e566c59`）完成公众号后台检测与手机端实机预览通过；对应仓库重建样稿 `design/wechat/samples/ld-g1-04-2026-11-24.html`（`799ebf6d...`）的真机预览结果仍留空于 `DEVICE_TEST.md` 待 Human 填报，本文件不代写“微信兼容”结论。
 
 ## 六、第三方与许可
 

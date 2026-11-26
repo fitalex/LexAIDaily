@@ -31,11 +31,11 @@
 | LD-G1-02A | 2026-11-11 | 设计系统与 Web 原型返工（推倒重做） | B | Antigravity（D-012） | [LD-G1-02A](LD-G1-02A.md)（Human 2026-11-11 指示，待其在 PR 中确认） |
 | LD-G1-01B | 2026-11-11 | 字段表 v0.2：卡片字段瘦身、重要度、占位标记 | A | DeepSeek Harness（D-011） | [LD-G1-01B](LD-G1-01B.md)（PR #19 已合并 `2307eed`） |
 | LD-G1-02B | 2026-11-11 | 设计系统与 Web 原型第二版（宣纸墨色 × 导航玻璃） | B | Antigravity（D-012） | [LD-G1-02B](LD-G1-02B.md)（PR #16 已合并 `cec7d31`） |
-| LD-G1-02C | 2026-11-23 | 复古报刊风 Design-in-Code HTML 原型与 v2.0 AI 配图规范落地（放弃 Penpot；D-027 / D-028） | B | Gemini（代码线）｜Antigravity（视觉资产线） | [LD-G1-02C](LD-G1-02C.md)（代码线 V1 分支 `gemini/ld-g1-02c-miranda-html` 待视觉验收） |
-| LD-G1-03 | 2026-11-09 | 公众号内联排版模板原型（juice 依赖，D-009） | B | DeepSeek Harness（D-011） | [LD-G1-03](LD-G1-03.md)（Human 已授权） |
-| LD-G1-04 | 2026-11-09 | 真实资讯样本集（用于原型填充与 3 分钟扫读评审，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | [LD-G1-04](LD-G1-04.md)；触发 6.1(d) 交叉核验或 Human 豁免 |
+| LD-G1-02C | 2026-11-23 | 复古报刊风 Design-in-Code HTML 原型与 v2.0 AI 配图规范落地（放弃 Penpot；D-027 / D-028） | B | Gemini（代码线）｜Antigravity（视觉资产线） | [LD-G1-02C](LD-G1-02C.md)；代码线 [PR #25](https://github.com/fitalex/LexAIDaily/pull/25)（已合并 `52a8dcf`）、视觉资产线 [PR #26](https://github.com/fitalex/LexAIDaily/pull/26)（已合并 `36a8c90`）、详情弹窗对齐 [PR #30](https://github.com/fitalex/LexAIDaily/pull/30)（已合并 `db902d7`） |
+| LD-G1-03 | 2026-11-09 | 公众号内联排版模板原型（juice 依赖，D-009） | B | DeepSeek Harness（D-011） | [LD-G1-03](LD-G1-03.md)；[PR #29](https://github.com/fitalex/LexAIDaily/pull/29)（已合并 `e87d480`） |
+| LD-G1-04 | 2026-11-09 | 真实资讯样本集（用于原型填充与 3 分钟扫读评审，不对外发布） | A | Gemini（D-025，原 GPT 网页版） | [LD-G1-04](LD-G1-04.md)；[PR #27](https://github.com/fitalex/LexAIDaily/pull/27)（已合并 `63cc482`） |
 | LD-G1-05 | 2026-11-09 | Gate 1 验收清单（只转写 ROADMAP 既有标准） | A | Gemini（接替 Claude） | [LD-G1-05](LD-G1-05.md) |
-| LD-G1-06 | 2026-11-09 | 公众号排版导出结构与兼容性交叉测试 | A | Antigravity（D-015） | [LD-G1-06](LD-G1-06.md) |
+| LD-G1-06 | 2026-11-09 | 公众号排版导出结构与兼容性交叉测试 | A | Antigravity（D-015） | [LD-G1-06](LD-G1-06.md)；[PR #32](https://github.com/fitalex/LexAIDaily/pull/32)（已合并 `93d3c71`） |
 | LD-G1-07 | 2026-11-09 | Gate 1 文档同步与交叉引用核对 | A | Antigravity | [LD-G1-07](LD-G1-07.md) |
 
 本索引不代表任务已完成验收；交付与 CI 证据以对应 PR 为准。公开版本不得包含密钥或读者私域数据。
