@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFileSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import Ajv from "ajv";
@@ -209,6 +209,33 @@ export function validateBySchemaName(schemaName, data) {
   };
 }
 
+/**
+ * R2-ST05: Validates either a single object or an array of objects (e.g. cn.json / global.json) against a schema.
+ */
+export function validatePayloadOrArray(schemaName, payload) {
+  if (schemaName === "candidate-item" && Array.isArray(payload)) {
+    const errors = [];
+    payload.forEach((item, idx) => {
+      const res = validateBySchemaName(schemaName, item);
+      if (!res.valid) {
+        for (const err of res.errors) {
+          errors.push({
+            ...err,
+            instancePath: `[${idx}]${err.instancePath === "$" ? "" : err.instancePath}`,
+          });
+        }
+      }
+    });
+    return {
+      valid: errors.length === 0,
+      schemaName,
+      count: payload.length,
+      errors,
+    };
+  }
+  return validateBySchemaName(schemaName, payload);
+}
+
 export const validateCandidateItem = (data) =>
   validateBySchemaName("candidate-item", data);
 
@@ -268,11 +295,66 @@ export function checkNoTrackedRawCache(repoRoot = DEFAULT_REPO_ROOT) {
   };
 }
 
+function listJsonFilesRecursive(dir) {
+  if (!existsSync(dir)) return [];
+  const out = [];
+  for (const entry of readdirSync(dir)) {
+    const full = path.join(dir, entry);
+    const st = statSync(full);
+    if (st.isDirectory()) {
+      out.push(...listJsonFilesRecursive(full));
+    } else if (entry.endsWith(".json")) {
+      out.push(full);
+    }
+  }
+  return out;
+}
+
+/**
+ * R2-ST05: Validates .cache isolation plus all existing public outputs under data/candidates, data/bundles, data/topic-pool.
+ */
+export function validateAllPublicOutputs(repoRoot = DEFAULT_REPO_ROOT) {
+  const cacheCheck = checkNoTrackedRawCache(repoRoot);
+  const filesChecked = [];
+  const fileErrors = [];
+
+  const targets = [
+    { dir: path.join(repoRoot, "data", "candidates"), inferSchema: (f) => (f.endsWith("-meta.json") ? "collect-meta" : "candidate-item") },
+    { dir: path.join(repoRoot, "data", "bundles"), inferSchema: () => "daily-bundle" },
+    { dir: path.join(repoRoot, "data", "topic-pool"), inferSchema: () => "wechat-topic-pool" },
+  ];
+
+  for (const { dir, inferSchema } of targets) {
+    for (const filePath of listJsonFilesRecursive(dir)) {
+      const schemaName = inferSchema(path.basename(filePath));
+      const rel = path.relative(repoRoot, filePath);
+      try {
+        const payload = JSON.parse(readFileSync(filePath, "utf8"));
+        const res = validatePayloadOrArray(schemaName, payload);
+        filesChecked.push({ file: rel, schemaName, valid: res.valid });
+        if (!res.valid) {
+          fileErrors.push({ file: rel, schemaName, errors: res.errors });
+        }
+      } catch (err) {
+        filesChecked.push({ file: rel, schemaName, valid: false });
+        fileErrors.push({ file: rel, schemaName, errors: [{ message: String(err?.message ?? err) }] });
+      }
+    }
+  }
+
+  return {
+    valid: cacheCheck.valid && fileErrors.length === 0,
+    trackedFiles: cacheCheck.trackedFiles,
+    filesChecked: filesChecked.length,
+    errors: [...cacheCheck.errors, ...fileErrors],
+  };
+}
+
 function runCli() {
   const args = process.argv.slice(2);
   if (args.length === 0) {
     console.error(
-      "Usage:\n  node src/contracts/validate.mjs <schemaName> <jsonFile>\n  node src/contracts/validate.mjs --check-cache",
+      "Usage:\n  node src/contracts/validate.mjs <schemaName> <jsonFile>\n  node src/contracts/validate.mjs --batch <schemaName> <jsonFile>\n  node src/contracts/validate.mjs --all [repoRoot]\n  node src/contracts/validate.mjs --check-cache",
     );
     process.exit(2);
   }
@@ -283,15 +365,24 @@ function runCli() {
     process.exit(res.valid ? 0 : 1);
   }
 
-  const [schemaName, filePath] = args;
-  if (!filePath) {
-    console.error("Missing <jsonFile> argument.");
+  if (args[0] === "--all") {
+    const rootDir = args[1] ? path.resolve(process.cwd(), args[1]) : DEFAULT_REPO_ROOT;
+    const res = validateAllPublicOutputs(rootDir);
+    console.log(JSON.stringify(res, null, 2));
+    process.exit(res.valid ? 0 : 1);
+  }
+
+  const isBatch = args[0] === "--batch";
+  const schemaName = isBatch ? args[1] : args[0];
+  const filePath = isBatch ? args[2] : args[1];
+  if (!schemaName || !filePath) {
+    console.error("Missing <schemaName> or <jsonFile> argument.");
     process.exit(2);
   }
 
   const absPath = path.resolve(process.cwd(), filePath);
   const payload = JSON.parse(readFileSync(absPath, "utf8"));
-  const result = validateBySchemaName(schemaName, payload);
+  const result = validatePayloadOrArray(schemaName, payload);
   console.log(JSON.stringify(result, null, 2));
   process.exit(result.valid ? 0 : 1);
 }

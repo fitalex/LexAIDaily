@@ -3,21 +3,31 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）及 Gate 2 数据契约与双轨信源白名单校验。",
+  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）及 Gate 2 数据契约、双轨采集与两阶段事实锚定汇流管线。",
   "engines": {
     "node": ">=22.12.0"
   },
   "scripts": {
     "build:samples": "node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out design/wechat/samples/ld-g1-04-2026-11-24.html",
     "test:contracts": "node --test tests/contracts/*.test.mjs",
-    "validate:contracts": "node src/contracts/validate.mjs --check-cache",
+    "validate:contracts": "node src/contracts/validate.mjs --all",
     "test:sources": "node --test tests/sources/*.test.mjs",
-    "smoke:sources": "node scripts/sources/smoke-check.mjs"
+    "smoke:sources": "node scripts/sources/smoke-check.mjs",
+    "collect:cn": "node src/collectors/cn/index.mjs",
+    "collect:global": "node src/collectors/global/index.mjs",
+    "curate": "node src/pipeline/merge-and-curate/index.mjs",
+    "daily": "node src/pipeline/daily.mjs",
+    "test:pipeline": "node --test tests/pipeline/*.test.mjs",
+    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/wechat-prototype/*.test.mjs"
   },
   "dependencies": {
+    "@mozilla/readability": "0.6.0",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",
     "js-yaml": "5.5.0",
-    "juice": "12.2.6"
+    "juice": "12.2.6",
+    "linkedom": "0.18.15",
+    "normalize-url": "10.0.0",
+    "rss-parser": "3.13.0"
   }
 }
