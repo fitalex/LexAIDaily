@@ -1,0 +1,268 @@
+schema_version: "1.0"
+region: global
+updated_at: "2026-11-26"
+description: "LexAIDaily 海外轨白名单（v1.2 法律人 AI 实务效率雷达定版：3 合规哨兵 + 3 一线法律 AI 厂商博客 + 3 法律科技实务媒体/研究 + 3 办公 AI 工作流官方源 + 2 前沿学术与法律 AI 实证研究）"
+sources:
+  - source_id: eu-ai-office
+    region: global
+    name: 欧盟 AI 办公室 (EU AI Office｜合规哨兵)
+    source_type: legislation_regulator
+    language: en
+    jurisdiction: EU
+    default_categories:
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://digital-strategy.ec.europa.eu/en/policies/ai-office
+    expected_domain: digital-strategy.ec.europa.eu
+    authority_tier: T1
+    high_risk_default: true
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "合规哨兵；R4 标准浏览器 UA 实测 HTTP 200 可静态解析，追踪 EU AI Act 实施指南与 GPAI 行为准则"
+
+  - source_id: uk-ico-news
+    region: global
+    name: 英国信息专员办公室 (UK ICO｜合规哨兵)
+    source_type: legislation_regulator
+    language: en
+    jurisdiction: UK
+    default_categories:
+      - 监管与合规
+    fetch_mode: static_html
+    entry_url: https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/
+    expected_domain: ico.org.uk
+    authority_tier: T1
+    high_risk_default: true
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "合规哨兵；R4 标准浏览器 UA 实测 HTTP 200 可静态解析，追踪 AI 数据合规与执法动态（对齐 PR #47 夹具）"
+
+  - source_id: us-courtlistener
+    region: global
+    name: CourtListener AI 判例订阅源（合规哨兵）
+    source_type: court_judiciary
+    language: en
+    jurisdiction: US
+    default_categories:
+      - 判例与学术
+      - 监管与合规
+    fetch_mode: atom
+    entry_url: https://www.courtlistener.com/feed/search/?q=AI
+    expected_domain: www.courtlistener.com
+    authority_tier: T2
+    high_risk_default: true
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "合规哨兵；R4 实测 HTTP 200 匿名公开 Atom XML（20 条），专盯美国法院涉 AI 幻觉与诉讼判例"
+
+  - source_id: global-harvey-blog
+    region: global
+    name: Harvey AI 官方博客
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.harvey.ai/blog
+    expected_domain: www.harvey.ai
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 标准浏览器 UA 实测 HTTP 200 静态可读，涵盖 Legal Agents、Review Tables、MCP 与律所落地工作流"
+
+  - source_id: global-legora-blog
+    region: global
+    name: Legora 官方博客
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://legora.com/blog
+    expected_domain: legora.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 标准浏览器 UA 实测 HTTP 200 静态可读，涵盖法律 AI Skills/Subagents、M365/Workspace 集成与实务 ROI"
+
+  - source_id: global-tr-legal-blog
+    region: global
+    name: Thomson Reuters Law Blog (CoCounsel)
+    source_type: legal_ai_vendor
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: static_html
+    entry_url: https://legal.thomsonreuters.com/blog/
+    expected_domain: legal.thomsonreuters.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 标准浏览器 UA 实测 HTTP 200 静态可读，涵盖 CoCounsel Legal、HighQ MCP 与合同红线对比实战"
+
+  - source_id: artificial-lawyer
+    region: global
+    name: Artificial Lawyer
+    source_type: authoritative_media
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: rss
+    entry_url: https://www.artificiallawyer.com/feed/
+    expected_domain: www.artificiallawyer.com
+    authority_tier: T3
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 实测 HTTP 200 RSS XML（10 条），全球法律 AI 产品发布、律所采纳与实务评测一线媒体"
+
+  - source_id: lawsites-blog
+    region: global
+    name: LawSites (Bob Ambrogi)
+    source_type: authoritative_media
+    language: en
+    jurisdiction: US
+    default_categories:
+      - 实务与工具
+      - 行业与资本
+    fetch_mode: rss
+    entry_url: https://www.lawnext.com/feed
+    expected_domain: www.lawnext.com
+    authority_tier: T3
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 实测 HTTP 200 RSS XML（100 条），深度追踪法律科技新产品、Claude/Copilot 法律插件与律师工作流评测"
+
+  - source_id: thomson-reuters-institute
+    region: global
+    name: Thomson Reuters Institute
+    source_type: authoritative_media
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 行业与资本
+      - 实务与工具
+    fetch_mode: static_html
+    entry_url: https://www.thomsonreuters.com/en/institute
+    expected_domain: www.thomsonreuters.com
+    authority_tier: T3
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 标准浏览器 UA 实测 HTTP 200 静态 HTML，发布法律行业生成式 AI 采用率与提效基准调研（对齐 PR #47 夹具）"
+
+  - source_id: ms-copilot-blog
+    region: global
+    name: Microsoft Copilot Blog（含 Copilot for Legal）
+    source_type: official_tech_blog
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.microsoft.com/en-us/microsoft-365/blog/
+    expected_domain: www.microsoft.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 标准浏览器 UA 实测 HTTP 200 静态可读，覆盖 Copilot for Legal、Word/Excel/Outlook 律师办公 Agent"
+
+  - source_id: anthropic-news
+    region: global
+    name: Anthropic Newsroom（含 Claude for Legal）
+    source_type: official_tech_blog
+    language: en
+    jurisdiction: US
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: static_html
+    entry_url: https://www.anthropic.com/news
+    expected_domain: www.anthropic.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 标准浏览器 UA 实测 HTTP 200 静态可读，追踪 Claude 法律实务插件、长文档分析与企业级安全工作流更新"
+
+  - source_id: openai-news-rss
+    region: global
+    name: OpenAI News RSS（企业级 Agent 与法律应用）
+    source_type: official_tech_blog
+    language: en
+    jurisdiction: US
+    default_categories:
+      - 实务与工具
+      - 模型与技术
+    fetch_mode: rss
+    entry_url: https://openai.com/news/rss.xml
+    expected_domain: openai.com
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R1–R3 连续实测 HTTP 200 标准 RSS XML，替代触发 Cloudflare 403 的 Clio 页面，追踪 OpenAI 法律与企业 Agent 更新"
+
+  - source_id: stanford-hai-news
+    region: global
+    name: Stanford HAI News（法律 AI 实证与评测研究）
+    source_type: academic_paper
+    language: en
+    jurisdiction: US
+    default_categories:
+      - 判例与学术
+      - 实务与工具
+    fetch_mode: static_html
+    entry_url: https://hai.stanford.edu/news
+    expected_domain: hai.stanford.edu
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R1–R3 连续实测 HTTP 200 静态可读，替代触发 Bot Verification 的 Legal IT Insider，追踪 Stanford RegLab 等法律 AI 幻觉与提效实证"
+
+  - source_id: arxiv-cs-ai-rss
+    region: global
+    name: arXiv cs.AI 官方 RSS（推理与评测前沿）
+    source_type: academic_paper
+    language: en
+    jurisdiction: GLOBAL
+    default_categories:
+      - 判例与学术
+      - 模型与技术
+    fetch_mode: rss
+    entry_url: https://rss.arxiv.org/rss/cs.AI
+    expected_domain: rss.arxiv.org
+    authority_tier: T2
+    high_risk_default: false
+    discovery_only: false
+    status: active
+    verified_at: "2026-11-26"
+    verification_note: "R4 实测 HTTP 200 RSS XML（398 条），追踪法律推理、检索增强与幻觉评测前沿论文（对齐 PR #47 夹具）"
