@@ -15,6 +15,14 @@
 | LD-GOV-01 | 待归档为 `LD-GOV-01-gpt-audit-r4.md`（PR #3 评论 issuecomment-6653214636） | 第四轮增量审计（GPT 网页版，基准 `08b29e9`） | 需修改 |
 | LD-G0-04 | [LD-G0-04-codex-audit-r1.md](https://github.com/fitalex/LexAIDaily/blob/c37167adcd8580a4d44e8b365c4404404ea9bc05/docs/audits/LD-G0-04-codex-audit-r1.md)（经 [PR #8](https://github.com/fitalex/LexAIDaily/pull/8) 合并，`31a2d0a`） | 独立审计（Codex Astra，1 轮，被审 `d32abf4`；通知评论 issuecomment-6702332965） | 需修改 |
 | LD-GOV-01 | [LD-GOV-01-claude-response.md](LD-GOV-01-claude-response.md) | Owner 整改回应（Claude，含第二至四轮） | 待增量复审 |
+| LD-G2-01 | [LD-G2-01-dsh-audit-r1.md](LD-G2-01-dsh-audit-r1.md)（经 [PR #50](https://github.com/fitalex/LexAIDaily/pull/50) 合并） | 独立审计（DeepSeek Harness，R1） | 需修改 |
+| LD-G2-01 | [LD-G2-01-dsh-audit-r2.md](LD-G2-01-dsh-audit-r2.md)（经 [PR #51](https://github.com/fitalex/LexAIDaily/pull/51) 合并） | 独立审计（DeepSeek Harness，R2） | 通过 |
+| LD-G2-02 | [LD-G2-02-dsh-audit-r1.md](LD-G2-02-dsh-audit-r1.md)（经 [PR #50](https://github.com/fitalex/LexAIDaily/pull/50) 合并） | 独立审计（DeepSeek Harness，R1） | 需修改 |
+| LD-G2-02 | [LD-G2-02-dsh-audit-r2.md](LD-G2-02-dsh-audit-r2.md)（经 [PR #51](https://github.com/fitalex/LexAIDaily/pull/51) 合并） | 独立审计（DeepSeek Harness，R2） | 需修改 |
+| LD-G2-02 | [LD-G2-02-dsh-audit-r3.md](LD-G2-02-dsh-audit-r3.md)（经 [PR #52](https://github.com/fitalex/LexAIDaily/pull/52) 合并） | 独立审计（DeepSeek Harness，R3） | 通过 |
+| LD-G2-02 | [LD-G2-02-dsh-audit-r4.md](LD-G2-02-dsh-audit-r4.md)（经 [PR #53](https://github.com/fitalex/LexAIDaily/pull/53) 合并） | 独立审计（DeepSeek Harness，R4） | 需修改 |
+| LD-G2-02 | [LD-G2-02-dsh-audit-r5.md](LD-G2-02-dsh-audit-r5.md)（经 [PR #55](https://github.com/fitalex/LexAIDaily/pull/55) 合并） | 独立审计（DeepSeek Harness，R5） | 需修改 |
+| LD-G2-02 | [LD-G2-02-dsh-audit-r6.md](LD-G2-02-dsh-audit-r6.md)（经 [PR #56](https://github.com/fitalex/LexAIDaily/pull/56) 合并） | 独立审计（DeepSeek Harness，R6） | 通过 |
 
 ## 归档文件 blob SHA 核对记录（AGENTS.md 6.2）
 
@@ -27,3 +35,11 @@ Claude 读取仓库中的归档文件后以 `git hash-object` 计算；已归档
 | LD-GOV-01-gpt-audit-r3.md | `8d43ca4d210cca1798b5fa763a2cdf2b0b9dfa09` | Claude / 2026-11-06 | 待核对 |
 | LD-GOV-01-gpt-audit-r4.md | 归档后补记 | — | 待核对 |
 | LD-G0-04-codex-audit-r1.md | `c7fd1a968459e73d44343929c8be58fc64456ed3` | Claude / 2026-11-07（读回 commit `c37167a` 的文件，与评论所载 SHA 一致） | 待核对 |
+| LD-G2-01-dsh-audit-r1.md | `1b9cbe3722bd8d5b3adf44dd58ca93e41ee6f5a2` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #50） | 待核对 |
+| LD-G2-01-dsh-audit-r2.md | `e320b6458a7b3e0b655f4e7202a935083da4c694` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #51） | 待核对 |
+| LD-G2-02-dsh-audit-r1.md | `2522ac589a7ffb419f0a27737c6a1d7f0f54aadb` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #50） | 待核对 |
+| LD-G2-02-dsh-audit-r2.md | `da3264919febfeee375917f8a37d9454be73a20f` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #51） | 待核对 |
+| LD-G2-02-dsh-audit-r3.md | `ddae7ab8b23294f00d5a8b78f4d5f3b3569aadff` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #52） | 待核对 |
+| LD-G2-02-dsh-audit-r4.md | `9f39c51590324ee1f140b1445aa07a767875a448` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #53） | 待核对 |
+| LD-G2-02-dsh-audit-r5.md | `214b4f6bdff5f6497892a161da0fd531f3a77420` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #55） | 待核对 |
+| LD-G2-02-dsh-audit-r6.md | `4b2b1234fab99c0c6decf270703eb6a4e74a94a2` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #56） | 待核对 |
