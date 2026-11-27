@@ -22,9 +22,10 @@ import {
   decodeResponseBuffer,
   extractLinksFromListHtml,
   extractPublishedDateFromHtml,
+  parseDateToken,
   stripHtmlToPlainText,
 } from "../../src/collectors/shared/extractor.mjs";
-import { resolveProxyDispatcher } from "../../src/collectors/shared/http.mjs";
+import { resolveProxyUrl } from "../../src/collectors/shared/http.mjs";
 import { evaluateLegalRelevance } from "../../src/collectors/shared/noise-filter.mjs";
 import {
   isDomainAllowed,
@@ -33,6 +34,7 @@ import {
 import {
   scanForbiddenFulltextKeys,
   validateBySchemaName,
+  validatePayloadOrArray,
 } from "../../src/contracts/validate.mjs";
 import { runDailyPipeline } from "../../src/pipeline/daily.mjs";
 import { deduplicateCrossTrack } from "../../src/pipeline/merge-and-curate/dedup.mjs";
@@ -171,6 +173,7 @@ test("3. SP06: Cross-track dedup prefers global primary URL and does NOT merge u
   assert.equal(clusters[0].item.source_url, euUrl);
   assert.equal(clusters[0].cross_source_count, 2);
 
+  // SP06 Negative test: unrelated events sharing only generic "AI" + "2026" must NOT merge
   const unrelatedCn = {
     id: "cn-unrel-1",
     region: "cn",
@@ -267,6 +270,7 @@ test("4. SP01/SP02/SP10: AIHOT maps live score, reuses cached payload on 304, ne
   assert.equal(first.items[0].raw_text.includes("FORBIDDEN_AIHOT_SUMMARY"), false);
   assert.equal(first.items[0].heat_score, 86);
 
+  // SP02: On HTTP 304, cached payload is reused instead of dropping to 0 items
   const second = await fetchAihotDiscoverySource(src, {
     cacheDir,
     fetchImpl: stubFetch,
@@ -280,17 +284,30 @@ test("4. SP01/SP02/SP10: AIHOT maps live score, reuses cached payload on 304, ne
 });
 
 test("5. ST03/ST05/SP07: Fail-closed MONID cap, local Asia/Shanghai date, proxy dispatcher, GBK & noise filter", () => {
+  // ST03: invalid cap fails closed to 0
   assert.equal(parseStrictDailyCap("abc", 5), 0);
   assert.equal(parseStrictDailyCap("-3", 5), 0);
   assert.equal(parseStrictDailyCap("3", 5), 3);
   assert.equal(parseStrictDailyCap(undefined, 5), 5);
 
+  // ST05: 2026-11-26T18:30:00Z is 2026-11-27 02:30 in Asia/Shanghai
   assert.equal(getLocalDateString("2026-11-26T18:30:00Z", "Asia/Shanghai"), "2026-11-27");
 
-  assert.equal(resolveProxyDispatcher({}), undefined);
-  const proxyAgent = resolveProxyDispatcher({ HTTPS_PROXY: H("proxy.example.org", ":8080") });
-  assert.ok(proxyAgent);
+  // R2-ST02: Pure built-in proxy resolver (zero undici dependency) + NO_PROXY support
+  assert.equal(resolveProxyUrl(H("api.example.org", "/x"), {}), null);
+  assert.equal(
+    resolveProxyUrl(H("api.example.org", "/x"), { HTTPS_PROXY: H("proxy.example.org", ":8080") }),
+    H("proxy.example.org", ":8080"),
+  );
+  assert.equal(
+    resolveProxyUrl(H("api.example.org", "/x"), {
+      HTTPS_PROXY: H("proxy.example.org", ":8080"),
+      NO_PROXY: "example.org",
+    }),
+    null,
+  );
 
+  // Domain, relative link, GBK, HTML date extraction, noise filter
   const baseUrl = H("court.example.org", "/fabu.html");
   assert.equal(
     normalizeCandidateUrl("/fabu/2026/doc.html?utm_source=x#sec", baseUrl),
@@ -331,6 +348,7 @@ test("5. ST03/ST05/SP07: Fail-closed MONID cap, local Asia/Shanghai date, proxy 
 });
 
 test("6. SP03/SP09 & Stage 2 faithfulness: unspaced Chinese sentences, multi-segment long regulation, numeric mismatch flag", async () => {
+  // SP03: 4 unspaced Chinese sentences must split into 4 distinct sentences
   const unspacedZh =
     "第一句明确要求服务提供者建立合规台账。第二句规定在30日内完成算法备案手续。第三句要求高风险场景留存180天审计日志。第四句强调须配备人工复核机制。";
   const segs = splitSentences(unspacedZh);
@@ -360,6 +378,7 @@ test("6. SP03/SP09 & Stage 2 faithfulness: unspaced Chinese sentences, multi-seg
   const s1Zh = runStage1FactExtraction({ candidate, rawText: unspacedZh });
   assert.equal(s1Zh.evidence_quotes.length, 3);
 
+  // SP09: Multi-segment long regulation extracts quotes & numbers from segment 2+ (not just segment 0)
   const longReg = [
     "第1条 总则明确2026年合规适用范围。",
     "第2条 建立内部治理制度。",
@@ -376,6 +395,7 @@ test("6. SP03/SP09 & Stage 2 faithfulness: unspaced Chinese sentences, multi-seg
   assert.ok(s1Long.numbers_and_dates.includes("999"));
   assert.ok(s1Long.evidence_quotes.some((q) => q.locator === "核心条款段 2"));
 
+  // Stage 2 faithfulness check
   const rawText =
     "2026年11月20日，监管机构发布生成式人工智能服务合规指引试行版，要求在 30 日内完成算法备案，并保留不少于 180 天的审计日志。";
   assert.equal(
@@ -436,6 +456,7 @@ test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fai
   const topicPoolDir = path.join(base, "topic-pool");
   mkdirSync(base, { recursive: true });
 
+  // ST04: Invalid Layer 2 source_id ("L2") degrades without crashing
   const l2 = await fetchWeMpRssBridge({
     nowIso: "2026-11-27T08:00:00Z",
     retries: 0,
@@ -449,6 +470,7 @@ test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fai
   assert.equal(l2.items.length, 0);
   assert.equal(l2.sourceResults[0].status, "degraded");
 
+  // ST03: Non-numeric MONID_DAILY_MAX_CALLS="abc" fails closed (0 calls)
   const inboxPath = path.join(base, "manual-inbox.yaml");
   const p1 = H("example.org", "/p1");
   const providerEp = H("provider.example.org", "/v1/extract");
@@ -476,6 +498,7 @@ test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fai
   });
   assert.equal(monidCalls, 0);
 
+  // SP04 + SP05 + E2E
   const cnWl = path.join(base, "wl-cn.yaml");
   const glWl = path.join(base, "wl-gl.yaml");
   const cnEntry = H("firm.example.org", "/insights");
@@ -532,11 +555,14 @@ test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fai
     fetchArticleBodyForFeeds: false,
   });
 
+  // SP04: T2 law_firm_practice -> market_opinion + unverified: true
   assert.equal(cnOut.candidates[0].fact_tier, "market_opinion");
   assert.equal(cnOut.candidates[0].unverified, true);
+  // SP05: Real published_at extracted from HTML meta, court ruling gets effective_status: not_applicable
   assert.equal(cnOut.candidates[0].published_at, "2026-11-20");
   assert.equal(glOut.candidates[0].effective_status, "not_applicable");
 
+  // SP08: Missing cache record flags needs_human_check=true and records cacheMissingIds
   const emptyCacheDir = uniqueTmp("test-empty-cache");
   mkdirSync(emptyCacheDir, { recursive: true });
   const curatedMissingCache = await runCuratePipeline({
@@ -556,6 +582,7 @@ test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fai
   assert.equal(validateBySchemaName("daily-bundle", curatedMissingCache.bundle).valid, true);
   assert.equal(scanForbiddenFulltextKeys(curatedMissingCache.bundle).length, 0);
 
+  // ST08: Corrupt cn.json does not crash curate
   writeFileSync(path.join(candidatesDir, "cn.json"), "{broken json", "utf8");
   const degradedCorrupt = await runCuratePipeline({
     date: "2026-11-27",
@@ -578,4 +605,140 @@ test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fai
     writeOutput: false,
   });
   assert.equal(dailyRes.errors.length, 2);
+  assert.equal(dailyRes.status, "failed");
+});
+
+test("8. R2 regressions: plain-text < >, naive datetime, pure CN/EN dedup, legacy 304 etag, L2 domain, academic_paper & array validate", async () => {
+  // R2-ST03: Plain-text inequalities must not be eaten as HTML tags
+  assert.equal(stripHtmlToPlainText("3 < 5 且 7 > 2"), "3 < 5 且 7 > 2");
+  assert.equal(stripHtmlToPlainText("条款 &lt;100万元&gt; 适用"), "条款 <100万元> 适用");
+
+  // R2-SP01: Timezone-naive datetime must NOT shift backward by one day
+  assert.equal(parseDateToken("2026-11-20T00:00:00"), "2026-11-20");
+  assert.equal(
+    extractPublishedDateFromHtml(
+      `<html><head><meta property="article:published_time" content="2026-11-20T00:00:00"></head><body>ok</body></html>`,
+    ),
+    "2026-11-20",
+  );
+
+  // R2-SP02: Pure Chinese vs pure English same-event titles merge with global priority
+  const pureCn = {
+    id: "cn-eu-gpai-001",
+    region: "cn",
+    source_id: "cn-kwm-cli",
+    source_url: H("firm.example.org", "/eu-gpai-zh"),
+    title: "欧盟人工智能法案通用人工智能行为准则最终版",
+    summary: "欧盟发布通用人工智能行为准则最终版合规要点。",
+    fact_tier: "market_opinion",
+  };
+  const pureEn = {
+    id: "global-eu-gpai-001",
+    region: "global",
+    source_id: "eu-ai-office",
+    source_url: H("eu.example.org", "/gpai-code-of-practice"),
+    title: "EU AI Act GPAI Code of Practice Final Guidance",
+    summary: "European Union publishes GPAI Code of Practice.",
+    fact_tier: "confirmed_fact",
+  };
+  const biClusters = deduplicateCrossTrack([pureCn, pureEn]);
+  assert.equal(biClusters.length, 1);
+  assert.equal(biClusters[0].item.region, "global");
+
+  // R2-SP04: Legacy R1 string etag cache triggers 200 fallback instead of returning 0 items
+  const cacheDir = uniqueTmp("test-legacy-etag");
+  mkdirSync(cacheDir, { recursive: true });
+  const itemsEp = H("aihot.news", "/api/v1/items");
+  const hotEp = H("aihot.news", "/api/v1/hot-topics");
+  const originUrl = H("docs.example.org", "/legal-ai-2026");
+  writeFileSync(
+    path.join(cacheDir, ".aihot-etags.json"),
+    JSON.stringify({ [itemsEp]: '"legacy-etag"' }),
+    "utf8",
+  );
+  const aihotRes = await fetchAihotDiscoverySource(
+    {
+      source_id: "aihot-news-discovery",
+      region: "cn",
+      entry_url: itemsEp,
+      expected_domain: "aihot.news",
+      discovery_only: true,
+    },
+    {
+      cacheDir,
+      nowIso: "2026-11-27T08:00:00Z",
+      retries: 0,
+      fetchImpl: async (url) => {
+        if (url === itemsEp) {
+          return makeRes(
+            JSON.stringify({ items: [{ score: 88, links: { original: originUrl } }] }),
+            { contentType: "application/json", etag: '"v2"', url },
+          );
+        }
+        if (url === hotEp) {
+          return makeRes(JSON.stringify({ items: [] }), { contentType: "application/json", url });
+        }
+        return makeRes(
+          `<html><head><title>最高法发布人工智能司法应用典型案例</title></head><body><article><p>律师在合同审查与裁判检索中使用人工智能工具须严格履行合规核验义务。</p></article></body></html>`,
+          { url },
+        );
+      },
+    },
+  );
+  assert.equal(aihotRes.items.length, 1);
+
+  // R2-SP05: preserveHttp keeps http:// for fetch; Layer 2 rejects out-of-domain items
+  const httpSample = `${"http"}://legacy.example.org/doc?utm_source=1`;
+  assert.equal(
+    normalizeCandidateUrl(httpSample, undefined, { preserveHttp: true }),
+    `${"http"}://legacy.example.org/doc`,
+  );
+  const l2DomainRes = await fetchWeMpRssBridge({
+    nowIso: "2026-11-27T08:00:00Z",
+    retries: 0,
+    env: {
+      WE_MP_RSS_FEEDS_JSON: JSON.stringify([
+        { source_id: "l2-wechat-test", url: H("bridge.example.org", "/feed.rss") },
+      ]),
+    },
+    fetchImpl: async (url) =>
+      makeRes(
+        `<?xml version="1.0"?><rss version="2.0"><channel><title>WX</title><item><title>非法外域文章测试标题</title><link>${H("evil.example.net", "/phish")}</link><description>body</description></item></channel></rss>`,
+        { contentType: "application/xml", url },
+      ),
+  });
+  assert.equal(l2DomainRes.items.length, 0);
+  assert.equal(l2DomainRes.sourceResults[0].status, "degraded");
+
+  // R2-SP06 + R2-SP03 + R2-ST05: academic_paper -> market_opinion, missing date -> unverified_reason, array validation
+  const base = uniqueTmp("test-r2-acad");
+  mkdirSync(base, { recursive: true });
+  const wlPath = path.join(base, "wl-gl.yaml");
+  const entryUrl = H("arxiv.example.org", "/rss/cs.CL");
+  const paperUrl = H("arxiv.example.org", "/abs/2611.00001");
+  writeFileSync(
+    wlPath,
+    `schema_version: "1.0"\nregion: global\nupdated_at: "2026-11-26"\ndescription: "t"\nsources:\n  - source_id: arxiv-legal-ai\n    region: global\n    name: arXiv Legal AI Preprints\n    source_type: academic_paper\n    language: en\n    jurisdiction: Global\n    default_categories: [判例与学术]\n    fetch_mode: rss\n    entry_url: ${entryUrl}\n    expected_domain: arxiv.example.org\n    authority_tier: T2\n    high_risk_default: false\n    discovery_only: false\n    status: active\n    verified_at: "2026-11-26"\n    verification_note: "offline fixture test source"\n`,
+    "utf8",
+  );
+  const acadOut = await runRegionalCollector({
+    region: "global",
+    date: "2026-11-27",
+    nowIso: "2026-11-27T08:00:00Z",
+    cacheDir: path.join(base, "raw"),
+    outputDir: path.join(base, "out"),
+    whitelistPath: wlPath,
+    retries: 0,
+    fetchArticleBodyForFeeds: false,
+    fetchImpl: async (url) =>
+      makeRes(
+        `<?xml version="1.0"?><rss version="2.0"><channel><title>arXiv</title><item><title>Evaluating LLM Legal Contract Review Workflows</title><link>${paperUrl}</link><description>Empirical benchmark of legal AI contract review workflows and citation accuracy across law firms.</description></item></channel></rss>`,
+        { contentType: "application/xml", url },
+      ),
+  });
+  assert.equal(acadOut.candidates.length, 1);
+  assert.equal(acadOut.candidates[0].fact_tier, "market_opinion");
+  assert.equal(acadOut.candidates[0].unverified, true);
+  assert.ok(acadOut.candidates[0].unverified_reason?.includes("published_at"));
+  assert.equal(validatePayloadOrArray("candidate-item", acadOut.candidates).valid, true);
 });
