@@ -49,31 +49,30 @@ const GENERIC_ENTITY_STOPWORDS = new Set([
 ]);
 
 /**
- * R2-SP02: Curated bilingual CN<->EN legal-AI entity canonicalization table so pure Chinese
- * and pure English headlines about the same statute, regulator, or framework share specific
- * canonical entity tokens and merge with global primary source priority.
+ * R2-SP02 + R3-SP01: Curated bilingual CN<->EN legal-AI entity canonicalization table
+ * (strictly stateless regexes without `/g` flag so repeated calls are 100% deterministic).
  */
 const BILINGUAL_ENTITY_ALIASES = [
-  { canonical: "ent_eu", patterns: [/欧盟/g, /\beu\b/gi, /\beuropean\s+union\b/gi] },
-  { canonical: "ent_ai_act", patterns: [/人工智能法案/g, /\bai\s+act\b/gi] },
-  { canonical: "ent_gpai", patterns: [/通用人工智能/g, /\bgpai\b/gi, /\bgeneral[- ]purpose\s+ai\b/gi] },
-  { canonical: "ent_code_of_practice", patterns: [/行为准则/g, /\bcode\s+of\s+practice\b/gi] },
-  { canonical: "ent_cac", patterns: [/网信办|国家互联网信息办公室/g, /\bcac\b/gi] },
-  { canonical: "ent_spc", patterns: [/最高法|最高人民法院/g, /\bsupreme\s+people'?s\s+court\b/gi, /\bspc\b/gi] },
-  { canonical: "ent_spp", patterns: [/最高检|最高人民检察院/g, /\bsupreme\s+people'?s\s+procuratorate\b/gi] },
-  { canonical: "ent_usco", patterns: [/美国版权局/g, /\bu\.?s\.?\s+copyright\s+office\b/gi, /\busco\b/gi] },
-  { canonical: "ent_ftc", patterns: [/联邦贸易委员会/g, /\bftc\b/gi, /\bfederal\s+trade\s+commission\b/gi] },
-  { canonical: "ent_edpb", patterns: [/欧洲数据保护委员会/g, /\bedpb\b/gi] },
-  { canonical: "ent_ico", patterns: [/英国信息专员办公室/g, /\bico\b/gi] },
-  { canonical: "ent_gdpr", patterns: [/通用数据保护条例/g, /\bgdpr\b/gi] },
-  { canonical: "ent_nist_rmf", patterns: [/风险管理框架/g, /\bnist\s+ai\s+rmf\b/gi] },
-  { canonical: "ent_harvey", patterns: [/harvey/gi] },
-  { canonical: "ent_co_counsel", patterns: [/cocounsel/gi] },
-  { canonical: "ent_lexis", patterns: [/lexisnexis|lexis\+?\s*ai/gi] },
-  { canonical: "ent_westlaw", patterns: [/westlaw/gi] },
-  { canonical: "ent_openai", patterns: [/openai/gi] },
-  { canonical: "ent_anthropic", patterns: [/anthropic|claude/gi] },
-  { canonical: "ent_deepseek", patterns: [/deepseek|深度求索/gi] },
+  { canonical: "ent_eu", patterns: [/欧盟/, /\beu\b/i, /\beuropean\s+union\b/i] },
+  { canonical: "ent_ai_act", patterns: [/人工智能法案/, /\bai\s+act\b/i] },
+  { canonical: "ent_gpai", patterns: [/通用人工智能/, /\bgpai\b/i, /\bgeneral[- ]purpose\s+ai\b/i] },
+  { canonical: "ent_code_of_practice", patterns: [/行为准则/, /\bcode\s+of\s+practice\b/i] },
+  { canonical: "ent_cac", patterns: [/网信办|国家互联网信息办公室/, /\bcac\b/i] },
+  { canonical: "ent_spc", patterns: [/最高法|最高人民法院/, /\bsupreme\s+people'?s\s+court\b/i, /\bspc\b/i] },
+  { canonical: "ent_spp", patterns: [/最高检|最高人民检察院/, /\bsupreme\s+people'?s\s+procuratorate\b/i] },
+  { canonical: "ent_usco", patterns: [/美国版权局/, /\bu\.?s\.?\s+copyright\s+office\b/i, /\busco\b/i] },
+  { canonical: "ent_ftc", patterns: [/联邦贸易委员会/, /\bftc\b/i, /\bfederal\s+trade\s+commission\b/i] },
+  { canonical: "ent_edpb", patterns: [/欧洲数据保护委员会/, /\bedpb\b/i] },
+  { canonical: "ent_ico", patterns: [/英国信息专员办公室/, /\bico\b/i] },
+  { canonical: "ent_gdpr", patterns: [/通用数据保护条例/, /\bgdpr\b/i] },
+  { canonical: "ent_nist_rmf", patterns: [/风险管理框架/, /\bnist\s+ai\s+rmf\b/i] },
+  { canonical: "ent_harvey", patterns: [/harvey/i] },
+  { canonical: "ent_co_counsel", patterns: [/cocounsel/i] },
+  { canonical: "ent_lexis", patterns: [/lexisnexis|lexis\+?\s*ai/i] },
+  { canonical: "ent_westlaw", patterns: [/westlaw/i] },
+  { canonical: "ent_openai", patterns: [/openai/i] },
+  { canonical: "ent_anthropic", patterns: [/anthropic|claude/i] },
+  { canonical: "ent_deepseek", patterns: [/deepseek|深度求索/i] },
 ];
 
 export function buildBigrams(text) {

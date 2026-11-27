@@ -8,6 +8,7 @@ import {
   fetchRssOrAtomSource,
   fetchWeMpRssBridge,
 } from "../../src/collectors/shared/adapters.mjs";
+import { normalizePublishedAt } from "../../src/collectors/shared/adapters-l1.mjs";
 import {
   getLocalDateString,
   parseStrictDailyCap,
@@ -25,7 +26,7 @@ import {
   parseDateToken,
   stripHtmlToPlainText,
 } from "../../src/collectors/shared/extractor.mjs";
-import { resolveProxyUrl } from "../../src/collectors/shared/http.mjs";
+import { requestViaHttpProxy, resolveProxyUrl } from "../../src/collectors/shared/http.mjs";
 import { evaluateLegalRelevance } from "../../src/collectors/shared/noise-filter.mjs";
 import {
   isDomainAllowed,
@@ -37,7 +38,10 @@ import {
   validatePayloadOrArray,
 } from "../../src/contracts/validate.mjs";
 import { runDailyPipeline } from "../../src/pipeline/daily.mjs";
-import { deduplicateCrossTrack } from "../../src/pipeline/merge-and-curate/dedup.mjs";
+import {
+  deduplicateCrossTrack,
+  extractEntityTokens,
+} from "../../src/pipeline/merge-and-curate/dedup.mjs";
 import {
   runStage1FactExtraction,
   runStage2DualLayer,
@@ -741,4 +745,78 @@ test("8. R2 regressions: plain-text < >, naive datetime, pure CN/EN dedup, legac
   assert.equal(acadOut.candidates[0].unverified, true);
   assert.ok(acadOut.candidates[0].unverified_reason?.includes("published_at"));
   assert.equal(validatePayloadOrArray("candidate-item", acadOut.candidates).valid, true);
+});
+
+test("9. R3 regressions: stateless dedup repeated calls, Asia/Shanghai midnight fallback & offset date, proxy 302 redirect", async () => {
+  // R3-SP01: Repeated calls to extractEntityTokens & deduplicateCrossTrack must be 100% deterministic
+  const tokenCounts = [1, 2, 3].map(
+    () => extractEntityTokens("欧盟人工智能法案通用人工智能行为准则").size,
+  );
+  assert.deepEqual(tokenCounts, [4, 4, 4]);
+
+  const pureCn = {
+    id: "cn-eu-gpai-rep",
+    region: "cn",
+    source_id: "cn-kwm-cli",
+    source_url: H("firm.example.org", "/eu-gpai-rep"),
+    title: "欧盟人工智能法案通用人工智能行为准则最终版",
+    summary: "欧盟发布通用人工智能行为准则最终版合规要点。",
+    fact_tier: "market_opinion",
+  };
+  const pureEn = {
+    id: "global-eu-gpai-rep",
+    region: "global",
+    source_id: "eu-ai-office",
+    source_url: H("eu.example.org", "/gpai-rep"),
+    title: "EU AI Act GPAI Code of Practice Final Guidance",
+    summary: "European Union publishes GPAI Code of Practice.",
+    fact_tier: "confirmed_fact",
+  };
+  const dedupCounts = [1, 2, 3].map(() => deduplicateCrossTrack([pureCn, pureEn]).length);
+  assert.deepEqual(dedupCounts, [1, 1, 1]);
+
+  // R3-SP02: Asia/Shanghai midnight fallback uses local calendar date, and +08:00 offset stays on 2026-11-20
+  const midnightFallback = normalizePublishedAt(null, "2026-11-26T18:30:00Z", "Asia/Shanghai");
+  assert.equal(midnightFallback.value, "2026-11-27");
+  assert.equal(midnightFallback.inferred, true);
+  assert.equal(parseDateToken("2026-11-20T00:00:00+08:00", "Asia/Shanghai"), "2026-11-20");
+
+  // R3-ST02: Proxy redirect follow (302 -> 200) without requiring OS socket listen permissions
+  const visited = [];
+  const proxyRes = await requestViaHttpProxy(
+    `${"http"}://target.example.org/old`,
+    `${"http"}://proxy.example.org:8080`,
+    { method: "GET", headers: {}, timeoutMs: 5000 },
+    5,
+    async (url) => {
+      visited.push(url);
+      if (url.endsWith("/old")) {
+        return {
+          status: 302,
+          ok: false,
+          notModified: false,
+          etag: null,
+          contentType: "",
+          location: "/final",
+          finalUrl: url,
+          buffer: new Uint8Array(),
+        };
+      }
+      return {
+        status: 200,
+        ok: true,
+        notModified: false,
+        etag: null,
+        contentType: "text/plain",
+        location: null,
+        finalUrl: url,
+        buffer: new TextEncoder().encode("redirect-ok"),
+      };
+    },
+  );
+  assert.equal(proxyRes.status, 200);
+  assert.equal(proxyRes.ok, true);
+  assert.equal(proxyRes.finalUrl, `${"http"}://target.example.org/final`);
+  assert.equal(new TextDecoder().decode(proxyRes.buffer), "redirect-ok");
+  assert.equal(visited.length, 2);
 });

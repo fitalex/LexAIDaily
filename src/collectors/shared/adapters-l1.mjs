@@ -5,6 +5,7 @@ import {
   extractArticleFromHtml,
   extractLinksFromListHtml,
   extractPublishedDateFromHtml,
+  formatCalendarDateInTz,
   parseDateToken,
   parseFeedXml,
   stripHtmlToPlainText,
@@ -22,14 +23,14 @@ function sleep(ms) {
 }
 
 /**
- * R2-SP01 + R2-SP03: Normalizes publication date without shifting timezone-naive datetimes.
- * When no publication date is found, falls back to local calendar date (YYYY-MM-DD)
+ * R2-SP01 + R2-SP03 + R3-SP02: Normalizes publication date without shifting timezone-naive datetimes.
+ * When no publication date is found, falls back to local calendar date (YYYY-MM-DD in TZ || Asia/Shanghai)
  * and marks `inferred: true` so collector-runner flags `unverified` + `unverified_reason`.
  */
-export function normalizePublishedAt(rawDate, fallbackIso) {
-  const fallbackDate = String(fallbackIso ?? new Date().toISOString()).slice(0, 10);
+export function normalizePublishedAt(rawDate, fallbackIso, timeZone = process.env.TZ || "Asia/Shanghai") {
+  const fallbackDate = formatCalendarDateInTz(fallbackIso ?? new Date().toISOString(), timeZone);
   if (!rawDate) return { value: fallbackDate, inferred: true };
-  const parsed = parseDateToken(rawDate);
+  const parsed = parseDateToken(rawDate, timeZone);
   if (parsed) {
     return { value: parsed, inferred: false };
   }

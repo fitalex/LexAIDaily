@@ -73,11 +73,26 @@ export function stripHtmlToPlainText(input) {
   return normalizeWhitespace(text.replace(HTML_TAG_RE, " "));
 }
 
+export function formatCalendarDateInTz(isoOrDate, timeZone = process.env.TZ || "Asia/Shanghai") {
+  const dt = isoOrDate instanceof Date ? isoOrDate : new Date(isoOrDate);
+  const safeDate = Number.isNaN(dt.getTime()) ? new Date() : dt;
+  try {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(safeDate);
+  } catch {
+    return safeDate.toISOString().slice(0, 10);
+  }
+}
+
 /**
- * R2-SP01: Parses date tokens without shifting timezone-naive datetimes (e.g. "2026-11-20T00:00:00")
- * backward by one calendar day in UTC+8 environments.
+ * R2-SP01 + R3-SP02: Parses date tokens into target-timezone calendar date YYYY-MM-DD (or YYYY-MM)
+ * without shifting timezone-naive or offset-bearing datetimes backward by one day.
  */
-export function parseDateToken(raw) {
+export function parseDateToken(raw, timeZone = process.env.TZ || "Asia/Shanghai") {
   const str = String(raw ?? "").trim();
   if (!str) return null;
   if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str)) {
@@ -95,7 +110,7 @@ export function parseDateToken(raw) {
   }
   const parsed = new Date(str);
   if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toISOString();
+    return formatCalendarDateInTz(parsed, timeZone);
   }
   return null;
 }

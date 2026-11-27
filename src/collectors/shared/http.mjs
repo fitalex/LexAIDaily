@@ -65,7 +65,7 @@ function decompressBuffer(rawBuf, contentEncoding = "") {
   return new Uint8Array(rawBuf);
 }
 
-function requestViaHttpProxy(targetUrl, proxyUrl, { method, headers, body, timeoutMs }) {
+function requestViaHttpProxyOnce(targetUrl, proxyUrl, { method, headers, body, timeoutMs }) {
   return new Promise((resolve, reject) => {
     const target = new URL(targetUrl);
     const proxy = new URL(proxyUrl);
@@ -88,6 +88,7 @@ function requestViaHttpProxy(targetUrl, proxyUrl, { method, headers, body, timeo
           notModified: status === 304,
           etag: res.headers.etag ?? null,
           contentType: res.headers["content-type"] ?? "",
+          location: res.headers.location ?? null,
           finalUrl: targetUrl,
           buffer,
         });
@@ -159,6 +160,48 @@ function requestViaHttpProxy(targetUrl, proxyUrl, { method, headers, body, timeo
     });
     connectReq.end();
   });
+}
+
+const REDIRECT_STATUSES = new Set([301, 302, 303, 307, 308]);
+
+/**
+ * R3-ST02: Follows up to maxRedirects (default 5) on proxy requests to match native fetch redirect:"follow".
+ */
+export async function requestViaHttpProxy(
+  targetUrl,
+  proxyUrl,
+  opts,
+  maxRedirects = 5,
+  requestOnceImpl = requestViaHttpProxyOnce,
+) {
+  let currentUrl = targetUrl;
+  let currentMethod = opts.method;
+  let currentBody = opts.body;
+  for (let hop = 0; hop <= maxRedirects; hop += 1) {
+    const res = await requestOnceImpl(currentUrl, proxyUrl, {
+      ...opts,
+      method: currentMethod,
+      body: currentBody,
+    });
+    if (REDIRECT_STATUSES.has(res.status) && res.location && hop < maxRedirects) {
+      currentUrl = new URL(res.location, currentUrl).toString();
+      if (res.status === 303 || ((res.status === 301 || res.status === 302) && currentMethod === "POST")) {
+        currentMethod = "GET";
+        currentBody = undefined;
+      }
+      continue;
+    }
+    return {
+      status: res.status,
+      ok: res.ok,
+      notModified: res.notModified,
+      etag: res.etag,
+      contentType: res.contentType,
+      finalUrl: currentUrl,
+      buffer: res.buffer,
+    };
+  }
+  throw new Error(`Too many proxy redirects for ${targetUrl}`);
 }
 
 export async function fetchWithRetry(
