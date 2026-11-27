@@ -1,6 +1,7 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { getLocalDateString } from "../../collectors/shared/adapters-ext.mjs";
 import {
   getDefaultCacheDir,
   loadRawCacheIndex,
@@ -10,32 +11,48 @@ import { deduplicateCrossTrack } from "./dedup.mjs";
 import { runStage1FactExtraction, runStage2DualLayer } from "./fact-anchor.mjs";
 import { buildWechatTopicPool, renderTopicPoolMarkdown } from "./topic-pool.mjs";
 
-function readJsonIfExists(filePath) {
-  if (!existsSync(filePath)) return null;
-  return JSON.parse(readFileSync(filePath, "utf8"));
+function readJsonSafe(filePath) {
+  if (!existsSync(filePath)) return { data: null, corrupted: false };
+  try {
+    return { data: JSON.parse(readFileSync(filePath, "utf8")), corrupted: false };
+  } catch {
+    return { data: null, corrupted: true };
+  }
+}
+
+function writeFileAtomic(filePath, content) {
+  const dir = path.dirname(filePath);
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}`;
+  writeFileSync(tmpPath, content, "utf8");
+  renameSync(tmpPath, filePath);
 }
 
 export async function runCuratePipeline({
   repoRoot = process.cwd(),
-  date = new Date().toISOString().slice(0, 10),
   nowIso = new Date().toISOString(),
+  env = process.env,
+  date = getLocalDateString(nowIso, env?.TZ || "Asia/Shanghai"),
   candidatesDir = path.join(repoRoot, "data", "candidates", date),
   cacheDir = getDefaultCacheDir(repoRoot),
   bundlesDir = path.join(repoRoot, "data", "bundles"),
   topicPoolDir = path.join(repoRoot, "data", "topic-pool"),
   offline = false,
-  env = process.env,
   fetchImpl = globalThis.fetch,
   writeOutput = true,
 } = {}) {
-  const cnItems = readJsonIfExists(path.join(candidatesDir, "cn.json"));
-  const globalItems = readJsonIfExists(path.join(candidatesDir, "global.json"));
-  const cnMeta = readJsonIfExists(path.join(candidatesDir, "cn-meta.json"));
-  const globalMeta = readJsonIfExists(path.join(candidatesDir, "global-meta.json"));
+  const cnRead = readJsonSafe(path.join(candidatesDir, "cn.json"));
+  const glRead = readJsonSafe(path.join(candidatesDir, "global.json"));
+  const cnMeta = readJsonSafe(path.join(candidatesDir, "cn-meta.json")).data;
+  const globalMeta = readJsonSafe(path.join(candidatesDir, "global-meta.json")).data;
 
   const missingTracks = [];
-  if (!Array.isArray(cnItems)) missingTracks.push("cn");
-  if (!Array.isArray(globalItems)) missingTracks.push("global");
+  if (!Array.isArray(cnRead.data)) {
+    missingTracks.push(cnRead.corrupted ? "cn(corrupted)" : "cn");
+  }
+  if (!Array.isArray(glRead.data)) {
+    missingTracks.push(glRead.corrupted ? "global(corrupted)" : "global");
+  }
 
   const failedSources = [];
   for (const meta of [cnMeta, globalMeta]) {
@@ -49,16 +66,21 @@ export async function runCuratePipeline({
   }
 
   const combined = [
-    ...(Array.isArray(globalItems) ? globalItems : []),
-    ...(Array.isArray(cnItems) ? cnItems : []),
+    ...(Array.isArray(glRead.data) ? glRead.data : []),
+    ...(Array.isArray(cnRead.data) ? cnRead.data : []),
   ];
 
   const dedupedClusters = deduplicateCrossTrack(combined);
   const { byUrl } = loadRawCacheIndex(cacheDir);
   const curatedClusters = [];
+  const cacheMissingIds = [];
 
   for (const cluster of dedupedClusters) {
     const cacheRec = byUrl.get(cluster.item.source_url);
+    const cacheMissing = !cacheRec || !cacheRec.raw_text;
+    if (cacheMissing) {
+      cacheMissingIds.push(cluster.item.id);
+    }
     const rawText = cacheRec?.raw_text || `${cluster.item.title}\n${cluster.item.summary}`;
     const stage1 = runStage1FactExtraction({ candidate: cluster.item, rawText });
     const { item, faithfulness } = await runStage2DualLayer({
@@ -70,15 +92,22 @@ export async function runCuratePipeline({
       fetchImpl,
     });
 
+    if (cacheMissing) {
+      item.needs_human_check = true;
+    }
+
     const itemCheck = validateBySchemaName("candidate-item", item);
     if (!itemCheck.valid) {
-      throw new Error(`Curated item schema invalid (${item.id}): ${itemCheck.errors.join("; ")}`);
+      throw new Error(
+        `Curated item schema invalid (${item.id}): ${JSON.stringify(itemCheck.errors)}`,
+      );
     }
 
     curatedClusters.push({
       ...cluster,
       item,
       faithfulness,
+      cache_missing: cacheMissing,
       heat_score: cacheRec?.heat_score ?? null,
       is_long_regulation: stage1.is_long_regulation,
     });
@@ -87,13 +116,14 @@ export async function runCuratePipeline({
   const topicPool = buildWechatTopicPool({ curatedClusters, nowIso });
   const topicCheck = validateBySchemaName("wechat-topic-pool", topicPool);
   if (!topicCheck.valid) {
-    throw new Error(`WechatTopicPool schema invalid: ${topicCheck.errors.join("; ")}`);
+    throw new Error(`WechatTopicPool schema invalid: ${JSON.stringify(topicCheck.errors)}`);
   }
 
-  const degradedNote =
-    missingTracks.length > 0 || failedSources.length > 0
-      ? `（降级提示：缺失轨=${missingTracks.join(",") || "无"}；异常源=${failedSources.slice(0, 5).join(",") || "无"}）`
-      : "";
+  const degradedParts = [];
+  if (missingTracks.length > 0) degradedParts.push(`缺失轨=${missingTracks.join(",")}`);
+  if (failedSources.length > 0) degradedParts.push(`异常源=${failedSources.slice(0, 5).join(",")}`);
+  if (cacheMissingIds.length > 0) degradedParts.push(`缓存缺失=${cacheMissingIds.length}条`);
+  const degradedNote = degradedParts.length > 0 ? `（降级提示：${degradedParts.join("；")}）` : "";
 
   const digestRaw = `LexAIDaily ${date} 法律 AI 实务雷达：共汇流 ${curatedClusters.length} 条一手候选，${topicPool.topics.length} 条入深度选题池。${degradedNote}`;
   const digest = digestRaw.slice(0, 240);
@@ -120,29 +150,24 @@ export async function runCuratePipeline({
 
     const bundleCheck = validateBySchemaName("daily-bundle", bundle);
     if (!bundleCheck.valid) {
-      throw new Error(`DailyBundle schema invalid: ${bundleCheck.errors.join("; ")}`);
+      throw new Error(`DailyBundle schema invalid: ${JSON.stringify(bundleCheck.errors)}`);
     }
   }
 
   if (writeOutput) {
     if (bundle) {
-      if (!existsSync(bundlesDir)) mkdirSync(bundlesDir, { recursive: true });
-      writeFileSync(
+      writeFileAtomic(
         path.join(bundlesDir, `${date}.json`),
         `${JSON.stringify(bundle, null, 2)}\n`,
-        "utf8",
       );
     }
-    if (!existsSync(topicPoolDir)) mkdirSync(topicPoolDir, { recursive: true });
-    writeFileSync(
+    writeFileAtomic(
       path.join(topicPoolDir, `${date}.json`),
       `${JSON.stringify(topicPool, null, 2)}\n`,
-      "utf8",
     );
-    writeFileSync(
+    writeFileAtomic(
       path.join(topicPoolDir, `${date}.md`),
       renderTopicPoolMarkdown(topicPool),
-      "utf8",
     );
   }
 
@@ -153,6 +178,7 @@ export async function runCuratePipeline({
     degraded: {
       missingTracks,
       failedSources,
+      cacheMissingIds,
     },
   };
 }
@@ -167,7 +193,7 @@ if (isCli) {
   runCuratePipeline({ ...(date ? { date } : {}), offline })
     .then(({ bundle, topicPool, degraded }) => {
       console.log(
-        `[curate] items=${bundle?.items.length ?? 0} topics=${topicPool.topics.length} missingTracks=${degraded.missingTracks.join(",") || "none"}`,
+        `[curate] items=${bundle?.items.length ?? 0} topics=${topicPool.topics.length} missingTracks=${degraded.missingTracks.join(",") || "none"} cacheMissing=${degraded.cacheMissingIds.length}`,
       );
     })
     .catch((err) => {

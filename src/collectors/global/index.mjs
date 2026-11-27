@@ -4,6 +4,7 @@ import { runRegionalCollector } from "../shared/collector-runner.mjs";
 export async function runGlobalCollector(options = {}) {
   return runRegionalCollector({
     region: "global",
+    useEnvProxy: options.useEnvProxy ?? true,
     perSourceDelayMs: options.perSourceDelayMs ?? 150,
     ...options,
   });
@@ -20,6 +21,9 @@ if (isCli) {
       console.log(
         `[collect:global] status=${meta.status} sources=${meta.sources_succeeded}/${meta.sources_attempted} items=${candidates.length} pruned=${meta.cache_pruned_count}`,
       );
+      if (meta.status === "failed") {
+        process.exitCode = 1;
+      }
     })
     .catch((err) => {
       console.error(`[collect:global] FAILED: ${err.message}`);

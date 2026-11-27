@@ -2,6 +2,48 @@ import { normalizeCandidateUrl } from "../../collectors/shared/url-and-domain.mj
 
 const STOP_CHAR_RE = /[\s\p{P}\p{S}]+/gu;
 
+const GENERIC_ENTITY_STOPWORDS = new Set([
+  "ai",
+  "llm",
+  "llms",
+  "new",
+  "law",
+  "legal",
+  "tech",
+  "data",
+  "news",
+  "blog",
+  "guide",
+  "policy",
+  "report",
+  "update",
+  "updates",
+  "china",
+  "global",
+  "model",
+  "models",
+  "tool",
+  "tools",
+  "regulation",
+  "regulatory",
+  "compliance",
+  "roundup",
+  "weekly",
+  "daily",
+  "review",
+  "final",
+  "draft",
+  "guidance",
+  "official",
+  "code",
+  "practice",
+  "the",
+  "for",
+  "and",
+  "with",
+  "from",
+]);
+
 export function buildBigrams(text) {
   const clean = String(text ?? "")
     .toLowerCase()
@@ -28,8 +70,16 @@ export function jaccardSimilarity(setA, setB) {
 }
 
 export function extractEntityTokens(text) {
-  const matches = String(text ?? "").match(/[A-Za-z][A-Za-z0-9.-]{1,24}|\d{4}/g) ?? [];
-  return new Set(matches.map((m) => m.toLowerCase()));
+  const matches = String(text ?? "").match(/[A-Za-z][A-Za-z0-9.-]{1,24}/g) ?? [];
+  const out = new Set();
+  for (const raw of matches) {
+    const token = raw.toLowerCase().replace(/^[.-]+|[.-]+$/g, "");
+    if (token.length < 2 || GENERIC_ENTITY_STOPWORDS.has(token)) {
+      continue;
+    }
+    out.add(token);
+  }
+  return out;
 }
 
 function scorePriority(item) {
@@ -48,12 +98,12 @@ function isFuzzyMatch(a, b, threshold) {
   if (a.region !== b.region) {
     const entA = extractEntityTokens(`${a.title} ${a.summary ?? ""}`);
     const entB = extractEntityTokens(`${b.title} ${b.summary ?? ""}`);
-    if (entA.size >= 2 && entB.size >= 2) {
+    if (entA.size >= 3 && entB.size >= 3) {
       let overlap = 0;
       for (const token of entA) {
         if (entB.has(token)) overlap += 1;
       }
-      if (overlap >= 2 && overlap / Math.min(entA.size, entB.size) >= 0.6) {
+      if (overlap >= 3 && overlap / Math.min(entA.size, entB.size) >= 0.6) {
         return true;
       }
     }
@@ -71,7 +121,10 @@ export function deduplicateCrossTrack(items, { fuzzyThreshold = 0.72 } = {}) {
     let matchedCluster = null;
     for (const cluster of clusters) {
       const exactHit = cluster.guids.has(guid) || cluster.urls.has(normUrl);
-      if (exactHit || isFuzzyMatch(cluster.winner, item, fuzzyThreshold)) {
+      const fuzzyHit =
+        !exactHit &&
+        cluster.members.some((member) => isFuzzyMatch(member, item, fuzzyThreshold));
+      if (exactHit || fuzzyHit) {
         matchedCluster = cluster;
         break;
       }

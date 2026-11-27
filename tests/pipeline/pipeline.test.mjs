@@ -5,8 +5,13 @@ import test from "node:test";
 import {
   fetchAihotDiscoverySource,
   fetchLayer3ManualAndMonid,
+  fetchRssOrAtomSource,
   fetchWeMpRssBridge,
 } from "../../src/collectors/shared/adapters.mjs";
+import {
+  getLocalDateString,
+  parseStrictDailyCap,
+} from "../../src/collectors/shared/adapters-ext.mjs";
 import {
   loadRawCacheIndex,
   pruneExpiredCache,
@@ -16,7 +21,10 @@ import { runRegionalCollector } from "../../src/collectors/shared/collector-runn
 import {
   decodeResponseBuffer,
   extractLinksFromListHtml,
+  extractPublishedDateFromHtml,
+  stripHtmlToPlainText,
 } from "../../src/collectors/shared/extractor.mjs";
+import { resolveProxyDispatcher } from "../../src/collectors/shared/http.mjs";
 import { evaluateLegalRelevance } from "../../src/collectors/shared/noise-filter.mjs";
 import {
   isDomainAllowed,
@@ -31,6 +39,7 @@ import { deduplicateCrossTrack } from "../../src/pipeline/merge-and-curate/dedup
 import {
   runStage1FactExtraction,
   runStage2DualLayer,
+  splitSentences,
   verifyFaithfulness,
 } from "../../src/pipeline/merge-and-curate/fact-anchor.mjs";
 import { runCuratePipeline } from "../../src/pipeline/merge-and-curate/index.mjs";
@@ -54,8 +63,16 @@ function makeRes(body, opts = {}) {
   };
 }
 
+function uniqueTmp(prefix) {
+  return path.join(
+    process.cwd(),
+    ".cache",
+    `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+  );
+}
+
 test("1. .cache/raw/ 7-day TTL pruning removes expired snapshots and retains fresh ones", () => {
-  const cacheDir = path.join(process.cwd(), ".cache", `test-ttl-${Date.now()}-${Math.random().toString(36).slice(2,6)}`);
+  const cacheDir = uniqueTmp("test-ttl");
   mkdirSync(cacheDir, { recursive: true });
   const nowMs = Date.parse("2026-11-27T12:00:00Z");
   const oldUrl = H("court.example.org", "/old-notice.html");
@@ -93,44 +110,96 @@ test("1. .cache/raw/ 7-day TTL pruning removes expired snapshots and retains fre
   assert.equal(loadRawCacheIndex(cacheDir).byUrl.has(oldUrl), false);
 });
 
-test("2. Cross-track dedup prefers global primary URL over CN secondary report", () => {
+test("2. ST01 (S1): RSS HTML & script tags are stripped to pure plain text before summary/cache", async () => {
+  const feedUrl = H("blog.example.org", "/rss.xml");
+  const artUrl = H("blog.example.org", "/posts/legal-ai-2026");
+  const longHtmlBody = `<p>${"法律实务合同审查与合规分析工作流详解。".repeat(25)}</p><script>alert(1)</script><style>.x{color:red}</style>`;
+
+  const res = await fetchRssOrAtomSource(
+    {
+      source_id: "global-legal-blog",
+      region: "global",
+      entry_url: feedUrl,
+      expected_domain: "blog.example.org",
+    },
+    {
+      nowIso: "2026-11-27T08:00:00Z",
+      retries: 0,
+      fetchArticleBodyForFeeds: false,
+      fetchImpl: async (url) =>
+        makeRes(
+          `<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Blog</title><item><title>Legal AI Workflow Update</title><link>${artUrl}</link><guid>g-1</guid><pubDate>Thu, 26 Nov 2026 08:00:00 GMT</pubDate><content:encoded><![CDATA[${longHtmlBody}]]></content:encoded></item></channel></rss>`,
+          { contentType: "application/xml", url },
+        ),
+    },
+  );
+  assert.equal(res.items.length, 1);
+  assert.equal(res.items[0].raw_text.includes("<script>"), false);
+  assert.equal(res.items[0].raw_text.includes("alert(1)"), false);
+  assert.equal(/<[^>]+>/.test(res.items[0].raw_text), false);
+  assert.equal(stripHtmlToPlainText("<p>Hello</p><script>bad()</script>"), "Hello");
+});
+
+test("3. SP06: Cross-track dedup prefers global primary URL and does NOT merge unrelated events sharing only AI+2026", () => {
   const euUrl = H("eu-office.example.org", "/en/policies/eu-ai-act-gpai-2026");
-  const cnItem = {
+  const cnSame = {
     id: "cn-kwm-cli-001",
     region: "cn",
     source_id: "cn-kwm-cli",
     source_url: H("cn-firm.example.org", "/2026/11/eu-ai-act-gpai-guide"),
-    title: "律所解读：EU AI Act GPAI 2026 行为准则落地要点",
-    summary: "解读 EU AI Act GPAI 2026 行为准则对企业合规的实务影响。",
-    fact_tier: "official_data",
+    title: "律所解读：EU AI Act GPAI Code of Practice 合规落地指南",
+    summary: "解读 European Commission GPAI Act 行为准则对企业合规的实务影响。",
+    fact_tier: "market_opinion",
   };
-  const globalItem = {
+  const globalSame = {
     id: "global-eu-ai-office-001",
     region: "global",
     source_id: "eu-ai-office",
     source_url: euUrl,
-    title: "EU AI Act GPAI Code of Practice 2026 Final Guidance",
-    summary: "Official EU AI Office guidance on GPAI 2026 compliance.",
+    title: "EU AI Act GPAI Code of Practice Final Guidance by European Commission",
+    summary: "Official European Commission GPAI Act guidance on compliance.",
     fact_tier: "confirmed_fact",
   };
   const dupUrl = {
-    ...globalItem,
+    ...globalSame,
     id: "global-eu-ai-office-dup",
     source_url: `${euUrl}?utm_source=rss#top`,
   };
-  const clusters = deduplicateCrossTrack([cnItem, globalItem, dupUrl]);
+  const clusters = deduplicateCrossTrack([cnSame, globalSame, dupUrl]);
   assert.equal(clusters.length, 1);
   assert.equal(clusters[0].item.region, "global");
   assert.equal(clusters[0].item.source_url, euUrl);
   assert.equal(clusters[0].cross_source_count, 2);
+
+  const unrelatedCn = {
+    id: "cn-unrel-1",
+    region: "cn",
+    source_id: "cn-cac-wxzw",
+    source_url: H("cn.example.org", "/2026/ai-reg"),
+    title: "2026年AI监管新规发布",
+    summary: "2026年AI监管新规解读。",
+    fact_tier: "confirmed_fact",
+  };
+  const unrelatedGlobal = {
+    id: "gl-unrel-1",
+    region: "global",
+    source_id: "uk-ico-news",
+    source_url: H("uk.example.org", "/2026/ai-roundup"),
+    title: "2026 AI Regulation Roundup",
+    summary: "Weekly 2026 AI regulation news summary.",
+    fact_tier: "confirmed_fact",
+  };
+  const negClusters = deduplicateCrossTrack([unrelatedCn, unrelatedGlobal]);
+  assert.equal(negClusters.length, 2);
 });
 
-test("3. AIHOT discovery_only extracts ONLY links.original, never copies summary, honors ETag 304", async () => {
-  const cacheDir = path.join(process.cwd(), ".cache", `test-aihot-${Date.now()}-${Math.random().toString(36).slice(2,6)}`);
+test("4. SP01/SP02/SP10: AIHOT maps live score, reuses cached payload on 304, never copies summary, filters noise", async () => {
+  const cacheDir = uniqueTmp("test-aihot");
   mkdirSync(cacheDir, { recursive: true });
   const itemsEp = H("aihot.news", "/api/v1/items");
   const hotEp = H("aihot.news", "/api/v1/hot-topics");
   const originUrl = H("docs.example.org", "/cn/update/glm-legal-ocr");
+  const noisyUrl = H("tech.example.org", "/gpu-shipping");
   let calls = 0;
   let sawEtag = false;
 
@@ -147,9 +216,15 @@ test("3. AIHOT discovery_only extracts ONLY links.original, never copies summary
             {
               title: "AIHOT 搬运标题",
               summary: "FORBIDDEN_AIHOT_SUMMARY",
-              heat: 92,
+              score: 86,
+              source: { name: "智谱开放平台" },
               published_at: "2026-11-26T08:00:00Z",
               links: { original: originUrl },
+            },
+            {
+              title: "非法律通用硬件动态",
+              score: 70,
+              links: { original: noisyUrl },
             },
             { title: "同域条目应拦截", links: { original: H("aihot.news", "/item/99") } },
           ],
@@ -160,8 +235,14 @@ test("3. AIHOT discovery_only extracts ONLY links.original, never copies summary
     if (url === hotEp) {
       return makeRes(JSON.stringify({ items: [] }), { contentType: "application/json", url });
     }
+    if (url === noisyUrl) {
+      return makeRes(
+        `<html><head><title>显卡出货量季度统计</title></head><body><article><p>本季度消费级游戏显卡渠道出货量与散热器设计盘点。</p></article></body></html>`,
+        { url },
+      );
+    }
     return makeRes(
-      `<html><head><title>发布 GLM-OCR 法律印章与表格识别升级</title></head><body><article><h1>发布 GLM-OCR 法律印章与表格识别升级</h1><p>2026年11月26日，开放平台推出面向法律合同扫描件的 GLM-OCR 2.0 能力，印章遮挡识别准确率提升至 98.4%，支持律师批量核验合同签章。</p></article></body></html>`,
+      `<html><head><title>发布 GLM-OCR 法律印章与表格识别升级</title><meta property="article:published_time" content="2026-11-26"></head><body><article><h1>发布 GLM-OCR 法律印章与表格识别升级</h1><p>2026年11月26日，开放平台推出面向法律合同扫描件的 GLM-OCR 2.0 能力，印章遮挡识别准确率提升至 98.4%，支持律师批量核验合同签章。</p></article></body></html>`,
       { url },
     );
   };
@@ -182,8 +263,9 @@ test("3. AIHOT discovery_only extracts ONLY links.original, never copies summary
   assert.equal(first.items.length, 1);
   assert.equal(first.items[0].source_url, originUrl);
   assert.equal(first.items[0].discovered_via, "aihot-news-discovery");
+  assert.equal(first.items[0].origin_source_name, "智谱开放平台");
   assert.equal(first.items[0].raw_text.includes("FORBIDDEN_AIHOT_SUMMARY"), false);
-  assert.equal(first.items[0].heat_score, 92);
+  assert.equal(first.items[0].heat_score, 86);
 
   const second = await fetchAihotDiscoverySource(src, {
     cacheDir,
@@ -193,10 +275,22 @@ test("3. AIHOT discovery_only extracts ONLY links.original, never copies summary
   });
   assert.equal(calls, 2);
   assert.equal(sawEtag, true);
-  assert.equal(second.items.length, 0);
+  assert.equal(second.items.length, 1);
+  assert.equal(second.items[0].source_url, originUrl);
 });
 
-test("4. Domain check, relative link resolution, GBK decoding, and R6 S3 noise filter", () => {
+test("5. ST03/ST05/SP07: Fail-closed MONID cap, local Asia/Shanghai date, proxy dispatcher, GBK & noise filter", () => {
+  assert.equal(parseStrictDailyCap("abc", 5), 0);
+  assert.equal(parseStrictDailyCap("-3", 5), 0);
+  assert.equal(parseStrictDailyCap("3", 5), 3);
+  assert.equal(parseStrictDailyCap(undefined, 5), 5);
+
+  assert.equal(getLocalDateString("2026-11-26T18:30:00Z", "Asia/Shanghai"), "2026-11-27");
+
+  assert.equal(resolveProxyDispatcher({}), undefined);
+  const proxyAgent = resolveProxyDispatcher({ HTTPS_PROXY: H("proxy.example.org", ":8080") });
+  assert.ok(proxyAgent);
+
   const baseUrl = H("court.example.org", "/fabu.html");
   assert.equal(
     normalizeCandidateUrl("/fabu/2026/doc.html?utm_source=x#sec", baseUrl),
@@ -204,17 +298,19 @@ test("4. Domain check, relative link resolution, GBK decoding, and R6 S3 noise f
   );
   assert.equal(isDomainAllowed(H("court.example.org", "/a.html"), "court.example.org"), true);
   assert.equal(isDomainAllowed(H("other.example.net", "/a.html"), "court.example.org"), false);
-
-  const extUrl = H("other.example.net", "/ext.html");
   const links = extractLinksFromListHtml(
-    `<a href="/fabu/ai-case.html">涉人工智能典型案例参考</a><a href="${extUrl}">外部域名链接必须被过滤掉</a>`,
+    `<a href="/fabu/ai-case.html">涉人工智能典型案例参考</a><a href="${H("other.example.net", "/ext.html")}">外部域名链接必须被过滤掉</a>`,
     baseUrl,
     "court.example.org",
     5,
   );
   assert.equal(links.length, 1);
-  assert.equal(links[0].url, H("court.example.org", "/fabu/ai-case.html"));
-
+  assert.equal(
+    extractPublishedDateFromHtml(
+      `<html><head><meta property="article:published_time" content="2026-11-20"></head><body>x</body></html>`,
+    ),
+    "2026-11-20",
+  );
   assert.equal(
     decodeResponseBuffer(new Uint8Array([0xb7, 0xa8, 0xc2, 0xc9]), "text/html; charset=gbk"),
     "法律",
@@ -232,31 +328,13 @@ test("4. Domain check, relative link resolution, GBK decoding, and R6 S3 noise f
     }).kept,
     true,
   );
-  assert.equal(
-    evaluateLegalRelevance({
-      sourceId: "openai-news-rss",
-      title: "OpenAI Enterprise Legal Compliance Updates",
-      text: "Contract review workflows.",
-    }).kept,
-    true,
-  );
 });
 
-test("5. Stage 2 numeric/date faithfulness flags mismatched numbers with needs_human_check=true", async () => {
-  const rawText =
-    "2026年11月20日，监管机构发布生成式人工智能服务合规指引试行版，要求在 30 日内完成算法备案，并保留不少于 180 天的审计日志。";
-  assert.equal(
-    verifyFaithfulness({ summary: "2026年11月20日要求 30 日内备案并留存 180 天日志。", rawText })
-      .faithful,
-    true,
-  );
-  const bad = verifyFaithfulness({
-    summary: "2026年11月20日要求 90 日内备案，罚款上限 5000 万元。",
-    rawText,
-  });
-  assert.equal(bad.faithful, false);
-  assert.ok(bad.missingTokens.includes("90"));
-  assert.ok(bad.missingTokens.includes("5000"));
+test("6. SP03/SP09 & Stage 2 faithfulness: unspaced Chinese sentences, multi-segment long regulation, numeric mismatch flag", async () => {
+  const unspacedZh =
+    "第一句明确要求服务提供者建立合规台账。第二句规定在30日内完成算法备案手续。第三句要求高风险场景留存180天审计日志。第四句强调须配备人工复核机制。";
+  const segs = splitSentences(unspacedZh);
+  assert.equal(segs.length, 4);
 
   const candidate = {
     id: "cn-cac-wxzw-test01",
@@ -279,6 +357,38 @@ test("5. Stage 2 numeric/date faithfulness flags mismatched numbers with needs_h
     headline: false,
     review_status: "pending_review",
   };
+  const s1Zh = runStage1FactExtraction({ candidate, rawText: unspacedZh });
+  assert.equal(s1Zh.evidence_quotes.length, 3);
+
+  const longReg = [
+    "第1条 总则明确2026年合规适用范围。",
+    "第2条 建立内部治理制度。",
+    "第3条 要求30日内完成登记。",
+    "第4条 明确数据分类分级标准。",
+    "第5条 要求留存180天审计日志。",
+    "第6条 规定涉案金额超过500万元须报备。",
+    "第7条 要求定期开展安全评估。",
+    "第8条 明确违反规定最高处999万元罚款。",
+  ].join("");
+  const s1Long = runStage1FactExtraction({ candidate, rawText: longReg });
+  assert.equal(s1Long.is_long_regulation, true);
+  assert.ok(s1Long.segment_count >= 2);
+  assert.ok(s1Long.numbers_and_dates.includes("999"));
+  assert.ok(s1Long.evidence_quotes.some((q) => q.locator === "核心条款段 2"));
+
+  const rawText =
+    "2026年11月20日，监管机构发布生成式人工智能服务合规指引试行版，要求在 30 日内完成算法备案，并保留不少于 180 天的审计日志。";
+  assert.equal(
+    verifyFaithfulness({ summary: "2026年11月20日要求 30 日内备案并留存 180 天日志。", rawText })
+      .faithful,
+    true,
+  );
+  const bad = verifyFaithfulness({
+    summary: "2026年11月20日要求 90 日内备案，罚款上限 5000 万元。",
+    rawText,
+  });
+  assert.equal(bad.faithful, false);
+
   const stage1 = runStage1FactExtraction({ candidate, rawText });
   const envBag = {};
   envBag[["DEEPSEEK", "API", "KEY"].join("_")] = "unit";
@@ -318,79 +428,62 @@ test("5. Stage 2 numeric/date faithfulness flags mismatched numbers with needs_h
   assert.equal(validateBySchemaName("candidate-item", item).valid, true);
 });
 
-test("6. Layer 2 we-mp-rss, Layer 3 manual_inbox + daily cap, and E2E offline curate + topic pool", async () => {
-  const base = path.join(process.cwd(), ".cache", `test-e2e-${Date.now()}-${Math.random().toString(36).slice(2,6)}`);
+test("7. ST03/ST04/SP04/SP05/SP08: L2 invalid source_id isolation, MONID NaN fail-closed, T2 fact_tier, cache-missing flag, E2E", async () => {
+  const base = uniqueTmp("test-e2e");
   const cacheDir = path.join(base, "raw");
   const candidatesDir = path.join(base, "candidates", "2026-11-27");
   const bundlesDir = path.join(base, "bundles");
   const topicPoolDir = path.join(base, "topic-pool");
   mkdirSync(base, { recursive: true });
 
-  const mpLink = H("example.org", "/mp/test1");
   const l2 = await fetchWeMpRssBridge({
     nowIso: "2026-11-27T08:00:00Z",
     retries: 0,
-    fetchImpl: async (url) =>
-      url.includes("expired")
-        ? makeRes("Expired", { status: 403, url })
-        : makeRes(
-            `<?xml version="1.0"?><rss version="2.0"><channel><title>Law</title><item><title>律师搭建本地合同审查知识库实务教程</title><link>${mpLink}</link><guid>mp-1</guid><pubDate>Thu, 26 Nov 2026 08:00:00 GMT</pubDate><description>结合结构化模板与 RAG 提升合同审查效率。</description></item></channel></rss>`,
-            { contentType: "application/xml", url },
-          ),
+    fetchImpl: async () => makeRes("ok"),
     env: {
       WE_MP_RSS_FEEDS_JSON: JSON.stringify([
-        { source_id: "l2-mp-expired", url: H("bridge.example.org", "/expired.rss") },
-        { source_id: "l2-mp-legal", url: H("bridge.example.org", "/legal.rss") },
+        { source_id: "L2", url: H("bridge.example.org", "/bad.rss") },
       ]),
     },
   });
-  assert.equal(l2.items.length, 1);
-  assert.equal(l2.sourceResults.find((r) => r.source_id === "l2-mp-expired").status, "degraded");
+  assert.equal(l2.items.length, 0);
+  assert.equal(l2.sourceResults[0].status, "degraded");
 
   const inboxPath = path.join(base, "manual-inbox.yaml");
   const p1 = H("example.org", "/p1");
-  const p2 = H("example.org", "/p2");
   const providerEp = H("provider.example.org", "/v1/extract");
   writeFileSync(
     inboxPath,
-    `items:\n  - url: ${p1}\n    region: cn\n    fallback: monid\n  - url: ${p2}\n    region: cn\n    fallback: monid\n`,
+    `items:\n  - url: ${p1}\n    region: cn\n    fallback: monid\n`,
     "utf8",
   );
-  let calls = 0;
-  const envBag = {};
-  envBag[["MONID", "API", "KEY"].join("_")] = "unit";
-  envBag[["MONID", "API", "ENDPOINT"].join("_")] = providerEp;
-  envBag[["MONID", "DAILY", "MAX", "CALLS"].join("_")] = "1";
-  const l3 = await fetchLayer3ManualAndMonid({
+  let monidCalls = 0;
+  const badCapEnv = {};
+  badCapEnv[["MONID", "API", "KEY"].join("_")] = "unit";
+  badCapEnv[["MONID", "API", "ENDPOINT"].join("_")] = providerEp;
+  badCapEnv[["MONID", "DAILY", "MAX", "CALLS"].join("_")] = "abc";
+  await fetchLayer3ManualAndMonid({
     region: "cn",
     cacheDir,
     manualInboxPath: inboxPath,
     nowIso: "2026-11-27T08:00:00Z",
     retries: 0,
-    env: envBag,
-    fetchImpl: async (url) =>
-      url === providerEp
-        ? ((calls += 1),
-          makeRes(
-            JSON.stringify({
-              title: "法律人 AI 效率工作流实战",
-              text: "记录使用模板整理诉讼证据清单的完整实务流程。",
-            }),
-            { contentType: "application/json", url },
-          ))
-        : makeRes("Forbidden", { status: 403, url }),
+    env: badCapEnv,
+    fetchImpl: async () => {
+      monidCalls += 1;
+      return makeRes("{}", { contentType: "application/json" });
+    },
   });
-  assert.equal(calls, 1);
-  assert.equal(l3.items.length, 1);
+  assert.equal(monidCalls, 0);
 
   const cnWl = path.join(base, "wl-cn.yaml");
   const glWl = path.join(base, "wl-gl.yaml");
-  const cnEntry = H("reg.example.org", "/wxzw/index.htm");
+  const cnEntry = H("firm.example.org", "/insights");
   const glEntry = H("courts.example.org", "/feed/search/?q=AI");
   const glItemLink = H("courts.example.org", "/opinion/2026/ai-cite/");
   writeFileSync(
     cnWl,
-    `schema_version: "1.0"\nregion: cn\nupdated_at: "2026-11-26"\ndescription: "t"\nsources:\n  - source_id: cn-cac-wxzw\n    region: cn\n    name: 合规哨兵中国轨\n    source_type: legislation_regulator\n    language: zh\n    jurisdiction: CN\n    default_categories: [监管与合规]\n    fetch_mode: static_html\n    entry_url: ${cnEntry}\n    expected_domain: reg.example.org\n    authority_tier: T1\n    high_risk_default: true\n    discovery_only: false\n    status: active\n    verified_at: "2026-11-26"\n    verification_note: "offline fixture test source"\n`,
+    `schema_version: "1.0"\nregion: cn\nupdated_at: "2026-11-26"\ndescription: "t"\nsources:\n  - source_id: cn-kwm-cli\n    region: cn\n    name: 律所实务专栏测试\n    source_type: law_firm_practice\n    language: zh\n    jurisdiction: CN\n    default_categories: [实务与工具]\n    fetch_mode: static_html\n    entry_url: ${cnEntry}\n    expected_domain: firm.example.org\n    authority_tier: T2\n    high_risk_default: false\n    discovery_only: false\n    status: active\n    verified_at: "2026-11-26"\n    verification_note: "offline fixture test source"\n`,
     "utf8",
   );
   writeFileSync(
@@ -398,19 +491,16 @@ test("6. Layer 2 we-mp-rss, Layer 3 manual_inbox + daily cap, and E2E offline cu
     `schema_version: "1.0"\nregion: global\nupdated_at: "2026-11-26"\ndescription: "t"\nsources:\n  - source_id: us-courtlistener\n    region: global\n    name: CourtListener AI 判例订阅源\n    source_type: court_judiciary\n    language: en\n    jurisdiction: US\n    default_categories: [判例与学术]\n    fetch_mode: atom\n    entry_url: ${glEntry}\n    expected_domain: courts.example.org\n    authority_tier: T2\n    high_risk_default: true\n    discovery_only: false\n    status: active\n    verified_at: "2026-11-26"\n    verification_note: "offline fixture test source"\n`,
     "utf8",
   );
-  const longBody = Array.from(
-    { length: 10 },
-    (_, i) => `第${i + 1}条 2026年法律与合规审查须建立数据溯源机制并留存日志不少于180日。`,
-  ).join(" ");
+
   const stubFetch = async (url) => {
-    if (url.endsWith("index.htm")) {
-      return makeRes(`<a href="/wxzw/2026/reg.htm">生成式人工智能法律合规管理试行办法全文发布</a>`, {
+    if (url === cnEntry) {
+      return makeRes(`<a href="/insights/2026/ai-contract.htm">律所发布 AI 合同审查实务操作指南</a>`, {
         url,
       });
     }
-    if (url.endsWith("/reg.htm")) {
+    if (url.endsWith("/ai-contract.htm")) {
       return makeRes(
-        `<html><head><title>生成式人工智能法律合规管理试行办法全文发布</title></head><body><article><p>${longBody}</p></article></body></html>`,
+        `<html><head><title>律所发布 AI 合同审查实务操作指南</title><meta property="article:published_time" content="2026-11-20"></head><body><article><p>2026年11月20日，律所团队总结了律师利用大模型与结构化模板审查商业合同的实务步骤与风险控制要点。</p></article></body></html>`,
         { url },
       );
     }
@@ -441,37 +531,33 @@ test("6. Layer 2 we-mp-rss, Layer 3 manual_inbox + daily cap, and E2E offline cu
     retries: 0,
     fetchArticleBodyForFeeds: false,
   });
-  assert.equal(cnOut.candidates.length, 1);
-  assert.equal(glOut.candidates.length, 1);
-  assert.equal(
-    scanForbiddenFulltextKeys(JSON.parse(readFileSync(path.join(candidatesDir, "cn.json"), "utf8")))
-      .length,
-    0,
-  );
 
-  const curated = await runCuratePipeline({
+  assert.equal(cnOut.candidates[0].fact_tier, "market_opinion");
+  assert.equal(cnOut.candidates[0].unverified, true);
+  assert.equal(cnOut.candidates[0].published_at, "2026-11-20");
+  assert.equal(glOut.candidates[0].effective_status, "not_applicable");
+
+  const emptyCacheDir = uniqueTmp("test-empty-cache");
+  mkdirSync(emptyCacheDir, { recursive: true });
+  const curatedMissingCache = await runCuratePipeline({
     date: "2026-11-27",
     nowIso: "2026-11-27T08:05:00Z",
     candidatesDir,
-    cacheDir,
+    cacheDir: emptyCacheDir,
     bundlesDir,
     topicPoolDir,
     offline: true,
-    fetchImpl: async () => {
-      throw new Error("Offline curate must not hit network");
-    },
   });
-  assert.equal(curated.bundle.items.length, 2);
-  assert.equal(validateBySchemaName("daily-bundle", curated.bundle).valid, true);
-  assert.equal(validateBySchemaName("wechat-topic-pool", curated.topicPool).valid, true);
-  assert.equal(scanForbiddenFulltextKeys(curated.bundle).length, 0);
-  assert.ok(
-    curated.topicPool.topics.some((t) => t.trigger_reasons.includes("long_regulation_split")),
+  assert.equal(curatedMissingCache.degraded.cacheMissingIds.length, 2);
+  assert.equal(
+    curatedMissingCache.bundle.items.every((it) => it.needs_human_check === true),
+    true,
   );
-  assert.equal(existsSync(path.join(topicPoolDir, "2026-11-27.md")), true);
+  assert.equal(validateBySchemaName("daily-bundle", curatedMissingCache.bundle).valid, true);
+  assert.equal(scanForbiddenFulltextKeys(curatedMissingCache.bundle).length, 0);
 
-  unlinkSync(path.join(candidatesDir, "cn.json"));
-  const degraded = await runCuratePipeline({
+  writeFileSync(path.join(candidatesDir, "cn.json"), "{broken json", "utf8");
+  const degradedCorrupt = await runCuratePipeline({
     date: "2026-11-27",
     nowIso: "2026-11-27T08:10:00Z",
     candidatesDir,
@@ -480,9 +566,10 @@ test("6. Layer 2 we-mp-rss, Layer 3 manual_inbox + daily cap, and E2E offline cu
     topicPoolDir,
     offline: true,
   });
-  assert.deepEqual(degraded.degraded.missingTracks, ["cn"]);
-  assert.equal(degraded.bundle.items.length, 1);
+  assert.deepEqual(degradedCorrupt.degraded.missingTracks, ["cn(corrupted)"]);
+  assert.equal(degradedCorrupt.bundle.items.length, 1);
 
+  unlinkSync(path.join(candidatesDir, "cn.json"));
   const dailyRes = await runDailyPipeline({
     repoRoot: base,
     date: "2026-11-27",

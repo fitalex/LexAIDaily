@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { validateBySchemaName } from "../../contracts/validate.mjs";
 import { loadAndValidateWhitelist } from "../../sources/validate-whitelist.mjs";
@@ -9,6 +9,7 @@ import {
   fetchStaticHtmlSource,
   fetchWeMpRssBridge,
 } from "./adapters.mjs";
+import { getLocalDateString } from "./adapters-ext.mjs";
 import {
   CACHE_TTL_DAYS,
   getDefaultCacheDir,
@@ -16,10 +17,30 @@ import {
   sha256Text,
   writeRawCache,
 } from "./cache.mjs";
+import { stripHtmlToPlainText } from "./extractor.mjs";
 import { extractDomain } from "./url-and-domain.mjs";
 
+const OFFICIAL_HIGH_RISK_DOMAINS = Object.freeze([
+  "court.gov.cn",
+  "cac.gov.cn",
+  "gov.cn",
+  "ec.europa.eu",
+  "ico.org.uk",
+  "courtlistener.com",
+  "eur-lex.europa.eu",
+  "congress.gov",
+]);
+
+function writeJsonAtomic(filePath, data) {
+  const dir = path.dirname(filePath);
+  if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
+  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}`;
+  writeFileSync(tmpPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  renameSync(tmpPath, filePath);
+}
+
 function clampString(str, minLen, maxLen, padSuffix = "。") {
-  let out = String(str ?? "").replace(/\s+/g, " ").trim();
+  let out = stripHtmlToPlainText(str).replace(/\s+/g, " ").trim();
   if (out.length > maxLen) {
     out = out.slice(0, maxLen).trim();
   }
@@ -30,7 +51,7 @@ function clampString(str, minLen, maxLen, padSuffix = "。") {
 }
 
 function buildInitialSummary(title, rawText) {
-  const cleanText = String(rawText ?? "").replace(/\s+/g, " ").trim();
+  const cleanText = stripHtmlToPlainText(rawText).replace(/\s+/g, " ").trim();
   const candidate = cleanText.length >= 24 ? cleanText.slice(0, 156) : `${title}：${cleanText}`;
   return clampString(candidate, 20, 160, "，详见一手原始信源。");
 }
@@ -46,11 +67,58 @@ function buildInitialPracticeImpact(category) {
   return clampString(map[category] || map["实务与工具"], 10, 60);
 }
 
-function mapAuthorityToFactTier(source) {
-  if (!source) return "market_opinion";
-  if (source.authority_tier === "T1") return "confirmed_fact";
-  if (source.authority_tier === "T2") return "official_data";
-  return "market_opinion";
+function isOfficialHighRiskDomain(domain) {
+  const lower = String(domain ?? "").toLowerCase();
+  return OFFICIAL_HIGH_RISK_DOMAINS.some((d) => lower === d || lower.endsWith(`.${d}`));
+}
+
+function resolveFactTierAndRisk({ srcMeta, raw, domain }) {
+  if (raw.discovered_via) {
+    const officialOrigin = isOfficialHighRiskDomain(domain);
+    return {
+      fact_tier: officialOrigin ? "confirmed_fact" : "market_opinion",
+      unverified: true,
+      high_risk_legal: officialOrigin,
+      source_name: clampString(raw.origin_source_name || domain || raw.source_id, 2, 120, ""),
+    };
+  }
+
+  const sType = srcMeta?.source_type;
+  let factTier = "market_opinion";
+  let unverified = true;
+
+  if (sType === "legislation_regulator" || sType === "court_judiciary") {
+    factTier = srcMeta.authority_tier === "T1" ? "confirmed_fact" : "official_data";
+    unverified = false;
+  } else if (sType === "official_tech_blog" || sType === "academic_paper") {
+    factTier = "official_data";
+    unverified = false;
+  } else {
+    factTier = "market_opinion";
+    unverified = true;
+  }
+
+  return {
+    fact_tier: factTier,
+    unverified,
+    high_risk_legal: Boolean(srcMeta?.high_risk_default),
+    source_name: clampString(srcMeta?.name || domain || raw.source_id, 2, 120, ""),
+  };
+}
+
+function inferEffectiveStatus({ srcMeta, title = "", rawText = "" }) {
+  if (srcMeta?.source_type === "court_judiciary") {
+    return { status: "not_applicable", uncertain: false };
+  }
+  const sample = `${title}\n${rawText.slice(0, 600)}`.toLowerCase();
+  if (/征求意见|草案|draft|proposed/.test(sample)) return { status: "draft", uncertain: false };
+  if (/废止|repealed/.test(sample)) return { status: "repealed", uncertain: false };
+  if (/修订|amended/.test(sample)) return { status: "amended", uncertain: false };
+  if (/生效|施行|in force|enacted/.test(sample)) return { status: "in_force", uncertain: false };
+  if (/指引|指南|指导意见|guidance|code of practice/.test(sample)) {
+    return { status: "guidance", uncertain: false };
+  }
+  return { status: "not_applicable", uncertain: true };
 }
 
 function makeCandidateId(region, sourceId, url) {
@@ -65,14 +133,14 @@ function makeCandidateId(region, sourceId, url) {
 export async function runRegionalCollector({
   region,
   repoRoot = process.cwd(),
-  date = new Date().toISOString().slice(0, 10),
   nowIso = new Date().toISOString(),
+  env = process.env,
+  date = getLocalDateString(nowIso, env?.TZ || "Asia/Shanghai"),
   cacheDir = getDefaultCacheDir(repoRoot),
   outputDir = path.join(repoRoot, "data", "candidates", date),
   whitelistPath = path.join(repoRoot, "data", "sources", `whitelist-${region}.yaml`),
   manualInboxPath = path.join(repoRoot, ".local", "manual-inbox.yaml"),
   fetchImpl = globalThis.fetch,
-  env = process.env,
   timeoutMs = 15000,
   retries = 2,
   backoffBaseMs = 300,
@@ -80,6 +148,7 @@ export async function runRegionalCollector({
   maxItemsPerSource = 8,
   maxAihotTrace = 6,
   fetchArticleBodyForFeeds = true,
+  useEnvProxy = region === "global",
   writeOutput = true,
 } = {}) {
   if (region !== "cn" && region !== "global") {
@@ -113,6 +182,7 @@ export async function runRegionalCollector({
     maxItemsPerSource,
     maxAihotTrace,
     fetchArticleBodyForFeeds,
+    useEnvProxy,
   };
 
   const sourceResults = [];
@@ -168,6 +238,7 @@ export async function runRegionalCollector({
 
   const seenUrls = new Set();
   const candidates = [];
+  const rejectedItems = [];
   let dedupedCount = 0;
 
   for (const raw of rawCollected) {
@@ -177,41 +248,56 @@ export async function runRegionalCollector({
     }
     seenUrls.add(raw.source_url);
 
-    writeRawCache({ cacheDir, item: raw, nowIso });
+    const cleanRawText = stripHtmlToPlainText(raw.raw_text);
+    writeRawCache({ cacheDir, item: { ...raw, raw_text: cleanRawText }, nowIso });
 
     const srcMeta = sourceById.get(raw.source_id);
+    const domain = extractDomain(raw.source_url);
     const category = srcMeta?.default_categories?.[0] || "实务与工具";
-    const highRisk = Boolean(srcMeta?.high_risk_default);
+    const resolved = resolveFactTierAndRisk({ srcMeta, raw, domain });
+    const eff = resolved.high_risk_legal
+      ? inferEffectiveStatus({ srcMeta, title: raw.title, rawText: cleanRawText })
+      : { status: undefined, uncertain: false };
+
+    const needsHumanCheck = Boolean(raw.published_date_inferred || eff.uncertain);
 
     const candidate = {
       id: makeCandidateId(region, raw.source_id, raw.source_url),
       region,
       source_id: raw.source_id,
       ...(raw.discovered_via ? { discovered_via: raw.discovered_via } : {}),
-      source_name: clampString(srcMeta?.name || raw.source_id, 2, 120, ""),
-      source_domain: extractDomain(raw.source_url),
+      source_name: resolved.source_name,
+      source_domain: domain,
       source_url: raw.source_url,
       published_at: raw.published_at,
       collected_at: nowIso,
       category,
       title: clampString(raw.title, 6, 120, "（待核）"),
-      summary: buildInitialSummary(raw.title, raw.raw_text),
+      summary: buildInitialSummary(raw.title, cleanRawText),
       practice_impact_brief: buildInitialPracticeImpact(category),
       practice_impact_is_ai_draft: true,
-      fact_tier: mapAuthorityToFactTier(srcMeta),
-      unverified: srcMeta ? srcMeta.authority_tier === "T3" : true,
-      needs_human_check: false,
-      high_risk_legal: highRisk,
-      ...(highRisk ? { effective_status: "guidance" } : {}),
+      fact_tier: resolved.fact_tier,
+      unverified: Boolean(resolved.unverified || raw.published_date_inferred),
+      needs_human_check: needsHumanCheck,
+      high_risk_legal: resolved.high_risk_legal,
+      ...(resolved.high_risk_legal ? { effective_status: eff.status } : {}),
       headline: false,
       review_status: "pending_review",
     };
 
     const check = validateBySchemaName("candidate-item", candidate);
     if (!check.valid) {
-      throw new Error(
-        `CandidateItem schema validation failed for ${candidate.id}: ${check.errors.join("; ")}`,
-      );
+      rejectedItems.push({
+        id: candidate.id,
+        source_id: candidate.source_id,
+        errors: JSON.stringify(check.errors),
+      });
+      const sr = sourceResults.find((r) => r.source_id === candidate.source_id);
+      if (sr) {
+        sr.status = "degraded";
+        sr.error_message = `Item schema rejected (${candidate.id}): ${JSON.stringify(check.errors).slice(0, 220)}`;
+      }
+      continue;
     }
     candidates.push(candidate);
   }
@@ -248,24 +334,13 @@ export async function runRegionalCollector({
 
   const metaCheck = validateBySchemaName("collect-meta", meta);
   if (!metaCheck.valid) {
-    throw new Error(`CollectMeta schema validation failed: ${metaCheck.errors.join("; ")}`);
+    throw new Error(`CollectMeta schema validation failed: ${JSON.stringify(metaCheck.errors)}`);
   }
 
   if (writeOutput) {
-    if (!existsSync(outputDir)) {
-      mkdirSync(outputDir, { recursive: true });
-    }
-    writeFileSync(
-      path.join(outputDir, `${region}.json`),
-      `${JSON.stringify(candidates, null, 2)}\n`,
-      "utf8",
-    );
-    writeFileSync(
-      path.join(outputDir, `${region}-meta.json`),
-      `${JSON.stringify(meta, null, 2)}\n`,
-      "utf8",
-    );
+    writeJsonAtomic(path.join(outputDir, `${region}.json`), candidates);
+    writeJsonAtomic(path.join(outputDir, `${region}-meta.json`), meta);
   }
 
-  return { candidates, meta };
+  return { candidates, meta, rejectedItems };
 }

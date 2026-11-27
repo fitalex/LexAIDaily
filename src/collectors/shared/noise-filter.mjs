@@ -2,6 +2,7 @@ export const NOISY_GENERAL_SOURCE_IDS = Object.freeze([
   "openai-news-rss",
   "cn-sspai-home",
   "cn-ruanyifeng-blog",
+  "aihot-news-discovery",
 ]);
 
 const LEGAL_AND_WORKFLOW_KEYWORDS = Object.freeze([

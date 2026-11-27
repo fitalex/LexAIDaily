@@ -1,18 +1,34 @@
+import { stripHtmlToPlainText } from "../../collectors/shared/extractor.mjs";
 import { fetchWithRetry } from "../../collectors/shared/http.mjs";
 
 const LONG_REGULATION_CHAR_THRESHOLD = 6000;
 const REGULATION_ARTICLE_RE = /(第[一二三四五六七八九十百零\d]+条|\bArticle\s+\d+\b|\bSection\s+\d+\b)/gi;
+const zhSegmenter =
+  typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
+    ? new Intl.Segmenter("zh", { granularity: "sentence" })
+    : null;
 
-function splitSentences(text) {
-  return String(text ?? "")
-    .replace(/\r\n/g, "\n")
-    .split(/(?<=[。！？.!?\n])\s+/)
-    .map((s) => s.replace(/\s+/g, " ").trim())
-    .filter((s) => s.length >= 12);
+export function splitSentences(text) {
+  const clean = stripHtmlToPlainText(text).replace(/\r\n/g, "\n");
+  if (!clean) return [];
+
+  let rawParts = [];
+  if (zhSegmenter) {
+    for (const seg of zhSegmenter.segment(clean)) {
+      const trimmed = seg.segment.replace(/\s+/g, " ").trim();
+      if (trimmed) rawParts.push(trimmed);
+    }
+  } else {
+    rawParts = clean
+      .split(/(?<=[。！？!?])|(?<=\.)\s+|\n+/)
+      .map((s) => s.replace(/\s+/g, " ").trim())
+      .filter(Boolean);
+  }
+  return rawParts.filter((s) => s.length >= 10);
 }
 
 function clampText(text, minLen, maxLen, pad = "，详情请核对原始出处。") {
-  let out = String(text ?? "").replace(/\s+/g, " ").trim();
+  let out = stripHtmlToPlainText(text).replace(/\s+/g, " ").trim();
   if (out.length > maxLen) {
     out = out.slice(0, maxLen).trim();
   }
@@ -23,15 +39,31 @@ function clampText(text, minLen, maxLen, pad = "，详情请核对原始出处�
 }
 
 export function detectAndSplitLongRegulation(rawText) {
-  const text = String(rawText ?? "");
+  const text = stripHtmlToPlainText(rawText);
   const articleMatches = text.match(REGULATION_ARTICLE_RE) ?? [];
   const isLong =
     text.length >= LONG_REGULATION_CHAR_THRESHOLD || articleMatches.length >= 8;
   if (!isLong) {
     return { isLongRegulation: false, segments: [text] };
   }
+
+  const clauses = text
+    .split(/(?=第[一二三四五六七八九十百零\d]+条|\bArticle\s+\d+\b|\bSection\s+\d+\b)/gi)
+    .map((c) => c.trim())
+    .filter(Boolean);
+
+  if (clauses.length >= 4) {
+    const segCount = Math.min(4, clauses.length);
+    const perSeg = Math.ceil(clauses.length / segCount);
+    const segments = [];
+    for (let i = 0; i < clauses.length; i += perSeg) {
+      segments.push(clauses.slice(i, i + perSeg).join(" "));
+    }
+    return { isLongRegulation: true, segments };
+  }
+
   const segments = [];
-  const chunkSize = 2000;
+  const chunkSize = Math.ceil(text.length / 4);
   for (let i = 0; i < text.length && segments.length < 4; i += chunkSize) {
     segments.push(text.slice(i, i + chunkSize));
   }
@@ -69,20 +101,42 @@ export function verifyFaithfulness({ summary, keyPoints = [], rawText }) {
 }
 
 export function runStage1FactExtraction({ candidate, rawText }) {
-  const text = String(rawText ?? "").trim();
+  const text = stripHtmlToPlainText(rawText);
   const { isLongRegulation, segments } = detectAndSplitLongRegulation(text);
-  const sentences = splitSentences(segments[0] || text);
 
   const quotes = [];
-  for (let i = 0; i < sentences.length && quotes.length < 3; i += 1) {
-    const s = sentences[i];
-    if (s.length >= 10) {
-      quotes.push({
-        text: clampText(s, 8, 150, ""),
-        locator: isLongRegulation ? `核心条款段 ${i + 1}` : `正文第 ${i + 1} 句`,
-      });
+  const leadSentences = [];
+  const allNumbers = new Set();
+
+  for (let segIdx = 0; segIdx < segments.length; segIdx += 1) {
+    const segText = segments[segIdx];
+    for (const num of extractNumbersAndDates(segText)) {
+      allNumbers.add(num);
+    }
+    const segSentences = splitSentences(segText);
+    if (isLongRegulation) {
+      if (segSentences[0]) {
+        leadSentences.push(segSentences[0]);
+        if (quotes.length < 3) {
+          quotes.push({
+            text: clampText(segSentences[0], 8, 150, ""),
+            locator: `核心条款段 ${segIdx + 1}`,
+          });
+        }
+      }
+    } else {
+      for (let i = 0; i < segSentences.length; i += 1) {
+        if (leadSentences.length < 5) leadSentences.push(segSentences[i]);
+        if (quotes.length < 3) {
+          quotes.push({
+            text: clampText(segSentences[i], 8, 150, ""),
+            locator: `正文第 ${i + 1} 句`,
+          });
+        }
+      }
     }
   }
+
   if (quotes.length === 0) {
     quotes.push({
       text: clampText(candidate.title, 8, 150, "（原始标题摘录）"),
@@ -93,11 +147,12 @@ export function runStage1FactExtraction({ candidate, rawText }) {
   return {
     issuer: candidate.source_name,
     published_at: candidate.published_at,
-    numbers_and_dates: extractNumbersAndDates(text).slice(0, 12),
+    numbers_and_dates: Array.from(allNumbers).slice(0, 12),
     effective_status: candidate.effective_status || "not_applicable",
     is_long_regulation: isLongRegulation,
+    segment_count: segments.length,
     evidence_quotes: quotes,
-    lead_sentences: sentences.slice(0, 5),
+    lead_sentences: leadSentences.slice(0, 5),
   };
 }
 

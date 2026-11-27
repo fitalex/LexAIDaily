@@ -1,8 +1,24 @@
+import { EnvHttpProxyAgent } from "undici";
+
 const DEFAULT_USER_AGENT =
   "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 LexAIDailyBot/1.0";
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+export function resolveProxyDispatcher(env = process.env) {
+  const httpProxy = env?.HTTP_PROXY || env?.http_proxy || "";
+  const httpsProxy = env?.HTTPS_PROXY || env?.https_proxy || "";
+  const noProxy = env?.NO_PROXY || env?.no_proxy || "";
+  if (!httpProxy && !httpsProxy) {
+    return undefined;
+  }
+  return new EnvHttpProxyAgent({
+    ...(httpProxy ? { httpProxy } : {}),
+    ...(httpsProxy ? { httpsProxy } : {}),
+    ...(noProxy ? { noProxy } : {}),
+  });
 }
 
 export async function fetchWithRetry(
@@ -16,6 +32,9 @@ export async function fetchWithRetry(
     headers = {},
     method = "GET",
     body = undefined,
+    useEnvProxy = false,
+    env = process.env,
+    dispatcher = undefined,
   } = {},
 ) {
   const mergedHeaders = {
@@ -27,6 +46,9 @@ export async function fetchWithRetry(
   if (etag) {
     mergedHeaders["If-None-Match"] = etag;
   }
+
+  const effectiveDispatcher =
+    dispatcher ?? (useEnvProxy ? resolveProxyDispatcher(env) : undefined);
 
   let lastError = null;
   for (let attempt = 0; attempt <= retries; attempt += 1) {
@@ -41,6 +63,7 @@ export async function fetchWithRetry(
           body,
           signal: controller.signal,
           redirect: "follow",
+          ...(effectiveDispatcher ? { dispatcher: effectiveDispatcher } : {}),
         });
       } finally {
         clearTimeout(timer);

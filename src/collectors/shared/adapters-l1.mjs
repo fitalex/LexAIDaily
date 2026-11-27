@@ -1,10 +1,12 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import {
   decodeResponseBuffer,
   extractArticleFromHtml,
   extractLinksFromListHtml,
+  extractPublishedDateFromHtml,
   parseFeedXml,
+  stripHtmlToPlainText,
 } from "./extractor.mjs";
 import { fetchWithRetry } from "./http.mjs";
 import { evaluateLegalRelevance } from "./noise-filter.mjs";
@@ -19,16 +21,16 @@ function sleep(ms) {
 }
 
 export function normalizePublishedAt(rawDate, fallbackIso) {
-  if (!rawDate) return fallbackIso;
+  if (!rawDate) return { value: fallbackIso, inferred: true };
   const str = String(rawDate).trim();
-  if (/^\d{4}-\d{2}-\d{2}$/.test(str) || /^\d{4}-(0[1-9]|1[0-2])$/.test(str)) {
-    return str;
+  if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str) || /^\d{4}-(0[1-9]|1[0-2])$/.test(str)) {
+    return { value: str, inferred: false };
   }
   const parsed = new Date(str);
   if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toISOString();
+    return { value: parsed.toISOString(), inferred: false };
   }
-  return fallbackIso;
+  return { value: fallbackIso, inferred: true };
 }
 
 export function loadJsonSafe(filePath, fallback) {
@@ -44,7 +46,9 @@ export function saveJsonSafe(filePath, data) {
   if (!filePath) return;
   const dir = path.dirname(filePath);
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
-  writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}`;
+  writeFileSync(tmpPath, `${JSON.stringify(data, null, 2)}\n`, "utf8");
+  renameSync(tmpPath, filePath);
 }
 
 export async function fetchRssOrAtomSource(source, ctx) {
@@ -53,6 +57,8 @@ export async function fetchRssOrAtomSource(source, ctx) {
     timeoutMs: ctx.timeoutMs,
     retries: ctx.retries,
     backoffBaseMs: ctx.backoffBaseMs,
+    useEnvProxy: ctx.useEnvProxy,
+    env: ctx.env,
   });
   if (!res.ok) {
     return {
@@ -62,19 +68,29 @@ export async function fetchRssOrAtomSource(source, ctx) {
       error_message: `HTTP ${res.status} fetching feed ${source.entry_url}`,
     };
   }
+  const finalFeedUrl = normalizeCandidateUrl(res.finalUrl || source.entry_url);
+  if (source.expected_domain && !isDomainAllowed(finalFeedUrl, source.expected_domain)) {
+    return {
+      items: [],
+      status: "error",
+      http_status: res.status,
+      error_message: `Domain mismatch on feed URL: ${finalFeedUrl} vs ${source.expected_domain}`,
+    };
+  }
+
   const xml = decodeResponseBuffer(res.buffer, res.contentType);
-  const feed = await parseFeedXml(xml, source.entry_url);
+  const feed = await parseFeedXml(xml, finalFeedUrl);
   const maxItems = ctx.maxItemsPerSource ?? 10;
   const items = [];
 
   for (const entry of feed.items.slice(0, maxItems)) {
-    const normalizedUrl = normalizeCandidateUrl(entry.link, source.entry_url);
+    const normalizedUrl = normalizeCandidateUrl(entry.link, finalFeedUrl);
     if (!normalizedUrl || isDiscoveryOnlyUrl(normalizedUrl)) continue;
     if (source.expected_domain && !isDomainAllowed(normalizedUrl, source.expected_domain)) {
       continue;
     }
 
-    let rawText = entry.content;
+    let rawText = stripHtmlToPlainText(entry.content);
     if (ctx.fetchArticleBodyForFeeds !== false && rawText.length < 300) {
       try {
         const artRes = await fetchWithRetry(normalizedUrl, {
@@ -82,6 +98,8 @@ export async function fetchRssOrAtomSource(source, ctx) {
           timeoutMs: ctx.timeoutMs,
           retries: 1,
           backoffBaseMs: ctx.backoffBaseMs,
+          useEnvProxy: ctx.useEnvProxy,
+          env: ctx.env,
         });
         if (artRes.ok) {
           const finalUrl = normalizeCandidateUrl(artRes.finalUrl || normalizedUrl) || normalizedUrl;
@@ -94,7 +112,7 @@ export async function fetchRssOrAtomSource(source, ctx) {
           }
         }
       } catch {
-        // Degrade gracefully to feed body
+        // Degrade gracefully to plain-text feed body
       }
     }
 
@@ -105,6 +123,7 @@ export async function fetchRssOrAtomSource(source, ctx) {
     });
     if (!rel.kept) continue;
 
+    const pub = normalizePublishedAt(entry.published_at, ctx.nowIso);
     items.push({
       guid: entry.guid || normalizedUrl,
       source_id: source.source_id,
@@ -112,7 +131,8 @@ export async function fetchRssOrAtomSource(source, ctx) {
       layer: "L1_PUBLIC",
       source_url: normalizedUrl,
       title: entry.title,
-      published_at: normalizePublishedAt(entry.published_at, ctx.nowIso),
+      published_at: pub.value,
+      published_date_inferred: pub.inferred,
       raw_text: rawText || entry.title,
     });
   }
@@ -126,6 +146,8 @@ export async function fetchStaticHtmlSource(source, ctx) {
     timeoutMs: ctx.timeoutMs,
     retries: ctx.retries,
     backoffBaseMs: ctx.backoffBaseMs,
+    useEnvProxy: ctx.useEnvProxy,
+    env: ctx.env,
   });
   if (!listRes.ok) {
     return {
@@ -159,6 +181,8 @@ export async function fetchStaticHtmlSource(source, ctx) {
         timeoutMs: ctx.timeoutMs,
         retries: 1,
         backoffBaseMs: ctx.backoffBaseMs,
+        useEnvProxy: ctx.useEnvProxy,
+        env: ctx.env,
       });
       if (!artRes.ok) continue;
       const finalArtUrl = normalizeCandidateUrl(artRes.finalUrl || link.url);
@@ -168,6 +192,8 @@ export async function fetchStaticHtmlSource(source, ctx) {
       }
       const artHtml = decodeResponseBuffer(artRes.buffer, artRes.contentType);
       const extracted = extractArticleFromHtml(artHtml, finalArtUrl);
+      const parsedDate = extractPublishedDateFromHtml(artHtml);
+      const pub = normalizePublishedAt(parsedDate, ctx.nowIso);
       const title = extracted.title && extracted.title !== "Untitled" ? extracted.title : link.title;
       const rawText = extracted.textContent || title;
 
@@ -185,7 +211,8 @@ export async function fetchStaticHtmlSource(source, ctx) {
         layer: "L1_PUBLIC",
         source_url: finalArtUrl,
         title,
-        published_at: ctx.nowIso,
+        published_at: pub.value,
+        published_date_inferred: pub.inferred,
         raw_text: rawText,
       });
     } catch {
@@ -194,6 +221,16 @@ export async function fetchStaticHtmlSource(source, ctx) {
   }
 
   return { items, status: "ok", http_status: listRes.status };
+}
+
+function extractAihotHeatScore(row) {
+  if (typeof row?.score === "number" && Number.isFinite(row.score)) return row.score;
+  if (typeof row?.heat === "number" && Number.isFinite(row.heat)) return row.heat;
+  if (typeof row?.heat_score === "number" && Number.isFinite(row.heat_score)) return row.heat_score;
+  if (typeof row?.signalCount === "number" && Number.isFinite(row.signalCount)) {
+    return Math.min(100, row.signalCount * 10);
+  }
+  return null;
 }
 
 export async function fetchAihotDiscoverySource(source, ctx) {
@@ -208,24 +245,39 @@ export async function fetchAihotDiscoverySource(source, ctx) {
   let lastStatus = 200;
 
   for (const endpoint of endpoints) {
+    const cachedEntry = etagState[endpoint] ?? {};
+    const prevEtag = typeof cachedEntry === "string" ? cachedEntry : cachedEntry.etag;
     const res = await fetchWithRetry(endpoint, {
       fetchImpl: ctx.fetchImpl,
       timeoutMs: ctx.timeoutMs,
       retries: ctx.retries,
       backoffBaseMs: ctx.backoffBaseMs,
-      etag: etagState[endpoint],
+      etag: prevEtag,
+      useEnvProxy: ctx.useEnvProxy,
+      env: ctx.env,
     });
     lastStatus = res.status;
-    if (res.notModified || !res.ok) continue;
-    if (res.etag) etagState[endpoint] = res.etag;
 
-    const text = decodeResponseBuffer(res.buffer, res.contentType);
-    let payload;
-    try {
-      payload = JSON.parse(text);
-    } catch {
-      continue;
+    let payload = null;
+    if (res.notModified) {
+      payload = cachedEntry.payload ?? null;
+    } else if (res.ok) {
+      const text = decodeResponseBuffer(res.buffer, res.contentType);
+      try {
+        payload = JSON.parse(text);
+      } catch {
+        payload = null;
+      }
+      if (payload !== null) {
+        etagState[endpoint] = {
+          etag: res.etag || prevEtag || null,
+          cached_at: ctx.nowIso,
+          payload,
+        };
+      }
     }
+
+    if (!payload) continue;
     const list = Array.isArray(payload)
       ? payload
       : Array.isArray(payload.items)
@@ -240,13 +292,12 @@ export async function fetchAihotDiscoverySource(source, ctx) {
       if (!origUrl || isDiscoveryOnlyUrl(origUrl)) continue;
       candidateOrigins.push({
         original_url: origUrl,
-        published_at: row?.published_at || row?.publishedAt || ctx.nowIso,
-        heat_score:
-          typeof row?.heat === "number"
-            ? row.heat
-            : typeof row?.heat_score === "number"
-              ? row.heat_score
-              : null,
+        published_at: row?.published_at || row?.publishedAt || row?.latestAt || null,
+        heat_score: extractAihotHeatScore(row),
+        origin_source_name:
+          typeof row?.source?.name === "string" && row.source.name.trim()
+            ? row.source.name.trim()
+            : null,
       });
     }
   }
@@ -267,6 +318,8 @@ export async function fetchAihotDiscoverySource(source, ctx) {
         timeoutMs: ctx.timeoutMs,
         retries: 1,
         backoffBaseMs: ctx.backoffBaseMs,
+        useEnvProxy: ctx.useEnvProxy,
+        env: ctx.env,
       });
       if (!originRes.ok) continue;
       const finalUrl = normalizeCandidateUrl(originRes.finalUrl || cand.original_url);
@@ -276,15 +329,27 @@ export async function fetchAihotDiscoverySource(source, ctx) {
       const extracted = extractArticleFromHtml(html, finalUrl);
       if (!extracted.title || extracted.textContent.length < 30) continue;
 
+      const rel = evaluateLegalRelevance({
+        sourceId: "aihot-news-discovery",
+        title: extracted.title,
+        text: extracted.textContent,
+      });
+      if (!rel.kept) continue;
+
+      const htmlDate = extractPublishedDateFromHtml(html);
+      const pub = normalizePublishedAt(htmlDate || cand.published_at, ctx.nowIso);
+
       items.push({
         guid: finalUrl,
         source_id: source.source_id,
         discovered_via: source.source_id,
+        origin_source_name: cand.origin_source_name,
         region: source.region,
         layer: "L1_PUBLIC",
         source_url: finalUrl,
         title: extracted.title,
-        published_at: normalizePublishedAt(cand.published_at, ctx.nowIso),
+        published_at: pub.value,
+        published_date_inferred: pub.inferred,
         heat_score: cand.heat_score,
         raw_text: extracted.textContent,
       });

@@ -18,7 +18,7 @@
     "curate": "node src/pipeline/merge-and-curate/index.mjs",
     "daily": "node src/pipeline/daily.mjs",
     "test:pipeline": "node --test tests/pipeline/*.test.mjs",
-    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs"
+    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/wechat-prototype/*.test.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "0.6.0",

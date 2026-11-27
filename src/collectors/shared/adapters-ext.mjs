@@ -9,13 +9,54 @@ import {
 import {
   decodeResponseBuffer,
   extractArticleFromHtml,
+  extractPublishedDateFromHtml,
   parseFeedXml,
+  stripHtmlToPlainText,
 } from "./extractor.mjs";
 import { fetchWithRetry } from "./http.mjs";
 import {
   isDiscoveryOnlyUrl,
   normalizeCandidateUrl,
 } from "./url-and-domain.mjs";
+
+const SOURCE_ID_PATTERN = /^[a-z0-9][a-z0-9-]{1,63}$/;
+
+export function getLocalDateString(nowIso = new Date().toISOString(), timeZone = process.env.TZ || "Asia/Shanghai") {
+  const dt = new Date(nowIso);
+  const safeDate = Number.isNaN(dt.getTime()) ? new Date() : dt;
+  try {
+    return new Intl.DateTimeFormat("en-CA", {
+      timeZone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(safeDate);
+  } catch {
+    return safeDate.toISOString().slice(0, 10);
+  }
+}
+
+export function parseStrictDailyCap(rawValue, defaultCap = 5) {
+  if (rawValue === undefined || rawValue === null || String(rawValue).trim() === "") {
+    return defaultCap;
+  }
+  const num = Number(rawValue);
+  if (!Number.isFinite(num) || !Number.isInteger(num) || num < 0) {
+    return 0;
+  }
+  return num;
+}
+
+export function sanitizeSourceId(rawId, fallback = "l2-we-mp-rss") {
+  const str = String(rawId ?? "").trim();
+  if (SOURCE_ID_PATTERN.test(str)) return str;
+  const cleaned = str
+    .toLowerCase()
+    .replace(/[^a-z0-9-]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 64);
+  return SOURCE_ID_PATTERN.test(cleaned) ? cleaned : fallback;
+}
 
 export async function fetchWeMpRssBridge(ctx) {
   const rawEnv = ctx.env?.WE_MP_RSS_FEEDS_JSON ?? process.env.WE_MP_RSS_FEEDS_JSON;
@@ -43,7 +84,17 @@ export async function fetchWeMpRssBridge(ctx) {
   const sourceResults = [];
 
   for (const feedCfg of Array.isArray(feeds) ? feeds : []) {
-    const sourceId = feedCfg.source_id || "l2-we-mp-rss";
+    const rawId = feedCfg.source_id || "l2-we-mp-rss";
+    if (!SOURCE_ID_PATTERN.test(String(rawId))) {
+      sourceResults.push({
+        source_id: sanitizeSourceId(rawId, "l2-we-mp-rss"),
+        status: "degraded",
+        items_count: 0,
+        error_message: `Invalid Layer 2 source_id "${rawId}" skipped`,
+      });
+      continue;
+    }
+    const sourceId = rawId;
     const feedUrl = feedCfg.url;
     if (!feedUrl) continue;
     try {
@@ -69,6 +120,7 @@ export async function fetchWeMpRssBridge(ctx) {
       for (const entry of parsed.items.slice(0, ctx.maxItemsPerSource ?? 8)) {
         const normalizedUrl = normalizeCandidateUrl(entry.link, feedUrl);
         if (!normalizedUrl || isDiscoveryOnlyUrl(normalizedUrl)) continue;
+        const pub = normalizePublishedAt(entry.published_at, ctx.nowIso);
         collected.push({
           guid: entry.guid || normalizedUrl,
           source_id: sourceId,
@@ -76,8 +128,9 @@ export async function fetchWeMpRssBridge(ctx) {
           layer: "L2_WECHAT_BRIDGE",
           source_url: normalizedUrl,
           title: entry.title,
-          published_at: normalizePublishedAt(entry.published_at, ctx.nowIso),
-          raw_text: entry.content || entry.title,
+          published_at: pub.value,
+          published_date_inferred: pub.inferred,
+          raw_text: stripHtmlToPlainText(entry.content) || entry.title,
         });
       }
       allItems.push(...collected);
@@ -129,12 +182,17 @@ export async function fetchLayer3ManualAndMonid(ctx) {
   const envBag = ctx.env ?? process.env;
   const monidToken = envBag.MONID_API_KEY ?? "";
   const monidEndpoint = envBag.MONID_API_ENDPOINT ?? "";
-  const dailyCap = Number(envBag.MONID_DAILY_MAX_CALLS ?? 5);
-  const dateKey = (ctx.nowIso || new Date().toISOString()).slice(0, 10);
+  const dailyCap = parseStrictDailyCap(envBag.MONID_DAILY_MAX_CALLS, 5);
+  const dateKey = getLocalDateString(ctx.nowIso, envBag.TZ || "Asia/Shanghai");
   const budgetFile = ctx.cacheDir
     ? path.join(ctx.cacheDir, `.monid-budget-${dateKey}.json`)
     : null;
-  let monidCallsToday = Number(loadJsonSafe(budgetFile, { calls: 0 }).calls ?? 0);
+  const budgetObj = loadJsonSafe(budgetFile, { calls: 0 });
+  const rawCalls = Number(budgetObj?.calls);
+  let monidCallsToday =
+    Number.isFinite(rawCalls) && Number.isInteger(rawCalls) && rawCalls >= 0
+      ? rawCalls
+      : dailyCap;
 
   const items = [];
   let degradedCount = 0;
@@ -144,8 +202,9 @@ export async function fetchLayer3ManualAndMonid(ctx) {
     const normalizedUrl = normalizeCandidateUrl(row.url);
     if (!normalizedUrl || isDiscoveryOnlyUrl(normalizedUrl)) continue;
 
-    let extractedTitle = row.title || "";
+    let extractedTitle = stripHtmlToPlainText(row.title || "");
     let rawText = "";
+    let htmlDate = null;
     let layer = "L3_MANUAL_INBOX";
 
     if (row.fallback !== "monid") {
@@ -159,6 +218,7 @@ export async function fetchLayer3ManualAndMonid(ctx) {
         if (res.ok) {
           const html = decodeResponseBuffer(res.buffer, res.contentType);
           const extracted = extractArticleFromHtml(html, normalizedUrl);
+          htmlDate = extractPublishedDateFromHtml(html);
           extractedTitle = extractedTitle || extracted.title;
           rawText = extracted.textContent;
         }
@@ -168,7 +228,7 @@ export async function fetchLayer3ManualAndMonid(ctx) {
     }
 
     if (!rawText && (row.fallback === "monid" || row.allow_monid_fallback)) {
-      if (!monidToken || !monidEndpoint || monidCallsToday >= dailyCap) {
+      if (!monidToken || !monidEndpoint || dailyCap <= 0 || monidCallsToday >= dailyCap) {
         degradedCount += 1;
         continue;
       }
@@ -187,8 +247,8 @@ export async function fetchLayer3ManualAndMonid(ctx) {
         });
         if (monidRes.ok) {
           const parsed = JSON.parse(decodeResponseBuffer(monidRes.buffer, monidRes.contentType));
-          extractedTitle = extractedTitle || parsed.title || "";
-          rawText = String(parsed.text || parsed.markdown || "").trim();
+          extractedTitle = extractedTitle || stripHtmlToPlainText(parsed.title || "");
+          rawText = stripHtmlToPlainText(parsed.text || parsed.markdown || "");
           layer = "L3_ON_DEMAND";
         } else {
           degradedCount += 1;
@@ -205,6 +265,7 @@ export async function fetchLayer3ManualAndMonid(ctx) {
       continue;
     }
 
+    const pub = normalizePublishedAt(row.published_at || htmlDate, ctx.nowIso);
     items.push({
       guid: normalizedUrl,
       source_id: layer === "L3_ON_DEMAND" ? "l3-monid-fallback" : "l3-manual-inbox",
@@ -212,7 +273,8 @@ export async function fetchLayer3ManualAndMonid(ctx) {
       layer,
       source_url: normalizedUrl,
       title: extractedTitle || "人工投喂线索",
-      published_at: normalizePublishedAt(row.published_at, ctx.nowIso),
+      published_at: pub.value,
+      published_date_inferred: pub.inferred,
       raw_text: rawText,
     });
   }

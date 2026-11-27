@@ -20,6 +20,9 @@ if (isCli) {
       console.log(
         `[collect:cn] status=${meta.status} sources=${meta.sources_succeeded}/${meta.sources_attempted} items=${candidates.length} pruned=${meta.cache_pruned_count}`,
       );
+      if (meta.status === "failed") {
+        process.exitCode = 1;
+      }
     })
     .catch((err) => {
       console.error(`[collect:cn] FAILED: ${err.message}`);

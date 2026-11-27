@@ -41,8 +41,81 @@ function normalizeWhitespace(text) {
     .trim();
 }
 
+export function stripHtmlToPlainText(input) {
+  const raw = String(input ?? "");
+  if (!raw) return "";
+  if (!/[<>]/.test(raw)) {
+    return normalizeWhitespace(raw);
+  }
+  const { document } = parseHTML(`<!DOCTYPE html><html><body>${raw}</body></html>`);
+  for (const el of document.querySelectorAll("script, style, noscript, iframe, object, embed, svg")) {
+    el.remove();
+  }
+  const text = document.body?.textContent ?? "";
+  return normalizeWhitespace(text.replace(/<[^>]*>/g, " "));
+}
+
+export function extractPublishedDateFromHtml(html) {
+  const { document } = parseHTML(String(html ?? ""));
+  const metaSelectors = [
+    'meta[property="article:published_time"]',
+    'meta[name="publishdate"]',
+    'meta[name="PubDate"]',
+    'meta[name="pubdate"]',
+    'meta[name="date"]',
+    'meta[name="DC.date.issued"]',
+    'meta[itemprop="datePublished"]',
+  ];
+
+  for (const sel of metaSelectors) {
+    const val = document.querySelector(sel)?.getAttribute("content")?.trim();
+    if (val) {
+      const normalized = parseDateToken(val);
+      if (normalized) return normalized;
+    }
+  }
+
+  const timeEl = document.querySelector("time[datetime]");
+  if (timeEl) {
+    const normalized = parseDateToken(timeEl.getAttribute("datetime"));
+    if (normalized) return normalized;
+  }
+
+  const headText = normalizeWhitespace(document.body?.textContent ?? "").slice(0, 1200);
+  const zhMatch = headText.match(/(20\d{2})\s*年\s*(0?[1-9]|1[0-2])\s*月\s*(0?[1-9]|[12]\d|3[01])\s*日/);
+  if (zhMatch) {
+    const [, y, m, d] = zhMatch;
+    return `${y}-${m.padStart(2, "0")}-${d.padStart(2, "0")}`;
+  }
+  const isoMatch = headText.match(/\b(20\d{2})[-/.](0[1-9]|1[0-2])[-/.](0[1-9]|[12]\d|3[01])\b/);
+  if (isoMatch) {
+    const [, y, m, d] = isoMatch;
+    return `${y}-${m}-${d}`;
+  }
+  return null;
+}
+
+function parseDateToken(raw) {
+  const str = String(raw ?? "").trim();
+  if (!str) return null;
+  if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str)) {
+    return str;
+  }
+  if (/^\d{4}-(0[1-9]|1[0-2])$/.test(str)) {
+    return str;
+  }
+  const parsed = new Date(str);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString();
+  }
+  return null;
+}
+
 export function extractArticleFromHtml(html, url = "https://example.com/") {
   const { document } = parseHTML(String(html ?? ""));
+  for (const el of document.querySelectorAll("script, style, noscript, iframe")) {
+    el.remove();
+  }
   if (!document.baseURI && url) {
     try {
       const baseEl = document.createElement("base");
@@ -53,7 +126,7 @@ export function extractArticleFromHtml(html, url = "https://example.com/") {
     }
   }
 
-  const docTitle = normalizeWhitespace(document.title ?? "");
+  const docTitle = stripHtmlToPlainText(document.title ?? "");
   let parsed = null;
   try {
     const reader = new Readability(document);
@@ -62,12 +135,12 @@ export function extractArticleFromHtml(html, url = "https://example.com/") {
     parsed = null;
   }
 
-  if (parsed && normalizeWhitespace(parsed.textContent).length >= 40) {
+  if (parsed && stripHtmlToPlainText(parsed.textContent).length >= 40) {
     return {
-      title: normalizeWhitespace(parsed.title || docTitle),
-      textContent: normalizeWhitespace(parsed.textContent),
-      excerpt: normalizeWhitespace(parsed.excerpt || ""),
-      byline: normalizeWhitespace(parsed.byline || ""),
+      title: stripHtmlToPlainText(parsed.title || docTitle),
+      textContent: stripHtmlToPlainText(parsed.textContent),
+      excerpt: stripHtmlToPlainText(parsed.excerpt || ""),
+      byline: stripHtmlToPlainText(parsed.byline || ""),
     };
   }
 
@@ -77,7 +150,7 @@ export function extractArticleFromHtml(html, url = "https://example.com/") {
     document.querySelector(".content, #content, .TRS_Editor") ||
     document.body;
 
-  const fallbackText = normalizeWhitespace(mainNode?.textContent ?? "");
+  const fallbackText = stripHtmlToPlainText(mainNode?.textContent ?? "");
   return {
     title: docTitle || "Untitled",
     textContent: fallbackText,
@@ -94,7 +167,7 @@ export function extractLinksFromListHtml(html, baseUrl, expectedDomain, maxLinks
 
   for (const a of anchors) {
     const href = a.getAttribute("href");
-    const title = normalizeWhitespace(a.textContent);
+    const title = stripHtmlToPlainText(a.textContent);
     if (!href || title.length < 6) {
       continue;
     }
@@ -125,19 +198,18 @@ export async function parseFeedXml(xmlString, baseUrl = undefined) {
   const items = (feed.items ?? []).map((entry) => {
     const rawLink = entry.link || entry.guid || "";
     const normalizedLink = normalizeCandidateUrl(rawLink, baseUrl);
+    const rawContent =
+      entry["content:encoded"] || entry.content || entry.contentSnippet || entry.summary || "";
     return {
       guid: entry.guid || entry.id || normalizedLink || "",
-      title: normalizeWhitespace(entry.title || ""),
+      title: stripHtmlToPlainText(entry.title || ""),
       link: normalizedLink,
-      published_at:
-        entry.isoDate || entry.pubDate || entry.updated || new Date().toISOString(),
-      content: normalizeWhitespace(
-        entry["content:encoded"] || entry.content || entry.contentSnippet || entry.summary || "",
-      ),
+      published_at: entry.isoDate || entry.pubDate || entry.updated || null,
+      content: stripHtmlToPlainText(rawContent),
     };
   });
   return {
-    title: normalizeWhitespace(feed.title || ""),
+    title: stripHtmlToPlainText(feed.title || ""),
     items: items.filter((item) => Boolean(item.link) && item.title.length >= 4),
   };
 }
