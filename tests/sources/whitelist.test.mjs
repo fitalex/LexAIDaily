@@ -9,6 +9,7 @@ import {
   loadAndValidateWhitelist,
   validateWhitelistConfig,
 } from "../../src/sources/validate-whitelist.mjs";
+import { probeSource } from "../../scripts/sources/smoke-check.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -79,7 +80,6 @@ describe("LD-G2-02 Dual-Track Whitelist YAML Validation (v1.2 Practical Radar)",
       );
     }
 
-    // Confirm blocked R4 sources are removed and replaced by verified RSS/academic entries
     assert.equal(globalIds.has("global-clio-ai-blog"), false);
     assert.equal(globalIds.has("legal-it-insider"), false);
     assert.equal(globalIds.has("openai-news-rss"), true);
@@ -134,41 +134,54 @@ describe("LD-G2-02 Dual-Track Whitelist YAML Validation (v1.2 Practical Radar)",
     assert.equal(validateWhitelistConfig(badDiscovery, "cn").valid, false);
   });
 
-  it("checkPayloadParsability rejects Cloudflare 403, Bot Verification, SPA shells, empty feeds, and accepts valid payloads", () => {
-    // Reject Cloudflare 403 (R4-ST01 regression guard)
-    const cf = checkPayloadParsability(
+  it("checkPayloadParsability rejects CF/Bot interstitials & SPA shells, while accepting real pages with passive CF scripts (R5-ST02)", () => {
+    // Reject Cloudflare 403 & 200 interstitials
+    const cf403 = checkPayloadParsability(
       { fetch_mode: "static_html" },
       { status: 403, body: "<html><title>Just a moment...</title></html>" },
     );
-    assert.equal(cf.ok, false);
+    assert.equal(cf403.ok, false);
 
-    // Reject Bot Verification 200 (R4-ST02 regression guard)
+    const cf200Interstitial = checkPayloadParsability(
+      { fetch_mode: "static_html" },
+      {
+        status: 200,
+        body:
+          "<html><head><title>Just a moment...</title></head><body><script src=\"/cdn-cgi/challenge-platform/main.js\"></script>" +
+          " ".repeat(2000) +
+          "</body></html>",
+      },
+    );
+    assert.equal(cf200Interstitial.ok, false);
+
+    // Accept real full page containing passive Cloudflare challenge-platform script (R5-ST02)
+    const realPageWithPassiveCf = checkPayloadParsability(
+      { fetch_mode: "static_html" },
+      {
+        status: 200,
+        body:
+          "<html><head><title>China Law Insight</title></head><body>" +
+          Array.from({ length: 20 }, (_, i) => `<a href="/post/${i}">Article ${i}</a>`).join("") +
+          "<script src=\"/cdn-cgi/challenge-platform/scripts/jsd/main.js\"></script>" +
+          "x".repeat(2000) +
+          "</body></html>",
+      },
+    );
+    assert.equal(realPageWithPassiveCf.ok, true, JSON.stringify(realPageWithPassiveCf.errors));
+
+    // Reject Bot Verification 200 (R4-ST02)
     const bot = checkPayloadParsability(
       { fetch_mode: "static_html" },
       { status: 200, body: "<html><body><h1>Bot Verification</h1></body></html>" },
     );
     assert.equal(bot.ok, false);
 
-    // Reject SPA shell (R2 regression guard)
+    // Reject SPA shell (R2)
     const spa = checkPayloadParsability(
       { fetch_mode: "static_html" },
       { status: 200, body: '<html><body><div id="app"></div><script src="/app.js"></script></body></html>' },
     );
     assert.equal(spa.ok, false);
-
-    // Accept valid static_html
-    const validHtml = checkPayloadParsability(
-      { fetch_mode: "static_html" },
-      {
-        status: 200,
-        body:
-          "<html><body>" +
-          Array.from({ length: 6 }, (_, i) => `<a href="/p/${i}">Post ${i}</a>`).join("") +
-          "x".repeat(1600) +
-          "</body></html>",
-      },
-    );
-    assert.equal(validHtml.ok, true);
 
     // Accept valid RSS & Atom; reject empty RSS
     assert.equal(
@@ -213,5 +226,52 @@ describe("LD-G2-02 Dual-Track Whitelist YAML Validation (v1.2 Practical Radar)",
       ).ok,
       false,
     );
+  });
+
+  it("probeSource retries transient network failures and stops immediately on non-transient 403 (R5-ST03 & R5-ST04)", async () => {
+    const validBody =
+      "<html><head><title>Court News</title></head><body>" +
+      Array.from({ length: 12 }, (_, i) => `<a href="/n/${i}">News ${i}</a>`).join("") +
+      "x".repeat(2000) +
+      "</body></html>";
+
+    // Transient network error on attempt 1, succeeds on attempt 2
+    let calls = 0;
+    const flakyFetch = async () => {
+      calls += 1;
+      if (calls === 1) {
+        throw new TypeError("fetch failed");
+      }
+      return {
+        status: 200,
+        headers: new Headers({ "content-type": "text/html" }),
+        text: async () => validBody,
+      };
+    };
+
+    const recovered = await probeSource(
+      { source_id: "cn-spc-fabu", fetch_mode: "static_html", entry_url: "https://www.court.gov.cn/fabu.html" },
+      { fetchImpl: flakyFetch, maxRetries: 2, backoffMs: 0 },
+    );
+    assert.equal(recovered.ok, true);
+    assert.equal(recovered.attempts, 2);
+
+    // Non-transient 403 stops immediately on attempt 1 without wasting retries
+    let hardFailCalls = 0;
+    const forbiddenFetch = async () => {
+      hardFailCalls += 1;
+      return {
+        status: 403,
+        headers: new Headers({ "content-type": "text/html" }),
+        text: async () => "<html><title>Just a moment...</title></html>",
+      };
+    };
+    const blocked = await probeSource(
+      { source_id: "blocked-site", fetch_mode: "static_html", entry_url: "https://example.com/" },
+      { fetchImpl: forbiddenFetch, maxRetries: 2, backoffMs: 0 },
+    );
+    assert.equal(blocked.ok, false);
+    assert.equal(blocked.attempts, 1);
+    assert.equal(hardFailCalls, 1);
   });
 });

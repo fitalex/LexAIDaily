@@ -212,10 +212,20 @@ export function checkPayloadParsability(source, { status, contentType = "", body
     return { ok: false, errors, metrics: { bytes: text.length } };
   }
 
-  if (/just a moment\.\.\.|cf-browser-verification|challenge-platform/i.test(text)) {
-    errors.push("Detected Cloudflare challenge page");
+  const titleMatch = text.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const titleText = titleMatch ? titleMatch[1].trim() : "";
+  const linkCount = (text.match(/<a\s+[^>]*href=/gi) || []).length;
+
+  // Distinguish actual Cloudflare interstitials from normal pages carrying passive CF scripts (R5-ST02)
+  const hasCfChallengeTitle =
+    /just a moment\.\.\.|attention required!|cloudflare/i.test(titleText);
+  const hasCfInterstitialMarkers =
+    /cf-browser-verification|challenge-platform|just a moment\.\.\./i.test(text);
+  if (hasCfChallengeTitle || (hasCfInterstitialMarkers && linkCount < 10)) {
+    errors.push("Detected Cloudflare challenge interstitial page");
   }
-  if (/bot verification|verifying you are human|captcha-delivery/i.test(text)) {
+
+  if (/bot verification|verifying you are human|captcha-delivery/i.test(text) && linkCount < 10) {
     errors.push("Detected Bot Verification / CAPTCHA interstitial");
   }
 
@@ -269,7 +279,6 @@ export function checkPayloadParsability(source, { status, contentType = "", body
   }
 
   // static_html
-  const linkCount = (text.match(/<a\s+[^>]*href=/gi) || []).length;
   const isSpaShell =
     /<div\s+id=["']app["']\s*>\s*<\/div>/i.test(text) && linkCount < 5;
   if (isSpaShell) {
