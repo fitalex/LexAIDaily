@@ -9,3 +9,8 @@ node_modules/
 # ADR-0002: Local private raw cache (7-day TTL, strictly never committed)
 .cache/
 .cache/raw/
+
+# Local private secrets & Layer 3 manual inbox (strictly never committed)
+.env
+.env.*
+.local/
