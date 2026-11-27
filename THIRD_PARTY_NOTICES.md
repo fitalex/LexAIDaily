@@ -17,10 +17,10 @@
 | 12 | JSON Schema 校验器：ajv | [ajv-validator/ajv](https://github.com/ajv-validator/ajv) | `v8.20.0`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `ajv@8.20.0`（`registry.npmjs.org/ajv/-/ajv-8.20.0.tgz`，不入库）；许可证据：[v8.20.0 LICENSE](https://github.com/ajv-validator/ajv/blob/v8.20.0/LICENSE)（2026-11-26 核对） | MIT | LD-G2-01（#39）数据契约测试接缝 1 核心校验引擎；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。直接传递依赖 `fast-deep-equal`、`fast-uri`、`json-schema-traverse`、`require-from-string` 均为宽松许可；当前锁文件 49 个包全部为宽松许可（MIT 30、BSD-2-Clause 12、MIT-0 3、ISC 2、BSD-3-Clause 2），`npm audit --registry=https://registry.npmjs.org` 结果：0 vulnerabilities。 |
 | 13 | JSON Schema 格式插件：ajv-formats | [ajv-validator/ajv-formats](https://github.com/ajv-validator/ajv-formats) | `v3.0.1`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `ajv-formats@3.0.1`（`registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz`，不入库）；许可证据：[v3.0.1 LICENSE](https://github.com/ajv-validator/ajv-formats/blob/v3.0.1/LICENSE)（2026-11-26 核对） | MIT | LD-G2-01（#39）配套格式校验插件，用于校验 `source_url`（`uri`）与时间戳（`date` / `date-time`）；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
 | 14 | YAML 解析库：js-yaml | [nodeca/js-yaml](https://github.com/nodeca/js-yaml) | `5.5.0`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `js-yaml@5.5.0`（`registry.npmjs.org/js-yaml/-/js-yaml-5.5.0.tgz`，不入库）；许可证据：[5.5.0 LICENSE](https://github.com/nodeca/js-yaml/blob/5.5.0/LICENSE)（2026-11-26 核对） | MIT | LD-G2-02（#40）双轨白名单配置文件（`whitelist-cn.yaml` / `whitelist-global.yaml`）解析与结构校验依赖；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。直接传递依赖 `argparse@3.0.4` 为 PSF-2.0 宽松许可（仅作为 npm 依赖安装，未随仓库分发源码）；当前合并锁文件 51 个包全部为宽松许可（MIT 31、BSD-2-Clause 12、MIT-0 3、ISC 2、BSD-3-Clause 2、PSF-2.0 1），`npm audit --registry=https://registry.npmjs.org` 结果：0 vulnerabilities。 |
-| 15 | 正文提取库：@mozilla/readability | [mozilla/readability](https://github.com/mozilla/readability) | `0.6.0`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `@mozilla/readability@0.6.0`（不入库）；许可证据：[LICENSE.md](https://github.com/mozilla/readability/blob/main/LICENSE.md) | Apache-2.0 | LD-G2-03（#41）HTML 正文提取核心库；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。当前合并锁文件 71 个包全部为宽松许可（MIT 37、BSD-2-Clause 20、ISC 5、MIT-0 3、Apache-2.0 2、BSD-3-Clause 2、PSF-2.0 1、BlueOak-1.0.0 1）。 |
-| 16 | 轻量 DOM 解析库：linkedom | [WebReflection/linkedom](https://github.com/WebReflection/linkedom) | `0.18.15`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `linkedom@0.18.15`（不入库）；许可证据：[LICENSE](https://github.com/WebReflection/linkedom/blob/main/LICENSE) | ISC | LD-G2-03（#41）配合 `@mozilla/readability` 的轻量级 DOM 实现；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
-| 17 | URL 归一化库：normalize-url | [sindresorhus/normalize-url](https://github.com/sindresorhus/normalize-url) | `10.0.0`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `normalize-url@10.0.0`（不入库）；许可证据：[license](https://github.com/sindresorhus/normalize-url/blob/main/license) | MIT | LD-G2-03（#41）候选链接归一化与跨轨精确去重核心库；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
-| 18 | RSS / Atom 解析库：rss-parser | [rbren/rss-parser](https://github.com/rbren/rss-parser) | `3.13.0`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `rss-parser@3.13.0`（不入库）；许可证据：[LICENSE](https://github.com/rbren/rss-parser/blob/master/LICENSE) | MIT | LD-G2-03（#41）Layer 1 RSS/Atom 订阅源与 Layer 2 外部 `we-mp-rss` 只读消费核心解析库；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
+| 15 | 正文提取库：@mozilla/readability | [mozilla/readability](https://github.com/mozilla/readability) | `0.6.0`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `@mozilla/readability@0.6.0`（`registry.npmjs.org`，不入库）；许可证据：[LICENSE.md](https://github.com/mozilla/readability/blob/main/LICENSE.md) | Apache-2.0 | LD-G2-03（#41）HTML 正文提取核心库；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`（71 个包全部 `registry.npmjs.org`，均为宽松许可：MIT 37、BSD-2-Clause 20、ISC 5、MIT-0 3、Apache-2.0 2、BSD-3-Clause 2、PSF-2.0 1、BlueOak-1.0.0 1；`npm audit` 0 vulnerabilities）。 |
+| 16 | 轻量 DOM 解析库：linkedom | [WebReflection/linkedom](https://github.com/WebReflection/linkedom) | `0.18.15`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `linkedom@0.18.15`（`registry.npmjs.org`，不入库）；许可证据：[LICENSE](https://github.com/WebReflection/linkedom/blob/main/LICENSE) | ISC | LD-G2-03（#41）配合 `@mozilla/readability` 的轻量级 DOM 实现；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
+| 17 | URL 归一化库：normalize-url | [sindresorhus/normalize-url](https://github.com/sindresorhus/normalize-url) | `10.0.0`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `normalize-url@10.0.0`（`registry.npmjs.org`，不入库）；许可证据：[license](https://github.com/sindresorhus/normalize-url/blob/main/license) | MIT | LD-G2-03（#41）候选链接归一化与跨轨精确去重核心库；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
+| 18 | RSS / Atom 解析库：rss-parser | [rbren/rss-parser](https://github.com/rbren/rss-parser) | `3.13.0`（2026-11-27 经 #38 Human 授权锁版本安装） | npm 包 `rss-parser@3.13.0`（`registry.npmjs.org`，不入库）；许可证据：[LICENSE](https://github.com/rbren/rss-parser/blob/master/LICENSE) | MIT | LD-G2-03（#41）Layer 1 RSS/Atom 订阅源与 Layer 2 外部 `we-mp-rss` 只读消费核心解析库；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
 
 ---
 
@@ -240,7 +240,7 @@ Copyright (c) 2021 Automattic
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+to use, copy, modify, merge, publish, and distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
@@ -271,7 +271,7 @@ Copyright (c) 2020 Evgeny Poberezkin (ajv-formats)
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+to use, copy, modify, merge, publish, and distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
@@ -321,7 +321,7 @@ SOFTWARE.
 
 ### 7. Apache License 2.0 (@mozilla/readability 0.6.0 - 实际采用依赖)
 
-> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；完整 Apache-2.0 许可证全文随 npm 包分发，此处留档版权与许可声明。来源：[mozilla/readability LICENSE.md](https://github.com/mozilla/readability/blob/main/LICENSE.md)。
+> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；npm 包内 `LICENSE.md` 含 13 行 Apache-2.0 版权与许可声明，此处逐字留档。来源：[mozilla/readability LICENSE.md](https://github.com/mozilla/readability/blob/main/LICENSE.md)。
 
 ```text
 Copyright (c) 2010 Arc90 Inc
@@ -343,7 +343,7 @@ limitations under the License.
 
 ### 8. ISC License (linkedom 0.18.15 - 实际采用依赖)
 
-> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；许可证全文随 npm 包分发，此处留档。来源：[WebReflection/linkedom LICENSE](https://github.com/WebReflection/linkedom/blob/main/LICENSE)。
+> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；以下逐字复制自 npm 安装包 `node_modules/linkedom/LICENSE`。来源：[WebReflection/linkedom LICENSE](https://github.com/WebReflection/linkedom/blob/main/LICENSE)。
 
 ```text
 ISC License
@@ -352,15 +352,14 @@ Copyright (c) 2021, Andrea Giammarchi, @WebReflection
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+copyright notice and this permission notice appear in all copies.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
 REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
 AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
 INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
 LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
-OR OTHER TORTIOUS ACTION, ARISING FROM, OUT OF OR IN CONNECTION WITH THE USE OR
+OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ```
 
@@ -368,7 +367,7 @@ PERFORMANCE OF THIS SOFTWARE.
 
 ### 9. MIT License (normalize-url 10.0.0 - 实际采用依赖)
 
-> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；许可证全文随 npm 包分发，此处留档。来源：[sindresorhus/normalize-url license](https://github.com/sindresorhus/normalize-url/blob/main/license)。
+> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；以下逐字复制自 npm 安装包 `node_modules/normalize-url/license`。来源：[sindresorhus/normalize-url license](https://github.com/sindresorhus/normalize-url/blob/main/license)。
 
 ```text
 MIT License
@@ -379,20 +378,15 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ```
 
 ---
 
 ### 10. MIT License (rss-parser 3.13.0 - 实际采用依赖)
 
-> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；许可证全文随 npm 包分发，此处留档。来源：[rbren/rss-parser LICENSE](https://github.com/rbren/rss-parser/blob/master/LICENSE)。
+> 仅作为 npm 依赖安装使用（LD-G2-03 / #41），未拷贝源码进仓库；以下逐字复制自 npm 安装包 `node_modules/rss-parser/LICENSE`（版权声明以 npm 安装包为准）。来源：[rbren/rss-parser LICENSE](https://github.com/rbren/rss-parser/blob/master/LICENSE)。
 
 ```text
 MIT License
