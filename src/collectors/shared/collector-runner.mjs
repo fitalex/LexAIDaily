@@ -72,12 +72,16 @@ function isOfficialHighRiskDomain(domain) {
   return OFFICIAL_HIGH_RISK_DOMAINS.some((d) => lower === d || lower.endsWith(`.${d}`));
 }
 
+/**
+ * SP04: Maps source_type & origin domain to accurate fact_tier and unverified status.
+ * Law firm columns & legal AI vendors default to market_opinion + unverified=true.
+ */
 function resolveFactTierAndRisk({ srcMeta, raw, domain }) {
   if (raw.discovered_via) {
     const officialOrigin = isOfficialHighRiskDomain(domain);
     return {
       fact_tier: officialOrigin ? "confirmed_fact" : "market_opinion",
-      unverified: true,
+      unverified: true, // Discovery-traced items conservatively require verification
       high_risk_legal: officialOrigin,
       source_name: clampString(raw.origin_source_name || domain || raw.source_id, 2, 120, ""),
     };
@@ -90,10 +94,11 @@ function resolveFactTierAndRisk({ srcMeta, raw, domain }) {
   if (sType === "legislation_regulator" || sType === "court_judiciary") {
     factTier = srcMeta.authority_tier === "T1" ? "confirmed_fact" : "official_data";
     unverified = false;
-  } else if (sType === "official_tech_blog" || sType === "academic_paper") {
+  } else if (sType === "official_tech_blog") {
     factTier = "official_data";
     unverified = false;
   } else {
+    // R2-SP06: academic_paper (preprints/research news), law_firm_practice, legal_ai_vendor, authoritative_media, L2/L3
     factTier = "market_opinion";
     unverified = true;
   }
@@ -106,6 +111,9 @@ function resolveFactTierAndRisk({ srcMeta, raw, domain }) {
   };
 }
 
+/**
+ * SP05: Infers effective_status conservatively without blindly marking court rulings as "guidance".
+ */
 function inferEffectiveStatus({ srcMeta, title = "", rawText = "" }) {
   if (srcMeta?.source_type === "court_judiciary") {
     return { status: "not_applicable", uncertain: false };
@@ -260,6 +268,9 @@ export async function runRegionalCollector({
       : { status: undefined, uncertain: false };
 
     const needsHumanCheck = Boolean(raw.published_date_inferred || eff.uncertain);
+    const unverifiedReason = raw.published_date_inferred
+      ? "一手页面未检测到明确发布日期，published_at 暂以采集日期占位，人工终审前须核对原页时间。"
+      : undefined;
 
     const candidate = {
       id: makeCandidateId(region, raw.source_id, raw.source_url),
@@ -278,6 +289,7 @@ export async function runRegionalCollector({
       practice_impact_is_ai_draft: true,
       fact_tier: resolved.fact_tier,
       unverified: Boolean(resolved.unverified || raw.published_date_inferred),
+      ...(unverifiedReason ? { unverified_reason: unverifiedReason } : {}),
       needs_human_check: needsHumanCheck,
       high_risk_legal: resolved.high_risk_legal,
       ...(resolved.high_risk_legal ? { effective_status: eff.status } : {}),
@@ -285,6 +297,7 @@ export async function runRegionalCollector({
       review_status: "pending_review",
     };
 
+    // ST04: Isolate single-item schema failure instead of aborting entire regional track
     const check = validateBySchemaName("candidate-item", candidate);
     if (!check.valid) {
       rejectedItems.push({

@@ -9,6 +9,9 @@ const rssParser = new Parser({
   },
 });
 
+const HTML_TAG_RE = /<\/?[a-zA-Z][a-zA-Z0-9-]*(?:\s[^<>]*)?\/?>|<!DOCTYPE\b|<!--/i;
+const HTML_ENTITY_RE = /&(?:lt|gt|amp|quot|apos|nbsp|#\d+|#x[0-9a-f]+);/i;
+
 export function decodeResponseBuffer(buffer, contentType = "") {
   const bytes = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
   const ctLower = String(contentType ?? "").toLowerCase();
@@ -41,20 +44,66 @@ function normalizeWhitespace(text) {
     .trim();
 }
 
+function decodeBasicEntities(str) {
+  return str
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;|&apos;/gi, "'")
+    .replace(/&amp;/gi, "&");
+}
+
+/**
+ * ST01 (S1) + R2-ST03: Strips actual HTML markup and dangerous elements (script/style/noscript/iframe/svg)
+ * into clean plain text while preserving plain-text comparison operators like "3 < 5 且 7 > 2".
+ */
 export function stripHtmlToPlainText(input) {
   const raw = String(input ?? "");
   if (!raw) return "";
-  if (!/[<>]/.test(raw)) {
-    return normalizeWhitespace(raw);
+  if (!HTML_TAG_RE.test(raw)) {
+    const decoded = HTML_ENTITY_RE.test(raw) ? decodeBasicEntities(raw) : raw;
+    return normalizeWhitespace(decoded);
   }
   const { document } = parseHTML(`<!DOCTYPE html><html><body>${raw}</body></html>`);
   for (const el of document.querySelectorAll("script, style, noscript, iframe, object, embed, svg")) {
     el.remove();
   }
   const text = document.body?.textContent ?? "";
-  return normalizeWhitespace(text.replace(/<[^>]*>/g, " "));
+  return normalizeWhitespace(text.replace(HTML_TAG_RE, " "));
 }
 
+/**
+ * R2-SP01: Parses date tokens without shifting timezone-naive datetimes (e.g. "2026-11-20T00:00:00")
+ * backward by one calendar day in UTC+8 environments.
+ */
+export function parseDateToken(raw) {
+  const str = String(raw ?? "").trim();
+  if (!str) return null;
+  if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str)) {
+    return str;
+  }
+  if (/^\d{4}-(0[1-9]|1[0-2])$/.test(str)) {
+    return str;
+  }
+  // Timezone-naive ISO datetime: preserve the literal calendar date YYYY-MM-DD
+  const naiveMatch = str.match(
+    /^(\d{4}-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12]\d|3[01]))[T\s]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?$/,
+  );
+  if (naiveMatch) {
+    return naiveMatch[1];
+  }
+  const parsed = new Date(str);
+  if (!Number.isNaN(parsed.getTime())) {
+    return parsed.toISOString();
+  }
+  return null;
+}
+
+/**
+ * SP05: Extracts real publication date (YYYY-MM-DD or ISO-8601) from HTML meta/time tags or visible header text.
+ * Returns null if no verifiable publication date is found.
+ */
 export function extractPublishedDateFromHtml(html) {
   const { document } = parseHTML(String(html ?? ""));
   const metaSelectors = [
@@ -91,22 +140,6 @@ export function extractPublishedDateFromHtml(html) {
   if (isoMatch) {
     const [, y, m, d] = isoMatch;
     return `${y}-${m}-${d}`;
-  }
-  return null;
-}
-
-function parseDateToken(raw) {
-  const str = String(raw ?? "").trim();
-  if (!str) return null;
-  if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str)) {
-    return str;
-  }
-  if (/^\d{4}-(0[1-9]|1[0-2])$/.test(str)) {
-    return str;
-  }
-  const parsed = new Date(str);
-  if (!Number.isNaN(parsed.getTime())) {
-    return parsed.toISOString();
   }
   return null;
 }
@@ -171,21 +204,22 @@ export function extractLinksFromListHtml(html, baseUrl, expectedDomain, maxLinks
     if (!href || title.length < 6) {
       continue;
     }
-    const normalized = normalizeCandidateUrl(href, baseUrl);
-    if (!normalized) {
+    const fetchUrl = normalizeCandidateUrl(href, baseUrl, { preserveHttp: true });
+    const canonicalUrl = normalizeCandidateUrl(href, baseUrl);
+    if (!fetchUrl || !canonicalUrl) {
       continue;
     }
-    if (normalized === normalizeCandidateUrl(baseUrl)) {
+    if (canonicalUrl === normalizeCandidateUrl(baseUrl)) {
       continue;
     }
-    if (expectedDomain && !isDomainAllowed(normalized, expectedDomain)) {
+    if (expectedDomain && !isDomainAllowed(fetchUrl, expectedDomain)) {
       continue;
     }
-    if (seen.has(normalized)) {
+    if (seen.has(canonicalUrl)) {
       continue;
     }
-    seen.add(normalized);
-    results.push({ url: normalized, title });
+    seen.add(canonicalUrl);
+    results.push({ url: fetchUrl, canonicalUrl, title });
     if (results.length >= maxLinks) {
       break;
     }
@@ -197,13 +231,13 @@ export async function parseFeedXml(xmlString, baseUrl = undefined) {
   const feed = await rssParser.parseString(String(xmlString ?? ""));
   const items = (feed.items ?? []).map((entry) => {
     const rawLink = entry.link || entry.guid || "";
-    const normalizedLink = normalizeCandidateUrl(rawLink, baseUrl);
+    const fetchLink = normalizeCandidateUrl(rawLink, baseUrl, { preserveHttp: true });
     const rawContent =
       entry["content:encoded"] || entry.content || entry.contentSnippet || entry.summary || "";
     return {
-      guid: entry.guid || entry.id || normalizedLink || "",
+      guid: entry.guid || entry.id || fetchLink || "",
       title: stripHtmlToPlainText(entry.title || ""),
-      link: normalizedLink,
+      link: fetchLink,
       published_at: entry.isoDate || entry.pubDate || entry.updated || null,
       content: stripHtmlToPlainText(rawContent),
     };

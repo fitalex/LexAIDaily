@@ -5,6 +5,7 @@ import {
   extractArticleFromHtml,
   extractLinksFromListHtml,
   extractPublishedDateFromHtml,
+  parseDateToken,
   parseFeedXml,
   stripHtmlToPlainText,
 } from "./extractor.mjs";
@@ -20,17 +21,19 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+/**
+ * R2-SP01 + R2-SP03: Normalizes publication date without shifting timezone-naive datetimes.
+ * When no publication date is found, falls back to local calendar date (YYYY-MM-DD)
+ * and marks `inferred: true` so collector-runner flags `unverified` + `unverified_reason`.
+ */
 export function normalizePublishedAt(rawDate, fallbackIso) {
-  if (!rawDate) return { value: fallbackIso, inferred: true };
-  const str = String(rawDate).trim();
-  if (/^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/.test(str) || /^\d{4}-(0[1-9]|1[0-2])$/.test(str)) {
-    return { value: str, inferred: false };
+  const fallbackDate = String(fallbackIso ?? new Date().toISOString()).slice(0, 10);
+  if (!rawDate) return { value: fallbackDate, inferred: true };
+  const parsed = parseDateToken(rawDate);
+  if (parsed) {
+    return { value: parsed, inferred: false };
   }
-  const parsed = new Date(str);
-  if (!Number.isNaN(parsed.getTime())) {
-    return { value: parsed.toISOString(), inferred: false };
-  }
-  return { value: fallbackIso, inferred: true };
+  return { value: fallbackDate, inferred: true };
 }
 
 export function loadJsonSafe(filePath, fallback) {
@@ -68,7 +71,10 @@ export async function fetchRssOrAtomSource(source, ctx) {
       error_message: `HTTP ${res.status} fetching feed ${source.entry_url}`,
     };
   }
-  const finalFeedUrl = normalizeCandidateUrl(res.finalUrl || source.entry_url);
+  // SP11: Validate feed finalUrl against expected_domain
+  const finalFeedUrl = normalizeCandidateUrl(res.finalUrl || source.entry_url, undefined, {
+    preserveHttp: true,
+  });
   if (source.expected_domain && !isDomainAllowed(finalFeedUrl, source.expected_domain)) {
     return {
       items: [],
@@ -84,16 +90,18 @@ export async function fetchRssOrAtomSource(source, ctx) {
   const items = [];
 
   for (const entry of feed.items.slice(0, maxItems)) {
-    const normalizedUrl = normalizeCandidateUrl(entry.link, finalFeedUrl);
-    if (!normalizedUrl || isDiscoveryOnlyUrl(normalizedUrl)) continue;
-    if (source.expected_domain && !isDomainAllowed(normalizedUrl, source.expected_domain)) {
+    const fetchUrl = normalizeCandidateUrl(entry.link, finalFeedUrl, { preserveHttp: true });
+    const canonicalUrl = normalizeCandidateUrl(entry.link, finalFeedUrl);
+    if (!fetchUrl || !canonicalUrl || isDiscoveryOnlyUrl(fetchUrl)) continue;
+    if (source.expected_domain && !isDomainAllowed(fetchUrl, source.expected_domain)) {
       continue;
     }
 
     let rawText = stripHtmlToPlainText(entry.content);
+    let finalCanonicalUrl = canonicalUrl;
     if (ctx.fetchArticleBodyForFeeds !== false && rawText.length < 300) {
       try {
-        const artRes = await fetchWithRetry(normalizedUrl, {
+        const artRes = await fetchWithRetry(fetchUrl, {
           fetchImpl: ctx.fetchImpl,
           timeoutMs: ctx.timeoutMs,
           retries: 1,
@@ -102,8 +110,9 @@ export async function fetchRssOrAtomSource(source, ctx) {
           env: ctx.env,
         });
         if (artRes.ok) {
-          const finalUrl = normalizeCandidateUrl(artRes.finalUrl || normalizedUrl) || normalizedUrl;
+          const finalUrl = normalizeCandidateUrl(artRes.finalUrl || fetchUrl) || canonicalUrl;
           if (!source.expected_domain || isDomainAllowed(finalUrl, source.expected_domain)) {
+            finalCanonicalUrl = finalUrl;
             const html = decodeResponseBuffer(artRes.buffer, artRes.contentType);
             const extracted = extractArticleFromHtml(html, finalUrl);
             if (extracted.textContent.length > rawText.length) {
@@ -125,11 +134,11 @@ export async function fetchRssOrAtomSource(source, ctx) {
 
     const pub = normalizePublishedAt(entry.published_at, ctx.nowIso);
     items.push({
-      guid: entry.guid || normalizedUrl,
+      guid: entry.guid || finalCanonicalUrl,
       source_id: source.source_id,
       region: source.region,
       layer: "L1_PUBLIC",
-      source_url: normalizedUrl,
+      source_url: finalCanonicalUrl,
       title: entry.title,
       published_at: pub.value,
       published_date_inferred: pub.inferred,
@@ -157,7 +166,9 @@ export async function fetchStaticHtmlSource(source, ctx) {
       error_message: `HTTP ${listRes.status} fetching list ${source.entry_url}`,
     };
   }
-  const finalListUrl = normalizeCandidateUrl(listRes.finalUrl || source.entry_url);
+  const finalListUrl = normalizeCandidateUrl(listRes.finalUrl || source.entry_url, undefined, {
+    preserveHttp: true,
+  });
   if (source.expected_domain && !isDomainAllowed(finalListUrl, source.expected_domain)) {
     return {
       items: [],
@@ -233,6 +244,13 @@ function extractAihotHeatScore(row) {
   return null;
 }
 
+/**
+ * SP01 + SP02 + SP10 + R2-SP04: AIHOT discovery_only adapter.
+ * - Reads live `score` (and hot-topics `signalCount` / `latestAt`)
+ * - Migrates legacy string ETag entries & falls back to unconditional 200 fetch if 304 has no cached payload
+ * - Strictly extracts ONLY `links.original` + origin source name, never copies AIHOT summary
+ * - Applies legal AI relevance filter to traced origin items
+ */
 export async function fetchAihotDiscoverySource(source, ctx) {
   const etagFile = ctx.cacheDir ? path.join(ctx.cacheDir, ".aihot-etags.json") : null;
   const etagState = loadJsonSafe(etagFile, {});
@@ -245,23 +263,45 @@ export async function fetchAihotDiscoverySource(source, ctx) {
   let lastStatus = 200;
 
   for (const endpoint of endpoints) {
-    const cachedEntry = etagState[endpoint] ?? {};
-    const prevEtag = typeof cachedEntry === "string" ? cachedEntry : cachedEntry.etag;
-    const res = await fetchWithRetry(endpoint, {
+    const rawCached = etagState[endpoint];
+    // R2-SP04: Migrate legacy R1 plain-string etag entry into { etag, payload: null }
+    const cachedEntry =
+      typeof rawCached === "string"
+        ? { etag: rawCached, payload: null }
+        : rawCached && typeof rawCached === "object"
+          ? rawCached
+          : { etag: null, payload: null };
+
+    const hasCachedPayload = cachedEntry.payload !== null && cachedEntry.payload !== undefined;
+    let res = await fetchWithRetry(endpoint, {
       fetchImpl: ctx.fetchImpl,
       timeoutMs: ctx.timeoutMs,
       retries: ctx.retries,
       backoffBaseMs: ctx.backoffBaseMs,
-      etag: prevEtag,
+      etag: hasCachedPayload ? cachedEntry.etag : undefined,
       useEnvProxy: ctx.useEnvProxy,
       env: ctx.env,
     });
     lastStatus = res.status;
 
     let payload = null;
-    if (res.notModified) {
-      payload = cachedEntry.payload ?? null;
-    } else if (res.ok) {
+    if (res.notModified && hasCachedPayload) {
+      payload = cachedEntry.payload;
+    } else if (res.notModified && !hasCachedPayload) {
+      // R2-SP04: Fallback unconditional 200 fetch when 304 arrived without cached payload
+      res = await fetchWithRetry(endpoint, {
+        fetchImpl: ctx.fetchImpl,
+        timeoutMs: ctx.timeoutMs,
+        retries: ctx.retries,
+        backoffBaseMs: ctx.backoffBaseMs,
+        etag: undefined,
+        useEnvProxy: ctx.useEnvProxy,
+        env: ctx.env,
+      });
+      lastStatus = res.status;
+    }
+
+    if (!payload && res.ok && !res.notModified) {
       const text = decodeResponseBuffer(res.buffer, res.contentType);
       try {
         payload = JSON.parse(text);
@@ -270,7 +310,7 @@ export async function fetchAihotDiscoverySource(source, ctx) {
       }
       if (payload !== null) {
         etagState[endpoint] = {
-          etag: res.etag || prevEtag || null,
+          etag: res.etag || cachedEntry.etag || null,
           cached_at: ctx.nowIso,
           payload,
         };
@@ -288,10 +328,12 @@ export async function fetchAihotDiscoverySource(source, ctx) {
 
     for (const row of list) {
       const origRaw = row?.links?.original;
-      const origUrl = normalizeCandidateUrl(origRaw);
-      if (!origUrl || isDiscoveryOnlyUrl(origUrl)) continue;
+      const origFetchUrl = normalizeCandidateUrl(origRaw, undefined, { preserveHttp: true });
+      const origCanonicalUrl = normalizeCandidateUrl(origRaw);
+      if (!origFetchUrl || !origCanonicalUrl || isDiscoveryOnlyUrl(origFetchUrl)) continue;
       candidateOrigins.push({
-        original_url: origUrl,
+        fetch_url: origFetchUrl,
+        original_url: origCanonicalUrl,
         published_at: row?.published_at || row?.publishedAt || row?.latestAt || null,
         heat_score: extractAihotHeatScore(row),
         origin_source_name:
@@ -313,7 +355,7 @@ export async function fetchAihotDiscoverySource(source, ctx) {
     if (items.length >= maxTrace) break;
 
     try {
-      const originRes = await fetchWithRetry(cand.original_url, {
+      const originRes = await fetchWithRetry(cand.fetch_url, {
         fetchImpl: ctx.fetchImpl,
         timeoutMs: ctx.timeoutMs,
         retries: 1,
@@ -329,6 +371,7 @@ export async function fetchAihotDiscoverySource(source, ctx) {
       const extracted = extractArticleFromHtml(html, finalUrl);
       if (!extracted.title || extracted.textContent.length < 30) continue;
 
+      // SP10: Apply legal AI relevance filter to general AIHOT discovery items
       const rel = evaluateLegalRelevance({
         sourceId: "aihot-news-discovery",
         title: extracted.title,

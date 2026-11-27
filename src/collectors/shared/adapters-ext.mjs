@@ -16,10 +16,12 @@ import {
 import { fetchWithRetry } from "./http.mjs";
 import {
   isDiscoveryOnlyUrl,
+  isDomainAllowed,
   normalizeCandidateUrl,
 } from "./url-and-domain.mjs";
 
 const SOURCE_ID_PATTERN = /^[a-z0-9][a-z0-9-]{1,63}$/;
+const DEFAULT_L2_EXPECTED_DOMAIN = "mp.weixin.qq.com";
 
 export function getLocalDateString(nowIso = new Date().toISOString(), timeZone = process.env.TZ || "Asia/Shanghai") {
   const dt = new Date(nowIso);
@@ -36,13 +38,16 @@ export function getLocalDateString(nowIso = new Date().toISOString(), timeZone =
   }
 }
 
+/**
+ * ST03: Fail-closed integer cap parser. Non-numeric or negative values fail closed to 0.
+ */
 export function parseStrictDailyCap(rawValue, defaultCap = 5) {
   if (rawValue === undefined || rawValue === null || String(rawValue).trim() === "") {
     return defaultCap;
   }
   const num = Number(rawValue);
   if (!Number.isFinite(num) || !Number.isInteger(num) || num < 0) {
-    return 0;
+    return 0; // Fail closed on malformed cap
   }
   return num;
 }
@@ -97,6 +102,8 @@ export async function fetchWeMpRssBridge(ctx) {
     const sourceId = rawId;
     const feedUrl = feedCfg.url;
     if (!feedUrl) continue;
+    // R2-SP05: Enforce Layer 2 item domain allowlist (defaults to mp.weixin.qq.com)
+    const expectedItemDomain = feedCfg.expected_domain || DEFAULT_L2_EXPECTED_DOMAIN;
     try {
       const res = await fetchWithRetry(feedUrl, {
         fetchImpl: ctx.fetchImpl,
@@ -117,9 +124,14 @@ export async function fetchWeMpRssBridge(ctx) {
       const xml = decodeResponseBuffer(res.buffer, res.contentType);
       const parsed = await parseFeedXml(xml, feedUrl);
       const collected = [];
+      let domainRejected = 0;
       for (const entry of parsed.items.slice(0, ctx.maxItemsPerSource ?? 8)) {
         const normalizedUrl = normalizeCandidateUrl(entry.link, feedUrl);
         if (!normalizedUrl || isDiscoveryOnlyUrl(normalizedUrl)) continue;
+        if (!isDomainAllowed(normalizedUrl, expectedItemDomain)) {
+          domainRejected += 1;
+          continue;
+        }
         const pub = normalizePublishedAt(entry.published_at, ctx.nowIso);
         collected.push({
           guid: entry.guid || normalizedUrl,
@@ -136,9 +148,14 @@ export async function fetchWeMpRssBridge(ctx) {
       allItems.push(...collected);
       sourceResults.push({
         source_id: sourceId,
-        status: "ok",
+        status: domainRejected > 0 && collected.length === 0 ? "degraded" : "ok",
         items_count: collected.length,
         http_status: res.status,
+        ...(domainRejected > 0
+          ? {
+              error_message: `${domainRejected} Layer 2 item(s) rejected outside expected_domain (${expectedItemDomain})`,
+            }
+          : {}),
       });
     } catch (err) {
       sourceResults.push({
@@ -182,7 +199,9 @@ export async function fetchLayer3ManualAndMonid(ctx) {
   const envBag = ctx.env ?? process.env;
   const monidToken = envBag.MONID_API_KEY ?? "";
   const monidEndpoint = envBag.MONID_API_ENDPOINT ?? "";
+  // ST03: Strict finite non-negative integer cap (invalid value fails closed to 0)
   const dailyCap = parseStrictDailyCap(envBag.MONID_DAILY_MAX_CALLS, 5);
+  // ST05: Local timezone date key
   const dateKey = getLocalDateString(ctx.nowIso, envBag.TZ || "Asia/Shanghai");
   const budgetFile = ctx.cacheDir
     ? path.join(ctx.cacheDir, `.monid-budget-${dateKey}.json`)
@@ -192,15 +211,16 @@ export async function fetchLayer3ManualAndMonid(ctx) {
   let monidCallsToday =
     Number.isFinite(rawCalls) && Number.isInteger(rawCalls) && rawCalls >= 0
       ? rawCalls
-      : dailyCap;
+      : dailyCap; // Fail closed if budget file is corrupted
 
   const items = [];
   let degradedCount = 0;
 
   for (const row of entries) {
     if (targetRegion && row.region && row.region !== targetRegion) continue;
-    const normalizedUrl = normalizeCandidateUrl(row.url);
-    if (!normalizedUrl || isDiscoveryOnlyUrl(normalizedUrl)) continue;
+    const fetchUrl = normalizeCandidateUrl(row.url, undefined, { preserveHttp: true });
+    const canonicalUrl = normalizeCandidateUrl(row.url);
+    if (!fetchUrl || !canonicalUrl || isDiscoveryOnlyUrl(fetchUrl)) continue;
 
     let extractedTitle = stripHtmlToPlainText(row.title || "");
     let rawText = "";
@@ -209,7 +229,7 @@ export async function fetchLayer3ManualAndMonid(ctx) {
 
     if (row.fallback !== "monid") {
       try {
-        const res = await fetchWithRetry(normalizedUrl, {
+        const res = await fetchWithRetry(fetchUrl, {
           fetchImpl: ctx.fetchImpl,
           timeoutMs: ctx.timeoutMs,
           retries: 1,
@@ -217,7 +237,7 @@ export async function fetchLayer3ManualAndMonid(ctx) {
         });
         if (res.ok) {
           const html = decodeResponseBuffer(res.buffer, res.contentType);
-          const extracted = extractArticleFromHtml(html, normalizedUrl);
+          const extracted = extractArticleFromHtml(html, canonicalUrl);
           htmlDate = extractPublishedDateFromHtml(html);
           extractedTitle = extractedTitle || extracted.title;
           rawText = extracted.textContent;
@@ -243,7 +263,7 @@ export async function fetchLayer3ManualAndMonid(ctx) {
           timeoutMs: ctx.timeoutMs,
           retries: 0,
           headers: reqHeaders,
-          body: JSON.stringify({ url: normalizedUrl }),
+          body: JSON.stringify({ url: fetchUrl }),
         });
         if (monidRes.ok) {
           const parsed = JSON.parse(decodeResponseBuffer(monidRes.buffer, monidRes.contentType));
@@ -267,11 +287,11 @@ export async function fetchLayer3ManualAndMonid(ctx) {
 
     const pub = normalizePublishedAt(row.published_at || htmlDate, ctx.nowIso);
     items.push({
-      guid: normalizedUrl,
+      guid: canonicalUrl,
       source_id: layer === "L3_ON_DEMAND" ? "l3-monid-fallback" : "l3-manual-inbox",
       region: row.region || targetRegion || "cn",
       layer,
-      source_url: normalizedUrl,
+      source_url: canonicalUrl,
       title: extractedTitle || "人工投喂线索",
       published_at: pub.value,
       published_date_inferred: pub.inferred,

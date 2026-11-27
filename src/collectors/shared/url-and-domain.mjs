@@ -28,10 +28,11 @@ export function isDiscoveryOnlyUrl(urlString) {
 }
 
 /**
- * Resolves relative URLs against baseUrl, normalizes tracking params/fragments,
- * and ensures an HTTPS canonical URL suitable for CandidateItem.source_url.
+ * R2-SP05: Resolves relative URLs against baseUrl and normalizes tracking params/fragments.
+ * - Pass `{ preserveHttp: true }` when fetching so http-only sites are not forced to https.
+ * - Default (`preserveHttp: false`) yields canonical `https://` URLs required by frozen CandidateItem schema.
  */
-export function normalizeCandidateUrl(rawUrl, baseUrl = undefined) {
+export function normalizeCandidateUrl(rawUrl, baseUrl = undefined, { preserveHttp = false } = {}) {
   if (!rawUrl || typeof rawUrl !== "string") {
     return null;
   }
@@ -48,13 +49,13 @@ export function normalizeCandidateUrl(rawUrl, baseUrl = undefined) {
   if (resolved.protocol !== "http:" && resolved.protocol !== "https:") {
     return null;
   }
-  if (resolved.protocol === "http:") {
+  if (!preserveHttp && resolved.protocol === "http:") {
     resolved.protocol = "https:";
   }
   try {
     return normalizeUrl(resolved.toString(), {
-      defaultProtocol: "https",
-      forceHttps: true,
+      defaultProtocol: preserveHttp ? "http" : "https",
+      forceHttps: !preserveHttp,
       stripHash: true,
       stripWWW: false,
       removeTrailingSlash: true,

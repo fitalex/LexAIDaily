@@ -22,12 +22,18 @@ export async function runDailyPipeline(options = {}) {
   }
 
   const curated = await runCuratePipeline({ ...options, date, nowIso });
+  const cnFailed = !results.cn || results.cn.meta?.status === "failed";
+  const globalFailed = !results.global || results.global.meta?.status === "failed";
+  const itemCount = curated.bundle?.items.length ?? 0;
+  const overallFailed = (cnFailed && globalFailed) || (results.errors.length >= 2 && itemCount === 0);
+
   return {
     date,
     cn: results.cn,
     global: results.global,
     curated,
     errors: results.errors,
+    status: overallFailed ? "failed" : results.errors.length > 0 || cnFailed || globalFailed ? "partial" : "success",
   };
 }
 
@@ -39,12 +45,12 @@ if (isCli) {
   const date = dateArgIdx >= 0 ? process.argv[dateArgIdx + 1] : undefined;
   const offline = process.argv.includes("--offline");
   runDailyPipeline({ ...(date ? { date } : {}), offline })
-    .then(({ date: d, curated, errors }) => {
+    .then(({ date: d, curated, errors, status }) => {
       const itemCount = curated.bundle?.items.length ?? 0;
       console.log(
-        `[daily] date=${d} curated_items=${itemCount} topics=${curated.topicPool.topics.length} stage_errors=${errors.length}`,
+        `[daily] date=${d} status=${status} curated_items=${itemCount} topics=${curated.topicPool.topics.length} stage_errors=${errors.length}`,
       );
-      if (errors.length >= 2 && itemCount === 0) {
+      if (status === "failed") {
         process.exitCode = 1;
       }
     })

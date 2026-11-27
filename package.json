@@ -10,7 +10,7 @@
   "scripts": {
     "build:samples": "node scripts/wechat-prototype/build.mjs --in design/wechat/samples/ld-g1-04-2026-11-24.json --out design/wechat/samples/ld-g1-04-2026-11-24.html",
     "test:contracts": "node --test tests/contracts/*.test.mjs",
-    "validate:contracts": "node src/contracts/validate.mjs --check-cache",
+    "validate:contracts": "node src/contracts/validate.mjs --all",
     "test:sources": "node --test tests/sources/*.test.mjs",
     "smoke:sources": "node scripts/sources/smoke-check.mjs",
     "collect:cn": "node src/collectors/cn/index.mjs",
