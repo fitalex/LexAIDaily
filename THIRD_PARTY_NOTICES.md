@@ -16,6 +16,7 @@
 | 11 | 样式内联库：juice | [Automattic/juice](https://github.com/Automattic/juice) | `v12.2.6`；上游 commit `4400c58906440f1041ba444404e5f4d7a2ab09b4`（npm registry `gitHead`，2026-11-25 读取） | npm 包 `juice@12.2.6`（安装路径 `node_modules/juice`，不入库）；许可证据：[LICENSE.md](https://github.com/Automattic/juice/blob/4400c58906440f1041ba444404e5f4d7a2ab09b4/LICENSE.md) | MIT | LD-G1-03 唯一直接依赖（D-009 授权），仅用于把 `design/wechat/template.html` 的 CSS 内联到标签；以 npm 依赖方式安装使用，未拷贝、未改动其源码。安装方式 `npm install --ignore-scripts`，版本固定于 `package.json` 与 `package-lock.json`（`package-lock.json` 的 resolved 均为 `registry.npmjs.org`）。安装 43 个包，其中 38 个可见包经逐一读取 `package.json` 核对许可证：MIT（24）、BSD-2-Clause（8）、MIT-0（3）、ISC（2）、BSD-3-Clause（1），均为宽松许可；完整版本与完整性哈希见 `package-lock.json`。`npm audit --registry=https://registry.npmjs.org` 结果：0 vulnerabilities。 |
 | 12 | JSON Schema 校验器：ajv | [ajv-validator/ajv](https://github.com/ajv-validator/ajv) | `v8.20.0`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `ajv@8.20.0`（`registry.npmjs.org/ajv/-/ajv-8.20.0.tgz`，不入库）；许可证据：[v8.20.0 LICENSE](https://github.com/ajv-validator/ajv/blob/v8.20.0/LICENSE)（2026-11-26 核对） | MIT | LD-G2-01（#39）数据契约测试接缝 1 核心校验引擎；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。直接传递依赖 `fast-deep-equal`、`fast-uri`、`json-schema-traverse`、`require-from-string` 均为宽松许可；当前锁文件 49 个包全部为宽松许可（MIT 30、BSD-2-Clause 12、MIT-0 3、ISC 2、BSD-3-Clause 2），`npm audit --registry=https://registry.npmjs.org` 结果：0 vulnerabilities。 |
 | 13 | JSON Schema 格式插件：ajv-formats | [ajv-validator/ajv-formats](https://github.com/ajv-validator/ajv-formats) | `v3.0.1`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `ajv-formats@3.0.1`（`registry.npmjs.org/ajv-formats/-/ajv-formats-3.0.1.tgz`，不入库）；许可证据：[v3.0.1 LICENSE](https://github.com/ajv-validator/ajv-formats/blob/v3.0.1/LICENSE)（2026-11-26 核对） | MIT | LD-G2-01（#39）配套格式校验插件，用于校验 `source_url`（`uri`）与时间戳（`date` / `date-time`）；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。 |
+| 14 | YAML 解析库：js-yaml | [nodeca/js-yaml](https://github.com/nodeca/js-yaml) | `5.5.0`（2026-11-26 经 #38 Human 授权锁版本安装） | npm 包 `js-yaml@5.5.0`（`registry.npmjs.org/js-yaml/-/js-yaml-5.5.0.tgz`，不入库）；许可证据：[5.5.0 LICENSE](https://github.com/nodeca/js-yaml/blob/5.5.0/LICENSE)（2026-11-26 核对） | MIT | LD-G2-02（#40）双轨白名单配置文件（`whitelist-cn.yaml` / `whitelist-global.yaml`）解析与结构校验依赖；未拷贝源码，锁版本于 `package.json` 与 `package-lock.json`。直接传递依赖 `argparse@3.0.4` 为 PSF-2.0 宽松许可（仅作为 npm 依赖安装，未随仓库分发源码）；当前合并锁文件 51 个包全部为宽松许可（MIT 31、BSD-2-Clause 12、MIT-0 3、ISC 2、BSD-3-Clause 2、PSF-2.0 1），`npm audit --registry=https://registry.npmjs.org` 结果：0 vulnerabilities。 |
 
 ---
 
@@ -262,6 +263,36 @@ The MIT License (MIT)
 
 Copyright (c) 2015-2021 Evgeny Poberezkin (ajv)
 Copyright (c) 2020 Evgeny Poberezkin (ajv-formats)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+```
+
+---
+
+### 6. MIT License (js-yaml 5.5.0 - 实际采用依赖)
+
+> 仅作为 npm 依赖安装使用（LD-G2-02 / #40），未拷贝源码进仓库；传递依赖 `argparse@3.0.4`（PSF-2.0）仅作为 npm 依赖安装，未随仓库分发源码。许可证全文随 npm 包分发，此处留档。来源：[nodeca/js-yaml 5.5.0 LICENSE](https://github.com/nodeca/js-yaml/blob/5.5.0/LICENSE)。
+
+```text
+(The MIT License)
+
+Copyright (C) 2011-2015 by Vitaly Puzrin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
