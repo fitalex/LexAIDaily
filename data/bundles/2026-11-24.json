@@ -8,7 +8,7 @@
     "date_line": "2026-11-24 · 星期二 · 第 001 期",
     "internal": true,
     "internal_note": "LD-G2-05 内部试运行样稿（第 1/3 期）· 不对外发布",
-    "digest": "本期聚焦英国 ICO 对消费级 Agentic AI 的默认隐私保护提醒与欧盟 AI Act 第 27 条 FRIA 草案，同时追踪汤森路透、北大法宝 MCP 与 DeepSeek 在法律检索工作流中的实务落地进展。",
+    "digest": "本期聚焦英国 ICO 消费级 Agentic AI 默认隐私提醒与欧盟 AI Act 第 27 条 FRIA 草案，同时覆盖金杜大模型开源许可实务、OpenAI Astra for Law 法律评测、Stanford HAI 法院幻觉检测与汤森路透 CoCounsel 更新。",
     "disclaimer": "本样稿为 Gate 2 内部试运行产物，不对外发布。标有「AI 初稿」之实务影响与评述仅供初步研判，不构成正式法律意见；日期与效力状态以一手信源为准。",
     "web_detail_url": "https://lexaidaily.example/d/2026-11-24",
     "generated_at": "2026-11-24T08:30:00Z"
@@ -122,35 +122,35 @@
     {
       "id": "trial-20261124-04",
       "region": "cn",
-      "source_id": "cn-pkulaw-mcp",
-      "source_name": "北大法宝 MCP 智能法律服务平台",
-      "source_domain": "mcp.pkulaw.com",
-      "source_url": "https://mcp.pkulaw.com/",
-      "published_at": "2026-11-24",
+      "source_id": "cn-kwm-cli",
+      "source_name": "金杜律师事务所 China Law Insight",
+      "source_domain": "www.chinalawinsight.com",
+      "source_url": "https://www.chinalawinsight.com/2025/06/articles/uncategorized/%E6%B5%85%E6%9E%90ai%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BC%80%E6%BA%90%E6%96%B0%E8%B6%8B%E5%8A%BF-ai%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE/",
+      "published_at": "2025-06-30",
       "collected_at": "2026-11-24T08:00:00Z",
       "category": "实务与工具",
-      "title": "北大法宝 MCP 接入中文法规与类案检索工具协议，强化法条版本溯源",
-      "summary": "北大法宝 MCP 平台提供面向 AI Agent 的标准工具调用接口，支持在对话与文档工作流中实时检索现行有效中文法规与类案引用，降低通用大模型编造法条号风险。",
-      "practice_impact_brief": "国内律所搭建内部 AI 助手时，可优先通过 MCP 协议挂载权威法规检索而非裸问模型。",
+      "title": "金杜实务解析 AI 大模型开源许可新趋势：自拟社区协议渐成主流",
+      "summary": "金杜律师事务所 China Law Insight 撰文对比 DeepSeek 采用 MIT 许可与多家大厂自拟大模型社区许可协议的分化趋势，拆解商业使用限制、衍生权重授权与合规核查要点。",
+      "practice_impact_brief": "企业与律所本地部署开源大模型前，须逐条核查自拟许可中的商业与月活限制。",
       "practice_impact_is_ai_draft": true,
       "fact_tier": "market_opinion",
       "unverified": true,
-      "unverified_reason": "厂商官网功能说明，具体调用限额与付费口径以实测为准",
+      "unverified_reason": "律所实务分析文章，属专业市场观点",
       "needs_human_check": false,
       "high_risk_legal": false,
       "headline": false,
       "review_status": "approved",
       "detail_analysis": {
         "key_points": [
-          "中文法律 AI 降幻觉的关键，在于把权威数据库变成模型可实时调用的外部工具。北大法宝 MCP 平台通过标准工具协议开放中文法规检索与版本核验能力，供各类 AI 客户端直接挂载调用。相比靠提示词约束模型背诵法条，工具直连能直接锁定现行有效文本与原文出处。因此，律所自建法务助手时无需重造法规库，接入标准协议即可显著压低错引率。当然，商业接口的并发限额与检索精度仍需在真实诉讼检索任务中做盲测验证。"
+          "开源大模型不再默认等同于可自由商用的 MIT 或 Apache-2.0 许可。金杜文章指出，腾讯、Meta、谷歌等多家许可方已放弃传统格式化开源许可证，转而自拟大模型开源许可协议，重新设定商业边界与衍生模型约束。技术团队常误以为能从开源社区直接下载权重就能直接接入商业产品。因此，企业法务必须在开源模型引入清单中新增许可条款人工审查环节。相比标准宽松协议，自拟社区协议往往暗藏地域、用户规模或竞品禁止条款，忽略核查极易埋下违约隐患。"
         ],
         "evidence_quotes": [
           {
-            "text": "支持在工作流中实时检索现行有效中文法规与类案引用，强化法条核验与溯源。",
-            "locator": "平台能力说明"
+            "text": "多家公司作为开源AI大模型的许可方，均放弃沿用MIT、Apache2.0等格式化开源许可证，转而自拟大模型开源许可协议。",
+            "locator": "引言段"
           }
         ],
-        "legal_commentary": "【AI 初稿】在中文法律实务场景下，通用大模型最大短板是法条修订滞后与文号编造。通过 MCP 协议将北大法宝等权威法源接入律师常用的桌面 AI 客户端，能够把“检索—核验—引用”收束到同一界面内，减少反复切窗复制的摩擦。律所技术团队在试点接入前，建议重点评估账号权限管理、检索日志留存、调用配额成本、法条时效核对以及涉密案情脱敏后再触发外部检索的操作规范。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "legal_commentary": "【AI 初稿】律所与企业技术团队在落地私有化开源法律模型时，最容易忽略的合规死角正是模型权重许可协议。建议法务团队联合研发建立两步准入清单：首先，区分 MIT/Apache-2.0 等标准宽松许可与厂商自拟社区许可，后者一律进入法务逐条审阅流程；其次，重点核对商用月活上限、输出蒸馏限制、商标归属及显著署名义务，并在内部模型台账中留存许可文本快照。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
         "ai_draft": true
       }
     },
@@ -191,36 +191,36 @@
     },
     {
       "id": "trial-20261124-06",
-      "region": "cn",
-      "source_id": "cn-deepseek-updates",
-      "source_name": "DeepSeek 官方更新日志（长文档与 Agent 底座）",
-      "source_domain": "api-docs.deepseek.com",
-      "source_url": "https://api-docs.deepseek.com/updates",
-      "published_at": "2026-11-24",
+      "region": "global",
+      "source_id": "openai-news-rss",
+      "source_name": "OpenAI News RSS（企业级 Agent 与法律应用）",
+      "source_domain": "openai.com",
+      "source_url": "https://openai.com/index/astra-law-6-2/",
+      "published_at": "2026-11-17",
       "collected_at": "2026-11-24T08:00:00Z",
       "category": "模型与技术",
-      "title": "DeepSeek 官方更新长上下文与结构化 JSON 输出能力，适配长合同批量抽取",
-      "summary": "DeepSeek 官方更新日志披露其推理与对话接口在长文档上下文处理与严格 JSON 模式上的稳定性改进，便于律所与法务团队低成本构建批量合同条款抽取流水线。",
-      "practice_impact_brief": "法务自动化团队可用 JSON 模式稳定抽取合同主体、金额与履约期限并入库核验。",
+      "title": "OpenAI 公布 Astra for Law 法律智能评测：扩展 3.1 亿 URL 法律索引并压低输出消耗",
+      "summary": "OpenAI 披露面向法律实务的 Astra for Law 配置，其法律检索索引扩展至 3.1 亿余条 URL（覆盖 99.9% 以上美国判例），在 Vals AI 评测中以 20.8% 满分率居首且输出 token 减少 54%。",
+      "practice_impact_brief": "法律团队评估按量计费模型时，应同步对比准确率与单案输出 token 成本。",
       "practice_impact_is_ai_draft": true,
       "fact_tier": "market_opinion",
       "unverified": true,
-      "unverified_reason": "厂商官方更新日志，实际长文召回率须结合本地合同集验证",
+      "unverified_reason": "厂商官方基准博客披露，须结合独立第三方盲测复核",
       "needs_human_check": false,
       "high_risk_legal": false,
       "headline": false,
       "review_status": "approved",
       "detail_analysis": {
         "key_points": [
-          "法律文档批量处理要真正跑进日常工作流，前提是输出格式足够稳定。DeepSeek 官方更新日志强调了长上下文与结构化 JSON 输出稳定性的持续迭代，直接回应了合同台账抽取与法规比对的工程痛点。过去律师用对话窗口审合同，常因格式漂移而无法直接导入表格。进一步看，严格的 JSON 输出配合外部 Schema 校验，能把错漏字段自动拦截在人工审校之前。不过，公有云 API 调用仍须前置脱敏规则，涉密并购底稿建议评估私有化部署方案。"
+          "前沿法律模型竞争已从拼绝对跑分，转向“权威索引覆盖 + 单案成本效率”双维度。OpenAI 披露，Astra for Law 将法律检索索引扩充至 3.1 亿条 URL，在评测中取得 20.8% 满分率的同时将单任务平均输出压缩至 64,000 token。对按 token 付费的律所和法务部而言，冗长无效推理直接拉高年度预算。因此，选型评估不能只看单一得分，还应测算“同等准确率下的单份尽调或检索成本”。不过，厂商自报基准仍带有利口径，真实中文与跨法域表现尚待一线实测。"
         ],
         "evidence_quotes": [
           {
-            "text": "持续优化长文档上下文处理与结构化 JSON 输出稳定性，支撑工具调用与 Agent 工作流。",
-            "locator": "更新日志摘要"
+            "text": "Today, the updated index spans over 310 million URLs and covers more than 99.9% of published U.S. precedential case law.",
+            "locator": "Legal Search Index 段"
           }
         ],
-        "legal_commentary": "【AI 初稿】对正在自建合同台账或法规监控管线的律所与企业法务而言，国产推理底座在长上下文和 JSON 稳定性上的提升，显著拉低了批量文档初筛的试错成本。建议团队采用“结构化字段抽取 + 逐字原文短引文回链”的两阶段范式，配合自动 Schema 校验拦截异常格式，让律师只需对照短引文即可在数秒内完成真伪核验，同时严格禁止未经脱敏的客户核心机密直接发往外部接口。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "legal_commentary": "【AI 初稿】OpenAI 此次披露释放了两个值得法律科技负责人关注的实务信号：一是“基础模型 + 专用法律检索索引 + 实务提示调优”的配置模式正在取代纯微调黑盒，迭代速度更快；二是单任务 token 消耗已成为影响律所规模化部署预算的关键变量。建议涉美业务律所在采购测试中记录每项复杂法律调研的实际耗时、核源准确率与单次调用费用，综合核算 ROI。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
         "ai_draft": true
       }
     },
@@ -230,32 +230,32 @@
       "source_id": "stanford-hai-news",
       "source_name": "Stanford HAI News（法律 AI 实证与评测研究）",
       "source_domain": "hai.stanford.edu",
-      "source_url": "https://hai.stanford.edu/news",
-      "published_at": "2026-11-22",
+      "source_url": "https://hai.stanford.edu/news/ai-might-be-flooding-state-court-houses-but-proving-it-is-another-matter",
+      "published_at": "2026-11-19",
       "collected_at": "2026-11-24T08:00:00Z",
       "category": "判例与学术",
-      "title": "Stanford HAI 法律 AI 实证观察：附带引用链接仍不足以消除律师核源盲区",
-      "summary": "Stanford HAI 法律 AI 实证研究专栏指出，即使法律 RAG 工具提供可点击引用链接，实务用户在时间压力下实际点开核验原文的比例仍偏低，需在界面并排展示逐字短引文。",
-      "practice_impact_brief": "律所审校 AI 生成文书时，应要求工具在正文旁直接展示原文短句以便 3 秒核真。",
+      "title": "Stanford HAI 研究州法院 AI 幻觉文书激增：构建基准校准检测器但举证认定仍难",
+      "summary": "Stanford HAI 发文指出，随着生成式 AI 辅助起草的诉状涌入美国州法院，研究团队利用已记录的 AI 幻觉案例构建基准以校准检测工具，但要在司法程序中确证诉状由 AI 生成仍面临举证难题。",
+      "practice_impact_brief": "诉讼团队不可依赖 AI 检测器替代实质核源，质证核心仍是逐条核查判例真伪。",
       "practice_impact_is_ai_draft": true,
       "fact_tier": "market_opinion",
       "unverified": true,
-      "unverified_reason": "学术研究观察摘要，具体实验样本细节以论文全文为准",
+      "unverified_reason": "学术研究观察报道，具体实验细节以论文全文为准",
       "needs_human_check": false,
       "high_risk_legal": false,
       "headline": false,
       "review_status": "approved",
       "detail_analysis": {
         "key_points": [
-          "给 AI 输出加上蓝字超链接，并不等于律师真的会点开核源。Stanford HAI 法律 AI 实证观察指出，在高压办案节奏下，单纯提供外部引用链接仍容易引发过度信任，唯有把关键法条或原文短句并排呈现在审校视图中，才能实质提升纠错率。这一发现直接戳中了法律科技产品的交互软肋。点击跳转会打断阅读流，律师往往默认“有链接即靠谱”。因此，律所内部审核 SOP 与采购标准都应把“原文短引文同屏对照”列为硬指标。"
+          "识别对方诉状是否由 AI 撰写，在法庭上远比想象中更难举证。Stanford HAI 报道显示，斯坦福研究者基于已披露的 AI 幻觉案例搭建了校准基准，用于评估检测工具在州法院文书中的表现，同时指出单纯证明“系 AI 生成”仍具高度不确定性。原因在于，文本风格检测器普遍存在误报率，法官很难仅凭检测分值作出纪律处分。因此，诉讼律师质证对手方疑似 AI 诉状时，最硬的抓手不是跑检测器，而是直接指出具体不存在的案号与篡改引文。"
         ],
         "evidence_quotes": [
           {
-            "text": "引用链接虽提升信任度，但在时间压力下用户实际点击核源的比例仍偏低。",
-            "locator": "实证观察段"
+            "text": "Stanford researchers use a novel benchmark built from documented AI hallucination cases to calibrate detectors.",
+            "locator": "导语段"
           }
         ],
-        "legal_commentary": "【AI 初稿】这项实证观察对执业律师的日常审校习惯极具警示意义：在庭审文书或合规意见书定稿前，切忌因为 AI 附上了看似规范的引用编号就跳过原文核对。律所知识管理团队在评估或自研法律 AI 检索工具时，应优先选择能在摘要旁直接露出逐字原文片段及条款定位的产品，并在内部审校 SOP 中明确高风险条款必核原文，把单条核真成本压到数秒之内，避免核源流于形式。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "legal_commentary": "【AI 初稿】这项斯坦福研究为诉讼律师与法院实务人员划清了一个关键认知：AI 文本检测器只能作为初筛辅助信号，不能当作法庭质证的决定性证据。无论己方提交还是审查对方代理词，真正决定程序责任与惩戒后果的，都是具体引用的法条、案号与裁判要旨是否客观存在。律所内部审校机制仍应坚持“一手原文逐条核验 + 经办人留痕签核”，而不是寄望于检测工具事后把关。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
         "ai_draft": true
       }
     },
@@ -265,32 +265,32 @@
       "source_id": "thomson-reuters-institute",
       "source_name": "Thomson Reuters Institute",
       "source_domain": "www.thomsonreuters.com",
-      "source_url": "https://www.thomsonreuters.com/en/institute",
-      "published_at": "2026-11-21",
+      "source_url": "https://www.thomsonreuters.com/en-us/posts/innovation/cocounsel-legal-october-2026-releases/",
+      "published_at": "2026-11-19",
       "collected_at": "2026-11-24T08:00:00Z",
       "category": "行业与资本",
-      "title": "Thomson Reuters Institute 追踪法律行业 AI 采用率：透明度披露正成客户信任新锚点",
-      "summary": "Thomson Reuters Institute 行业研究指出，法律机构生成式 AI 采用已从个人尝鲜转向所级工作流采购，同时企业客户更关注律所是否主动披露 AI 使用边界与人工复核机制。",
-      "practice_impact_brief": "律所合伙人可在委托代理协议中前置 AI 使用披露与复核承诺，化合规义务为信任优势。",
+      "title": "汤森路透新一代 CoCounsel Legal 登陆英、加、澳，并将 Westlaw Deep Research 嵌入第三方平台",
+      "summary": "汤森路透公布 CoCounsel Legal 2026 年 10 月版进展：重构后的平台已在英、加、澳上线并接入各国 Westlaw 与 Practical Law，同时新增主流云盘直连并将深度检索嵌入第三方执业平台。",
+      "practice_impact_brief": "跨法域律所可重点评估“权威法源 + DMS 直连 + 第三方内嵌”的整合采购成本。",
       "practice_impact_is_ai_draft": true,
       "fact_tier": "market_opinion",
       "unverified": true,
-      "unverified_reason": "行业研究机构观点报告",
+      "unverified_reason": "商业厂商官方产品发布通稿",
       "needs_human_check": false,
       "high_risk_legal": false,
       "headline": false,
       "review_status": "approved",
       "detail_analysis": {
         "key_points": [
-          "律所使用 AI 不必藏着掖着，透明披露反而正在变成赢取客户信任的加分项。Thomson Reuters Institute 行业观察显示，随着法律 AI 进入所级规模化采购阶段，企业客户的核心关切不再是“有没有用 AI”，而是“怎么管住保密与质量”。原因在于，大中型企业法务自身也在推进 AI 降本增效，更看重外部律师是否具备清晰的人工复核闭环。因此，提前在业务约定书中写明脱敏底线与合伙人终审责任，比事后被客户质疑要主动得多。"
+          "头部法律信息巨头正通过“本土权威库直连 + 第三方平台内嵌”重构竞争壁垒。汤森路透披露，新一代 CoCounsel Legal 已在英国、加拿大与澳大利亚上线，接入各国 Westlaw 与 Practical Law 内容，并将 Westlaw Deep Research 直接嵌入第三方执业平台。相比独立聊天网页，把深度检索和云盘文档管理串进同一套工作流，能显著减少律师来回切换窗口的摩擦。不过，厂商商业通稿往往突出生态广度，实际跨法域检索精度与捆绑计费条款仍待律所试用核验。"
         ],
         "evidence_quotes": [
           {
-            "text": "法律机构生成式 AI 采用正转向所级工作流采购，客户更关注透明披露与人工复核机制。",
-            "locator": "行业观察摘要"
+            "text": "重构后的新一代平台已在英国、加拿大与澳大利亚上线，接入各国 Westlaw 与 Practical Law 内容。",
+            "locator": "发布公告第 1 段"
           }
         ],
-        "legal_commentary": "【AI 初稿】结合当前行业趋势，律所管委会与业务合伙人可将“负责任 AI 使用说明”纳入标准客户沟通材料与委托代理协议，清晰界定哪些辅助环节（如初筛检索、格式核对）可使用经批准的 AI 工具，哪些核心环节（如法律结论、庭审质证）严格由执业律师主导把关。需要留意的是，披露条款须与所内实际权限配置保持一致，避免书面承诺与一线操作脱节引发执业争议。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "legal_commentary": "【AI 初稿】对承接跨境业务的大中型律所与跨国企业法务而言，汤森路透此次更新标志着法律 AI 行业正从“独立工具箱”迈向“权威数据库 + 执业工作流”深度融合阶段。法务与 IT 负责人在续签或评估法律数据库合同时，建议将 DMS 连接器权限边界、第三方平台调用的客户数据隔离条款以及按席位/按用量计费结构一并纳入商务谈判清单，避免后期锁定成本过高。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
         "ai_draft": true
       }
     }

@@ -712,6 +712,7 @@ test("5. R2 closures: ST02 brief faithfulness, N1 Stage 1 verbatim grounding, ST
     candidatesDir: candDir,
     cacheDir: path.join(baseDir, "raw"),
     bundlesDir,
+    topicPoolDir: path.join(baseDir, "topic-pool"),
     offline: true,
   });
   assert.ok(r3Curate.reviewNotesMd.includes("Stage1 模板/模式"));

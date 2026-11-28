@@ -3,7 +3,7 @@
  * LexAIDaily 双层差异化一键导出 CLI（LD-G2-05｜Issue #43）
  *
  * 读取经人工终审的结构化日更数据包（DailyBundle JSON，对齐 #39 Schema）：
- *   1. 先执行 #39 ajv 契约校验、禁用全文字段扫描与白名单 source_id 核对；
+ *   1. 先执行 #39 ajv 契约校验、禁用全文字段扫描与严格 fail-closed 白名单 source_id 核对；
  *   2. 公众号固定栏目（预览层，依 D-030）：直接调用 Gate 1 已验收的
  *      scripts/wechat-prototype/build.mjs（juice@12.2.6），仅渲染 ≤160 字摘要 +
  *      1 句极简实务影响 + 引导「阅读原文」跳 Web 详情页（零 <table>、零 <a href>）；
@@ -208,7 +208,6 @@ export function mapBundleToWebEdition(
         summary: item.summary,
         practiceImpactBrief: item.practice_impact_brief,
         practiceImpactIsAiDraft: Boolean(item.practice_impact_is_ai_draft),
-        // Backward-compatible V16 modal impact list + full Gate 2 detail_analysis
         impact: [item.practice_impact_brief],
         highRiskLegal: Boolean(item.high_risk_legal),
         ...(item.effective_status ? { effectiveStatus: item.effective_status } : {}),
@@ -253,7 +252,6 @@ export function buildWebEditionsIndex(bundles, { approvedOnly = false } = {}) {
     recentKeys.push(bundle.meta.date);
   });
 
-  // Group all bundles by ISO week to provide weekly curated archive entries (D-029)
   const weeklyMap = new Map();
   for (const bundle of sorted) {
     const wk = isoWeekKey(bundle.meta.date);
@@ -320,6 +318,9 @@ function assertWechatHtmlCompliance(html) {
 }
 
 function validateBundleOrThrow(bundle, sourceLabel, whitelistIds) {
+  if (!whitelistIds || whitelistIds.size === 0) {
+    throw new Error("白名单文件缺失或为空，拒绝导出（fail-closed）");
+  }
   const schemaRes = validateDailyBundle(bundle);
   if (!schemaRes.valid) {
     const summary = schemaRes.errors
@@ -334,13 +335,11 @@ function validateBundleOrThrow(bundle, sourceLabel, whitelistIds) {
       `DailyBundle (${sourceLabel}) 含禁用全文字段：${forbidden.map((h) => h.path).join(", ")}`,
     );
   }
-  if (whitelistIds && whitelistIds.size > 0) {
-    const wlRes = validateSourceIdAgainstWhitelist(bundle, whitelistIds);
-    if (!wlRes.valid) {
-      throw new Error(
-        `DailyBundle (${sourceLabel}) 含未注册白名单 source_id：${wlRes.errors.map((e) => e.message).join("; ")}`,
-      );
-    }
+  const wlRes = validateSourceIdAgainstWhitelist(bundle, whitelistIds);
+  if (!wlRes.valid) {
+    throw new Error(
+      `DailyBundle (${sourceLabel}) 含未注册白名单 source_id：${wlRes.errors.map((e) => e.message).join("; ")}`,
+    );
   }
 }
 
@@ -349,7 +348,6 @@ export function exportDualLayer({
   outDir,
   imageBase = DEFAULT_IMAGE_BASE,
   approvedOnly = false,
-  verifyWhitelist = true,
   repoRoot = DEFAULT_REPO_ROOT,
   buildScriptPath = DEFAULT_BUILD_SCRIPT,
 }) {
@@ -360,12 +358,20 @@ export function exportDualLayer({
     throw new Error("必须指定 --out-dir 输出目录");
   }
 
-  const whitelistIds = verifyWhitelist ? loadWhitelistSourceIds(repoRoot) : null;
+  const whitelistIds = loadWhitelistSourceIds(repoRoot);
+  if (whitelistIds.size === 0) {
+    throw new Error("白名单文件缺失或为空，拒绝导出（fail-closed）");
+  }
   const loadedBundles = bundlePaths.map((p) => {
     const abs = path.resolve(p);
     const raw = readFileSync(abs, "utf8");
     const parsed = JSON.parse(raw);
     validateBundleOrThrow(parsed, abs, whitelistIds);
+    // Pre-check publishable items before creating any output directories (R1-S3-1)
+    const publishable = selectPublishableItems(parsed, { approvedOnly });
+    if (publishable.length === 0) {
+      throw new Error(`DailyBundle (${parsed?.meta?.date || abs}) 无可导出条目`);
+    }
     return { path: abs, bundle: parsed };
   });
 
@@ -453,14 +459,13 @@ export function exportDualLayer({
   };
 }
 
-function parseCliArgs(argv) {
+export function parseCliArgs(argv) {
   const args = {
     in: null,
     inDir: null,
     outDir: null,
     imageBase: DEFAULT_IMAGE_BASE,
     approvedOnly: false,
-    skipWhitelistCheck: false,
     help: false,
   };
   for (let i = 0; i < argv.length; i += 1) {
@@ -469,8 +474,6 @@ function parseCliArgs(argv) {
       args.help = true;
     } else if (token === "--approved-only") {
       args.approvedOnly = true;
-    } else if (token === "--skip-whitelist-check") {
-      args.skipWhitelistCheck = true;
     } else if (token === "--in" || token === "--in-dir" || token === "--out-dir" || token === "--image-base") {
       const val = argv[(i += 1)];
       if (!val || val.startsWith("--")) {
@@ -517,7 +520,6 @@ function runCli() {
     outDir: path.resolve(process.cwd(), args.outDir),
     imageBase: args.imageBase,
     approvedOnly: args.approvedOnly,
-    verifyWhitelist: !args.skipWhitelistCheck,
   });
 
   console.log(

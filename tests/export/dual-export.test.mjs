@@ -17,6 +17,7 @@ import {
   loadWhitelistSourceIds,
   mapBundleToWebEdition,
   mapBundleToWechatSample,
+  parseCliArgs,
 } from "../../src/export/dual-export.mjs";
 
 const TRIAL_DATES = ["2026-11-24", "2026-11-25", "2026-11-26"];
@@ -24,7 +25,23 @@ const BUNDLES_DIR = path.join(DEFAULT_REPO_ROOT, "data", "bundles");
 const EXPORTS_DIR = path.join(DEFAULT_REPO_ROOT, "data", "exports", "ld-g2-05");
 const H = (host, p = "") => `${"https"}://${host}${p}`;
 
-test("1. LD-G2-05: 3 consecutive dual-track trial bundles pass #39 Schema, whitelist, sentinel ratio & zero-fulltext", () => {
+const DISALLOWED_SECTION_PATHS = new Set([
+  "",
+  "/",
+  "/blog",
+  "/blog/",
+  "/news",
+  "/news/",
+  "/feed",
+  "/feed/",
+  "/law-reviews",
+  "/law-reviews/",
+  "/updates",
+  "/fabu.html",
+  "/en/institute",
+]);
+
+test("1. LD-G2-05: 3 consecutive dual-track trial bundles pass #39 Schema, whitelist, article-level URLs, sentinel ratio & zero-fulltext", () => {
   const whitelistIds = loadWhitelistSourceIds(DEFAULT_REPO_ROOT);
   assert.ok(whitelistIds.size >= 20, "Whitelist must load both CN and Global sources");
 
@@ -51,6 +68,12 @@ test("1. LD-G2-05: 3 consecutive dual-track trial bundles pass #39 Schema, white
     for (const item of bundle.items) {
       assert.ok(item.source_url.startsWith(`${"https"}://`));
       assert.equal(item.source_url.includes("aihot.news"), false);
+      const parsedUrl = new URL(item.source_url);
+      assert.equal(
+        DISALLOWED_SECTION_PATHS.has(parsedUrl.pathname),
+        false,
+        `SP01: ${item.id} must use an article-level primary URL, got ${item.source_url}`,
+      );
       assert.ok(item.summary.length >= 20 && item.summary.length <= 160);
       assert.ok(item.detail_analysis.key_points.length >= 1 && item.detail_analysis.key_points.length <= 3);
       const totalKp = item.detail_analysis.key_points.reduce((s, p) => s + p.length, 0);
@@ -128,7 +151,7 @@ test("2. LD-G2-05: Dual-layer CLI produces deterministic WeChat preview HTML (D-
   }
 });
 
-test("3. LD-G2-05: Negative guardrails reject invalid schema, forbidden fulltext, aihot.news, over-160 summary & over-600 key_points", () => {
+test("3. LD-G2-05: Negative & R1-ST01/S3-1 guardrails reject bad schema, fulltext, aihot, hidden bypass, empty whitelist & leave zero empty dirs", () => {
   const baseBundle = JSON.parse(readFileSync(path.join(BUNDLES_DIR, "2026-11-24.json"), "utf8"));
   const tmpDir = mkdtempSync(path.join(os.tmpdir(), "lexai-g2-05-neg-"));
   const outDir = path.join(tmpDir, "out");
@@ -166,6 +189,43 @@ test("3. LD-G2-05: Negative guardrails reject invalid schema, forbidden fulltext
       b.items[0].source_id = "unregistered-fake-src";
     });
     assert.throws(() => exportDualLayer({ bundlePaths: [badWhitelistPath], outDir }), /白名单/);
+
+    // R1-ST01: hidden --skip-whitelist-check flag removed & empty repoRoot fails closed
+    assert.throws(
+      () => parseCliArgs(["--in", "a.json", "--out-dir", "b", "--skip-whitelist-check"]),
+      /未知参数/,
+    );
+    const emptyRepoRoot = mkdtempSync(path.join(os.tmpdir(), "lexai-empty-repo-"));
+    try {
+      assert.throws(
+        () =>
+          exportDualLayer({
+            bundlePaths: [path.join(BUNDLES_DIR, "2026-11-24.json")],
+            outDir,
+            repoRoot: emptyRepoRoot,
+          }),
+        /白名单文件缺失或为空/,
+      );
+    } finally {
+      rmSync(emptyRepoRoot, { recursive: true, force: true });
+    }
+
+    // R1-S3-1: --approved-only with all pending items fails BEFORE creating empty wechat/ or web/ dirs
+    const allPendingPath = writeCase("all-pending", (b) => {
+      for (const it of b.items) {
+        it.review_status = "pending_review";
+        it.headline = false;
+        it.practice_impact_is_ai_draft = true;
+        it.detail_analysis.ai_draft = true;
+      }
+    });
+    const pendingOutDir = path.join(tmpDir, "pending-out");
+    assert.throws(
+      () => exportDualLayer({ bundlePaths: [allPendingPath], outDir: pendingOutDir, approvedOnly: true }),
+      /无可导出条目/,
+    );
+    assert.equal(existsSync(path.join(pendingOutDir, "wechat")), false);
+    assert.equal(existsSync(path.join(pendingOutDir, "web")), false);
 
     const wxSample = mapBundleToWechatSample(baseBundle);
     assert.equal(wxSample.items[0].num, "01");
