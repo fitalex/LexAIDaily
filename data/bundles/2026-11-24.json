@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "site": "The Legal AI Daily",
+    "column": "每日固定栏目",
+    "issue": "第 001 期",
+    "date": "2026-11-24",
+    "date_line": "2026-11-24 · 星期二 · 第 001 期",
+    "internal": true,
+    "internal_note": "LD-G2-05 内部试运行样稿（第 1/3 期）· 不对外发布",
+    "digest": "本期聚焦英国 ICO 消费级 Agentic AI 默认隐私提醒与欧盟 AI Act 第 27 条 FRIA 草案，同时覆盖金杜大模型开源许可实务、OpenAI Astra for Law 法律评测、Stanford HAI 法院幻觉检测与汤森路透 CoCounsel 更新。",
+    "disclaimer": "本样稿为 Gate 2 内部试运行产物，不对外发布。标有「AI 初稿」之实务影响与评述仅供初步研判，不构成正式法律意见；日期与效力状态以一手信源为准。",
+    "web_detail_url": "https://lexaidaily.example/d/2026-11-24",
+    "generated_at": "2026-11-24T08:30:00Z"
+  },
+  "items": [
+    {
+      "id": "trial-20261124-01",
+      "region": "global",
+      "source_id": "uk-ico-news",
+      "source_name": "英国信息专员办公室（ICO）",
+      "source_domain": "ico.org.uk",
+      "source_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/11/developers-creating-agentic-ai-services-for-consumers-reminded-to-meet-their-data-protection-responsibilities/",
+      "published_at": "2026-11-24",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "监管与合规",
+      "title": "英国 ICO 联合 CMA 提醒消费级 Agentic AI 开发者落实默认隐私保护义务",
+      "summary": "英国信息专员办公室（ICO）联合 CMA 发布合规提醒，明确消费级 Agentic AI 开发与部署方须从设计之初嵌入默认隐私保护并持续证明符合英国数据保护法，正式指引预计 2027 年推出。",
+      "practice_impact_brief": "涉英 AI Agent 团队须在研发期收紧最小权限与记忆开关，并建立可审计合规留痕。",
+      "practice_impact_is_ai_draft": false,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "guidance",
+      "headline": true,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "英国监管层给消费级 Agentic AI 划出了明确红线。开发与部署方不能再先上线、后补隐私条款。英国信息专员办公室（ICO）联合 CMA 明确指出，「开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法」。监管之所以将防线前移，根源在于智能体的自主特性。一旦默认权限过宽，跨步骤数据收集便已发生。因此，唯有靠架构层默认控制与留痕，才能撑起持续举证义务。有人会质疑目前只是指引而非新法，但该要求直接锚定现行英国数据保护法，不等 2027 年才生效。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法。",
+            "locator": "正文第 1 句"
+          }
+        ],
+        "legal_commentary": "英国 ICO 联合 CMA 释放的监管信号明确：针对具备自主执行能力的消费级 Agentic AI，“先上线、后补隐私条款”在英国数据保护法下风险显著抬升。对服务出海科技企业或评估外部 AI 工具的执业律师与法务而言，实务落地可从三处切入：其一，在需求评审与供应商尽调清单中前置“默认隐私”核查项，明确智能体默认不开启跨应用数据留存；其二，要求技术团队或供应商输出可审计的合规留痕，回应持续举证口径；其三，跟踪 2027 年正式指引推进节点，提前预留隐私政策修订窗口。以上分析仅作实务工作流参考，不构成个案法律意见。",
+        "ai_draft": false
+      }
+    },
+    {
+      "id": "trial-20261124-02",
+      "region": "global",
+      "source_id": "eu-ai-office",
+      "source_name": "欧盟 AI 办公室 (EU AI Office｜合规哨兵)",
+      "source_domain": "digital-strategy.ec.europa.eu",
+      "source_url": "https://digital-strategy.ec.europa.eu/en/news/commission-seeks-feedback-draft-template-fundamental-rights-impact-assessment-under-ai-act",
+      "published_at": "2026-11-16",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "监管与合规",
+      "title": "欧盟 AI 办公室就《人工智能法案》第 27 条 FRIA 问卷草案公开征求意见",
+      "summary": "欧盟 AI 办公室联合欧盟基本权利机构依据《人工智能法案》第 27(5) 条起草高风险 AI 部署方 FRIA 问卷草案，公开征求意见至 2027 年 1 月 15 日，法定适用日为 2027 年 12 月 2 日。",
+      "practice_impact_brief": "在欧部署高风险 AI 的企业法务可提前对照草案梳理评估要素与通报模板。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "draft",
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "欧盟高风险 AI 部署方的事前评估义务，已从原则条文落向标准化问卷。欧盟 AI 办公室联合 FRA 依据《人工智能法案》第 27(5) 条发布基本权利影响评估（FRIA）问卷模板草案，并明确法定适用日为 2027 年 12 月 2 日。之所以提前公开问卷框架，是因为企业盘点受影响群体与人工监督流程需要跨部门周期。因此，法务团队宜借征求意见窗口提前做一轮内部差距体检。虽有观点认为草案仍会微调，但核心评估维度已基本定型，早建台账能避免临期返工。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "依据《人工智能法案》第 27(5) 条起草高风险 AI 部署方基本权利影响评估（FRIA）问卷模板草案。",
+            "locator": "公告第 1 段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】欧盟 AI 办公室推出第 27 条 FRIA 问卷草案，为在欧部署附件三高风险 AI 系统的跨国企业提供了可直接对标的合规清单。对企业法务与涉外合规律师而言，现阶段可重点推进两项准备：一是结合问卷框架梳理业务部门正在采购或自研的高风险 AI 场景，明确受影响主体、人工复核节点与市场监管通报接口；二是在 2027 年 1 月 15 日征询截止前评估是否通过行业协会反馈实务难点。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261124-03",
+      "region": "global",
+      "source_id": "global-tr-legal-blog",
+      "source_name": "Thomson Reuters Law Blog (CoCounsel)",
+      "source_domain": "legal.thomsonreuters.com",
+      "source_url": "https://legal.thomsonreuters.com/blog/what-fiduciary-grade-ai-means-for-canadian-firms/",
+      "published_at": "2026-11-20",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "实务与工具",
+      "title": "汤森路透发布中小律所受托级 AI 选型四问清单，警示影子 AI 保密风险",
+      "summary": "汤森路透法律博客围绕受托级 AI 原则提出采购尽调四问（权威法源、客户数据隔离、法律专家参与与可追溯审计），并援引调研称 34% 受访专业人员正在使用未授权 AI 工具。",
+      "practice_impact_brief": "中小律所可将四问清单直接转为 AI 供应商尽调表，并同步排查所内影子 AI。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "厂商博客调研口径，未经独立第三方复核",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "律所采购 AI 工具的核心门槛，正从功能演示转向可审计的受托合规。汤森路透博客提出法源权威性、客户数据不用于训练、人类最终判断与引用可追溯四项核查标准，并称 34% 受访者存在未授权工具使用。这一数据点出了中小律所的普遍痛点。完全禁用 AI 往往逼出私下粘贴案卷的影子行为，反而放大泄密风险。因此，更务实的做法是先定四问准入门槛，再提供合规替代工具。不过，该文属厂商观点，调研样本与本土执业环境存在差异，落地时仍须结合律所自身保密规则裁剪。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "34% 的受访者正在使用未经所在机构批准的 AI 工具。",
+            "locator": "调研摘要段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】对中小律所合伙人与企业法务负责人而言，这份“受托级 AI”四问框架具备直接拿来即用的尽调价值。实务中可将四项问题拆入供应商合规问卷：要求厂商书面承诺客户案卷不用于模型训练、明确数据留存与删除周期、并提供法条与判例引用一键回溯能力。与此同时，律所应同步出台轻量级脱敏操作指引与季度抽查机制，用“合规白名单工具”疏导而非单纯封堵影子 AI。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261124-04",
+      "region": "cn",
+      "source_id": "cn-kwm-cli",
+      "source_name": "金杜律师事务所 China Law Insight",
+      "source_domain": "www.chinalawinsight.com",
+      "source_url": "https://www.chinalawinsight.com/2025/06/articles/uncategorized/%E6%B5%85%E6%9E%90ai%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BC%80%E6%BA%90%E6%96%B0%E8%B6%8B%E5%8A%BF-ai%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%BC%80%E6%BA%90%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE/",
+      "published_at": "2025-06-30",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "实务与工具",
+      "title": "金杜实务解析 AI 大模型开源许可新趋势：自拟社区协议渐成主流",
+      "summary": "金杜律师事务所 China Law Insight 撰文对比 DeepSeek 采用 MIT 许可与多家大厂自拟大模型社区许可协议的分化趋势，拆解商业使用限制、衍生权重授权与合规核查要点。",
+      "practice_impact_brief": "企业与律所本地部署开源大模型前，须逐条核查自拟许可中的商业与月活限制。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "律所实务分析文章，属专业市场观点",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "开源大模型不再默认等同于可自由商用的 MIT 或 Apache-2.0 许可。金杜文章指出，腾讯、Meta、谷歌等多家许可方已放弃传统格式化开源许可证，转而自拟大模型开源许可协议，重新设定商业边界与衍生模型约束。技术团队常误以为能从开源社区直接下载权重就能直接接入商业产品。因此，企业法务必须在开源模型引入清单中新增许可条款人工审查环节。相比标准宽松协议，自拟社区协议往往暗藏地域、用户规模或竞品禁止条款，忽略核查极易埋下违约隐患。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "多家公司作为开源AI大模型的许可方，均放弃沿用MIT、Apache2.0等格式化开源许可证，转而自拟大模型开源许可协议。",
+            "locator": "引言段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】律所与企业技术团队在落地私有化开源法律模型时，最容易忽略的合规死角正是模型权重许可协议。建议法务团队联合研发建立两步准入清单：首先，区分 MIT/Apache-2.0 等标准宽松许可与厂商自拟社区许可，后者一律进入法务逐条审阅流程；其次，重点核对商用月活上限、输出蒸馏限制、商标归属及显著署名义务，并在内部模型台账中留存许可文本快照。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261124-05",
+      "region": "global",
+      "source_id": "arxiv-cs-ai-rss",
+      "source_name": "arXiv cs.AI 官方 RSS（推理与评测前沿）",
+      "source_domain": "arxiv.org",
+      "source_url": "https://arxiv.org/html/2611.29852v1",
+      "published_at": "2026-11-23",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "模型与技术",
+      "title": "多语种劳动法基准 GlobalHRBench 发布：切换提问语言可致模型排名反转",
+      "summary": "卡内基梅隆大学与 Farlinko 发布覆盖 8 个法域 240 组劳动法决策题的 GlobalHRBench（共 1920 条提示），实测显示部分模型跨语言相对降幅达 42.2%，且中英文提问下排名反转。",
+      "practice_impact_brief": "涉外律所选型多语种法律 AI 时，须按实际工作语言分别测试而非套用英文榜单。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "arXiv 学术预印本，尚未经同行评审",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "英文榜单排名靠前的模型，切到中文或小语种法律提问时未必依然领先。研究团队在 GlobalHRBench 中构建覆盖 8 个法域、240 组劳动法决策题及 1920 条多语种提示的评测集，实测部分模型跨语言降幅高达 42.2%。造成排名反转的根源，在于不同法域法律语料在预训练中的分布极度不均。因此，出海企业法务不能凭单一英文跑分拍板采购。虽然补充权威法条能明显纠错，但原文也指出在缺失单一条款时模型仍可能误用保留条款，人工复核不可省略。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "覆盖 8 个法域 240 组劳动法决策题及其 8 种语言对齐版本（共 1,920 条提示）。",
+            "locator": "摘要第 1 句"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】GlobalHRBench 对跨国企业法务与涉外劳动法律师给出了很直接的选型警示：用英文提问测出来的模型表现，不能直接平移到中文、德文或日文劳动法实务。团队在开展法律 AI 采购 POC 时，建议准备 10 至 20 道本所高频涉外实务题，分别以目标工作语言和附带法条原文两种方式做对照盲测，重点观察模型在法条缺失时是否会“硬编结论”。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261124-06",
+      "region": "global",
+      "source_id": "openai-news-rss",
+      "source_name": "OpenAI News RSS（企业级 Agent 与法律应用）",
+      "source_domain": "openai.com",
+      "source_url": "https://openai.com/index/astra-law-6-2/",
+      "published_at": "2026-11-17",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "模型与技术",
+      "title": "OpenAI 公布 Astra for Law 法律智能评测：扩展 3.1 亿 URL 法律索引并压低输出消耗",
+      "summary": "OpenAI 披露面向法律实务的 Astra for Law 配置，其法律检索索引扩展至 3.1 亿余条 URL（覆盖 99.9% 以上美国判例），在 Vals AI 评测中以 20.8% 满分率居首且输出 token 减少 54%。",
+      "practice_impact_brief": "法律团队评估按量计费模型时，应同步对比准确率与单案输出 token 成本。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "厂商官方基准博客披露，须结合独立第三方盲测复核",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "前沿法律模型竞争已从拼绝对跑分，转向“权威索引覆盖 + 单案成本效率”双维度。OpenAI 披露，Astra for Law 将法律检索索引扩充至 3.1 亿条 URL，在评测中取得 20.8% 满分率的同时将单任务平均输出压缩至 64,000 token。对按 token 付费的律所和法务部而言，冗长无效推理直接拉高年度预算。因此，选型评估不能只看单一得分，还应测算“同等准确率下的单份尽调或检索成本”。不过，厂商自报基准仍带有利口径，真实中文与跨法域表现尚待一线实测。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "Today, the updated index spans over 310 million URLs and covers more than 99.9% of published U.S. precedential case law.",
+            "locator": "Legal Search Index 段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】OpenAI 此次披露释放了两个值得法律科技负责人关注的实务信号：一是“基础模型 + 专用法律检索索引 + 实务提示调优”的配置模式正在取代纯微调黑盒，迭代速度更快；二是单任务 token 消耗已成为影响律所规模化部署预算的关键变量。建议涉美业务律所在采购测试中记录每项复杂法律调研的实际耗时、核源准确率与单次调用费用，综合核算 ROI。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261124-07",
+      "region": "global",
+      "source_id": "stanford-hai-news",
+      "source_name": "Stanford HAI News（法律 AI 实证与评测研究）",
+      "source_domain": "hai.stanford.edu",
+      "source_url": "https://hai.stanford.edu/news/ai-might-be-flooding-state-court-houses-but-proving-it-is-another-matter",
+      "published_at": "2026-11-19",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "判例与学术",
+      "title": "Stanford HAI 研究州法院 AI 幻觉文书激增：构建基准校准检测器但举证认定仍难",
+      "summary": "Stanford HAI 发文指出，随着生成式 AI 辅助起草的诉状涌入美国州法院，研究团队利用已记录的 AI 幻觉案例构建基准以校准检测工具，但要在司法程序中确证诉状由 AI 生成仍面临举证难题。",
+      "practice_impact_brief": "诉讼团队不可依赖 AI 检测器替代实质核源，质证核心仍是逐条核查判例真伪。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "学术研究观察报道，具体实验细节以论文全文为准",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "识别对方诉状是否由 AI 撰写，在法庭上远比想象中更难举证。Stanford HAI 报道显示，斯坦福研究者基于已披露的 AI 幻觉案例搭建了校准基准，用于评估检测工具在州法院文书中的表现，同时指出单纯证明“系 AI 生成”仍具高度不确定性。原因在于，文本风格检测器普遍存在误报率，法官很难仅凭检测分值作出纪律处分。因此，诉讼律师质证对手方疑似 AI 诉状时，最硬的抓手不是跑检测器，而是直接指出具体不存在的案号与篡改引文。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "Stanford researchers use a novel benchmark built from documented AI hallucination cases to calibrate detectors.",
+            "locator": "导语段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】这项斯坦福研究为诉讼律师与法院实务人员划清了一个关键认知：AI 文本检测器只能作为初筛辅助信号，不能当作法庭质证的决定性证据。无论己方提交还是审查对方代理词，真正决定程序责任与惩戒后果的，都是具体引用的法条、案号与裁判要旨是否客观存在。律所内部审校机制仍应坚持“一手原文逐条核验 + 经办人留痕签核”，而不是寄望于检测工具事后把关。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261124-08",
+      "region": "global",
+      "source_id": "thomson-reuters-institute",
+      "source_name": "Thomson Reuters Institute",
+      "source_domain": "www.thomsonreuters.com",
+      "source_url": "https://www.thomsonreuters.com/en-us/posts/innovation/cocounsel-legal-october-2026-releases/",
+      "published_at": "2026-11-19",
+      "collected_at": "2026-11-24T08:00:00Z",
+      "category": "行业与资本",
+      "title": "汤森路透新一代 CoCounsel Legal 登陆英、加、澳，并将 Westlaw Deep Research 嵌入第三方平台",
+      "summary": "汤森路透公布 CoCounsel Legal 2026 年 10 月版进展：重构后的平台已在英、加、澳上线并接入各国 Westlaw 与 Practical Law，同时新增主流云盘直连并将深度检索嵌入第三方执业平台。",
+      "practice_impact_brief": "跨法域律所可重点评估“权威法源 + DMS 直连 + 第三方内嵌”的整合采购成本。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "商业厂商官方产品发布通稿",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "头部法律信息巨头正通过“本土权威库直连 + 第三方平台内嵌”重构竞争壁垒。汤森路透披露，新一代 CoCounsel Legal 已在英国、加拿大与澳大利亚上线，接入各国 Westlaw 与 Practical Law 内容，并将 Westlaw Deep Research 直接嵌入第三方执业平台。相比独立聊天网页，把深度检索和云盘文档管理串进同一套工作流，能显著减少律师来回切换窗口的摩擦。不过，厂商商业通稿往往突出生态广度，实际跨法域检索精度与捆绑计费条款仍待律所试用核验。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "重构后的新一代平台已在英国、加拿大与澳大利亚上线，接入各国 Westlaw 与 Practical Law 内容。",
+            "locator": "发布公告第 1 段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】对承接跨境业务的大中型律所与跨国企业法务而言，汤森路透此次更新标志着法律 AI 行业正从“独立工具箱”迈向“权威数据库 + 执业工作流”深度融合阶段。法务与 IT 负责人在续签或评估法律数据库合同时，建议将 DMS 连接器权限边界、第三方平台调用的客户数据隔离条款以及按席位/按用量计费结构一并纳入商务谈判清单，避免后期锁定成本过高。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    }
+  ]
+}

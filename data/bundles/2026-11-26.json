@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "site": "The Legal AI Daily",
+    "column": "每日固定栏目",
+    "issue": "第 003 期",
+    "date": "2026-11-26",
+    "date_line": "2026-11-26 · 星期四 · 第 003 期",
+    "internal": true,
+    "internal_note": "LD-G2-05 内部试运行样稿（第 3/3 期）· 不对外发布",
+    "digest": "本期聚焦最高法《关于依法审理涉人工智能纠纷案件的意见》与英国 ICO AI-assisted SARs 指引，同时涵盖 Legora 本体论法律检索、OpenAI Presence 企业护栏、君合“双备案”实务、NitiBench+ 时序基准与 AI Agent 民事归责研究。",
+    "disclaimer": "本样稿为 Gate 2 内部试运行产物，不对外发布。标有「AI 初稿」之实务影响与评述仅供初步研判，不构成正式法律意见；日期与效力状态以一手信源为准。",
+    "web_detail_url": "https://lexaidaily.example/d/2026-11-26",
+    "generated_at": "2026-11-26T08:30:00Z"
+  },
+  "items": [
+    {
+      "id": "trial-20261126-01",
+      "region": "cn",
+      "source_id": "cn-spc-fabu",
+      "source_name": "最高人民法院权威发布（合规哨兵）",
+      "source_domain": "www.court.gov.cn",
+      "source_url": "https://www.court.gov.cn/zixun/xiangqing/511101.html",
+      "published_at": "2026-09-07",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "判例与学术",
+      "title": "最高法发布《关于依法审理涉人工智能纠纷案件的意见》，明确涉 AI 知识产权审理导向",
+      "summary": "最高人民法院于 2026 年 9 月 7 日发布《关于依法审理涉人工智能纠纷案件的意见》，专节要求依法妥善审理涉人工智能知识产权纠纷案件，统筹保护创新与防范风险。",
+      "practice_impact_brief": "诉讼与知产律师办理涉 AI 纠纷案件时，须对照最高法最新意见校准裁判口径与举证重点。",
+      "practice_impact_is_ai_draft": false,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "guidance",
+      "headline": true,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "国内涉人工智能纠纷的司法裁判口径，正式有了最高法层面的系统性指导文件。最高人民法院在 2026 年 9 月 7 日发布的《关于依法审理涉人工智能纠纷案件的意见》中，明确提出「依法妥善审理涉人工智能知识产权纠纷案件，保障人工智能高质量发展」。此前各地法院在训练语料合理使用、生成物可版权性与不正当竞争边界上存在口径差异。因此，该意见的落地有助于统一举证与审查尺度。办案律师在起草诉状或答辩意见前，应第一时间逐条核对意见原文并结合本地区既往典型案例组织证据链。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "依法妥善审理涉人工智能知识产权纠纷案件，保障人工智能高质量发展。",
+            "locator": "意见第三部分标题"
+          }
+        ],
+        "legal_commentary": "最高法专门出台涉人工智能纠纷审理意见，对国内争议解决、知识产权与企业合规律师均为重要里程碑。实务中建议团队重点做好两项衔接：一是立即梳理手中在办的涉 AI 著作权、反不正当竞争及技术服务合同纠纷，逐条对照意见原文复核请求权基础、举证责任分配与抗辩路径；二是在为 AI 研发与应用企业提供事前合规顾问服务时，把训练数据授权留痕、生成过程控制记录与用户协议权责条款前置对齐最新司法导向。以上分析仅作实务参考，不构成个案法律意见。",
+        "ai_draft": false
+      }
+    },
+    {
+      "id": "trial-20261126-02",
+      "region": "global",
+      "source_id": "uk-ico-news",
+      "source_name": "英国信息专员办公室 (UK ICO｜合规哨兵)",
+      "source_domain": "ico.org.uk",
+      "source_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/11/subject-access-requests-generated-by-artificial-intelligence/",
+      "published_at": "2026-11-11",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "监管与合规",
+      "title": "英国 ICO 发布 AI 生成数据主体访问请求（AI-assisted SARs）处理指引",
+      "summary": "英国 ICO 明确 UK GDPR 第 15 条下由 AI 辅助起草的 SAR 不会因使用 AI 或含误引法条而自动无效，组织仍须在 1 个月法定期限内开展合理成比例检索，请求不清时可要求澄清暂停计时。",
+      "practice_impact_brief": "涉 UK GDPR 数据合规团队应更新 SAR 受理 SOP，用好澄清暂停计时与身份核验机制。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "guidance",
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "企业不能因为收到一封明显由 AI 代写的宽泛数据访问请求，就直接拒之门外。英国 ICO 在正式指引中明确，UK GDPR 第 15 条下的请求不会仅因借助 AI 起草或误引法条而无效，企业仍须在 1 个月法定期限内完成合理且成比例的检索。这一表态堵住了“以格式瑕疵一刀切驳回”的捷径。不过，指引也为法务留出了应对工具：遇到范围过度宽泛的请求，应第一时间发函要求澄清以暂停计时，疑似伪造授权书时则须直接向数据主体核验身份。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "请求不会仅因使用 AI 起草或包含误引法条而无效，组织仍须在 1 个月法定期限内开展合理且成比例的检索。",
+            "locator": "指引核心条款"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】随着消费者广泛使用通用大模型批量生成维权与数据访问函，涉英企业法务正面临“AI 驱动型 SAR 过载”的新挑战。建议数据合规团队立即对照 ICO 指引修订内部响应模板：第一，受理分流环节取消“疑似模板/AI 撰写即驳回”的错误口径；第二，对范围模糊的批量请求，在收到后数日内即发出标准化澄清函并留存暂停计时记录；第三，对第三方代理提交的请求强化直接身份核验。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-03",
+      "region": "global",
+      "source_id": "global-legora-blog",
+      "source_name": "Legora 官方博客",
+      "source_domain": "legora.com",
+      "source_url": "https://legora.com/blog/introducing-ontological-legal-research",
+      "published_at": "2026-10-29",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "实务与工具",
+      "title": "Legora 发布本体论法律检索：以人工三校法源与规则关联图谱补齐例外条款盲区",
+      "summary": "Legora 发布本体论法律检索方案，指出法律 AI 不仅会虚构引证，更常在命中主规则时漏掉例外条款或误引过时法条；其团队通过律师编辑梳理法源图谱并经三人逐页校对提升底库精度。",
+      "practice_impact_brief": "评估法律检索 AI 时，应专测“主规则 + 例外条款 + 效力层级”组合题而非简单关键词检索。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "法律 AI 厂商官方技术博客发布",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "法律检索 AI 最隐蔽的失误，往往不是编造假法条，而是“找到了主规则，却漏掉了但书和例外条款”。Legora 在其本体论法律检索博文中指出，即便引证真实，模型仍可能误引过时法律、误判权威层级或遗漏例外规则，解决之道在于结合结构化法源关联图谱与严格人工校对。这一观点切中了传统向量检索的盲区。因此，律所在实测法律 AI 检索产品时，务必准备包含“原则条款 + 特别法/但书例外”的真实疑难题，检验其能否给出完整现行规则全貌。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "Even when the sources are real, AI can cite outdated law, misjudge a source's authority, or find the main rule but miss the exception.",
+            "locator": "正文第 2 段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】Legora 提出的“本体论法律检索”对执业律师和知识管理团队具有很强的选型启发：很多看似“零幻觉”的检索工具，依然可能因为漏掉配套司法解释、修订生效日或但书条款而误导办案判断。建议律所在采购 POC 中专门设置 5 至 10 道涉及特别法优先、新旧法衔接和例外情形的实务测试题，重点验证工具能否把关联条款一并拉出并标注效力层级。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-04",
+      "region": "global",
+      "source_id": "openai-news-rss",
+      "source_name": "OpenAI News RSS（企业级 Agent 与法律应用）",
+      "source_domain": "openai.com",
+      "source_url": "https://openai.com/index/introducing-openai-presence/",
+      "published_at": "2026-07-22",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "实务与工具",
+      "title": "OpenAI 推出企业级 Agent 平台 Presence：前置最小权限、策略护栏与人工接管规则",
+      "summary": "OpenAI 公布企业级智能体平台 Presence，将模型推理与企业策略护栏、最小权限访问及人工审批接管规则绑定，支持在保险理赔、账单争议等高合规场景按明确边界上线部署。",
+      "practice_impact_brief": "企业法务评审业务部门 Agent 上线方案时，可要求明确“权限边界 + 审批卡点 + 人工接管”三清单。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "模型厂商官方产品发布说明",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "企业级 Agent 真正能放进生产环境的前提，不是模型更聪明，而是权限和接管规则写得够死。OpenAI 在介绍 Presence 平台时明确，每个智能体仅获得完成特定岗位所需的最小知识与系统访问权限，并由企业预先设定操作边界、审批触发点与人工接管规则。这种“先立规矩再上岗”的设计思路，正好契合受监管行业的风控逻辑。因此，法务参与内部 Agent 项目上线评审时，应要求业务与研发先交付书面权限矩阵和熔断升级路径，再批准开放外部写操作。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "The company sets the policies: what the agent can do, when it needs approval, and when a person should take over.",
+            "locator": "产品说明第 1 段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】随着企业内部客服、保险理赔与法务初筛逐步引入自主执行型 Agent，企业法务团队的合规审查重心必须从“文本内容合规”扩展到“系统执行权限合规”。建议参考 Presence 披露的治理框架，在企业 AI 项目上线评审表中固化三项必检项：最小权限隔离验证、对外法律承诺或资金变动动作的强制人工审批卡点，以及触发异常升级与人工接管后的全链路操作日志留存机制。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-05",
+      "region": "cn",
+      "source_id": "cn-junhe-reviews",
+      "source_name": "君合律师事务所·君合法评",
+      "source_domain": "www.junhe.com",
+      "source_url": "https://junhe.com/law-reviews/2974",
+      "published_at": "2026-04-28",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "监管与合规",
+      "title": "君合法评拆解生成式 AI“双备案”实务观察：明晰大模型备案与属地登记审批层级差异",
+      "summary": "君合律师事务所实务评述对比生成式人工智能大模型备案与登记的适用边界，指出大模型备案须经省级及中央网信办双重审核，而大模型登记仅需属地网信办审核且流程与材料更精简。",
+      "practice_impact_brief": "企业通过 API 接入已备案大模型推出应用时，可对照登记口径评估简化申报路径。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "律所实务分析文章，各地属地监管执行细则以当地网信办最新口径为准",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "同样是上马生成式 AI 应用，选“大模型备案”还是“大模型登记”，合规周期与材料成本差距很大。君合法评指出，大模型备案须经过省级网信办与中央网信办双重审核，而大模型登记仅需属地网信办审核，在流程和具体材料要求上相对精简。许多企业法务在项目立项期容易把两者混为一谈，导致误判上线排期。因此，若团队系直接调用已备案第三方基础模型 API 开发垂类应用，应尽早结合属地网信办最新执行口径，确认是否适用登记通道并前置准备安全评估材料。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "大模型备案需经过省级网信办及中央网信办的双重审核，而大模型登记目前仅需要通过属地网信办审核，在流程和具体材料要求上相对精简。",
+            "locator": "正文对比段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】对正在筹备垂类法律 AI 产品或企业对外智能客服的法务团队而言，准确区分“备案”与“登记”是控制上线节奏的关键。实务中建议分三步推进：第一步，核查底层基础模型是否已完成中央网信办正式备案并确认 API 调用架构不含自研重训权重；第二步，提前向公司注册地属地网信办咨询登记材料清单与最新排期；第三步，将内容安全过滤与标识合规同步纳入上线前验收。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-06",
+      "region": "global",
+      "source_id": "arxiv-cs-ai-rss",
+      "source_name": "arXiv cs.AI 官方 RSS（推理与评测前沿）",
+      "source_domain": "arxiv.org",
+      "source_url": "https://arxiv.org/html/2611.03576v2",
+      "published_at": "2026-11-03",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "模型与技术",
+      "title": "时序法律问答基准 NitiBench+ 发布：审计 53 个法律基准均未对法条历史版本评分",
+      "summary": "VISAI AI 与 VISTEC 审查 156650 份裁判文书后发现最高法院裁判 67.1% 所引法条事后已修订或废止，且 53 个现有法律基准均未按历史有效版本评分；团队发布 1670 题时序基准 NitiBench+。",
+      "practice_impact_brief": "处理跨年度合同争议或历史合规审查时，须核对行为发生时有效的旧法版本而非默认套用新法。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "arXiv 学术预印本，尚未经同行评审",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "用最新修订的法条去评价几年前签的合同或发生的争议，是通用大模型极易踩中的“时间穿越”陷阱。NitiBench+ 研究审计了 156,650 份裁判文书与 53 个现有法律基准，发现 67.1% 最高法院裁判所引法条事后已修订或废止，且检索缺失废止法条导致的评分降幅（-0.79）约为修订法条（-0.25）的三倍。原因是多数知识库只保留现行版文本。因此，诉讼与合规团队在搭建法规库时，必须保留历史时点版本索引，审案时显式指定“行为发生日期”。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "跨 19 个法域的 53 个现有法律 NLP 基准均未按裁判当时有效版本评分，废止法条缺失导致的评分降幅约为修订法条的三倍。",
+            "locator": "论文摘要"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】NitiBench+ 揭示的时序失真问题，在商事诉讼、行政复议、税务稽查与跨年度合规审计中尤为致命——依据“从旧兼从轻”或行为发生时有效法律原则，直接套用现行法条可能得出截然相反的裁判预判。建议执业律师在向 AI 提问跨年度历史争议案件时，务必在提示词中明确标注争议发生年份并人工粘贴对应历史版本法条，切忌让模型仅凭参数记忆或现行单版法规库直接作答。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-07",
+      "region": "global",
+      "source_id": "arxiv-cs-ai-rss",
+      "source_name": "arXiv cs.AI 官方 RSS（推理与评测前沿）",
+      "source_domain": "arxiv.org",
+      "source_url": "https://arxiv.org/html/2611.20670v1",
+      "published_at": "2026-11-16",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "判例与学术",
+      "title": "学者提出 AI Agent 越权民事归责框架：以《智能体授权记录》界定部署方举证责任",
+      "summary": "意大利法律学者 Nicola Fabiano 发布论文，将 AI Agent 越权区分为配置失误、有意放开、主动规避与第三方入侵四类模式，并设计结构化《智能体授权记录》作为部署方事前控制证据。",
+      "practice_impact_brief": "筹备自主型 Agent 的合规团队可建立权限与熔断《授权记录》，并定期核查配置漂移。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "arXiv 法学学术预印本，属学者理论框架探讨",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "自主型 AI Agent 越权下单或误发承诺函引发损失时，部署方能否减责，取决于事前控制边界有没有可审计证据。学者 Nicola Fabiano 在论文中将越界拆为四类模式，并设计《智能体授权记录》作为举证载体，同时警示“记录若与实际配置漂移不符，反而会成为对部署方不利的证据”。这一提醒对法务极具实务穿透力。纸面制度写得再严，如果线上权限表没人定期核对，出事后反而暴露管理疏失。因此，授权记录必须与技术配置自动同步并定期抽检。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "设计结构化的《智能体授权记录》作为证明事前控制边界的证据载体，但记录与实际配置不符反而可能成为不利证据。",
+            "locator": "论文核心结论"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】在各国尚未出台专门的 AI Agent 侵权成文法之前，部署企业与服务商之间的责任分配高度依赖合同约定与举证责任倒置规则。参考该研究框架，建议企业法务在批准采购或上线具备外部执行能力的 Agent 时，要求技术团队同步建立并归档《智能体授权与阈值配置记录》，明确单笔操作上限、人工熔断条件及月度配置漂移审计机制，防止出现“书面有红线、线上无拦截”的举证被动。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-08",
+      "region": "cn",
+      "source_id": "cn-ruanyifeng-blog",
+      "source_name": "阮一峰科技爱好者周刊（AI 效率工具）",
+      "source_domain": "www.ruanyifeng.com",
+      "source_url": "https://www.ruanyifeng.com/blog/2026/11/weekly-issue-421.html",
+      "published_at": "2026-11-26",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "行业与资本",
+      "title": "阮一峰科技爱好者周刊第 421 期观察模型厂商上市与 AI 行业资本分化效应",
+      "summary": "阮一峰科技爱好者周刊第 421 期以 Anthropic 上市为切入口，梳理头部基础模型公司在资本市场快速扩张带来的行业估值重构与研发工具生态外溢效应。",
+      "practice_impact_brief": "关注 AI 投融资与并购业务的律师可跟踪头部模型商上市后的合规披露与股权激励案例。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "科技周刊观察文章，具体上市招股与财务数据以官方监管文件为准",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "头部基础模型公司迈向公开资本市场，正把 AI 行业的竞争规则从“私募烧钱”推向“公开披露与合规治理”。阮一峰科技爱好者周刊第 421 期关注了模型厂商上市引发的资本与财富效应。对资本市场与科技并购律师而言，头部模型商进入公开市场不仅意味着更详尽的 S-1 风险披露范本（如算力成本、版权诉讼与监管合规风险），也会直接带动下游法律科技与企业软件赛道估值锚点重估。相关执业团队可将公开招股文件中的 AI 风险因子披露作为同类交易的重要起草参考。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "模型公司上市创造出巨额财富，这家成立于 2021 年的公司正加速重塑 AI 行业资本格局。",
+            "locator": "周刊卷首评论"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】头部基础模型厂商走向公开资本市场，为国内涉外资本市场律师、科技并购律师与企业法务提供了难得的公开治理披露样本。建议关注 AI 投融资与并购业务的律师团队，及时研读相关公开上市申报文件中关于训练数据著作权争议、跨境监管合规不确定性、算力供应链依赖、核心客户集中度及大模型安全责任的披露口径，沉淀为本所起草 AI 企业融资协议陈述保证与风险揭示书的参考素材。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    }
+  ]
+}

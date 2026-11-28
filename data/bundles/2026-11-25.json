@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "site": "The Legal AI Daily",
+    "column": "每日固定栏目",
+    "issue": "第 002 期",
+    "date": "2026-11-25",
+    "date_line": "2026-11-25 · 星期三 · 第 002 期",
+    "internal": true,
+    "internal_note": "LD-G2-05 内部试运行样稿（第 2/3 期）· 不对外发布",
+    "digest": "本期聚焦中央网信办生成式 AI 备案公告与《人工智能生成合成内容标识办法》，实务板块涵盖 Litera 接入 Microsoft Copilot、汉坤全国首例 AI 系统提示词商业秘密案观察、Anthropic 欧盟文本水印及 AI-Voyager 版本溯源研究。",
+    "disclaimer": "本样稿为 Gate 2 内部试运行产物，不对外发布。标有「AI 初稿」之实务影响与评述仅供初步研判，不构成正式法律意见；日期与效力状态以一手信源为准。",
+    "web_detail_url": "https://lexaidaily.example/d/2026-11-25",
+    "generated_at": "2026-11-25T08:30:00Z"
+  },
+  "items": [
+    {
+      "id": "trial-20261125-01",
+      "region": "cn",
+      "source_id": "cn-cac-wxzw",
+      "source_name": "中央网信办网信政务（合规哨兵）",
+      "source_domain": "www.cac.gov.cn",
+      "source_url": "https://www.cac.gov.cn/2026-05/13/c_1780413225190669.htm",
+      "published_at": "2026-05-13",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "监管与合规",
+      "title": "中央网信办公布 2026 年 3–4 月生成式人工智能服务已备案信息公告",
+      "summary": "中央网信办依据《生成式人工智能服务管理暂行办法》发布 2026 年 3 月至 4 月已备案信息公告，持续公开面向境内公众提供服务的生成式人工智能备案主体与模型清单。",
+      "practice_impact_brief": "法律科技厂商与律所对外开放 AI 问答前，须先核验底层模型备案编号与公示状态。",
+      "practice_impact_is_ai_draft": false,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "in_force",
+      "headline": true,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "面向境内公众上线法律 AI 服务，底层模型备案与公示核验已是硬前置条件。中央网信办在 2026 年 5 月 13 日公告中明确，网信部门会同有关部门按照《生成式人工智能服务管理暂行办法》持续开展并公开已备案信息。原因在于，法律咨询直接涉及公众权益，属于监管重点排查的垂类场景。因此，律所或 LegalTech 团队在对外发布小程序或 Web 端 AI 问答工具前，必须先核对所调用模型的官方备案号并在界面规范公示。若仅限所内封闭使用，也应留存访问隔离记录以备核查。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "网信部门会同有关部门按照《生成式人工智能服务管理暂行办法》要求，持续开展生成式人工智能服务备案工作。",
+            "locator": "公告正文第 1 段"
+          }
+        ],
+        "legal_commentary": "网信部门按双月节奏持续公开已备案清单，意味着企业法务可以随时对照一手官方公告做供应商合规尽调。对计划推出对外 AI 法律咨询或合同助手的律所与创业团队，建议落实三步动作：其一，在采购大模型 API 合同时强制要求供应商提供有效备案编号并约定状态变更通知；其二，核对自身产品是否仅调用已备案模型接口，避免私自微调后未履行登记义务；其三，明确区分“所内封闭提效工具”与“面向公众服务”的权限边界。以上分析仅作实务参考，不构成个案法律意见。",
+        "ai_draft": false
+      }
+    },
+    {
+      "id": "trial-20261125-02",
+      "region": "cn",
+      "source_id": "cn-cac-wxzw",
+      "source_name": "中央网信办网信政务（合规哨兵）",
+      "source_domain": "www.cac.gov.cn",
+      "source_url": "https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm",
+      "published_at": "2025-03-14",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "监管与合规",
+      "title": "四部门印发《人工智能生成合成内容标识办法》，将标识合规衔接算法备案与安全评估",
+      "summary": "中央网信办等四部门联合印发《人工智能生成合成内容标识办法》，第 11、12 条明确服务提供者开展标识活动须符合强制性国家标准，并在履行算法备案和安全评估时提交相关材料。",
+      "practice_impact_brief": "对外输出 AI 法律文章、音视频与咨询摘要的团队须同步落实显式提示与元数据标识。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "in_force",
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "AI 生成内容标识不再只是前端加一行小字，而是直接挂钩算法备案与安全评估的合规要件。《人工智能生成合成内容标识办法》第 11 条与第 12 条明确要求，服务提供者开展标识活动须符合强制性国家标准，并在履行算法备案、安全评估时衔接落实。之所以把显隐式标识纳入准入审查，是为了防止生成文本与音视频在二次传播中失去来源可追溯性。因此，律所运营 AI 辅助普法号或对外发布行业简报时，也应养成在显著位置标明「AI 初稿」与来源核验的规范习惯。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "服务提供者在履行算法备案、安全评估等手续时，应当按照本办法规定提供生成合成内容标识相关材料。",
+            "locator": "第 12 条要点"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】《标识办法》将显式提示与隐式元数据标识统一纳入强制性国家标准轨道，对法律科技平台和内容运营团队提出了明确落点。实务中建议产品与法务团队协同排查两处：一是确认向终端用户展示的 AI 生成法律摘要、播客音视频及插画均附有清晰可见的显式标识；二是检查对外导出文件与接口元数据是否保留标准隐式标识字段，避免在合规检查或平台审核中被下架处置。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-03",
+      "region": "global",
+      "source_id": "lawsites-blog",
+      "source_name": "LawSites (Bob Ambrogi)",
+      "source_domain": "www.lawnext.com",
+      "source_url": "https://www.lawnext.com/2026/11/litera-brings-document-comparison-and-firm-ai-search-to-microsoft-copilot-for-legal.html",
+      "published_at": "2026-11-11",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "实务与工具",
+      "title": "Litera 将文档比对与所内 AI 检索以插件形态接入 Microsoft Copilot for Legal",
+      "summary": "LawSites 报道称，Litera 宣布将 Litera Compare 与 Firm AI Search 通过插件直接接入 Microsoft Copilot for Legal，把确定性文档比对与所内知识检索嵌入律师日常 M365 办公环境。",
+      "practice_impact_brief": "已部署 M365 的律所可通过插件把确定性合同比对直接嵌入 Copilot，减少切窗摩擦。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "法律科技媒体转述厂商发布通稿",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "把“确定性比对工具”和“生成式 AI 助手”装进同一个办公入口，是解决合同修订漏检的务实路径。LawSites 报道称，Litera 已将 Litera Compare 与 Firm AI Search 通过插件接入 Microsoft Copilot for Legal，减少律师在多系统间的上下文切换。纯靠大模型做合同逐字比对容易漏掉标点或金额微调，而引入确定性比对引擎能兜住底线。因此，已使用 Microsoft 365 的律所与法务团队在评估插件生态时，应优先考察确定性工具与 AI 检索的协同能力。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "Litera Compare and Firm AI Search are now available inside Microsoft Copilot for legal through plugins.",
+            "locator": "新闻稿第 1 段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】在合同修订实务中，律师最忌讳用概率型大模型直接替代传统的逐字红线比对工具。Litera 将确定性文档比对插件直接嵌入 Microsoft Copilot for Legal，提供了一个很值得借鉴的工作流组合：由确定性引擎负责零漏检的差异定位，由 AI 负责总结修订实质影响并检索所内历史范本。团队在开通此类插件前，应先核查 M365 租户内的项目组权限隔离配置。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-04",
+      "region": "global",
+      "source_id": "lawsites-blog",
+      "source_name": "LawSites (Bob Ambrogi)",
+      "source_domain": "www.lawnext.com",
+      "source_url": "https://www.lawnext.com/2026/11/how-ai-is-changing-case-research-for-corporate-restructuring.html",
+      "published_at": "2026-11-18",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "实务与工具",
+      "title": "LawSites 实务观察：AI 如何重塑企业破产重组中的海量案卷尽调与先例检索",
+      "summary": "LawSites 专栏分析大语言模型在企业重组案件中的应用边界，指出 AI 能显著加速海量债权文件初筛与先例模式梳理，但无法替代律师在重组策略制定与庭审辩护中的专业判断。",
+      "practice_impact_brief": "重组与争议解决团队可将 AI 锁定在海量卷宗初筛与议题清单生成，把人工留给策略博弈。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "行业垂直媒体实务评论文章",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "破产重组这类信息爆炸的复杂案件，恰恰是最能检验 AI 与律师分工边界的试金石。LawSites 专栏指出，大语言模型擅长在短时间内消化海量尽调文档并提炼先例要点，但无法替代律师制定谈判策略与出庭辩护。重组案件往往涉及数十家债权人与错综复杂的担保顺位，单靠人工通读耗时极长。因此，把 AI 定位为“高速初筛与议题索引员”，把省下来的时间集中投入关键条款博弈，才是高年资律师最稳妥的提效姿势。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "AI can accelerate document review, precedent analysis and other research tasks, but it does not replace professional judgment.",
+            "locator": "正文核心段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】在破产重组、大型商事仲裁或投融资尽调项目中，律师团队往往同时面对成百上千份合同、财务报表与历史判例。实务落地时，建议将工作流明确切为两段：前半段由 AI 协助完成海量文档归类、关键日期与担保条款清单提取以及初步先例聚类；后半段由主办律师对照一手原文逐条复核高争议焦点、把关债权顺位逻辑并主导客户谈判与庭审策略，既释放基础检索工时，又守住执业质量与风险底线。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-05",
+      "region": "cn",
+      "source_id": "cn-hankun-insights",
+      "source_name": "汉坤律师事务所·汉坤观点",
+      "source_domain": "www.hankunlaw.com",
+      "source_url": "https://www.hankunlaw.com/portal/article/index/cid/8/id/17403.html",
+      "published_at": "2026-11-03",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "实务与工具",
+      "title": "汉坤观察全国首例 AI 垂类大模型商业秘密案：系统提示词保护须结合规则与留痕",
+      "summary": "汉坤律师事务所就全国首例 AI 垂类大模型商业秘密案撰文指出，系统提示词能否受商业秘密保护不能仅看自然语言形式，须结合技术功能、业务规则组合及研发留痕与保密措施综合认定。",
+      "practice_impact_brief": "律所与法律科技团队沉淀核心提示词库时，须同步做版本留痕、分级授权与保密协议约束。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "律所实务观察文章，具体裁判文书细节以法院公开版本为准",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "把核心业务经验写进系统提示词（System Prompt），能否当成商业秘密保护，关键不在文字长短，而在结构化组合与保密留痕。汉坤文章指出，系统提示词的商业秘密认定须结合具体内容、技术功能、信息组合及法定构成要件综合判断，保护重点还应延伸至其与专业规则、业务流程的联动关系。很多法律科技团队把精心打磨的审查提示词裸放在共享文档里，事后维权极易因缺乏合理保密措施落空。因此，法务与研发须尽早对核心提示词资产实施权限隔离与版本留痕。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "系统提示词能否获得商业秘密保护，不能仅依据其自然语言的表现形式作出判断，而应结合具体内容、技术功能、信息组合及法定构成要件综合分析。",
+            "locator": "正文分析段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】随着越来越多律所与企业法务将内部合同审查 Playbook 封装为系统提示词和 Agent 技能包，提示词资产的权属与防泄密已成为现实合规需求。参考汉坤本案观察，建议团队从三处补齐保护链条：第一，将核心提示词与配套规则表纳入代码库权限管控并保留迭代研发日志；第二，在员工保密协议与供应商 NDA 中明确覆盖提示词工程文档；第三，在前端调用层隔离系统提示词防止被轻易套取。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-06",
+      "region": "global",
+      "source_id": "anthropic-news",
+      "source_name": "Anthropic Newsroom（含 Claude for Legal）",
+      "source_domain": "www.anthropic.com",
+      "source_url": "https://www.anthropic.com/news/claude-text-watermark",
+      "published_at": "2026-08-14",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "模型与技术",
+      "title": "Anthropic 说明 Claude 文本水印机制，提前对齐欧盟《人工智能法案》标识义务",
+      "summary": "Anthropic 官方发文解释未来 Claude 模型面向欧盟《人工智能法案》合规要求引入文本水印的工作原理，为跨国企业法务评估生成内容可追溯性与输出合规提供技术参考。",
+      "practice_impact_brief": "涉欧企业法务可对照模型商水印说明，提前排查对外生成文案的标识与披露义务。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "模型厂商官方技术说明文章",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "主流基础模型厂商正主动在底层嵌入文本水印，以回应欧盟《人工智能法案》的透明度硬要求。Anthropic 官方发文披露了未来 Claude 模型引入文本水印的技术思路，旨在从生成源头满足欧盟监管标识义务。对跨国企业与涉外律所而言，模型商自带合规水印能减轻应用层的部分技术改造压力。不过，水印并非万能免责盾牌：若业务团队对生成文本做了二次大幅改写，或涉及特定法定显式披露场景，仍须由应用方承担独立的合规告知责任。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "Future Claude models will generate text that contains a watermark to comply with the EU AI Act.",
+            "locator": "公告导语"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】在欧盟《人工智能法案》透明度条款逐步落地的背景下，了解底层大模型是否支持机器可读水印，正成为涉外合规尽调的新增核查项。建议服务出海科技企业与跨国平台的法务团队在评估外部模型 API 时，主动向供应商索取欧盟 AI Act 透明度与水印合规说明文档，同时核对企业自身业务在二次编辑与分发环节是否触发最终用户显式披露义务，避免把底层技术水印误当成全部合规动作。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-07",
+      "region": "global",
+      "source_id": "arxiv-cs-ai-rss",
+      "source_name": "arXiv cs.AI 官方 RSS（推理与评测前沿）",
+      "source_domain": "arxiv.org",
+      "source_url": "https://arxiv.org/html/2611.17564v1",
+      "published_at": "2026-11-12",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "判例与学术",
+      "title": "AI-Voyager 与 Voyager-RAG 公布：以版本级段落溯源与声明核验破解 AI 立法检索失真",
+      "summary": "北卡罗来纳大学教堂山分校发布 AI-Voyager 系统，将 3653 个政策文档版本重建为带页码与版本哈希的 812537 个段落，并以逐句声明核验过滤无依据陈述，宏召回率达 83.0%。",
+      "practice_impact_brief": "构建法规 RAG 产品的团队可借鉴“版本页码溯源 + 逐句核验”架构压低错引率。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "arXiv 学术预印本，尚未经同行评审",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "法规检索系统要真正防幻觉，光靠切片向量搜索远远不够，必须做到版本哈希级溯源加逐句声明核验。研究团队在 AI-Voyager 中将 3,653 个文档版本切分为保留页码与版本哈希的 812,537 个段落，在 360 题基准上达到 83.0% 宏召回率。更值得实务界警惕的是，其 24 人用户实验发现，单纯挂上引用链接虽提高了信任感，但用户实际点开核源的比例仍然偏低。因此，法律科技产品必须在摘要旁直接并排露出关键原文短句。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "将 3,653 个文档版本重建为保留页码与版本哈希的 812,537 个结构化段落，并通过逐句声明核验过滤无依据陈述。",
+            "locator": "论文摘要"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】AI-Voyager 与 Voyager-RAG 为律所内部知识库与企业合规检索产品提供了扎实的技术架构参考：一是将每条法规切片绑定精确文档版本号、生效状态与页码定位，从底层防止新旧修订版混杂误引；二是在生成后增加独立的逐句声明核验环节，把没有原文依据的推断直接拦截或标红提醒。同时，其用户实验再次印证了“原文短引文同屏对照”比单纯附带超链接更能守住律师的核源底线。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-08",
+      "region": "global",
+      "source_id": "artificial-lawyer",
+      "source_name": "Artificial Lawyer",
+      "source_domain": "www.artificiallawyer.com",
+      "source_url": "https://www.artificiallawyer.com/2026/01/08/artificial-lawyer-predictions-2026/",
+      "published_at": "2026-01-08",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "行业与资本",
+      "title": "Artificial Lawyer 2026 趋势预测：第一波生成式法律 AI 常态化后加速行业整合",
+      "summary": "Artificial Lawyer 年度预测指出，随着第一波生成式法律 AI 工具步入常态化使用，法律科技赛道将在 2026 年迎来更密集的并购整合，并开始向后智能体工作流阶段演进。",
+      "practice_impact_brief": "律所签约新兴法律 AI 供应商时，应提前约定数据可迁移性与并购变更退出条款。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "行业垂直媒体年度趋势评论",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "法律 AI 赛道进入常态化阶段后，中小单点厂商被并购或退出的风险正在上升。Artificial Lawyer 在年度预测中指出，随着第一波生成式法律 AI 普及，行业整合将明显加速并迈向后智能体工作流阶段。对律所与企业法务而言，这不仅是资本新闻，更是现实的供应链风险。如果把大量内部范本和提示词深度绑定在单一初创平台上，一旦对方被竞品收购或停服，迁移成本极高。因此，采购合同中提前锁定数据导出格式与控制权变更解约权尤为必要。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "There will definitely be more consolidation in legal AI as the first wave GAI becomes normalized.",
+            "locator": "年度预测正文"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】结合法律 AI 行业整合加速的趋势，律所管委会与企业法务部在签署法律科技 SaaS 年度合同时，建议重点补齐三项“防锁死”商务与合规条款：一是明确本方上传文档、审查规则与自定义提示词工作流可随时以标准格式完整导出；二是约定供应商发生控制权变更、被竞品收购或产品停服时的提前通知期与按比例退费权；三是优先选择支持标准接口或主流办公套件集成的方案，降低后期迁移沉没成本。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    }
+  ]
+}

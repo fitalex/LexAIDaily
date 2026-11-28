@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "editions": [
+    {
+      "date": "2026-11-24",
+      "issue": "第 001 期",
+      "itemCount": 8,
+      "wechatHtml": "wechat/2026-11-24.html",
+      "wechatSha256": "c9d88f19b8355291ec1008cf72b0db4da263291d51d0f3a233bac9a48ce3538b",
+      "webJson": "web/2026-11-24.json",
+      "webSha256": "4b7d41ec5516ae4434f1cdf40183a30acc17ff90fdf4d473c50f6b9f6a55d5a1"
+    },
+    {
+      "date": "2026-11-25",
+      "issue": "第 002 期",
+      "itemCount": 8,
+      "wechatHtml": "wechat/2026-11-25.html",
+      "wechatSha256": "ff136ccb1ac6ff4b59e93adb44d8dd8f42baeb86a0147589f932de7286843ec2",
+      "webJson": "web/2026-11-25.json",
+      "webSha256": "0d9bc842b158366a70b51e714ca5541ced622b9b3154f4ed4c9c765d7c8f1ba2"
+    },
+    {
+      "date": "2026-11-26",
+      "issue": "第 003 期",
+      "itemCount": 8,
+      "wechatHtml": "wechat/2026-11-26.html",
+      "wechatSha256": "ef133b1fa64cb386f40933eb9d13950b86d9e65a0ecf47db09fcd6abdeede0b1",
+      "webJson": "web/2026-11-26.json",
+      "webSha256": "8f3c2fca1cc0bd45965a7056e427688d741137d897619b6acacab67cbfcf5862"
+    }
+  ],
+  "webIndex": "web/editions-index.json",
+  "webIndexSha256": "c8e6f9aa192ce80ab01c786756e61b36e3a422ccd65f98c3eef27d4145c8ecde"
+}
