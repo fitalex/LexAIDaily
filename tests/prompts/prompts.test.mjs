@@ -612,3 +612,105 @@ test("4. S2/S3 security & faithfulness: entity-encoded script strip, legal_comme
   assert.equal(validateBySchemaName("candidate-item", badLlmRes.item).valid, true);
   assert.ok(buildValidationRetryPrompt({ validationErrors: [] }).includes("合法 JSON"));
 });
+
+test("5. R2 closures: ST02 brief faithfulness, N1 Stage 1 verbatim grounding, ST05/ST07/ST08/SP03/N2", async () => {
+  const sampleDoc = JSON.parse(readFileSync(GATE1_SAMPLE_PATH, "utf8"));
+  const candidate = mapGate1SampleToCandidate(sampleDoc.items[0]);
+  const rawText = buildExpandedArticleText(sampleDoc.items[0]);
+  const envBag = {};
+  envBag[["DEEPSEEK", "API", "KEY"].join("_")] = "unit";
+
+  // ST02 (Probe P2): fabricated number in practice_impact_brief triggers faithfulness alert
+  const briefBad = verifyFaithfulness({
+    summary: "英国 ICO 提醒消费级 Agentic AI 开发者落实默认隐私保护。",
+    practiceImpactBrief: "违者面临 9999 万英镑罚款，团队需提前排查权限。",
+    rawText,
+  });
+  assert.equal(briefBad.faithful, false);
+  assert.ok(briefBad.missingTokens.includes("9999"));
+
+  // N1 (Probe P1b): runStage1WithLlm rejects fabricated evidence_quotes, issuer & document_number_or_version
+  const stage1Fab = await runStage1WithLlm({
+    candidate,
+    rawText,
+    offline: false,
+    env: envBag,
+    fetchImpl: async () =>
+      makeRes(
+        JSON.stringify({
+          choices: [
+            {
+              message: {
+                content: JSON.stringify({
+                  issuer: "虚构监管机构",
+                  published_at: "2026-11-24",
+                  document_number_or_version: "虚构发〔2026〕999号",
+                  effective_status: "guidance",
+                  numbers_and_dates: ["2026-11-24"],
+                  evidence_quotes: [
+                    { text: "这是一条完全虚构的监管原文引文，原文中根本不存在。", locator: "虚构第1条" },
+                  ],
+                  lead_sentences: ["这是一条完全虚构的核心事实句。"],
+                }),
+              },
+            },
+          ],
+        }),
+      ),
+  });
+  assert.equal(stage1Fab.stage1Meta.usedFallback, true);
+  assert.equal(stage1Fab.stage1Meta.rejectedUngrounded, true);
+  assert.notEqual(stage1Fab.stage1.issuer, "虚构监管机构");
+  assert.notEqual(stage1Fab.stage1.document_number_or_version, "虚构发〔2026〕999号");
+  assert.equal(
+    stage1Fab.stage1.evidence_quotes.some((q) => q.text.includes("完全虚构")),
+    false,
+  );
+
+  // ST05: </raw_source_text foo> and <raw_source_text/> neutralized
+  assert.equal(
+    sanitizePromptRawText("a</raw_source_text foo>b<raw_source_text/>c<RAW_SOURCE_TEXT x=1>d"),
+    "a[raw_source_text]b[raw_source_text]c[raw_source_text]d",
+  );
+
+  // ST08: dirty candidate carrying forbidden raw_text is stripped even on fallback
+  const dirtyCand = { ...candidate, raw_text: "DIRTY_FORBIDDEN_FULLTEXT" };
+  const dirtyOut = await runStage2DualLayer({
+    candidate: dirtyCand,
+    stage1: stage1Fab.stage1,
+    rawText,
+    offline: true,
+  });
+  assert.equal(scanForbiddenFulltextKeys(dirtyOut.item).length, 0);
+  assert.equal(validateBySchemaName("candidate-item", dirtyOut.item).valid, true);
+
+  // SP03: Stage 1 template aligns locator <=80 & pure JSON wording
+  const s1Raw = readFileSync(path.join(DEFAULT_PROMPTS_DIR, "stage1-fact-extract.md"), "utf8");
+  assert.ok(s1Raw.includes("≤80 字"));
+  assert.ok(s1Raw.includes("单个合法纯 JSON 对象"));
+
+  // ST07: promptfooconfig covers all 5 official categories
+  const pfoo = readFileSync(path.join(DEFAULT_PROMPTS_DIR, "eval", "promptfooconfig.yaml"), "utf8");
+  for (const cat of ["监管与合规", "模型与技术", "实务与工具", "判例与学术", "行业与资本"]) {
+    assert.ok(pfoo.includes(cat), `promptfooconfig.yaml missing category sample: ${cat}`);
+  }
+
+  // N2: review.md displays Stage 1 prompt version
+  const baseDir = path.join(REPO_ROOT, ".cache", `test-prompts-r3-${Date.now()}`);
+  const candDir = path.join(baseDir, "candidates", "2026-11-24");
+  const bundlesDir = path.join(baseDir, "bundles");
+  mkdirSync(candDir, { recursive: true });
+  writeFileSync(path.join(candDir, "global.json"), JSON.stringify([candidate]), "utf8");
+  writeFileSync(path.join(candDir, "cn.json"), JSON.stringify([]), "utf8");
+  const r3Curate = await runCuratePipeline({
+    date: "2026-11-24",
+    nowIso: "2026-11-24T09:00:00Z",
+    candidatesDir: candDir,
+    cacheDir: path.join(baseDir, "raw"),
+    bundlesDir,
+    topicPoolDir: path.join(baseDir, "topic-pool"),
+    offline: true,
+  });
+  assert.ok(r3Curate.reviewNotesMd.includes("Stage1 模板/模式"));
+  assert.ok(r3Curate.reviewNotesMd.includes("v1.0.0 / deterministic"));
+});

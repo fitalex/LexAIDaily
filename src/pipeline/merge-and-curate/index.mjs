@@ -35,13 +35,14 @@ export function renderReviewNotesMarkdown({ date, nowIso, curatedClusters, degra
     `- 生成时间：\`${nowIso}\``,
     `- 汇流条目数：${curatedClusters.length}｜LLM 降级：${degraded.llmFallbackCount} 条｜Schema 校验重试：${degraded.llmRetryCount} 次｜缓存缺失：${degraded.cacheMissingIds.length} 条`,
     "",
-    "| 条目 ID | 标题 | Stage1 模式 | Stage2 模板/重试/降级 | 数字/日期忠实度 | 需人工复核 |",
+    "| 条目 ID | 标题 | Stage1 模板/模式 | Stage2 模板/重试/降级 | 数字/日期忠实度 | 需人工复核 |",
     "|---|---|---|---|---|---|",
   ];
 
   for (const c of curatedClusters) {
     const titleShort = String(c.item.title).replace(/\|/g, "｜").slice(0, 32);
-    const s1Mode = `${c.stage1Meta?.mode || "deterministic"}${c.stage1Meta?.usedFallback ? "(fallback)" : ""}`;
+    const s1Ver = c.stage1Meta?.version || "1.0.0";
+    const s1Mode = `v${s1Ver} / ${c.stage1Meta?.mode || "deterministic"}${c.stage1Meta?.usedFallback ? "(fallback)" : ""}`;
     const s2Info = `v${c.promptMeta?.version || "1.0.0"} / retry=${c.promptMeta?.retryCount ?? 0} / fb=${Boolean(c.promptMeta?.usedFallback)}`;
     const faithInfo = c.faithfulness?.faithful
       ? "通过"

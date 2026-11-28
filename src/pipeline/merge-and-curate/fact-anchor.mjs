@@ -22,6 +22,34 @@ const EFFECTIVE_STATUS_ENUM = new Set([
   "not_applicable",
 ]);
 
+const ALLOWED_CANDIDATE_KEYS = Object.freeze([
+  "id",
+  "region",
+  "source_id",
+  "discovered_via",
+  "source_name",
+  "source_domain",
+  "source_url",
+  "published_at",
+  "collected_at",
+  "category",
+  "title",
+  "summary",
+  "practice_impact_brief",
+  "practice_impact_is_ai_draft",
+  "fact_tier",
+  "fact_tier_note",
+  "unverified",
+  "unverified_reason",
+  "needs_human_check",
+  "high_risk_legal",
+  "effective_status",
+  "superseded_by",
+  "headline",
+  "review_status",
+  "detail_analysis",
+]);
+
 const zhSegmenter =
   typeof Intl !== "undefined" && typeof Intl.Segmenter === "function"
     ? new Intl.Segmenter("zh", { granularity: "sentence" })
@@ -48,6 +76,21 @@ const ZH_UNIT_MAP = {
   千: 1000,
   万: 10000,
 };
+
+/**
+ * Strips any unknown or forbidden fulltext keys (e.g. raw_text, full_text) from a candidate object
+ * so downstream schema validation and fallback paths never leak forbidden fields (ST08 / ADR-0002).
+ */
+function pickAllowedCandidateFields(candidate) {
+  const out = {};
+  if (!candidate || typeof candidate !== "object") return out;
+  for (const key of ALLOWED_CANDIDATE_KEYS) {
+    if (Object.prototype.hasOwnProperty.call(candidate, key) && candidate[key] !== undefined) {
+      out[key] = candidate[key];
+    }
+  }
+  return out;
+}
 
 /**
  * Resolves LLM provider credentials and matching default base URL / model so
@@ -132,6 +175,27 @@ function normalizeForNumberMatching(text) {
     },
   );
   return out;
+}
+
+/**
+ * Normalizes text for verbatim containment checks (N1) by stripping HTML, normalizing
+ * fullwidth digits, collapsing whitespace, and ignoring trivial spacing differences.
+ */
+function normalizeForContainment(text) {
+  return normalizeFullwidthDigits(stripHtmlToPlainText(text))
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
+function isGroundedInSource(fragment, normalizedSourceHaystack) {
+  const normFrag = normalizeForContainment(fragment);
+  if (!normFrag) return false;
+  if (normalizedSourceHaystack.includes(normFrag)) return true;
+  // Also allow whitespace-stripped comparison for CJK spacing differences
+  const compactFrag = normFrag.replace(/\s+/g, "");
+  const compactSource = normalizedSourceHaystack.replace(/\s+/g, "");
+  return compactFrag.length > 0 && compactSource.includes(compactFrag);
 }
 
 function escapeRegExp(str) {
@@ -272,16 +336,17 @@ export function extractNumbersAndDates(text) {
 
 function tokenExistsInNormalizedText(token, normalizedSource) {
   const escaped = escapeRegExp(token);
-  if (/^\d+(?:\.\d+)?%?$/.test(token)) {
-    const re = new RegExp(`(?<!\\d)${escaped}(?!\\d)`);
-    return re.test(normalizedSource);
-  }
   const re = new RegExp(`(?<!\\d)${escaped}(?!\\d)`);
   return re.test(normalizedSource);
 }
 
+/**
+ * Verifies numeric/date faithfulness across ALL generated text fields:
+ * summary, practiceImpactBrief, keyPoints, and legalCommentary (ST02).
+ */
 export function verifyFaithfulness({
   summary = "",
+  practiceImpactBrief = "",
   keyPoints = [],
   legalCommentary = "",
   rawText = "",
@@ -289,7 +354,7 @@ export function verifyFaithfulness({
 }) {
   const normalizedRaw = normalizeForNumberMatching(rawText);
   const normalizedAllowed = normalizeForNumberMatching(allowedTokens.join("\n"));
-  const targetText = [summary, ...keyPoints, legalCommentary].join("\n");
+  const targetText = [summary, practiceImpactBrief, ...keyPoints, legalCommentary].join("\n");
   const tokens = extractNumbersAndDates(targetText);
   const missing = [];
 
@@ -368,8 +433,10 @@ export function runStage1FactExtraction({ candidate, rawText }) {
 
 /**
  * Runtime Stage 1 entry point wired to `prompts/stage1-fact-extract.md`.
- * Uses LLM extraction when online with credentials and falls back cleanly to
- * deterministic `runStage1FactExtraction` when offline or on invalid output.
+ * Strictly enforces verbatim grounding (N1): evidence_quotes, issuer,
+ * document_number_or_version, and lead_sentences returned by the LLM MUST be
+ * grounded in rawText (or candidate metadata); fabricated outputs are rejected
+ * and trigger clean fallback to deterministic `runStage1FactExtraction`.
  */
 export async function runStage1WithLlm({
   candidate,
@@ -394,9 +461,16 @@ export async function runStage1WithLlm({
         version: rendered.version,
         mode: "deterministic",
         usedFallback: false,
+        rejectedUngrounded: false,
       },
     };
   }
+
+  const sourceHaystack = normalizeForContainment(`${candidate?.title ?? ""}\n${rawText ?? ""}`);
+  const issuerHaystack = normalizeForContainment(
+    `${candidate?.source_name ?? ""}\n${candidate?.title ?? ""}\n${rawText ?? ""}`,
+  );
+  let rejectedUngrounded = false;
 
   try {
     const reqHeaders = { "Content-Type": "application/json" };
@@ -421,27 +495,34 @@ export async function runStage1WithLlm({
       const content = completion?.choices?.[0]?.message?.content;
       if (typeof content === "string" && content.trim()) {
         const parsed = JSON.parse(content);
-        const validQuotes = Array.isArray(parsed?.evidence_quotes)
-          ? parsed.evidence_quotes
-              .filter(
-                (q) =>
-                  q &&
-                  typeof q.text === "string" &&
-                  stripHtmlToPlainText(q.text).length >= 8 &&
-                  stripHtmlToPlainText(q.text).length <= 150,
-              )
-              .slice(0, 3)
-              .map((q) => ({
-                text: stripHtmlToPlainText(q.text),
-                ...(typeof q.locator === "string" && q.locator.trim()
-                  ? { locator: stripHtmlToPlainText(q.locator).slice(0, 80) }
-                  : {}),
-              }))
-          : [];
+        const rawQuotes = Array.isArray(parsed?.evidence_quotes) ? parsed.evidence_quotes : [];
+        const validQuotes = rawQuotes
+          .filter((q) => {
+            if (!q || typeof q.text !== "string") return false;
+            const clean = stripHtmlToPlainText(q.text);
+            if (clean.length < 8 || clean.length > 150) return false;
+            const grounded = isGroundedInSource(clean, sourceHaystack);
+            if (!grounded) rejectedUngrounded = true;
+            return grounded;
+          })
+          .slice(0, 3)
+          .map((q) => ({
+            text: stripHtmlToPlainText(q.text),
+            ...(typeof q.locator === "string" && q.locator.trim()
+              ? { locator: stripHtmlToPlainText(q.locator).slice(0, 80) }
+              : {}),
+          }));
 
         const validLeads = Array.isArray(parsed?.lead_sentences)
           ? parsed.lead_sentences
-              .filter((s) => typeof s === "string" && stripHtmlToPlainText(s).length >= 8)
+              .filter((s) => {
+                if (typeof s !== "string") return false;
+                const clean = stripHtmlToPlainText(s);
+                if (clean.length < 8) return false;
+                const grounded = isGroundedInSource(clean, sourceHaystack);
+                if (!grounded) rejectedUngrounded = true;
+                return grounded;
+              })
               .map((s) => stripHtmlToPlainText(s))
               .slice(0, 5)
           : [];
@@ -453,13 +534,28 @@ export async function runStage1WithLlm({
               ? parsed.effective_status
               : deterministic.effective_status;
 
-          const docNum =
+          let resolvedIssuer = deterministic.issuer;
+          if (typeof parsed.issuer === "string" && parsed.issuer.trim()) {
+            const cleanIssuer = stripHtmlToPlainText(parsed.issuer).slice(0, 120);
+            if (isGroundedInSource(cleanIssuer, issuerHaystack)) {
+              resolvedIssuer = cleanIssuer;
+            } else {
+              rejectedUngrounded = true;
+            }
+          }
+
+          let docNum = deterministic.document_number_or_version;
+          if (
             typeof parsed.document_number_or_version === "string" &&
             parsed.document_number_or_version.trim()
-              ? stripHtmlToPlainText(parsed.document_number_or_version).slice(0, 120)
-              : parsed.document_number_or_version === null
-                ? deterministic.document_number_or_version
-                : deterministic.document_number_or_version;
+          ) {
+            const cleanDoc = stripHtmlToPlainText(parsed.document_number_or_version).slice(0, 120);
+            if (isGroundedInSource(cleanDoc, sourceHaystack)) {
+              docNum = cleanDoc;
+            } else {
+              rejectedUngrounded = true;
+            }
+          }
 
           const nums = Array.isArray(parsed.numbers_and_dates)
             ? parsed.numbers_and_dates
@@ -470,10 +566,7 @@ export async function runStage1WithLlm({
 
           return {
             stage1: {
-              issuer:
-                typeof parsed.issuer === "string" && parsed.issuer.trim()
-                  ? stripHtmlToPlainText(parsed.issuer).slice(0, 120)
-                  : deterministic.issuer,
+              issuer: resolvedIssuer,
               published_at: deterministic.published_at,
               document_number_or_version: docNum,
               numbers_and_dates: nums.length > 0 ? nums : deterministic.numbers_and_dates,
@@ -491,6 +584,7 @@ export async function runStage1WithLlm({
               version: rendered.version,
               mode: "llm",
               usedFallback: false,
+              rejectedUngrounded,
             },
           };
         }
@@ -507,6 +601,7 @@ export async function runStage1WithLlm({
       version: rendered.version,
       mode: "deterministic",
       usedFallback: true,
+      rejectedUngrounded,
     },
   };
 }
@@ -553,9 +648,10 @@ function buildDeterministicStage2({ candidate, stage1 }) {
 /**
  * Normalizes LLM Stage 2 JSON output into a schema-checked CandidateItem draft.
  * Strictly preserves non-string types so ajv catches type violations and triggers retry,
- * while enforcing immutable governance guardrails (headline=false, ai_draft=true, pending_review).
+ * while stripping forbidden keys and enforcing immutable governance guardrails.
  */
 function buildCandidateDraftFromLlm({ candidate, stage1, parsed }) {
+  const cleanCandidate = pickAllowedCandidateFields(candidate);
   const rawDetail =
     parsed?.detail_analysis && typeof parsed.detail_analysis === "object"
       ? parsed.detail_analysis
@@ -569,7 +665,7 @@ function buildCandidateDraftFromLlm({ candidate, stage1, parsed }) {
     typeof parsed?.summary === "string" ? stripHtmlToPlainText(parsed.summary) : parsed?.summary;
   const practiceImpactBrief =
     parsed?.practice_impact_brief === undefined
-      ? candidate.practice_impact_brief
+      ? cleanCandidate.practice_impact_brief
       : typeof parsed.practice_impact_brief === "string"
         ? stripHtmlToPlainText(parsed.practice_impact_brief)
         : parsed.practice_impact_brief;
@@ -579,11 +675,11 @@ function buildCandidateDraftFromLlm({ candidate, stage1, parsed }) {
       : rawDetail?.legal_commentary;
 
   return {
-    ...candidate,
+    ...cleanCandidate,
     summary,
     practice_impact_brief: practiceImpactBrief,
     practice_impact_is_ai_draft: true,
-    unverified: Boolean(candidate.unverified || parsed?.unverified === true),
+    unverified: Boolean(cleanCandidate.unverified || parsed?.unverified === true),
     headline: false,
     review_status: "pending_review",
     detail_analysis: {
@@ -613,10 +709,11 @@ export async function runStage2DualLayer({
   promptsDir = undefined,
   maxValidationRetries = 1,
 }) {
+  const cleanCandidate = pickAllowedCandidateFields(candidate);
   const llmCfg = resolveLlmConfig(env);
 
   const rendered = renderStage2Prompt(
-    { candidate, stage1 },
+    { candidate: cleanCandidate, stage1 },
     promptsDir ? { promptsDir } : {},
   );
 
@@ -685,7 +782,11 @@ export async function runStage2DualLayer({
           break;
         }
 
-        const candidateDraft = buildCandidateDraftFromLlm({ candidate, stage1, parsed });
+        const candidateDraft = buildCandidateDraftFromLlm({
+          candidate: cleanCandidate,
+          stage1,
+          parsed,
+        });
         const check = validateBySchemaName("candidate-item", candidateDraft);
         if (check.valid) {
           generated = {
@@ -717,46 +818,47 @@ export async function runStage2DualLayer({
 
   if (!generated) {
     usedFallback = !offline && Boolean(llmCfg.apiKey);
-    generated = buildDeterministicStage2({ candidate, stage1 });
+    generated = buildDeterministicStage2({ candidate: cleanCandidate, stage1 });
   }
 
   const faithfulness = verifyFaithfulness({
     summary: generated.summary,
+    practiceImpactBrief: generated.practice_impact_brief,
     keyPoints: generated.detail_analysis.key_points,
     legalCommentary: generated.detail_analysis.legal_commentary,
-    rawText: rawText || candidate.title,
-    allowedTokens: [candidate.published_at].filter(Boolean),
+    rawText: rawText || cleanCandidate.title,
+    allowedTokens: [cleanCandidate.published_at].filter(Boolean),
   });
 
   const faithfulnessReason = !faithfulness.faithful
     ? `数字/日期未在原文命中: ${faithfulness.missingTokens.slice(0, 6).join(", ")}`
     : undefined;
-  const mergedReason = appendUnverifiedReason(candidate.unverified_reason, faithfulnessReason);
+  const mergedReason = appendUnverifiedReason(cleanCandidate.unverified_reason, faithfulnessReason);
 
   let enriched = {
-    ...candidate,
+    ...cleanCandidate,
     summary: generated.summary,
     practice_impact_brief: generated.practice_impact_brief,
     practice_impact_is_ai_draft: true,
-    unverified: Boolean(candidate.unverified || generated.unverified === true),
+    unverified: Boolean(cleanCandidate.unverified || generated.unverified === true),
     ...(mergedReason ? { unverified_reason: mergedReason } : {}),
-    needs_human_check: Boolean(candidate.needs_human_check || !faithfulness.faithful),
+    needs_human_check: Boolean(cleanCandidate.needs_human_check || !faithfulness.faithful),
     headline: false,
     review_status: "pending_review",
     detail_analysis: generated.detail_analysis,
   };
 
-  // Final post-assembly #39 Schema guard
+  // Final post-assembly #39 Schema guard (uses cleanCandidate so forbidden keys can never leak)
   const finalCheck = validateBySchemaName("candidate-item", enriched);
   if (!finalCheck.valid) {
     usedFallback = true;
-    const safe = buildDeterministicStage2({ candidate, stage1 });
+    const safe = buildDeterministicStage2({ candidate: cleanCandidate, stage1 });
     enriched = {
-      ...candidate,
+      ...cleanCandidate,
       summary: safe.summary,
       practice_impact_brief: safe.practice_impact_brief,
       practice_impact_is_ai_draft: true,
-      unverified: Boolean(candidate.unverified),
+      unverified: Boolean(cleanCandidate.unverified),
       needs_human_check: true,
       headline: false,
       review_status: "pending_review",

@@ -73,13 +73,14 @@ export function renderTemplate(templateBody, vars = {}) {
 }
 
 /**
- * Neutralizes markdown code fences and XML delimiter tags inside untrusted source text
- * to prevent prompt-boundary breakout / fence injection in Stage 1.
+ * Neutralizes markdown code fences and XML delimiter tags (including attribute or
+ * self-closing variants like `</raw_source_text foo>` and `<raw_source_text/>`)
+ * inside untrusted source text to prevent prompt-boundary breakout in Stage 1.
  */
 export function sanitizePromptRawText(rawText) {
   return String(rawText ?? "")
     .replace(/```/g, "'''")
-    .replace(/<\/?raw_source_text\s*>/gi, "[raw_source_text]");
+    .replace(/<\s*\/?\s*raw_source_text(?:\b[^>]*)?\/?>/gi, "[raw_source_text]");
 }
 
 export function renderStage1Prompt({ candidate, rawText }, options = {}) {
