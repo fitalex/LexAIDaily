@@ -173,13 +173,23 @@ describe("LD-G2-01 Testing Seam 1: Formal Data Contract & Schema Validation", ()
     badBrief.practice_impact_brief = "【AI 初稿】" + "实务影响".repeat(20);
     assert.equal(validateCandidateItem(badBrief).valid, false);
 
-    const lowKp = structuredClone(sampleItem);
-    lowKp.detail_analysis.key_points = ["核心事实要点一。", "核心事实要点二。"];
-    assert.equal(validateCandidateItem(lowKp).valid, false);
+    const emptyKp = structuredClone(sampleItem);
+    emptyKp.detail_analysis.key_points = [];
+    assert.equal(validateCandidateItem(emptyKp).valid, false);
 
     const highKp = structuredClone(sampleItem);
-    highKp.detail_analysis.key_points = ["要点一内容。", "要点二内容。", "要点三内容。", "要点四内容。", "要点五内容。", "要点六内容。"];
+    highKp.detail_analysis.key_points = ["要点一内容。", "要点二内容。", "要点三内容。", "要点四内容。"];
     assert.equal(validateCandidateItem(highKp).valid, false);
+
+    const overTotalKp = structuredClone(sampleItem);
+    overTotalKp.detail_analysis.key_points = ["观".repeat(301), "点".repeat(300)];
+    const overTotalRes = validateCandidateItem(overTotalKp);
+    assert.equal(overTotalRes.valid, false);
+    assert.ok(overTotalRes.errors.some((e) => e.keyword === "keyPointsTotalMaxLength"));
+
+    const singleRichKp = structuredClone(sampleItem);
+    singleRichKp.detail_analysis.key_points = ["论".repeat(320)];
+    assert.equal(validateCandidateItem(singleRichKp).valid, true);
 
     const overLenQuote = structuredClone(sampleItem);
     overLenQuote.detail_analysis.evidence_quotes = [{ text: "引".repeat(151) }];

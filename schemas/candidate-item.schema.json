@@ -181,14 +181,14 @@
       "properties": {
         "key_points": {
           "type": "array",
-          "minItems": 3,
-          "maxItems": 5,
+          "minItems": 1,
+          "maxItems": 3,
           "items": {
             "type": "string",
             "minLength": 8,
-            "maxLength": 140
+            "maxLength": 600
           },
-          "description": "3–5 条结构化核心事实要点（每条 8–140 字）"
+          "description": "1–3 段实质核心观点论证（观点→证据→解析→回应，每段仅 1 句长句，各段合计 ≤600 字）"
         },
         "evidence_quotes": {
           "type": "array",

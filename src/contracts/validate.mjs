@@ -169,6 +169,34 @@ export function validateSourceIdAgainstWhitelist(data, allowedSourceIds) {
   };
 }
 
+function checkKeyPointsTotalLength(value, currentPath = "$", errors = []) {
+  if (Array.isArray(value)) {
+    value.forEach((item, idx) => {
+      checkKeyPointsTotalLength(item, `${currentPath}[${idx}]`, errors);
+    });
+    return errors;
+  }
+  if (value !== null && typeof value === "object") {
+    const kps = value?.detail_analysis?.key_points;
+    if (Array.isArray(kps) && kps.every((p) => typeof p === "string")) {
+      const totalChars = kps.reduce((sum, p) => sum + p.length, 0);
+      if (totalChars > 600) {
+        errors.push({
+          instancePath: `${currentPath}.detail_analysis.key_points`,
+          keyword: "keyPointsTotalMaxLength",
+          message: `detail_analysis.key_points total length (${totalChars}) exceeds 600 characters`,
+        });
+      }
+    }
+    for (const [key, val] of Object.entries(value)) {
+      if (key !== "detail_analysis" && val && typeof val === "object") {
+        checkKeyPointsTotalLength(val, `${currentPath}.${key}`, errors);
+      }
+    }
+  }
+  return errors;
+}
+
 export function validateBySchemaName(schemaName, data) {
   const validateFn = validators[schemaName];
   if (!validateFn) {
@@ -179,6 +207,7 @@ export function validateBySchemaName(schemaName, data) {
 
   const forbiddenHits = scanForbiddenFulltextKeys(data);
   const discoveryErrors = checkDiscoverySourceUrls(data);
+  const keyPointsTotalErrors = checkKeyPointsTotalLength(data);
   const schemaOk = Boolean(validateFn(data));
   const errors = [];
 
@@ -190,7 +219,7 @@ export function validateBySchemaName(schemaName, data) {
     });
   }
 
-  errors.push(...discoveryErrors);
+  errors.push(...discoveryErrors, ...keyPointsTotalErrors);
 
   if (!schemaOk && Array.isArray(validateFn.errors)) {
     for (const err of validateFn.errors) {

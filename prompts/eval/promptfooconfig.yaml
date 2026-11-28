@@ -1,0 +1,111 @@
+# Optional on-demand Promptfoo evaluation config (NOT installed in package.json under Option A).
+# Run manually only when comparing multiple LLM providers locally:
+#   npx promptfoo eval -c prompts/eval/promptfooconfig.yaml
+description: "LexAIDaily LD-G2-04 Stage 2 Dual-Layer Prompt Evaluation (Optional, 5-Category Sample Set)"
+
+prompts:
+  - file://../stage2-dual-layer.md
+
+providers:
+  - id: openai:chat:deepseek-chat
+    config:
+      apiBaseUrl: https://api.deepseek.com/v1
+      temperature: 0.2
+      response_format:
+        type: json_object
+
+defaultTest:
+  vars:
+    output_spec: file://../output-spec.md
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        const d = JSON.parse(output);
+        const forbidden = new Set([
+          "raw_text", "full_text", "html_content", "body_html",
+          "raw_html", "full_content", "article_body"
+        ]);
+        const hasForbidden = Object.keys(d).some((k) => forbidden.has(k.toLowerCase()));
+        const quotes = d.detail_analysis?.evidence_quotes;
+        const kps = d.detail_analysis?.key_points;
+        return (
+          !hasForbidden &&
+          typeof d.summary === "string" &&
+          d.summary.length >= 20 &&
+          d.summary.length <= 160 &&
+          typeof d.practice_impact_brief === "string" &&
+          d.practice_impact_brief.length >= 10 &&
+          d.practice_impact_brief.length <= 60 &&
+          d.practice_impact_is_ai_draft === true &&
+          d.headline === false &&
+          d.review_status === "pending_review" &&
+          Array.isArray(kps) &&
+          kps.length >= 1 &&
+          kps.length <= 3 &&
+          kps.every((p) => typeof p === "string" && p.length >= 8 && p.length <= 600) &&
+          kps.reduce((sum, p) => sum + p.length, 0) <= 600 &&
+          !kps.some((p) => /（唯一长句）|\(唯一长句\)|（观点）|（证据）|（论据）|（回应质疑）/.test(p)) &&
+          Array.isArray(quotes) && quotes.length >= 1 && quotes.length <= 3 &&
+          quotes.every((q) => typeof q?.text === "string" && q.text.length >= 8 && q.text.length <= 150) &&
+          d.detail_analysis?.ai_draft === true &&
+          typeof d.detail_analysis?.legal_commentary === "string" &&
+          d.detail_analysis.legal_commentary.length >= 200 &&
+          d.detail_analysis.legal_commentary.length <= 400
+        );
+
+tests:
+  - description: "Gate 1 Sample 01 [监管与合规] - UK ICO & CMA Agentic AI Privacy Guidance"
+    vars:
+      title: "英国 ICO 联合 CMA 提醒消费级 Agentic AI 开发者落实默认隐私保护义务"
+      source_name: "英国信息专员办公室（ICO）"
+      published_at: "2026-11-24"
+      category: "监管与合规"
+      fact_tier: "official_data"
+      high_risk_legal: "true"
+      effective_status: "guidance"
+      stage1_json: '{"issuer":"英国信息专员办公室（ICO）","published_at":"2026-11-24","document_number_or_version":null,"effective_status":"guidance","numbers_and_dates":["11月20日","2027年"],"evidence_quotes":[{"text":"开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法。","locator":"正文第 1 句"}]}'
+
+  - description: "Gate 1 Sample 04 [模型与技术] - GlobalHRBench Multilingual Labor Law Benchmark"
+    vars:
+      title: "多语种劳动法基准 GlobalHRBench 发布：同一法律问题切换提问语言可致模型排名反转"
+      source_name: "Farlinko / 卡内基梅隆大学（arXiv 预印本）"
+      published_at: "2026-11-23"
+      category: "模型与技术"
+      fact_tier: "confirmed_fact"
+      high_risk_legal: "false"
+      effective_status: "not_applicable"
+      stage1_json: '{"issuer":"Farlinko / 卡内基梅隆大学（arXiv 预印本）","published_at":"2026-11-23","document_number_or_version":"2611.29852v1","effective_status":"not_applicable","numbers_and_dates":["240","1920","76.2%","5.8%","42.2%"],"evidence_quotes":[{"text":"覆盖 8 个法域 240 组劳动法决策题及其 8 种语言对齐版本（共 1,920 条提示）。","locator":"正文第 1 句"}]}'
+
+  - description: "Gate 1 Sample 07 [实务与工具] - Thomson Reuters CoCounsel Legal Expansion"
+    vars:
+      title: "汤森路透新一代 CoCounsel Legal 登陆英、加、澳三地，并将 Westlaw Deep Research 接入第三方执业平台"
+      source_name: "Thomson Reuters"
+      published_at: "2026-11-19"
+      category: "实务与工具"
+      fact_tier: "confirmed_fact"
+      high_risk_legal: "false"
+      effective_status: "not_applicable"
+      stage1_json: '{"issuer":"Thomson Reuters","published_at":"2026-11-19","document_number_or_version":"2026 年 10 月版本","effective_status":"not_applicable","numbers_and_dates":["2026年10月"],"evidence_quotes":[{"text":"重构后的新一代平台已在英国、加拿大与澳大利亚上线，接入各国 Westlaw 与 Practical Law 内容。","locator":"正文第 1 句"}]}'
+
+  - description: "Gate 1 Sample 10 [判例与学术] - SD Illinois Judge Rosenstengel AI Rule 11 Order"
+    vars:
+      title: "美国伊利诺伊州南区联邦法官更新案件管理规程：重申 AI 文书 Rule 11 责任并严禁庭审与口头辩论使用 AI"
+      source_name: "美国伊利诺伊州南区联邦地区法院（District Judge Nancy J. Rosenstengel）"
+      published_at: "2026-11"
+      category: "判例与学术"
+      fact_tier: "official_data"
+      high_risk_legal: "true"
+      effective_status: "not_applicable"
+      stage1_json: '{"issuer":"美国伊利诺伊州南区联邦地区法院（District Judge Nancy J. Rosenstengel）","published_at":"2026-11","document_number_or_version":"Rule 11","effective_status":"not_applicable","numbers_and_dates":["2026年11月","11"],"evidence_quotes":[{"text":"规程同时明令任何情况下均不得在出庭口头辩论或庭审过程中使用 AI。","locator":"正文第 2 句"}]}'
+
+  - description: "Gate 1 Sample 14 [行业与资本] - Clio 2026 Legal Trends Report"
+    vars:
+      title: "Clio 发布《2026 法律趋势报告》：85% 从业者所在律所已采用 AI，70% 消费者称律所披露 AI 使用更增信任"
+      source_name: "Clio（Themis Solutions Inc.）"
+      published_at: "2026-10-26"
+      category: "行业与资本"
+      fact_tier: "confirmed_fact"
+      high_risk_legal: "false"
+      effective_status: "not_applicable"
+      stage1_json: '{"issuer":"Clio（Themis Solutions Inc.）","published_at":"2026-10-26","document_number_or_version":"第 11 期","effective_status":"not_applicable","numbers_and_dates":["85%","79%","82%","70%","6%"],"evidence_quotes":[{"text":"85% 的法律从业者报告所在律所已不同程度采用 AI（高于 2025 年的 79%）。","locator":"正文第 1 句"}]}'
