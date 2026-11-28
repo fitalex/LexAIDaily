@@ -32,6 +32,8 @@
 | LD-G2-04 | [LD-G2-04-dsh-audit-r1.md](LD-G2-04-dsh-audit-r1.md)（经 [PR #64](https://github.com/fitalex/LexAIDaily/pull/64) 补档） | 独立审计（DeepSeek Harness，R1，[PR #63](https://github.com/fitalex/LexAIDaily/pull/63)） | 需修改 |
 | LD-G2-04 | [LD-G2-04-dsh-audit-r2.md](LD-G2-04-dsh-audit-r2.md)（经 [PR #64](https://github.com/fitalex/LexAIDaily/pull/64) 补档） | 独立审计（DeepSeek Harness，R2，[PR #63](https://github.com/fitalex/LexAIDaily/pull/63)） | 需修改 |
 | LD-G2-04 | [LD-G2-04-dsh-audit-r3.md](LD-G2-04-dsh-audit-r3.md)（经 [PR #64](https://github.com/fitalex/LexAIDaily/pull/64) 补档） | 独立审计（DeepSeek Harness，R3，被审 `bb97409`；[PR #63](https://github.com/fitalex/LexAIDaily/pull/63) 后经人工实测升 `v1.1.0` 并合入 `main@e4f6b81`） | 通过 |
+| LD-G2-05 | [LD-G2-05-dsh-audit-r1.md](LD-G2-05-dsh-audit-r1.md)（经 PR #66 归档） | 独立审计（DeepSeek Harness，R1，[PR #65](https://github.com/fitalex/LexAIDaily/pull/65)，被审 `a44bc3a`） | 需修改 |
+| LD-G2-05 | [LD-G2-05-dsh-audit-r2.md](LD-G2-05-dsh-audit-r2.md)（经 PR #66 归档） | 独立审计（DeepSeek Harness，R2，[PR #65](https://github.com/fitalex/LexAIDaily/pull/65)，被审 `11660b3`，合入 `main@c38786a`） | 通过 |
 
 ## 归档文件 blob SHA 核对记录（AGENTS.md 6.2）
 
@@ -58,6 +60,8 @@ Claude 读取仓库中的归档文件后以 `git hash-object` 计算；已归档
 | LD-G2-03-dsh-audit-r4.md | `0837322fab16fbc2482b7178132a4513bc9ec1a0` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
 | LD-G2-03-dsh-audit-r5.md | `a2b12a6130b1aa5803ab201e869e23f7b6d676b5` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
 | LD-G2-03-dsh-audit-r6.md | `20868d201528e725f307de988061be15a5373804` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
-| LD-G2-04-dsh-audit-r1.md | `bf98ed80945226546cebf876e51977dece83487e` | DeepSeek Harness / 2026-11-28（PR #64 补档） | 待核对 |
-| LD-G2-04-dsh-audit-r2.md | `b2513d93f5f27e7a2c4530f6e613c98b1dacd3d2` | DeepSeek Harness / 2026-11-28（PR #64 补档） | 待核对 |
-| LD-G2-04-dsh-audit-r3.md | `6ec6f3c4cc0c625c35df28d4d38bc4689f5e4b37` | DeepSeek Harness / 2026-11-28（PR #64 补档） | 待核对 |
+| LD-G2-04-dsh-audit-r1.md | `bf98ed80945226546cebf876e51977dece83487e` | DeepSeek Harness / 2026-11-28（已合入 `main@c730c57`，PR #64） | 待核对 |
+| LD-G2-04-dsh-audit-r2.md | `b2513d93f5f27e7a2c4530f6e613c98b1dacd3d2` | DeepSeek Harness / 2026-11-28（已合入 `main@c730c57`，PR #64） | 待核对 |
+| LD-G2-04-dsh-audit-r3.md | `6ec6f3c4cc0c625c35df28d4d38bc4689f5e4b37` | DeepSeek Harness / 2026-11-28（已合入 `main@c730c57`，PR #64） | 待核对 |
+| LD-G2-05-dsh-audit-r1.md | `caf2aa5c0fad7e0bf1c8e58800847c6abc864de4` | Gemini / 2026-11-28（PR #66 归档） | 待核对 |
+| LD-G2-05-dsh-audit-r2.md | `61d43c406233189ba8814b050e76531e1b43b09f` | Gemini / 2026-11-28（PR #66 归档） | 待核对 |
