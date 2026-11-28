@@ -23,6 +23,12 @@
 | LD-G2-02 | [LD-G2-02-dsh-audit-r4.md](LD-G2-02-dsh-audit-r4.md)（经 [PR #53](https://github.com/fitalex/LexAIDaily/pull/53) 合并） | 独立审计（DeepSeek Harness，R4） | 需修改 |
 | LD-G2-02 | [LD-G2-02-dsh-audit-r5.md](LD-G2-02-dsh-audit-r5.md)（经 [PR #55](https://github.com/fitalex/LexAIDaily/pull/55) 合并） | 独立审计（DeepSeek Harness，R5） | 需修改 |
 | LD-G2-02 | [LD-G2-02-dsh-audit-r6.md](LD-G2-02-dsh-audit-r6.md)（经 [PR #56](https://github.com/fitalex/LexAIDaily/pull/56) 合并） | 独立审计（DeepSeek Harness，R6） | 通过 |
+| LD-G2-03 | 待补原稿 `LD-G2-03-dsh-audit-r1.md`（DSH 本地草稿 SHA `ae43b159634b0470346979379c41a4873670d34c`） | 独立审计（DeepSeek Harness，R1，被审 `4a5f168`） | 需修改 |
+| LD-G2-03 | [LD-G2-03-dsh-audit-r2.md](LD-G2-03-dsh-audit-r2.md)（经 [PR #59](https://github.com/fitalex/LexAIDaily/pull/59) 合并） | 独立审计（DeepSeek Harness，R2，被审 `a5a3b28`） | 需修改 |
+| LD-G2-03 | [LD-G2-03-dsh-audit-r3.md](LD-G2-03-dsh-audit-r3.md)（经 [PR #60](https://github.com/fitalex/LexAIDaily/pull/60) 合并） | 独立审计（DeepSeek Harness，R3，被审 `82f4d2f`） | 需修改 |
+| LD-G2-03 | [LD-G2-03-dsh-audit-r4.md](LD-G2-03-dsh-audit-r4.md)（经 [PR #61](https://github.com/fitalex/LexAIDaily/pull/61) 合并） | 独立审计（DeepSeek Harness，R4，被审 `cc5c542`） | 需修改 |
+| LD-G2-03 | [LD-G2-03-dsh-audit-r5.md](LD-G2-03-dsh-audit-r5.md)（经 [PR #61](https://github.com/fitalex/LexAIDaily/pull/61) 合并） | 独立审计（DeepSeek Harness，R5，被审 `b515ae1`） | 需修改 |
+| LD-G2-03 | [LD-G2-03-dsh-audit-r6.md](LD-G2-03-dsh-audit-r6.md)（经 [PR #61](https://github.com/fitalex/LexAIDaily/pull/61) 合并） | 独立审计（DeepSeek Harness，R6，被审 `edab639`） | 通过 |
 
 ## 归档文件 blob SHA 核对记录（AGENTS.md 6.2）
 
@@ -43,3 +49,9 @@ Claude 读取仓库中的归档文件后以 `git hash-object` 计算；已归档
 | LD-G2-02-dsh-audit-r4.md | `9f39c51590324ee1f140b1445aa07a767875a448` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #53） | 待核对 |
 | LD-G2-02-dsh-audit-r5.md | `214b4f6bdff5f6497892a161da0fd531f3a77420` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #55） | 待核对 |
 | LD-G2-02-dsh-audit-r6.md | `4b2b1234fab99c0c6decf270703eb6a4e74a94a2` | Gemini / 2026-11-26（已合入 `main@2dc7291`，PR #56） | 待核对 |
+| LD-G2-03-dsh-audit-r1.md | 归档后补记（DSH 本地草稿 `ae43b159634b0470346979379c41a4873670d34c`） | — | 待核对 |
+| LD-G2-03-dsh-audit-r2.md | `ffc8d6ae487d0ea9db72eb2f946c1925be87030e` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #59） | 待核对 |
+| LD-G2-03-dsh-audit-r3.md | `103131cf4591287fc2b30b990554bfc0328bc92f` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #60） | 待核对 |
+| LD-G2-03-dsh-audit-r4.md | `0837322fab16fbc2482b7178132a4513bc9ec1a0` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
+| LD-G2-03-dsh-audit-r5.md | `a2b12a6130b1aa5803ab201e869e23f7b6d676b5` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
+| LD-G2-03-dsh-audit-r6.md | `20868d201528e725f307de988061be15a5373804` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
