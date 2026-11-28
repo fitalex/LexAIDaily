@@ -21,6 +21,7 @@
     "test:pipeline": "node --test tests/pipeline/*.test.mjs",
     "test:prompts": "node --test tests/prompts/*.test.mjs",
     "test:export": "node --test tests/export/*.test.mjs",
+    "test:cross": "node --test tests/cross-test/*.test.mjs",
     "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/prompts/*.test.mjs tests/export/*.test.mjs tests/wechat-prototype/*.test.mjs"
   },
   "dependencies": {
