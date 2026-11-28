@@ -29,6 +29,9 @@
 | LD-G2-03 | [LD-G2-03-dsh-audit-r4.md](LD-G2-03-dsh-audit-r4.md)（经 [PR #61](https://github.com/fitalex/LexAIDaily/pull/61) 合并） | 独立审计（DeepSeek Harness，R4，被审 `cc5c542`） | 需修改 |
 | LD-G2-03 | [LD-G2-03-dsh-audit-r5.md](LD-G2-03-dsh-audit-r5.md)（经 [PR #61](https://github.com/fitalex/LexAIDaily/pull/61) 合并） | 独立审计（DeepSeek Harness，R5，被审 `b515ae1`） | 需修改 |
 | LD-G2-03 | [LD-G2-03-dsh-audit-r6.md](LD-G2-03-dsh-audit-r6.md)（经 [PR #61](https://github.com/fitalex/LexAIDaily/pull/61) 合并） | 独立审计（DeepSeek Harness，R6，被审 `edab639`） | 通过 |
+| LD-G2-04 | 待补原稿 `LD-G2-04-dsh-audit-r1.md`（DSH 本地草稿 SHA `bf98ed80945226546cebf876e51977dece83487e`） | 独立审计（DeepSeek Harness，R1，[PR #63](https://github.com/fitalex/LexAIDaily/pull/63)） | 需修改 |
+| LD-G2-04 | 待补原稿 `LD-G2-04-dsh-audit-r2.md`（DSH 本地草稿 SHA `b2513d93f5f27e7a2c4530f6e613c98b1dacd3d2`） | 独立审计（DeepSeek Harness，R2，[PR #63](https://github.com/fitalex/LexAIDaily/pull/63)） | 需修改 |
+| LD-G2-04 | 待补原稿 `LD-G2-04-dsh-audit-r3.md`（DSH 本地草稿 SHA `6ec6f3c4cc0c625c35df28d4d38bc4689f5e4b37`） | 独立审计（DeepSeek Harness，R3，被审 `bb97409`；[PR #63](https://github.com/fitalex/LexAIDaily/pull/63) 后经人工实测升 `v1.1.0` 并合入 `main@e4f6b81`） | 通过 |
 
 ## 归档文件 blob SHA 核对记录（AGENTS.md 6.2）
 
@@ -55,3 +58,6 @@ Claude 读取仓库中的归档文件后以 `git hash-object` 计算；已归档
 | LD-G2-03-dsh-audit-r4.md | `0837322fab16fbc2482b7178132a4513bc9ec1a0` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
 | LD-G2-03-dsh-audit-r5.md | `a2b12a6130b1aa5803ab201e869e23f7b6d676b5` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
 | LD-G2-03-dsh-audit-r6.md | `20868d201528e725f307de988061be15a5373804` | Gemini / 2026-11-27（已合入 `main@e1734c2`，PR #61） | 待核对 |
+| LD-G2-04-dsh-audit-r1.md | 归档后补记（DSH 本地草稿 `bf98ed80945226546cebf876e51977dece83487e`） | — | 待核对 |
+| LD-G2-04-dsh-audit-r2.md | 归档后补记（DSH 本地草稿 `b2513d93f5f27e7a2c4530f6e613c98b1dacd3d2`） | — | 待核对 |
+| LD-G2-04-dsh-audit-r3.md | 归档后补记（DSH 本地草稿 `6ec6f3c4cc0c625c35df28d4d38bc4689f5e4b37`） | — | 待核对 |
