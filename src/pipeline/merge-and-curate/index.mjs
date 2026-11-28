@@ -8,7 +8,7 @@ import {
 } from "../../collectors/shared/cache.mjs";
 import { validateBySchemaName } from "../../contracts/validate.mjs";
 import { deduplicateCrossTrack } from "./dedup.mjs";
-import { runStage1FactExtraction, runStage2DualLayer } from "./fact-anchor.mjs";
+import { runStage1WithLlm, runStage2DualLayer } from "./fact-anchor.mjs";
 import { buildWechatTopicPool, renderTopicPoolMarkdown } from "./topic-pool.mjs";
 
 function readJsonSafe(filePath) {
@@ -26,6 +26,32 @@ function writeFileAtomic(filePath, content) {
   const tmpPath = `${filePath}.tmp-${process.pid}-${Date.now()}`;
   writeFileSync(tmpPath, content, "utf8");
   renameSync(tmpPath, filePath);
+}
+
+export function renderReviewNotesMarkdown({ date, nowIso, curatedClusters, degraded }) {
+  const lines = [
+    `# LexAIDaily 人工审校诊断简报（${date}）`,
+    "",
+    `- 生成时间：\`${nowIso}\``,
+    `- 汇流条目数：${curatedClusters.length}｜LLM 降级：${degraded.llmFallbackCount} 条｜Schema 校验重试：${degraded.llmRetryCount} 次｜缓存缺失：${degraded.cacheMissingIds.length} 条`,
+    "",
+    "| 条目 ID | 标题 | Stage1 模式 | Stage2 模板/重试/降级 | 数字/日期忠实度 | 需人工复核 |",
+    "|---|---|---|---|---|---|",
+  ];
+
+  for (const c of curatedClusters) {
+    const titleShort = String(c.item.title).replace(/\|/g, "｜").slice(0, 32);
+    const s1Mode = `${c.stage1Meta?.mode || "deterministic"}${c.stage1Meta?.usedFallback ? "(fallback)" : ""}`;
+    const s2Info = `v${c.promptMeta?.version || "1.0.0"} / retry=${c.promptMeta?.retryCount ?? 0} / fb=${Boolean(c.promptMeta?.usedFallback)}`;
+    const faithInfo = c.faithfulness?.faithful
+      ? "通过"
+      : `告警：未命中 [${(c.faithfulness?.missingTokens ?? []).join(", ")}]`;
+    const checkFlag = c.item.needs_human_check ? "**是**" : "否";
+    lines.push(`| \`${c.item.id}\` | ${titleShort} | ${s1Mode} | ${s2Info} | ${faithInfo} | ${checkFlag} |`);
+  }
+
+  lines.push("");
+  return `${lines.join("\n")}\n`;
 }
 
 export async function runCuratePipeline({
@@ -74,6 +100,8 @@ export async function runCuratePipeline({
   const { byUrl } = loadRawCacheIndex(cacheDir);
   const curatedClusters = [];
   const cacheMissingIds = [];
+  let llmFallbackCount = 0;
+  let llmRetryCount = 0;
 
   for (const cluster of dedupedClusters) {
     const cacheRec = byUrl.get(cluster.item.source_url);
@@ -82,8 +110,14 @@ export async function runCuratePipeline({
       cacheMissingIds.push(cluster.item.id);
     }
     const rawText = cacheRec?.raw_text || `${cluster.item.title}\n${cluster.item.summary}`;
-    const stage1 = runStage1FactExtraction({ candidate: cluster.item, rawText });
-    const { item, faithfulness } = await runStage2DualLayer({
+    const { stage1, stage1Meta } = await runStage1WithLlm({
+      candidate: cluster.item,
+      rawText,
+      offline,
+      env,
+      fetchImpl,
+    });
+    const { item, faithfulness, promptMeta } = await runStage2DualLayer({
       candidate: cluster.item,
       stage1,
       rawText,
@@ -91,6 +125,11 @@ export async function runCuratePipeline({
       env,
       fetchImpl,
     });
+
+    if (stage1Meta.usedFallback || promptMeta.usedFallback) {
+      llmFallbackCount += 1;
+    }
+    llmRetryCount += promptMeta.retryCount;
 
     if (cacheMissing) {
       item.needs_human_check = true;
@@ -107,6 +146,8 @@ export async function runCuratePipeline({
       ...cluster,
       item,
       faithfulness,
+      stage1Meta,
+      promptMeta,
       cache_missing: cacheMissing,
       heat_score: cacheRec?.heat_score ?? null,
       is_long_regulation: stage1.is_long_regulation,
@@ -123,6 +164,8 @@ export async function runCuratePipeline({
   if (missingTracks.length > 0) degradedParts.push(`缺失轨=${missingTracks.join(",")}`);
   if (failedSources.length > 0) degradedParts.push(`异常源=${failedSources.slice(0, 5).join(",")}`);
   if (cacheMissingIds.length > 0) degradedParts.push(`缓存缺失=${cacheMissingIds.length}条`);
+  if (llmFallbackCount > 0) degradedParts.push(`LLM降级=${llmFallbackCount}条`);
+  if (llmRetryCount > 0) degradedParts.push(`校验重试=${llmRetryCount}次`);
   const degradedNote = degradedParts.length > 0 ? `（降级提示：${degradedParts.join("；")}）` : "";
 
   const digestRaw = `LexAIDaily ${date} 法律 AI 实务雷达：共汇流 ${curatedClusters.length} 条一手候选，${topicPool.topics.length} 条入深度选题池。${degradedNote}`;
@@ -154,11 +197,30 @@ export async function runCuratePipeline({
     }
   }
 
+  const degraded = {
+    missingTracks,
+    failedSources,
+    cacheMissingIds,
+    llmFallbackCount,
+    llmRetryCount,
+  };
+
+  const reviewNotesMd = renderReviewNotesMarkdown({
+    date,
+    nowIso,
+    curatedClusters,
+    degraded,
+  });
+
   if (writeOutput) {
     if (bundle) {
       writeFileAtomic(
         path.join(bundlesDir, `${date}.json`),
         `${JSON.stringify(bundle, null, 2)}\n`,
+      );
+      writeFileAtomic(
+        path.join(bundlesDir, `${date}-review.md`),
+        reviewNotesMd,
       );
     }
     writeFileAtomic(
@@ -175,11 +237,8 @@ export async function runCuratePipeline({
     bundle,
     topicPool,
     curatedClusters,
-    degraded: {
-      missingTracks,
-      failedSources,
-      cacheMissingIds,
-    },
+    reviewNotesMd,
+    degraded,
   };
 }
 
@@ -193,7 +252,7 @@ if (isCli) {
   runCuratePipeline({ ...(date ? { date } : {}), offline })
     .then(({ bundle, topicPool, degraded }) => {
       console.log(
-        `[curate] items=${bundle?.items.length ?? 0} topics=${topicPool.topics.length} missingTracks=${degraded.missingTracks.join(",") || "none"} cacheMissing=${degraded.cacheMissingIds.length}`,
+        `[curate] items=${bundle?.items.length ?? 0} topics=${topicPool.topics.length} missingTracks=${degraded.missingTracks.join(",") || "none"} cacheMissing=${degraded.cacheMissingIds.length} llmFallback=${degraded.llmFallbackCount} llmRetry=${degraded.llmRetryCount}`,
       );
     })
     .catch((err) => {

@@ -8,12 +8,13 @@
 
 ## 一、审校前输入清单
 
-执行 `npm run daily`（或分步执行 `collect:cn` / `collect:global` / `curate`）后，当日审校人员打开以下 3 组产物：
+执行 `npm run daily`（或分步执行 `collect:cn` / `collect:global` / `curate`）后，当日审校人员打开以下 4 组产物：
 
 | 文件路径 | 用途 |
 |---|---|
 | `data/candidates/<YYYY-MM-DD>/{cn,global}-meta.json` | 查看当日双轨抓取成功率、降级源与异常告警 |
-| `data/bundles/<YYYY-MM-DD>.json` | 当日待审早报初稿（含预览层摘要、详情页 `detail_analysis` 与 `needs_human_check` 标记） |
+| `data/bundles/<YYYY-MM-DD>.json` | 当日待审早报初稿（含预览层摘要、详情页 `detail_analysis`、`unverified_reason` 与 `needs_human_check` 标记） |
+| `data/bundles/<YYYY-MM-DD>-review.md` | 当日 AI 审校诊断简报（逐条展示 Stage 1/2 模式、模板版本、Schema 校验重试次数、LLM 降级状态与具体未命中数字/日期） |
 | `data/topic-pool/<YYYY-MM-DD>.md` | 当日自动入池的公众号深度选题清单（多源交叉 / 高风险法规 / 高热度 / 超长法规） |
 
 ---
@@ -22,7 +23,7 @@
 
 ### 步骤 1（0–3 分钟）：异常与降级快检
 
-1. 打开 `data/bundles/<YYYY-MM-DD>.json` 的 `meta.digest`，确认是否存在降级提示（如 `缺失轨`、`异常源`、`缓存缺失`）。
+1. 打开 `data/bundles/<YYYY-MM-DD>.json` 的 `meta.digest` 与 `data/bundles/<YYYY-MM-DD>-review.md`，确认是否存在降级提示（如 `缺失轨`、`异常源`、`缓存缺失`、`LLM降级`、`校验重试`）。
 2. 检查 `{cn,global}-meta.json` 中 `status` 为 `error` 或 `degraded` 的信源：
    - 若为 T1 合规哨兵（最高法、网信办、EU AI Office、UK ICO）故障，确认是否需在 `.local/manual-inbox.yaml` 人工补录链接后重跑 `npm run daily`。
    - 若为 Layer 2 公众号桥接（`we-mp-rss`）401/403 降级，记录待登录续期，不阻塞当日早报发布。
@@ -32,7 +33,7 @@
 按优先级依次审校 `items`（**先审 `needs_human_check: true` 与 `high_risk_legal: true` 条目**）：
 
 1. **优先排查红旗项（`needs_human_check: true`）**：
-   - 若因 Stage 2 数字/日期忠实度未命中触发：对照 `detail_analysis.evidence_quotes` 中的逐字短引文（含 `locator` 定位）或点击 `source_url` 核对一手原页，修正错误数字/日期，确认无误后将 `needs_human_check` 改为 `false`。
+   - 若因 Stage 2 数字/日期忠实度未命中触发：查看 `data/bundles/<YYYY-MM-DD>-review.md` 与该条目的 `unverified_reason`（已直接列出未命中数字/日期），对照 `detail_analysis.evidence_quotes` 中的逐字短引文（含 `locator` 定位）或点击 `source_url` 核对一手原页，修正错误数字/日期，确认无误后将 `needs_human_check` 改为 `false`。
    - 若因无明确发布日期触发（查看 `unverified_reason`）：打开 `source_url` 确认原页真实发布日期，回填准确 `published_at`。
 2. **高风险法律条目复核（`high_risk_legal: true`）**：
    - 必须人工核对 `effective_status`（`draft` / `proposed` / `enacted` / `in_force` / `amended` / `superseded` / `repealed` / `guidance` / `not_applicable`）与官方原页一致。

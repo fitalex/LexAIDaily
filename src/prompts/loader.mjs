@@ -72,16 +72,26 @@ export function renderTemplate(templateBody, vars = {}) {
   });
 }
 
+/**
+ * Neutralizes markdown code fences and XML delimiter tags inside untrusted source text
+ * to prevent prompt-boundary breakout / fence injection in Stage 1.
+ */
+export function sanitizePromptRawText(rawText) {
+  return String(rawText ?? "")
+    .replace(/```/g, "'''")
+    .replace(/<\/?raw_source_text\s*>/gi, "[raw_source_text]");
+}
+
 export function renderStage1Prompt({ candidate, rawText }, options = {}) {
   const tpl = loadPromptTemplate("stage1-fact-extract.md", options);
   const prompt = renderTemplate(tpl.body, {
-    title: candidate?.title ?? "",
-    source_name: candidate?.source_name ?? "",
+    title: sanitizePromptRawText(candidate?.title ?? ""),
+    source_name: sanitizePromptRawText(candidate?.source_name ?? ""),
     region: candidate?.region ?? "global",
     source_url: candidate?.source_url ?? "",
     published_at: candidate?.published_at ?? "",
     high_risk_legal: Boolean(candidate?.high_risk_legal),
-    raw_text: String(rawText ?? ""),
+    raw_text: sanitizePromptRawText(rawText),
   });
   return {
     prompt,

@@ -15,20 +15,38 @@ providers:
         type: json_object
 
 defaultTest:
+  vars:
+    output_spec: file://../output-spec.md
   assert:
     - type: is-json
     - type: javascript
       value: |
         const d = JSON.parse(output);
+        const forbidden = new Set([
+          "raw_text", "full_text", "html_content", "body_html",
+          "raw_html", "full_content", "article_body"
+        ]);
+        const hasForbidden = Object.keys(d).some((k) => forbidden.has(k.toLowerCase()));
+        const quotes = d.detail_analysis?.evidence_quotes;
+        const kps = d.detail_analysis?.key_points;
         return (
+          !hasForbidden &&
           typeof d.summary === "string" &&
           d.summary.length >= 20 &&
           d.summary.length <= 160 &&
+          typeof d.practice_impact_brief === "string" &&
+          d.practice_impact_brief.length >= 10 &&
+          d.practice_impact_brief.length <= 60 &&
           d.practice_impact_is_ai_draft === true &&
           d.headline === false &&
+          d.review_status === "pending_review" &&
+          Array.isArray(kps) && kps.length >= 3 && kps.length <= 5 &&
+          Array.isArray(quotes) && quotes.length >= 1 && quotes.length <= 3 &&
+          quotes.every((q) => typeof q?.text === "string" && q.text.length >= 8 && q.text.length <= 150) &&
           d.detail_analysis?.ai_draft === true &&
-          d.detail_analysis?.legal_commentary?.length >= 200 &&
-          d.detail_analysis?.legal_commentary?.length <= 400
+          typeof d.detail_analysis?.legal_commentary === "string" &&
+          d.detail_analysis.legal_commentary.length >= 200 &&
+          d.detail_analysis.legal_commentary.length <= 400
         );
 
 tests:
@@ -41,5 +59,4 @@ tests:
       fact_tier: "official_data"
       high_risk_legal: "true"
       effective_status: "guidance"
-      stage1_json: '{"issuer":"英国信息专员办公室（ICO）","published_at":"2026-11-24","effective_status":"guidance","numbers_and_dates":["11月20日","2027年"],"evidence_quotes":[{"text":"开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法。","locator":"正文第 1 句"}]}'
-      output_spec: "严格遵守 prompts/output-spec.md 全部字段长度与枚举约束。"
+      stage1_json: '{"issuer":"英国信息专员办公室（ICO）","published_at":"2026-11-24","document_number_or_version":null,"effective_status":"guidance","numbers_and_dates":["11月20日","2027年"],"evidence_quotes":[{"text":"开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法。","locator":"正文第 1 句"}]}'

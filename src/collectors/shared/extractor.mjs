@@ -55,17 +55,22 @@ function decodeBasicEntities(str) {
 }
 
 /**
- * ST01 (S1) + R2-ST03: Strips actual HTML markup and dangerous elements (script/style/noscript/iframe/svg)
- * into clean plain text while preserving plain-text comparison operators like "3 < 5 且 7 > 2".
+ * ST01 (S1) + R2-ST03 + G2-04-R2: Strips actual HTML markup (including entity-encoded
+ * payloads such as `&lt;script&gt;`) and dangerous elements into clean plain text while
+ * preserving plain-text comparison operators like "3 < 5 且 7 > 2" and "条款 <100万元> 适用".
  */
 export function stripHtmlToPlainText(input) {
   const raw = String(input ?? "");
   if (!raw) return "";
-  if (!HTML_TAG_RE.test(raw)) {
-    const decoded = HTML_ENTITY_RE.test(raw) ? decodeBasicEntities(raw) : raw;
-    return normalizeWhitespace(decoded);
+  let current = raw;
+  for (let pass = 0; pass < 2; pass += 1) {
+    if (!HTML_ENTITY_RE.test(current)) break;
+    current = decodeBasicEntities(current);
   }
-  const { document } = parseHTML(`<!DOCTYPE html><html><body>${raw}</body></html>`);
+  if (!HTML_TAG_RE.test(current)) {
+    return normalizeWhitespace(current);
+  }
+  const { document } = parseHTML(`<!DOCTYPE html><html><body>${current}</body></html>`);
   for (const el of document.querySelectorAll("script, style, noscript, iframe, object, embed, svg")) {
     el.remove();
   }
