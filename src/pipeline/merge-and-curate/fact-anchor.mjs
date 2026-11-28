@@ -1,5 +1,10 @@
 import { stripHtmlToPlainText } from "../../collectors/shared/extractor.mjs";
 import { fetchWithRetry } from "../../collectors/shared/http.mjs";
+import { validateBySchemaName } from "../../contracts/validate.mjs";
+import {
+  buildValidationRetryPrompt,
+  renderStage2Prompt,
+} from "../../prompts/loader.mjs";
 
 const LONG_REGULATION_CHAR_THRESHOLD = 6000;
 const REGULATION_ARTICLE_RE = /(第[一二三四五六七八九十百零\d]+条|\bArticle\s+\d+\b|\bSection\s+\d+\b)/gi;
@@ -195,6 +200,44 @@ function buildDeterministicStage2({ candidate, stage1 }) {
   };
 }
 
+/**
+ * Normalizes LLM Stage 2 JSON output into a schema-checked CandidateItem draft
+ * while strictly enforcing immutable governance guardrails (D-019 headline=false,
+ * ai_draft=true, pending_review, verbatim Stage 1 evidence_quotes, plain-text sanitization).
+ */
+function buildCandidateDraftFromLlm({ candidate, stage1, parsed }) {
+  const rawDetail =
+    parsed?.detail_analysis && typeof parsed.detail_analysis === "object"
+      ? parsed.detail_analysis
+      : parsed;
+
+  const rawKeyPoints = Array.isArray(rawDetail?.key_points)
+    ? rawDetail.key_points.map((k) => stripHtmlToPlainText(k))
+    : [];
+
+  const summary = stripHtmlToPlainText(parsed?.summary ?? "");
+  const practiceImpactBrief = stripHtmlToPlainText(
+    parsed?.practice_impact_brief || candidate.practice_impact_brief || "",
+  );
+  const legalCommentary = stripHtmlToPlainText(rawDetail?.legal_commentary ?? "");
+
+  return {
+    ...candidate,
+    summary,
+    practice_impact_brief: practiceImpactBrief,
+    practice_impact_is_ai_draft: true,
+    unverified: Boolean(candidate.unverified || parsed?.unverified === true),
+    headline: false,
+    review_status: "pending_review",
+    detail_analysis: {
+      key_points: rawKeyPoints,
+      evidence_quotes: stage1.evidence_quotes.slice(0, 3),
+      legal_commentary: legalCommentary,
+      ai_draft: true,
+    },
+  };
+}
+
 export async function runStage2DualLayer({
   candidate,
   stage1,
@@ -202,6 +245,8 @@ export async function runStage2DualLayer({
   offline = false,
   env = process.env,
   fetchImpl = globalThis.fetch,
+  promptsDir = undefined,
+  maxValidationRetries = 1,
 }) {
   const apiKey = env.DEEPSEEK_API_KEY || env.OPENAI_API_KEY || "";
   const apiBase = (env.DEEPSEEK_API_BASE || env.OPENAI_API_BASE || "https://api.deepseek.com/v1").replace(
@@ -210,66 +255,108 @@ export async function runStage2DualLayer({
   );
   const model = env.DEEPSEEK_MODEL || "deepseek-chat";
 
+  const rendered = renderStage2Prompt(
+    { candidate, stage1 },
+    promptsDir ? { promptsDir } : {},
+  );
+
   let generated = null;
+  let retryCount = 0;
+  let usedFallback = false;
 
   if (!offline && apiKey) {
-    try {
-      const prompt = [
-        "你是 LexAIDaily 法律 AI 实务编辑。仅基于给定事实卡片输出严格 JSON，不得编造未出现的数字或日期。",
-        `标题: ${candidate.title}`,
-        `信源: ${candidate.source_name} (${candidate.published_at})`,
-        `事实卡片: ${JSON.stringify(stage1)}`,
-        '返回 JSON: {"summary":"<=160字","practice_impact_brief":"10-60字","key_points":["3-5条,每条8-140字"],"legal_commentary":"200-400字"}',
-      ].join("\n");
+    const boundedRetries = Math.max(0, Math.min(2, Number(maxValidationRetries) || 0));
+    const messages = [{ role: "user", content: rendered.prompt }];
 
-      const reqHeaders = { "Content-Type": "application/json" };
-      reqHeaders.Authorization = ["Bearer", apiKey].join(" ");
-      const res = await fetchWithRetry(`${apiBase}/chat/completions`, {
-        fetchImpl,
-        method: "POST",
-        timeoutMs: 25000,
-        retries: 1,
-        headers: reqHeaders,
-        body: JSON.stringify({
-          model,
-          temperature: 0.2,
-          response_format: { type: "json_object" },
-          messages: [{ role: "user", content: prompt }],
-        }),
-      });
-      if (res.ok) {
+    for (let attempt = 0; attempt <= boundedRetries; attempt += 1) {
+      try {
+        const reqHeaders = { "Content-Type": "application/json" };
+        reqHeaders.Authorization = ["Bearer", apiKey].join(" ");
+        const res = await fetchWithRetry(`${apiBase}/chat/completions`, {
+          fetchImpl,
+          method: "POST",
+          timeoutMs: 25000,
+          retries: 1,
+          headers: reqHeaders,
+          body: JSON.stringify({
+            model,
+            temperature: 0.2,
+            response_format: { type: "json_object" },
+            messages,
+          }),
+        });
+        if (!res.ok) {
+          break;
+        }
         const bodyText = new TextDecoder("utf-8").decode(res.buffer);
         const completion = JSON.parse(bodyText);
         const content = completion?.choices?.[0]?.message?.content;
-        const parsed = JSON.parse(content);
-        if (parsed && parsed.summary && Array.isArray(parsed.key_points) && parsed.legal_commentary) {
-          generated = {
-            summary: clampText(parsed.summary, 20, 160),
-            practice_impact_brief: clampText(
-              parsed.practice_impact_brief || candidate.practice_impact_brief,
-              10,
-              60,
-            ),
-            detail_analysis: {
-              key_points: parsed.key_points.slice(0, 5).map((k) => clampText(k, 8, 140)),
-              evidence_quotes: stage1.evidence_quotes.slice(0, 3),
-              legal_commentary: clampText(parsed.legal_commentary, 200, 400),
-              ai_draft: true,
-            },
-          };
-          while (generated.detail_analysis.key_points.length < 3) {
-            generated.detail_analysis.key_points.push(
-              clampText(`补充事实：详见 ${candidate.source_name} 原始发布内容。`, 8, 140),
-            );
+        if (typeof content !== "string" || !content.trim()) {
+          if (attempt < boundedRetries) {
+            retryCount += 1;
+            messages.push({
+              role: "user",
+              content: buildValidationRetryPrompt({
+                validationErrors: [{ instancePath: "$", message: "响应内容为空，必须返回合法 JSON 对象" }],
+                attempt: retryCount,
+              }),
+            });
+            continue;
           }
+          break;
         }
+
+        let parsed;
+        try {
+          parsed = JSON.parse(content);
+        } catch (parseErr) {
+          if (attempt < boundedRetries) {
+            retryCount += 1;
+            messages.push({ role: "assistant", content });
+            messages.push({
+              role: "user",
+              content: buildValidationRetryPrompt({
+                validationErrors: [{ instancePath: "$", message: `JSON 解析失败: ${parseErr.message}` }],
+                attempt: retryCount,
+              }),
+            });
+            continue;
+          }
+          break;
+        }
+
+        const candidateDraft = buildCandidateDraftFromLlm({ candidate, stage1, parsed });
+        const check = validateBySchemaName("candidate-item", candidateDraft);
+        if (check.valid) {
+          generated = {
+            summary: candidateDraft.summary,
+            practice_impact_brief: candidateDraft.practice_impact_brief,
+            unverified: candidateDraft.unverified,
+            detail_analysis: candidateDraft.detail_analysis,
+          };
+          break;
+        }
+
+        if (attempt < boundedRetries) {
+          retryCount += 1;
+          messages.push({ role: "assistant", content });
+          messages.push({
+            role: "user",
+            content: buildValidationRetryPrompt({
+              validationErrors: check.errors,
+              attempt: retryCount,
+            }),
+          });
+          continue;
+        }
+      } catch {
+        break;
       }
-    } catch {
-      // Fallback cleanly to deterministic extraction
     }
   }
 
   if (!generated) {
+    usedFallback = !offline && Boolean(apiKey);
     generated = buildDeterministicStage2({ candidate, stage1 });
   }
 
@@ -284,6 +371,7 @@ export async function runStage2DualLayer({
     summary: generated.summary,
     practice_impact_brief: generated.practice_impact_brief,
     practice_impact_is_ai_draft: true,
+    unverified: Boolean(candidate.unverified || generated.unverified === true),
     needs_human_check: Boolean(candidate.needs_human_check || !faithfulness.faithful),
     headline: false,
     review_status: "pending_review",
@@ -293,5 +381,12 @@ export async function runStage2DualLayer({
   return {
     item: enriched,
     faithfulness,
+    promptMeta: {
+      promptId: rendered.promptId,
+      version: rendered.version,
+      outputSpecVersion: rendered.outputSpecVersion,
+      retryCount,
+      usedFallback,
+    },
   };
 }

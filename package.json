@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "type": "module",
-  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）及 Gate 2 数据契约、双轨采集与两阶段事实锚定汇流管线。",
+  "description": "LexAIDaily 微信公众号每日固定栏目内联排版原型（LD-G1-03）及 Gate 2 数据契约、双轨采集、两阶段事实锚定提示词包与人工审校管线。",
   "engines": {
     "node": ">=22.12.0"
   },
@@ -18,7 +18,8 @@
     "curate": "node src/pipeline/merge-and-curate/index.mjs",
     "daily": "node src/pipeline/daily.mjs",
     "test:pipeline": "node --test tests/pipeline/*.test.mjs",
-    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/wechat-prototype/*.test.mjs"
+    "test:prompts": "node --test tests/prompts/*.test.mjs",
+    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/prompts/*.test.mjs tests/wechat-prototype/*.test.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "0.6.0",

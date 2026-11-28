@@ -1,0 +1,45 @@
+# Optional on-demand Promptfoo evaluation config (NOT installed in package.json under Option A).
+# Run manually only when comparing multiple LLM providers locally:
+#   npx promptfoo eval -c prompts/eval/promptfooconfig.yaml
+description: "LexAIDaily LD-G2-04 Stage 2 Dual-Layer Prompt Evaluation (Optional)"
+
+prompts:
+  - file://../stage2-dual-layer.md
+
+providers:
+  - id: openai:chat:deepseek-chat
+    config:
+      apiBaseUrl: https://api.deepseek.com/v1
+      temperature: 0.2
+      response_format:
+        type: json_object
+
+defaultTest:
+  assert:
+    - type: is-json
+    - type: javascript
+      value: |
+        const d = JSON.parse(output);
+        return (
+          typeof d.summary === "string" &&
+          d.summary.length >= 20 &&
+          d.summary.length <= 160 &&
+          d.practice_impact_is_ai_draft === true &&
+          d.headline === false &&
+          d.detail_analysis?.ai_draft === true &&
+          d.detail_analysis?.legal_commentary?.length >= 200 &&
+          d.detail_analysis?.legal_commentary?.length <= 400
+        );
+
+tests:
+  - description: "Gate 1 Sample 01 - UK ICO & CMA Agentic AI Privacy Guidance"
+    vars:
+      title: "英国 ICO 联合 CMA 提醒消费级 Agentic AI 开发者落实默认隐私保护义务"
+      source_name: "英国信息专员办公室（ICO）"
+      published_at: "2026-11-24"
+      category: "监管与合规"
+      fact_tier: "official_data"
+      high_risk_legal: "true"
+      effective_status: "guidance"
+      stage1_json: '{"issuer":"英国信息专员办公室（ICO）","published_at":"2026-11-24","effective_status":"guidance","numbers_and_dates":["11月20日","2027年"],"evidence_quotes":[{"text":"开发与部署方须从设计之初嵌入隐私保护并持续证明符合英国数据保护法。","locator":"正文第 1 句"}]}'
+      output_spec: "严格遵守 prompts/output-spec.md 全部字段长度与枚举约束。"
