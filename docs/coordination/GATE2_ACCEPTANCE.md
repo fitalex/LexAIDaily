@@ -1,0 +1,54 @@
+# Gate 2 验收清单（LD-G2-07）
+
+> **状态：待 Human Maintainer 审阅与签署。** 本清单只转写 [ROADMAP.md](../../ROADMAP.md) Gate 2 既有交付成果与验收标准，原文逐字照录，不新增、不降低、不改写。证据与核对列仅作客观核查记录，不构成验收结论；独立审计按 AGENTS.md 6.1(d) 可交 DeepSeek Harness 核验，或由 Human Maintainer 书面豁免。
+>
+> 基准：`main` @ `65f5641fbc3868072d8b225957b414895125c7f9`（含 PR #37 / #47 / #50–#67 合并结果）｜关联任务：Issue [#45](https://github.com/fitalex/LexAIDaily/issues/45)（Parent [#38](https://github.com/fitalex/LexAIDaily/issues/38)）｜编制：Gemini｜日期：2026-11-28
+
+## 一、交付成果（ROADMAP 原文）
+
+| # | ROADMAP 原文 | 证据 | Gemini 核对 |
+|---|---|---|---|
+| T1 | 全球法律 AI 权威信源白名单库与采集配置文件。 | 中国大陆轨白名单（12 源，合规哨兵占比 16.7%）：[`data/sources/whitelist-cn.yaml`](../../data/sources/whitelist-cn.yaml)；大陆以外轨白名单（14 源，合规哨兵占比 21.4%）：[`data/sources/whitelist-global.yaml`](../../data/sources/whitelist-global.yaml)；准入与分级标准 v1.2：[`docs/sources/whitelist-admission-standard.md`](../sources/whitelist-admission-standard.md)；白名单校验与在线冒烟脚本：[`src/sources/validate-whitelist.mjs`](../../src/sources/validate-whitelist.mjs)、[`scripts/sources/smoke-check.mjs`](../../scripts/sources/smoke-check.mjs)（[PR #54](https://github.com/fitalex/LexAIDaily/pull/54) `6be8689`；DSH R6 独立审计通过：[`LD-G2-02-dsh-audit-r6.md`](../audits/LD-G2-02-dsh-audit-r6.md)，[PR #56](https://github.com/fitalex/LexAIDaily/pull/56)）。 | 已入库（26 源覆盖五维分类与七类信源，7/7 白名单测试通过） |
+| T2 | 自动化采集、分类、去重与深度选题池沉淀脚本/管线。 | 双轨分域采集器与公共适配/缓存/抽取模块：[`src/collectors/cn/index.mjs`](../../src/collectors/cn/index.mjs)、[`src/collectors/global/index.mjs`](../../src/collectors/global/index.mjs)、[`src/collectors/shared/`](../../src/collectors/shared/collector-runner.mjs)（`.cache/raw/` 7 天 TTL 自动清理与 `.gitignore` 隔离）；公共汇流、跨轨去重、两阶段事实锚定与深度选题池管线：[`src/pipeline/daily.mjs`](../../src/pipeline/daily.mjs)、[`src/pipeline/merge-and-curate/`](../../src/pipeline/merge-and-curate/index.mjs)；4 套正式数据契约与校验器：[`schemas/`](../../schemas/daily-bundle.schema.json)、[`src/contracts/validate.mjs`](../../src/contracts/validate.mjs)（[PR #47](https://github.com/fitalex/LexAIDaily/pull/47) `831095f`、[PR #58](https://github.com/fitalex/LexAIDaily/pull/58) `e28edfa`；DSH R2/R6 审计通过：[`LD-G2-01-dsh-audit-r2.md`](../audits/LD-G2-01-dsh-audit-r2.md)、[`LD-G2-03-dsh-audit-r6.md`](../audits/LD-G2-03-dsh-audit-r6.md)）。 | 已入库（契约 12/12 + 管线 9/9 单测通过，Antigravity 交叉测试 Suite 2 通过） |
+| T3 | 每日精选摘要与实务影响生成模板及《人工审校与发布 SOP 文档》。 | 两阶段提示词模板包与解耦输出契约：[`prompts/stage1-fact-extract.md`](../../prompts/stage1-fact-extract.md)（`v1.0.0`）、[`prompts/stage2-dual-layer.md`](../../prompts/stage2-dual-layer.md)（`v1.1.0`，含 Human 实测拍板的 Option B 四步观点论证与去 AI 腔规则）、[`prompts/output-spec.md`](../../prompts/output-spec.md)（`v1.1.0`）、[`src/prompts/loader.mjs`](../../src/prompts/loader.mjs) 与可选评测配置 [`prompts/eval/promptfooconfig.yaml`](../../prompts/eval/promptfooconfig.yaml)；单日 ≤20 分钟审校 SOP：[`docs/sop/HUMAN_REVIEW_SOP.md`](../sop/HUMAN_REVIEW_SOP.md)（[PR #63](https://github.com/fitalex/LexAIDaily/pull/63) `e4f6b81`；DSH R3 审计通过：[`LD-G2-04-dsh-audit-r3.md`](../audits/LD-G2-04-dsh-audit-r3.md)，[PR #64](https://github.com/fitalex/LexAIDaily/pull/64)）。 | 已入库（提示词 5/5 单测通过，经 Human 6 项实测微调并批准合入） |
+| T4 | 公众号固定栏目 HTML 一键导出工具与结构化日更数据包样例。 | 双层差异化一键导出 CLI：[`src/export/dual-export.mjs`](../../src/export/dual-export.mjs)（`npm run export:dual`，复用 Gate 1 [`scripts/wechat-prototype/build.mjs`](../../scripts/wechat-prototype/build.mjs) 并输出 V16 兼容 Web JSON 与 `editions-index.json`）；连续 3 期真实双轨试运行样本（共 24 条）：[`data/bundles/2026-11-24.json`](../../data/bundles/2026-11-24.json)、[`2026-11-25.json`](../../data/bundles/2026-11-25.json)、[`2026-11-26.json`](../../data/bundles/2026-11-26.json)；确定性导出哈希清单：[`data/exports/ld-g2-05/manifest.json`](../../data/exports/ld-g2-05/manifest.json)（`webIndexSha256`：`c8e6f9aa192ce80ab01c786756e61b36e3a422ccd65f98c3eef27d4145c8ecde`）；Gate 2 全量总索引：[`docs/gate2-index.md`](../gate2-index.md)（[PR #65](https://github.com/fitalex/LexAIDaily/pull/65) `c38786a`、[PR #67](https://github.com/fitalex/LexAIDaily/pull/67) `65f5641`；DSH R2 审计通过：[`LD-G2-05-dsh-audit-r2.md`](../audits/LD-G2-05-dsh-audit-r2.md)，[PR #66](https://github.com/fitalex/LexAIDaily/pull/66)）。 | 已入库（导出 3/3 + Antigravity 交叉测试 7/7 均复现全部 7 项 SHA-256） |
+
+## 二、验收标准（ROADMAP 原文）
+
+| # | ROADMAP 原文 | 证据 | Gemini 核对 | 需 Human 判断 |
+|---|---|---|---|---|
+| A1 | 采集管线稳定抓取白名单信源，输出的候选条目 100% 附带可溯源的一手或核心原始链接。 | 1. 白名单在线可解析性冒烟：[`LD-G2-02-dsh-audit-r6.md`](../audits/LD-G2-02-dsh-audit-r6.md) 记录 `npm run smoke:sources` 25/26～26/26 源可解析。<br>2. 链接溯源与防二手红线：`schemas/candidate-item.schema.json` 与 `src/contracts/validate.mjs` 强制 `https://` 且拦截 `aihot.news` 作为主链接；[`LD-G2-05-dsh-audit-r2.md`](../audits/LD-G2-05-dsh-audit-r2.md) 与 [`tests/cross-test/REPORT.md`](../../tests/cross-test/REPORT.md) 独立核验 3 期 24/24 条试运行样本全部为文章级一手 `https://` 原链（23 条 HTTP 200、1 条 KWM 403 反爬非 404，零栏目/Feed 首页、零 `aihot.news`、零禁用全文字段）。<br>3. 离线管线与单轨降级：[`tests/pipeline/pipeline.test.mjs`](../../tests/pipeline/pipeline.test.mjs)（9/9）与 [`tests/cross-test/gate2-cross-test.test.mjs`](../../tests/cross-test/gate2-cross-test.test.mjs) Suite 2 验证 `aihot.news` 仅取 `links.original`、跨轨去重优先留海外一手原链及单轨故障降级。 | 离线契约、单测、独立审计与交叉测试均通过；“生产环境长期抓取稳定性”未在无密钥离线测试中连续跑网验证，是否满足准出标准由 Human 判定 | **是** |
+| A2 | 深度选题池能有效归集高热度/高争议法律 AI 议题，分类准确率满足日常运营要求。 | 1. 深度选题池量化归集：[`src/pipeline/merge-and-curate/topic-pool.mjs`](../../src/pipeline/merge-and-curate/topic-pool.mjs) 实现 4 类触发规则（多源交叉报道、高风险法律标签、热度 ≥80、超长法规切分），经 [`schemas/wechat-topic-pool.schema.json`](../../schemas/wechat-topic-pool.schema.json)、DSH R6（[`LD-G2-03-dsh-audit-r6.md`](../audits/LD-G2-03-dsh-audit-r6.md)）与 Antigravity 交叉测试（[`tests/cross-test/REPORT.md`](../../tests/cross-test/REPORT.md) Suite 2）验证高热度/高风险条目正确入池且低热度常规短讯被过滤。<br>2. 五维分类与双轨覆盖：3 期 24 条试运行样本每期均覆盖全部 5 个官方分类（监管与合规、模型与技术、实务与工具、判例与学术、行业与资本）与 `cn`/`global` 双轨，合规哨兵占比均为 25.0%（15%–25% 红线内）。 | 规则逻辑与样本覆盖均经测试验证；“分类准确率满足日常运营要求”属运营质量主观判断，且未调用真实在线 LLM 跑批量评测，AI 不代判 | **是** |
+| A3 | 运营者按照 SOP 可在规定时间内完成单日精选审校、实务点评注入，并一键生成符合 Gate 1 标准的公众号排版稿与 Web 数据文件，连续跑通内部试运行样本。 | 1. 审校 SOP 与提示词实测：[`docs/sop/HUMAN_REVIEW_SOP.md`](../sop/HUMAN_REVIEW_SOP.md) 明确单日 ≤20 分钟 5 步审校流、3 秒短引文核源与 5 条红线；Human 已于 2026-11-28 完成 PR #63 6 项人工实测并批准合入 `v1.1.0` 提示词与 SOP。<br>2. 双端一键导出与 Gate 1 兼容：DSH R2（[`LD-G2-05-dsh-audit-r2.md`](../audits/LD-G2-05-dsh-audit-r2.md)）与 Antigravity 交叉测试（[`tests/cross-test/REPORT.md`](../../tests/cross-test/REPORT.md) Suite 3）均两次实跑 `npm run export:dual -- --in-dir data/bundles --out-dir <tmp> --approved-only`，连续 3 期（2026-11-24 至 11-26）WeChat HTML、Web JSON 与 `editions-index.json`（`c8e6f9aa…c8ecde`）SHA-256 100% 复现，公众号 HTML 严守 D-030（零 `<table>`/`<a href>`/`<style>`/`<script>`/`class=`，全区块 `#D5C5AE`），Web JSON 对齐 V16 原型字段。<br>3. 全量验证：`npm ci` 71 packages（零新增依赖）、`TZ=Asia/Shanghai npm test` 40/40 通过、`npm run test:cross` 7/7 通过、`npm run validate:contracts` `filesChecked: 3, valid: true`。 | 自动化导出、确定性哈希与 D-029/D-030 机械红线全部通过；“≤20 分钟实际计时演练体验与 3 期试运行成稿质量满意度”须由 Human 亲自判定 | **是** |
+
+## 三、前置任务完成情况核对
+
+| 任务 | 标题 | GitHub 状态 | 实现 PR / Commit | 独立审计 / 交叉测试证据 |
+|---|---|---|---|---|
+| Spec #38（前置） | Gate 2 术语表与 ADR-0001～0003 | 已合入底座 | [PR #37](https://github.com/fitalex/LexAIDaily/pull/37)（`21d24da`） | Human 拍板确立 |
+| LD-G2-01（[#39](https://github.com/fitalex/LexAIDaily/issues/39)） | 正式采集与日更数据契约 v1.0 | ✅ CLOSED | [PR #47](https://github.com/fitalex/LexAIDaily/pull/47)（`831095f`） | DSH R1–R2 通过（[PR #50](https://github.com/fitalex/LexAIDaily/pull/50)、[PR #51](https://github.com/fitalex/LexAIDaily/pull/51)） |
+| LD-G2-02（[#40](https://github.com/fitalex/LexAIDaily/issues/40)） | 双轨权威信源白名单库 v1.2 | ⚠️ OPEN（代码已合入，待关单） | [PR #54](https://github.com/fitalex/LexAIDaily/pull/54)（`6be8689`） | DSH R1–R6 通过（[PR #50](https://github.com/fitalex/LexAIDaily/pull/50)–[#53](https://github.com/fitalex/LexAIDaily/pull/53)、[#55](https://github.com/fitalex/LexAIDaily/pull/55)、[#56](https://github.com/fitalex/LexAIDaily/pull/56)） |
+| LD-G2-03（[#41](https://github.com/fitalex/LexAIDaily/issues/41)，含 [#46](https://github.com/fitalex/LexAIDaily/issues/46)） | 双轨采集器、7 天缓存与公共汇流管线 | ✅ CLOSED | [PR #58](https://github.com/fitalex/LexAIDaily/pull/58)（`e28edfa`） | DSH R1–R6 通过（[PR #59](https://github.com/fitalex/LexAIDaily/pull/59)–[#62](https://github.com/fitalex/LexAIDaily/pull/62)） |
+| LD-G2-04（[#42](https://github.com/fitalex/LexAIDaily/issues/42)） | 两阶段提示词模板包与人工审校 SOP | ✅ CLOSED | [PR #63](https://github.com/fitalex/LexAIDaily/pull/63)（`e4f6b81`） | DSH R1–R3 通过（[PR #64](https://github.com/fitalex/LexAIDaily/pull/64)）+ Human 实测定稿 `v1.1.0` |
+| LD-G2-05（[#43](https://github.com/fitalex/LexAIDaily/issues/43)） | 双端一键导出 CLI 与 3 期试运行样本 | ✅ CLOSED | [PR #65](https://github.com/fitalex/LexAIDaily/pull/65)（`c38786a`） | DSH R1–R2 通过（[PR #66](https://github.com/fitalex/LexAIDaily/pull/66)） |
+| LD-G2-06（[#44](https://github.com/fitalex/LexAIDaily/issues/44)） | 独立交叉测试与 Gate 2 文档总索引 | ✅ CLOSED | [PR #67](https://github.com/fitalex/LexAIDaily/pull/67)（`65f5641`） | Antigravity 7/7 交叉测试通过 + Gemini 复核通过（89 条索引链接 0 断链） |
+
+## 四、已知观察与带入 Gate 3 事项（非验收阻断项，供 Human 决策）
+
+| 编号 | 观察 | 建议处置 |
+|---|---|---|
+| O1 | **`key_points` Option B 跨文档口径漂移（DSH ST04 / Antigravity S3-1）**：现行 Schema、Prompt 与 SOP 均已锁定 `key_points` 为 1–3 段、合计 ≤600 字，但冻结基线 `docs/adr/0002-fact-tier-and-no-fulltext.md`（第 12 行）与 `docs/contracts/gate2-data-contract-v1.md`（第 31 行）仍留有早期“3–5 条”措辞；`src/contracts/types.d.ts` 第 62 行 `detail_analysis` 未标可选。 | 建议 Gate 3 启动时由 Human 授权统一刷新 ADR-0002 附注、合同文档与 `types.d.ts`；本次不阻断 Gate 2。 |
+| O2 | **试运行样本占位详情域名与主机名细节（DSH SP02 / Antigravity S3-2）**：3 期样本 `meta.web_detail_url` 均采用 `https://lexaidaily.example/d/<date>` 占位地址（已标 `internal: true`）；`trial-20261126-05` 的 `source_url` 为 `junhe.com` 而 `source_domain` 为 `www.junhe.com`。 | Gate 3 正式域名配置后统一替换为生产域名，并在公开导出前增加拒绝 `.example`/`localhost` 域名校验。 |
+| O3 | **双端展示细节衔接（Antigravity S3-3 / S3-4）**：公众号模板 `design/wechat/template.html` 第 515 行固定输出「实务影响 · AI 初稿」（对已解除初稿的头条保守多标）；Web V16 `design/prototype/index.html` 仍内联静态数据且弹窗外链拼接 `sourceDomain`。 | 均属 Gate 3 前端工程化接入 `editions-index.json` 与 `sourceUrl` 时的标准研发任务。 |
+| O4 | **治理状态与历史草稿待收口（Antigravity S3-5）**：Issue [#40](https://github.com/fitalex/LexAIDaily/issues/40)（`LD-G2-02`）代码已合入但 Issue 仍为 `OPEN`；[`docs/coordination/STATUS.md`](STATUS.md) 仍停留在 Gate 1 态；[`docs/audits/README.md`](../audits/README.md) 中 `LD-G2-03-dsh-audit-r1.md` 尚待补原稿。 | 本清单签署通过后，随关闭 `#38` 一并关闭 `#40` 并刷新 `STATUS.md`；`LD-G2-03` R1 原稿视 DSH 本地留存情况择机补档。 |
+| O5 | **离线审计边界（未替代真人实操项）**：真实 LLM API 批量调用、20 分钟单日人工计时演练、公众号后台新样稿真机粘贴均未在离线自动化测试中替代验证；仓库尚未配置 `.github/workflows/`（CI 未触发）。 | 在 Gate 3 联调与首轮正式发布验收中完成实机、在线 LLM 与 CI 闭环。 |
+
+## 五、Human 签署
+
+以下由 Human Maintainer 本人填写（或在 PR 评论中书面写明签署结论），AI 不得代签：
+
+- [ ] 我已阅读第二节，对 A1–A3 的判断为：____
+- [ ] 对 `LD-G2-07` 独立审计（AGENTS.md 6.1(d)）的决定（交 DeepSeek Harness 复核 / 书面豁免）：____
+- [ ] 对 O1–O5 及同步关闭 Issue `#40`、`#38` 的决定为：____
+- [ ] 同意 / 不同意 正式验收 Gate 2 并解锁 Gate 3
+- 签署人：____｜日期：____｜链接或评论编号：____
