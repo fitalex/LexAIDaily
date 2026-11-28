@@ -40,7 +40,12 @@ defaultTest:
           d.practice_impact_is_ai_draft === true &&
           d.headline === false &&
           d.review_status === "pending_review" &&
-          Array.isArray(kps) && kps.length >= 3 && kps.length <= 5 &&
+          Array.isArray(kps) &&
+          kps.length >= 1 &&
+          kps.length <= 3 &&
+          kps.every((p) => typeof p === "string" && p.length >= 8 && p.length <= 600) &&
+          kps.reduce((sum, p) => sum + p.length, 0) <= 600 &&
+          !kps.some((p) => /（唯一长句）|\(唯一长句\)|（观点）|（证据）|（论据）|（回应质疑）/.test(p)) &&
           Array.isArray(quotes) && quotes.length >= 1 && quotes.length <= 3 &&
           quotes.every((q) => typeof q?.text === "string" && q.text.length >= 8 && q.text.length <= 150) &&
           d.detail_analysis?.ai_draft === true &&

@@ -611,25 +611,23 @@ function buildDeterministicStage2({ candidate, stage1 }) {
   const summary = clampText(lead, 20, 160, "，详见一手原始信源披露内容。");
 
   const keyPoints = [];
-  for (const s of stage1.lead_sentences.slice(0, 4)) {
-    keyPoints.push(clampText(s, 8, 140, "。"));
+  let totalKpChars = 0;
+  for (const s of stage1.lead_sentences.slice(0, 3)) {
+    const remaining = 600 - totalKpChars;
+    if (remaining < 20) break;
+    const clamped = clampText(s, 8, Math.min(200, remaining), "。");
+    keyPoints.push(clamped);
+    totalKpChars += clamped.length;
   }
-  while (keyPoints.length < 3) {
-    const idx = keyPoints.length + 1;
-    keyPoints.push(
-      clampText(
-        `要点 ${idx}：信源 ${candidate.source_name} 于 ${candidate.published_at} 发布「${candidate.title}」。`,
-        8,
-        140,
-      ),
-    );
+  if (keyPoints.length === 0) {
+    keyPoints.push(clampText(candidate.title, 8, 200, "，详见一手原文。"));
   }
 
   const commentaryBase =
     `【AI 初稿】本条动态由 ${candidate.source_name} 于 ${candidate.published_at} 披露，聚焦「${candidate.title}」。` +
     `对法律从业者而言，建议结合原文核对适用边界、合规义务及实务提效场景，重点评估其在合同审查、法规检索、证据梳理或内部治理工作流中的可落地性。` +
     `若涉及监管红线或高风险法律适用，团队应先完成内部风险分级与人工复核，再决定是否纳入标准化办案与法务 SOP。` +
-    `本文评述由程序基于一手原文自动生成，供人工终审参考，不构成正式法律意见。`;
+    `本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。`;
 
   const legalCommentary = clampText(commentaryBase, 200, 400, "请结合最新官方文本持续跟踪。");
 
@@ -637,7 +635,7 @@ function buildDeterministicStage2({ candidate, stage1 }) {
     summary,
     practice_impact_brief: clampText(candidate.practice_impact_brief, 10, 60),
     detail_analysis: {
-      key_points: keyPoints.slice(0, 5),
+      key_points: keyPoints.slice(0, 3),
       evidence_quotes: stage1.evidence_quotes.slice(0, 3),
       legal_commentary: legalCommentary,
       ai_draft: true,
@@ -674,11 +672,16 @@ function buildCandidateDraftFromLlm({ candidate, stage1, parsed }) {
       ? stripHtmlToPlainText(rawDetail.legal_commentary)
       : rawDetail?.legal_commentary;
 
+  // Allow LLM to downgrade fact_tier to market_opinion (e.g. commercial press release / preprint), never upgrade.
+  const resolvedFactTier =
+    parsed?.fact_tier === "market_opinion" ? "market_opinion" : cleanCandidate.fact_tier;
+
   return {
     ...cleanCandidate,
     summary,
     practice_impact_brief: practiceImpactBrief,
     practice_impact_is_ai_draft: true,
+    fact_tier: resolvedFactTier,
     unverified: Boolean(cleanCandidate.unverified || parsed?.unverified === true),
     headline: false,
     review_status: "pending_review",

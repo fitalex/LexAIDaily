@@ -40,27 +40,27 @@
    - 若新规已替代旧规，须补填 `superseded_by`。
    - 若条目来自 `aihot-news-discovery`（`discovered_via` 非空），确认 `source_url` 为合法一手外域原链且事实层级准确。
 3. **常规实务条目抽核（每条 ≤ 30 秒）**：
-   - 用 `evidence_quotes` 快速交叉验证 `summary`（≤160 字）与 `key_points`（3–5 条），剔除低价值或重复条目（将 `review_status` 设为 `"rejected"`）。
+   - 用 `evidence_quotes` 快速交叉验证 `summary`（≤160 字）与 `key_points`（**1–3 段核心观点论证，各段合计 ≤600 字**），扫读确认未混入「发文主体/时间提示」等内部元数据水话、每段仅 1 句长句且无 `（唯一长句）` 等元标注残留，剔除低价值或重复条目（将 `review_status` 设为 `"rejected"`）。
 
-### 步骤 3（12–16 分钟）：选刊、勾选「头条」与注入实务锐评
+### 步骤 3（12–17 分钟）：选刊、勾选「头条」与注入实务锐评
 
 1. **勾选当日入刊条目**：保留 8–14 条高价值实务与合规条目，确认双轨合规哨兵占比控制在 **15%–25%**，≥75% 聚焦「法律人如何用 AI 提升工作效率」。
 2. **人工勾选「头条」（D-019 硬红线）**：
    - 默认所有条目 `headline` 均为 `false`。
    - 仅由审校人员结合当日实务影响力度，手工为 1–2 条核心条目将 `headline` 改为 `true`。
-3. **审校评述并摘除「AI 初稿」标识**：
-   - 审阅 `practice_impact_brief`（≤60 字）与 `detail_analysis.legal_commentary`（200–400 字），删除空泛表述，按需注入一线律师/法务实务锐评。
-   - 逐条核对通过后，将：
+3. **分层审校评述并摘除「AI 初稿」标识（控时核心）**：
+   - **常规入刊条目**：核验无事实偏差后，可将 `review_status` 改为 `"approved"`，**允许保留 `practice_impact_is_ai_draft: true` 与 `detail_analysis.ai_draft: true` 直接入刊**，避免在 8–14 条上逐条精修导致超时。
+   - **1–2 条「头条」或高风险重点条目**：精修 `practice_impact_brief`（≤60 字）与 `detail_analysis.legal_commentary`（200–400 字），删除空泛表述并注入一线律师/法务实务锐评；精修核对通过后，再将：
      - `review_status` 改为 `"approved"`
      - `practice_impact_is_ai_draft` 改为 `false`
      - `detail_analysis.ai_draft` 改为 `false`
      - 若已完成官方一手核实且确认无误，可将 `unverified` 改为 `false` 并移除 `unverified_reason`。
    - **未人工精修的条目禁止摘除 `ai_draft: true`**。
 
-### 步骤 4（16–18 分钟）：周度深度选题池筛选
+### 步骤 4（17–18 分钟）：周度深度选题池快览（平日跳过，周五集中勾选）
 
-1. 浏览 `data/topic-pool/<YYYY-MM-DD>.md`（对应 `schemas/wechat-topic-pool.schema.json`），重点关注触发 `long_regulation_split`（超长法规分段）或 `multi_source_cross_report`（多源交叉报道）的条目。
-2. 对具备公众号深度长文价值的选题，在对应 `data/topic-pool/<YYYY-MM-DD>.json` 中将 `status` 从 `"queued"` 更新为 `"selected"`（每周集中挑选 1–2 篇）。
+1. **平日（周一至周四）**：30 秒快速扫一眼 `data/topic-pool/<YYYY-MM-DD>.md`（对应 `schemas/wechat-topic-pool.schema.json`）的标题即可跳过，重点留意触发 `long_regulation_split`（超长法规分段）或 `multi_source_cross_report`（多源交叉报道）的条目，把时间匀给步骤 3 的头条精修。
+2. **周五集中筛选（约 3 分钟）**：从本周累计池中挑选 1–2 篇具备公众号深度长文价值的选题，在对应 `data/topic-pool/<YYYY-MM-DD>.json` 中将 `status` 从 `"queued"` 更新为 `"selected"`。
 
 ### 步骤 5（18–20 分钟）：契约终检与双端导出粘贴检查
 

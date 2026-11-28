@@ -135,8 +135,8 @@ test("1. Prompt template pack, fence-injection guard, promptfoo config & SOP com
   const specTpl = loadPromptTemplate("output-spec.md");
 
   assert.equal(s1Tpl.meta.version, "1.0.0");
-  assert.equal(s2Tpl.meta.version, "1.0.0");
-  assert.equal(specTpl.meta.version, "1.0.0");
+  assert.equal(s2Tpl.meta.version, "1.1.0");
+  assert.equal(specTpl.meta.version, "1.1.0");
   assert.equal(s1Tpl.meta.schema_alignment, "candidate-item.schema.json#1.0");
   assert.equal(s2Tpl.meta.schema_alignment, "candidate-item.schema.json#1.0");
 
@@ -169,6 +169,10 @@ test("1. Prompt template pack, fence-injection guard, promptfoo config & SOP com
     "20–160 字",
     "10–60 字",
     "200–400 字",
+    "1–3 段",
+    "≤600 字",
+    "唯一长句",
+    "去 AI 腔",
     "confirmed_fact",
     "official_data",
     "market_opinion",
@@ -708,7 +712,7 @@ test("5. R2 closures: ST02 brief faithfulness, N1 Stage 1 verbatim grounding, ST
     candidatesDir: candDir,
     cacheDir: path.join(baseDir, "raw"),
     bundlesDir,
-    topicPoolDir: path.join(baseDir, "topic-pool"),
+    topicPoolDir: topicDir,
     offline: true,
   });
   assert.ok(r3Curate.reviewNotesMd.includes("Stage1 模板/模式"));
