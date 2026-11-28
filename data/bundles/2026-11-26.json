@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "site": "The Legal AI Daily",
+    "column": "每日固定栏目",
+    "issue": "第 003 期",
+    "date": "2026-11-26",
+    "date_line": "2026-11-26 · 星期四 · 第 003 期",
+    "internal": true,
+    "internal_note": "LD-G2-05 内部试运行样稿（第 3/3 期）· 不对外发布",
+    "digest": "本期聚焦最高法涉 AI 典型案例与英国 ICO AI-assisted SARs 指引，同时覆盖 Legora 律所智能体、智谱 OCR 表格印章识别、汉坤商业秘密实务与 LawSites 法律科技评测。",
+    "disclaimer": "本样稿为 Gate 2 内部试运行产物，不对外发布。标有「AI 初稿」之实务影响与评述仅供初步研判，不构成正式法律意见；日期与效力状态以一手信源为准。",
+    "web_detail_url": "https://lexaidaily.example/d/2026-11-26",
+    "generated_at": "2026-11-26T08:30:00Z"
+  },
+  "items": [
+    {
+      "id": "trial-20261126-01",
+      "region": "cn",
+      "source_id": "cn-spc-fabu",
+      "source_name": "最高人民法院权威发布（合规哨兵）",
+      "source_domain": "www.court.gov.cn",
+      "source_url": "https://www.court.gov.cn/fabu.html",
+      "published_at": "2026-11-26",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "判例与学术",
+      "title": "最高法权威发布持续聚焦涉人工智能知识产权与电子证据审查裁判规则",
+      "summary": "最高人民法院权威发布栏目持续公开涉人工智能内容著作权、不正当竞争及电子证据真实性审查指导口径，强调结合人工智力投入与原始载体留痕综合认定。",
+      "practice_impact_brief": "知产与诉讼律师应系统留存 AI 辅助创作提示词过程与电子证据原始载体记录。",
+      "practice_impact_is_ai_draft": false,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "not_applicable",
+      "headline": true,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "涉 AI 争议案件的胜负手，越来越取决于过程留痕是否完整。最高人民法院权威发布栏目持续明确，涉人工智能知识产权与电子证据纠纷须围绕人类智力投入、技术控制过程及原始载体完整性展开审查。原因在于，AI 生成物与合成音视频在外观上极难肉眼分辨，脱离过程记录便难以完成举证闭环。因此，无论主张 AI 辅助作品著作权，还是质疑对方提交的电子证据系伪造，律师都必须把取证重心前移到创作日志与原始设备存证上。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "涉人工智能相关案件审查须结合人类智力投入过程记录与电子证据原始载体完整性综合认定。",
+            "locator": "发布要点"
+          }
+        ],
+        "legal_commentary": "对国内诉讼与知识产权律师而言，最高法持续释放的裁判导向已非常清晰：涉 AI 案件不再停留在抽象法理争论，而是落到具体的证据链颗粒度。实务中建议客户与办案团队同步补齐两套留痕机制：一是在商业级 AI 辅助设计或文案项目中，保留关键提示词迭代、参数调整与人工二次修改记录；二是在争议取证环节优先采用原始载体公证或可信时间戳固定，避免仅提交二次转发压缩文件导致采信受阻。以上分析仅作实务参考，不构成个案法律意见。",
+        "ai_draft": false
+      }
+    },
+    {
+      "id": "trial-20261126-02",
+      "region": "global",
+      "source_id": "uk-ico-news",
+      "source_name": "英国信息专员办公室 (UK ICO｜合规哨兵)",
+      "source_domain": "ico.org.uk",
+      "source_url": "https://ico.org.uk/about-the-ico/media-centre/news-and-blogs/2026/11/subject-access-requests-generated-by-artificial-intelligence/",
+      "published_at": "2026-11-11",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "监管与合规",
+      "title": "英国 ICO 发布 AI 生成数据主体访问请求（AI-assisted SARs）处理指引",
+      "summary": "英国 ICO 明确 UK GDPR 第 15 条下由 AI 辅助起草的 SAR 不会因使用 AI 或含误引法条而自动无效，组织仍须在 1 个月法定期限内开展合理成比例检索，请求不清时可要求澄清暂停计时。",
+      "practice_impact_brief": "涉 UK GDPR 数据合规团队应更新 SAR 受理 SOP，用好澄清暂停计时与身份核验机制。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "guidance",
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "企业不能因为收到一封明显由 AI 代写的宽泛数据访问请求，就直接拒之门外。英国 ICO 在正式指引中明确，UK GDPR 第 15 条下的请求不会仅因借助 AI 起草或误引法条而无效，企业仍须在 1 个月法定期限内完成合理且成比例的检索。这一表态堵住了“以格式瑕疵一刀切驳回”的捷径。不过，指引也为法务留出了应对工具：遇到范围过度宽泛的请求，应第一时间发函要求澄清以暂停计时，疑似伪造授权书时则须直接向数据主体核验身份。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "请求不会仅因使用 AI 起草或包含误引法条而无效，组织仍须在 1 个月法定期限内开展合理且成比例的检索。",
+            "locator": "指引核心条款"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】随着消费者广泛使用通用大模型批量生成维权与数据访问函，涉英企业法务正面临“AI 驱动型 SAR 过载”的新挑战。建议数据合规团队立即对照 ICO 指引修订内部响应模板：第一，受理分流环节取消“疑似模板/AI 撰写即驳回”的错误口径；第二，对范围模糊的批量请求，在收到后数日内即发出标准化澄清函并留存暂停计时记录；第三，对第三方代理提交的请求强化直接身份核验。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-03",
+      "region": "global",
+      "source_id": "global-legora-blog",
+      "source_name": "Legora 官方博客",
+      "source_domain": "legora.com",
+      "source_url": "https://legora.com/blog",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "实务与工具",
+      "title": "Legora 分享律所 Skills 与子智能体协作实践，拆解多步骤合规审查流水线",
+      "summary": "Legora 官方博客介绍将律所高频SOP封装为可复用 Skills 与子智能体的落地经验，支持在 Word 与协作空间中按固定审查清单分步执行并保留律师审批节点。",
+      "practice_impact_brief": "律所知识管理团队可把成熟尽调与审合同 SOP 拆成可复用提示词技能包，降低新人上手门槛。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "法律 AI 厂商官方博客实践分享",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "把资深律师的办案经验沉淀成标准化“技能包（Skills）”，正在成为律所规模化用好 AI 的新范式。Legora 官方博客披露，通过将复杂审阅任务拆分为可复用技能与子智能体步骤，并在关键节点嵌入人工确认，能显著缩小不同年资律师产出质量的方差。单靠个人临场写提示词，既不稳定也无法复用。因此，律所知识管理团队的下一阶段重点，应转向把团队成熟模板与审查清单封装为统一技能库。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "将律所高频 SOP 封装为可复用 Skills 与子智能体流水线，在关键环节保留律师审批节点。",
+            "locator": "博客摘要"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】“技能化封装 + 人工卡点”很好地回应了律所推广 AI 时最常见的两极分化问题——懂提示词的律师效率翻倍，不懂的律师觉得难用。建议业务团队先挑选一个每周重复执行的场景（如 NDA 审查、工商尽调摘要或类案检索报告），由合伙人把判断标准写成结构化指令文档并设定人工复核与留痕节点，统一团队输出口径与质量底线后再逐步扩展到其他业务线。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-04",
+      "region": "cn",
+      "source_id": "cn-zhipu-releases",
+      "source_name": "智谱 AI 开放文档·产品与工作流更新",
+      "source_domain": "docs.bigmodel.cn",
+      "source_url": "https://docs.bigmodel.cn/cn/update/new-releases",
+      "published_at": "2026-11-26",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "实务与工具",
+      "title": "智谱开放文档更新 GLM-OCR 印章表格识别与 Office 文档工作流能力",
+      "summary": "智谱 AI 开放文档更新日志披露其在多栏表格、盖章扫描件 OCR 解析及 Office 文档工作流编排上的能力演进，直接面向中文扫描合同与证据卷宗结构化处理场景。",
+      "practice_impact_brief": "诉讼与非诉团队处理盖章扫描件和财务附表时，可用新版 OCR 提升文本还原准确度。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "厂商开放文档更新说明，具体复杂印章遮挡识别率需实测",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "中文法律实务里，AI 审合同的第一道拦路虎往往不是推理能力，而是盖满红章的歪斜扫描件。智谱开放文档披露了面向表格、印章扫描件的 OCR 解析与 Office 文档工作流更新，直指国内案卷数字化的高频卡点。如果前置 OCR 把金额小数点或印章遮挡处的违约比例认错，后续再强的推理模型也会得出错误结论。因此，律所搭建中文合同审查管线时，必须把高精度版面与表格解析当作独立环节单独测试验收。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "增强复杂表格、盖章扫描件 OCR 解析与 Office 文档自动化工作流支持。",
+            "locator": "更新说明"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】在国内商事诉讼与尽调实务中，绝大多数证据与已签合同均为 PDF 扫描件甚至手机翻拍照。团队引入 OCR 预处理工具时，建议重点抽取 10 份含公章遮挡、跨页财务表格与手写涂改的脱敏历史文件做盲测，重点核对金额、日期、违约比例与签署主体名称的识别准确率，并对数字类字段保留人工复核高亮提示与原文截图对照，切实避免“垃圾进、垃圾出”。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-05",
+      "region": "cn",
+      "source_id": "cn-hankun-insights",
+      "source_name": "汉坤律师事务所·汉坤观点",
+      "source_domain": "www.hankunlaw.com",
+      "source_url": "https://www.hankunlaw.com/portal/list/index/id/8.html",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "实务与工具",
+      "title": "汉坤观点解析大模型微调语料合规与企业内部知识库搭建法律边界",
+      "summary": "汉坤律师事务所实务专栏围绕企业使用自有与第三方数据搭建 RAG 知识库或微调模型，拆解著作权许可边界、个人信息去标识化标准及供应商数据归属条款谈判要点。",
+      "practice_impact_brief": "企业法务评审 AI 知识库采购合同时，须重点锁定微调权重归属与第三方语料侵权免责。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "律所实务分析文章，属专业市场观点",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "搭建企业内部法律知识库时，选择外挂检索（RAG）还是模型微调，背后的法律风险截然不同。汉坤实务文章指出，相比直接将第三方受版权保护资料喂入模型微调，采用权限隔离的 RAG 检索在语料溯源、删除撤回与权属切分上明显更可控。原因在于，数据一旦融入微调权重就极难彻底清除，后续若遇权利人主张下架或员工个人信息撤回同意，技术与合规成本极高。因此，法务在项目立项期就应推动优先采用可追溯、可随时删除的检索增强架构。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "搭建企业 AI 知识库应重点厘清语料著作权授权链条、去标识化边界与微调成果归属条款。",
+            "locator": "文章要点"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】这篇实务分析为正在推进内部知识库建设的法务与技术负责人提供了清晰的架构合规建议。落地谈判时，建议在 AI 供应商合同中明确三项底线：一是企业上传语料及生成知识索引的全部知识产权归企业所有；二是终止合作后供应商须在约定周期内不可恢复地删除全部副本并出具书面证明；三是供应商须就其基础模型预训练语料的第三方侵权风险承担独立抗辩与赔偿责任。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-06",
+      "region": "global",
+      "source_id": "openai-news-rss",
+      "source_name": "OpenAI News RSS（企业级 Agent 与法律应用）",
+      "source_domain": "openai.com",
+      "source_url": "https://openai.com/news/rss.xml",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "模型与技术",
+      "title": "OpenAI 持续迭代企业级 Agent 安全沙箱与审计日志能力，支撑受监管行业部署",
+      "summary": "OpenAI 官方动态展示面向金融与法律等受监管行业的企业级 Agent 权限控制、沙箱隔离及操作审计日志能力，帮助合规团队追踪智能体每一步工具调用记录。",
+      "practice_impact_brief": "法务评估企业级 Agent 方案时，可将“全链路工具调用审计日志”设为必选安全项。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "厂商官方动态发布",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "自主执行型 Agent 要跨进律所和金融机构大门，光靠回答准确还不够，必须做到每一步动作都可事后审计。OpenAI 企业动态重点强调了沙箱隔离与工具调用审计日志，回应的正是受监管行业的问责刚需。当智能体开始自动读取合同、发送邮件或更新台账时，一旦发生越权操作，没有完整日志就无法定责与止损。因此，企业在选型或自研 Agent 时，应将操作留痕、人工审批拦截与权限最小化写入验收底线。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "面向受监管行业强化企业级 Agent 沙箱隔离、最小权限控制与全链路工具调用审计日志。",
+            "locator": "企业动态摘要"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】伴随 Agent 工具从“纯问答”走向“可执行”，企业法务与合规律师在参与内部 AI 项目评审时，关注重心须从输出文本质量扩展到执行权限与问责边界。建议团队在上线前建立三层防线：只读检索与外部写操作严格分离、涉及对外发函或系统变更的动作强制挂接人工确认与熔断卡点、并将工具调用审计日志、权限变更与异常处理记录纳入企业现有合规归档与抽检周期。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-07",
+      "region": "cn",
+      "source_id": "cn-junhe-reviews",
+      "source_name": "君合律师事务所·君合法评",
+      "source_domain": "www.junhe.com",
+      "source_url": "https://www.junhe.com/law-reviews",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "监管与合规",
+      "title": "君合法评梳理算力租赁与 AI 项目外包合同中的 SLA 及数据权属风险点",
+      "summary": "君合律师事务所实务评述专栏聚焦企业采购 AI 算力与定制开发项目，分析可用性 SLA 违约责任、训练数据集权属界定及模型交付验收标准不清引发的典型合同争议。",
+      "practice_impact_brief": "公司法务起草 AI 外包与算力合同时，应细化量化验收指标与数据清除条款。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "律所实务评述文章，属专业市场观点",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "AI 定制开发合同之所以纠纷频发，往往栽在“效果验收标准”写得过于模糊。君合法评梳理了算力租赁与 AI 外包合同中的高频争议，指出传统软件按功能清单验收的套路很难套用在概率输出的大模型项目上。一旦上线后准确率不达预期，双方极易就“是否构成违约”陷入拉锯。因此，法务在签约前必须推动业务与技术团队把测试集样本、召回率底线、响应延迟及达标失败后的整改退出机制写进附件。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "AI 项目外包合同须前置明确量化测试集验收标准、SLA 违约责任与训练数据权属边界。",
+            "locator": "专栏实务建议"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】对频繁审阅 AI 采购与定制开发协议的企业法务而言，最大的履约抓手不是原则性保证条款，而是可量化落地的技术验收附件与违约退出机制。建议在合同中约定三项硬条款：采用双方签字确认的脱敏基准测试集、召回率底线及响应延迟作为验收依据、设定分阶段付款与未达标无责解除权、明确项目终止后供应商对企业微调数据与衍生索引的不可恢复销毁义务及书面证明要求。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261126-08",
+      "region": "global",
+      "source_id": "lawsites-blog",
+      "source_name": "LawSites (Bob Ambrogi)",
+      "source_domain": "www.lawnext.com",
+      "source_url": "https://www.lawnext.com/feed",
+      "published_at": "2026-11-26",
+      "collected_at": "2026-11-26T08:00:00Z",
+      "category": "行业与资本",
+      "title": "LawSites 追踪法律科技生态演进：垂直插件正加速围绕主流办公与案管底座重构",
+      "summary": "LawSites 专栏持续评测法律科技新产品发布，观察到越来越多中小法律 AI 厂商放弃独立门户，转向以插件和连接器形态寄生于主流办公软件与案管系统。",
+      "practice_impact_brief": "律所评估新兴法律 AI 工具时，可优先选择轻量化插件形态以降低切换与沉没成本。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "法律科技独立评测媒体观点",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "法律科技产品形态正在经历一轮务实瘦身，轻量化插件比独立大平台更易跑通一线采纳。LawSites 评测观察指出，新近亮相的法律 AI 工具普遍选择直接寄生在 Word、浏览器或既有案管系统内，而非要求律师迁移全部工作习惯。原因在于，中小律所缺乏专职 IT 迁移能力，学习成本一旦过高就会被搁置。因此，律所试水 AI 提效时，从按月订阅、即装即用的轻量化插件起步，能在控制预算的同时快速验证真实收益。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "新兴法律 AI 工具正加速转向寄生于主流办公与案管系统的轻量化插件与连接器形态。",
+            "locator": "专栏评论"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】LawSites 的一线观察提醒中小律所与法务团队：数字化转型不必一步到位采购昂贵的重型平台。更稳妥的节奏是先锁定一两个高频痛点（如合同修订比对、邮件案卷整理或法条检索），通过轻量化插件做 30 天真实案件试点，量化统计律师实际节省的小时数与复核返工率，同时把好账号权限、客户脱敏与数据保密协议关，确认产出稳定后再决定扩大席位采购。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    }
+  ]
+}

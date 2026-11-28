@@ -1,0 +1,298 @@
+{
+  "schema_version": "1.0",
+  "meta": {
+    "site": "The Legal AI Daily",
+    "column": "每日固定栏目",
+    "issue": "第 002 期",
+    "date": "2026-11-25",
+    "date_line": "2026-11-25 · 星期三 · 第 002 期",
+    "internal": true,
+    "internal_note": "LD-G2-05 内部试运行样稿（第 2/3 期）· 不对外发布",
+    "digest": "本期聚焦中央网信办生成式 AI 合规备案动态与美国联邦法院 AI 判例追踪，实务板块覆盖 Harvey Legal Agents、金杜 AI 合规实务、通义法睿合同审查与微软 Copilot 法律办公工作流。",
+    "disclaimer": "本样稿为 Gate 2 内部试运行产物，不对外发布。标有「AI 初稿」之实务影响与评述仅供初步研判，不构成正式法律意见；日期与效力状态以一手信源为准。",
+    "web_detail_url": "https://lexaidaily.example/d/2026-11-25",
+    "generated_at": "2026-11-25T08:30:00Z"
+  },
+  "items": [
+    {
+      "id": "trial-20261125-01",
+      "region": "cn",
+      "source_id": "cn-cac-wxzw",
+      "source_name": "中央网信办网信政务（合规哨兵）",
+      "source_domain": "www.cac.gov.cn",
+      "source_url": "https://www.cac.gov.cn/wxzw/A0937index_1.htm",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "监管与合规",
+      "title": "中央网信办持续推进生成式人工智能服务备案与内容标识合规核查",
+      "summary": "中央网信办网信政务专栏持续披露生成式人工智能服务备案、登记及内容标识落实进展，要求面向境内公众提供服务的模型与应用方同步履行算法备案与显隐式标识义务。",
+      "practice_impact_brief": "法律科技厂商与律所对外开放 AI 服务前，须先核对模型备案号与内容标识落地。",
+      "practice_impact_is_ai_draft": false,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "in_force",
+      "headline": true,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "面向境内公众的法律 AI 产品上线，备案与标识已成刚性前置门槛。中央网信办网信政务信息明确要求，生成式人工智能服务提供方须依规履行服务备案或登记程序，并同步落实内容标识义务。原因在于，法律咨询与文书生成直接影响公众权益，属于监管重点关注的垂类应用场景。因此，律所或 LegalTech 团队在对外发布小程序或 Web 端 AI 问答工具前，必须先核验底层调用模型的备案资质与前端显著提示。若仅限所内封闭使用，虽与对外公众服务适用口径不同，仍应留存内控边界说明以备核查。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "面向境内公众提供生成式人工智能服务的，须依规履行备案或登记程序并落实内容标识义务。",
+            "locator": "政务公告要点"
+          }
+        ],
+        "legal_commentary": "从近期网信政务披露节奏看，生成式 AI 监管重心正从“单次备案准入”延伸至“上线后持续标识与安全评估”。对国内法律科技创业团队及计划推出对外 AI 咨询入口的律所而言，实务合规需把握三条线：一是接入第三方大模型 API 时，在合同中要求对方提供有效备案编号并约定变更通知义务；二是在产品前端明确标注“AI 生成，不构成正式法律意见”的显式提示；三是区分“所内封闭提效工具”与“面向公众服务”的部署边界。以上评述仅作实务参考，不构成个案法律意见。",
+        "ai_draft": false
+      }
+    },
+    {
+      "id": "trial-20261125-02",
+      "region": "global",
+      "source_id": "us-courtlistener",
+      "source_name": "CourtListener AI 判例订阅源（合规哨兵）",
+      "source_domain": "www.courtlistener.com",
+      "source_url": "https://www.courtlistener.com/feed/search/?q=AI",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "判例与学术",
+      "title": "CourtListener 持续收录美国法院涉 AI 虚假引证惩戒令，重申执业律师独立核验义务",
+      "summary": "CourtListener 公开判例订阅持续追踪美国多地联邦与州法院针对诉状中出现 AI 虚构判例的惩戒裁定，法院普遍认定律师不得以依赖 AI 工具为由免除独立核验责任。",
+      "practice_impact_brief": "涉美诉讼团队提交书面诉状前，须对 AI 生成的每一条判例引证执行人工全量核真。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "official_data",
+      "unverified": false,
+      "needs_human_check": false,
+      "high_risk_legal": true,
+      "effective_status": "not_applicable",
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "美国法院对诉状中出现 AI 虚构判例的容忍度已降至零。CourtListener 判例订阅源持续收录多起联邦与州法院惩戒令，明确签署提交文书的律师须对全部引证真实性承担个人执业责任。之所以频频触发制裁，是因为部分律师直接将通用模型起草的判例摘要粘贴进代理词，却未回查官方判例库。因此，诉讼团队必须将“逐条核验判例原文与案号”写进签发前强制检查表。即使使用专业法律 AI，也只能降低核验耗时，不能替代律师签字背书。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "签署提交书面材料的执业律师须对含 AI 生成内容在内的全部判例引证真实性承担独立核验责任。",
+            "locator": "判例要旨"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】美国法院围绕 AI 虚假引证的惩戒实践，对国内涉外诉讼律师和跨境争议解决团队具有直接警示作用。建议诉讼团队建立两条铁律：其一，凡由 AI 辅助起草的诉状、仲裁申请书或法律意见书，所有引用的法条、判例案号与裁判要旨必须由主办律师在一手官方库逐条打勾核真并留痕；其二，提交前对照主审法院最新个案规程，确认是否需要提交 AI 使用披露声明。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-03",
+      "region": "global",
+      "source_id": "global-harvey-blog",
+      "source_name": "Harvey AI 官方博客",
+      "source_domain": "www.harvey.ai",
+      "source_url": "https://www.harvey.ai/blog",
+      "published_at": "2026-11-24",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "实务与工具",
+      "title": "Harvey 持续推进 Review Tables 与 Legal Agents 协同，聚焦大宗尽调表格化核验",
+      "summary": "Harvey 官方博客展示其 Review Tables 与 Legal Agents 在多文档尽职调查中的协同工作流，支持按预设风险维度批量抽取数百份合同条款并附带原文页码定位。",
+      "practice_impact_brief": "并购与投融资团队可借鉴“批量表格抽取 + 原文页码回链”范式压缩尽调初筛工时。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "厂商官方博客案例展示",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "法律 AI 在并购尽调中最落地的形态，不是聊天框，而是带原文定位的批量审阅表。Harvey 官方博客披露，其通过 Review Tables 结合 Legal Agents 实现多份合同按统一字段批量抽取并回链原文位置。这种设计切中了初级律师熬夜填尽调清单的痛点。表格化输出让合伙人能一眼扫出控制权变更、排他条款等异常项。不过，厂商博客通常展示理想样例，遇到扫描模糊或手写批注的中文非标合同时，仍须叠加 OCR 质量抽检与人工复核。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "通过 Review Tables 与 Legal Agents 协同，按预设风险维度批量抽取多文档条款并附带原文定位。",
+            "locator": "博客正文"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】对频繁承接并购尽调、基金设立或批量租赁合同审查的律所而言，“表格化批量抽取 + 原文高亮定位”是目前 ROI 最清晰的 AI 落地路径。即便团队暂未采购 Harvey，也可以利用现有大模型配合固定 JSON 模板和表格工具复现类似工作流：先由资深律师锁定 8 至 12 个核心尽调字段，再让 AI 逐份抽取并强制附带原文短句，由律师集中复核异常标红项即可大幅提效。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-04",
+      "region": "cn",
+      "source_id": "cn-tongyi-farui",
+      "source_name": "阿里云通义法睿官方文档",
+      "source_domain": "help.aliyun.com",
+      "source_url": "https://help.aliyun.com/zh/model-studio/tongyi-farui/",
+      "published_at": "2026-11-25",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "实务与工具",
+      "title": "通义法睿文档更新合同审查与法律文书生成接口说明，支持自定义审查规则库",
+      "summary": "阿里云通义法睿官方文档介绍其面向企业法务与律所的合同风险审查、类案检索与文书起草接口，支持导入企业内部合规清单作为自定义审查规则基准。",
+      "practice_impact_brief": "企业法务可将公司标准红线条款转为审查规则清单，提升高频采购合同初审一致性。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "云厂商官方文档说明，实际检出率须结合企业合同集实测",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "合同审查 AI 好不好用，关键在于能否吃进企业自己的红线规则库。通义法睿官方文档显示，其合同审查能力支持接入用户自定义的审查规则清单，而非只靠通用风险提示。原因在于，不同企业在付款账期、违约金上限与管辖法院上的底线差异极大。因此，把法务部既有的 Playbook 结构化写入规则库，才能让初审意见真正贴合业务。但接入云端 API 前，法务须先与信息安全部门确认合同数据加密传输与零留存协议。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "支持结合自定义审查规则清单开展合同风险识别、类案检索与法律文书辅助生成。",
+            "locator": "产品文档概览"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】对高频处理标准采购、销售与保密协议的企业法务团队而言，自定义规则库是合同 AI 从“玩具”变成“工具”的分水岭。建议法务团队先挑选 2 至 3 类最标准化的合同，将过往资深法务的修改批注提炼为 15 条以内可执行判断规则，先在小范围历史合同上跑召回率与误报率测试，同时明确高额违约责任条款必须人工复核，确认稳定后再接入 OA 审批流作为前置初筛节点。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-05",
+      "region": "cn",
+      "source_id": "cn-kwm-cli",
+      "source_name": "金杜律师事务所 China Law Insight",
+      "source_domain": "www.chinalawinsight.com",
+      "source_url": "https://www.chinalawinsight.com/",
+      "published_at": "2026-11-24",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "监管与合规",
+      "title": "金杜实务专栏解析企业部署生成式 AI 的数据跨境与商业秘密治理要点",
+      "summary": "金杜律师事务所 China Law Insight 专栏结合境内数据合规实务，梳理企业内部接入外部大模型 API 时面临的商业秘密外泄、员工提示词越权输入及跨境传输评估要点。",
+      "practice_impact_brief": "企业法务可对照专栏清单补齐员工 AI 使用红线政策与敏感词拦截机制。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "律所实务评述文章，属专业市场观点",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "企业内部推广 AI 办公最大的隐蔽风险，是员工把未脱敏的商业秘密直接粘贴进公有对话框。金杜实务专栏围绕企业部署外部大模型场景，重点提示了商业秘密保护、数据分类分级与跨境传输评估三道防线。一旦核心代码、客户名单或未公开财务数据流出，企业可能因未采取合理保密措施而丧失商业秘密法律保护资格。因此，法务与 IT 须联手落地“分级授权 + 敏感字段脱敏”双保险，不能只靠一纸口头通知。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "企业接入外部大模型时应同步落实数据分类分级、员工提示词输入边界与商业秘密留痕管理。",
+            "locator": "专栏实务要点"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】红圈所实务专栏的提示切中当前企业法务的高频难题：业务部门急于用 AI 提效，而法务最担心保密失控。建议企业法务分两步落地治理：第一步，在员工手册与保密协议中补充 AI 工具使用条款，明确禁止将 L3/L4 级机密文档输入未获批的公有模型；第二步，联合 IT 部门提供已签企业级零训练协议的内部合规入口，并建立季度抽查日志，形成可举证的合理保密措施。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-06",
+      "region": "global",
+      "source_id": "ms-copilot-blog",
+      "source_name": "Microsoft Copilot Blog（含 Copilot for Legal）",
+      "source_domain": "www.microsoft.com",
+      "source_url": "https://www.microsoft.com/en-us/microsoft-365/blog/",
+      "published_at": "2026-11-24",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "实务与工具",
+      "title": "Microsoft 365 Copilot 强化 Word 与 Outlook 长文对照及企业权限继承能力",
+      "summary": "Microsoft 365 官方博客介绍 Copilot 在 Word 合同修订比对、Outlook 邮件长线程摘要及租户级数据权限继承方面的办公工作流更新，面向企业级法务与合规团队。",
+      "practice_impact_brief": "已部署 M365 的律所与法务可优先测试 Word 修订比对与邮件案卷摘要，免额外迁移数据。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "厂商官方产品博客发布",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "对重度依赖 Word 和 Outlook 的律师来说，原生办公套件内的 AI 集成往往比独立网站更容易推开。微软官方博客披露，Copilot 进一步强化了文档对照修订、邮件线程提炼与企业租户权限继承能力。权限继承之所以关键，是因为律所存在严格的利益冲突墙，AI 检索绝不能越权召回其他项目组的保密文件。因此，已采购 M365 的团队在开启 Copilot 前，务必先做一轮 SharePoint 与文件夹权限大扫除，避免旧权限过宽被 AI 放大暴露。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "强化 Word 修订比对、Outlook 邮件摘要与企业租户级既有数据访问权限继承。",
+            "locator": "博客更新段"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】在已使用 Microsoft 365 的大型律所与跨国企业法务部，Copilot 的核心优势在于“数据不出既有租户”且贴合律师日常打开频率最高的 Word 与 Outlook。实务落地时，最容易被忽略的前置动作是内部权限治理：建议 IT 与合规团队在全员开通前先审计项目文件夹的访问隔离状态，确保“利益冲突墙”在 AI 搜索下依然生效，再从邮件纪要和合同初版比对两个低风险场景切入。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-07",
+      "region": "global",
+      "source_id": "anthropic-news",
+      "source_name": "Anthropic Newsroom（含 Claude for Legal）",
+      "source_domain": "www.anthropic.com",
+      "source_url": "https://www.anthropic.com/news",
+      "published_at": "2026-11-23",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "模型与技术",
+      "title": "Anthropic 披露企业级长文档分析与可控工具调用进展，强化复杂条款交叉核验",
+      "summary": "Anthropic Newsroom 分享其在长上下文精准引用与企业级安全工作流上的最新实践，重点改善跨章节定义条款追踪与减少长文档后半段遗漏问题。",
+      "practice_impact_brief": "处理百页并购协议或招股书时，可重点测试跨章节定义项核对与后半段罚则召回表现。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "模型厂商官方新闻稿",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "长合同审查最怕模型“看头忘尾”，漏掉藏在附录或违约条款里的定义陷阱。Anthropic 官方动态聚焦长上下文精准定位与工具调用稳定性，意在补齐超长法律文件跨章节交叉核验的短板。在并购协议与融资文件中，一个定义项的微调往往牵动后文十余处责任边界。因此，具备稳定长文追踪与逐段引用能力的模型，能切实帮律师做完第一遍全篇交叉核对。不过，实际长文召回上限仍需以本所脱敏长合同实测为准，切忌盲信宣传口径。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "持续优化企业级长文档跨章节追踪、精准引用与可控工具调用工作流。",
+            "locator": "新闻稿摘要"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】长文档交叉核对一直是商事律师最耗费眼力的重复劳动之一。在试用长上下文模型辅助审阅百页级协议时，建议采用“定义表单独抽取 + 关键责任条款分段核验”的拆解提示词，要求模型每指出一处冲突都必须附带对应条款号与原文短句，方便律师快速跳转 Word 复核。与此同时，法务团队应提前确认企业版账号的数据不用于训练、访问隔离及零留存条款已正式生效。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    },
+    {
+      "id": "trial-20261125-08",
+      "region": "global",
+      "source_id": "artificial-lawyer",
+      "source_name": "Artificial Lawyer",
+      "source_domain": "www.artificiallawyer.com",
+      "source_url": "https://www.artificiallawyer.com/feed/",
+      "published_at": "2026-11-24",
+      "collected_at": "2026-11-25T08:00:00Z",
+      "category": "行业与资本",
+      "title": "Artificial Lawyer 观察：律所 AI 采购正从单点试用转向工作流深度集成评估",
+      "summary": "Artificial Lawyer 行业报道指出，欧美大中型律所在经历一年多单点工具试点后，正集中收拢供应商数量，优先续约能与文档管理系统和计费体系打通的平台型产品。",
+      "practice_impact_brief": "律所技术负责人规划年度预算时，应优先考察现有案管与文档系统的集成成本。",
+      "practice_impact_is_ai_draft": true,
+      "fact_tier": "market_opinion",
+      "unverified": true,
+      "unverified_reason": "行业垂直媒体观察报道",
+      "needs_human_check": false,
+      "high_risk_legal": false,
+      "headline": false,
+      "review_status": "approved",
+      "detail_analysis": {
+        "key_points": [
+          "律所对法律 AI 的新鲜感正在退潮，采购决策全面回归工作流集成度。Artificial Lawyer 报道显示，经历多轮试点后，大中型律所开始削减孤立单点插件，转而青睐能直连文档管理与案管系统的平台工具。原因很现实：律师不会为了每个环节切换五六个网页账号，孤立工具的长期活跃率普遍偏低。因此，律所 IT 与管委会在做年度续费评估时，宜用“真实办案采纳率”和“系统集成度”替代演示效果作为核心指标。"
+        ],
+        "evidence_quotes": [
+          {
+            "text": "大中型律所正收拢单点 AI 供应商，优先续约能与文档管理及案管系统深度集成的平台。",
+            "locator": "报道导语"
+          }
+        ],
+        "legal_commentary": "【AI 初稿】欧美律所的采购收敛趋势对国内律所和企业法务具有很强的提前参考价值：在引入 AI 工具前，先梳理团队现有文档库、邮件和合同审批系统的数据流向，优先选择支持插件内嵌或标准协议对接的方案，并用 30 天真实案件活跃率做验收，避免买回来一堆“演示惊艳但无人打开”的孤岛工具。对法律科技创业者而言，深耕既有系统连接器与权限体系更具续费壁垒。本评述为 AI 初稿，仅作实务参考，不构成正式法律意见。",
+        "ai_draft": true
+      }
+    }
+  ]
+}

@@ -17,9 +17,11 @@
     "collect:global": "node src/collectors/global/index.mjs",
     "curate": "node src/pipeline/merge-and-curate/index.mjs",
     "daily": "node src/pipeline/daily.mjs",
+    "export:dual": "node src/export/dual-export.mjs",
     "test:pipeline": "node --test tests/pipeline/*.test.mjs",
     "test:prompts": "node --test tests/prompts/*.test.mjs",
-    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/prompts/*.test.mjs tests/wechat-prototype/*.test.mjs"
+    "test:export": "node --test tests/export/*.test.mjs",
+    "test": "node --test tests/contracts/*.test.mjs tests/sources/*.test.mjs tests/pipeline/*.test.mjs tests/prompts/*.test.mjs tests/export/*.test.mjs tests/wechat-prototype/*.test.mjs"
   },
   "dependencies": {
     "@mozilla/readability": "0.6.0",
